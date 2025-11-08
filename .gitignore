@@ -1,0 +1,34 @@
+# IDE
+.idea/
+.vscode/
+
+# Node
+**/node_modules/
+**/.cache/
+
+# Build outputs
+**/dist/
+**/build/
+**/.next/
+**/out/
+**/.turbo/
+
+# Logs
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Platforms/services
+.vercel/
+
+
