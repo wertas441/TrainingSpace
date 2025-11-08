@@ -1,4 +1,58 @@
+import {
+    CakeIcon,
+    ChartBarIcon,
+    HomeIcon,
+    PuzzlePieceIcon,
+    SparklesIcon,
+    Squares2X2Icon,
+    SquaresPlusIcon,
+    WrenchScrewdriverIcon
+} from "@heroicons/react/24/outline";
+
 export const baseUrlForBackend:string = 'localhost:9000';
 
 export const mainInputClasses:string = `w-full py-3 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 
     focus:outline-none focus:ring-2 focus:ring-emerald-500 hover:border-emerald-400 ease-in-out duration-300 transition-shadow `;
+
+export const mainSideBarItems = [
+    {
+        label: 'Главная',
+        link: '/',
+        icon: HomeIcon,
+    },
+    {
+        label: 'Моя активность',
+        link: '/my-activity',
+        icon: Squares2X2Icon,
+    },
+    {
+        label: 'Добавить активность',
+        link: '/add-activity',
+        icon: SquaresPlusIcon,
+    },
+    {
+        label: 'Статистика',
+        link: '/stats',
+        icon: ChartBarIcon,
+    },
+    {
+        label: 'Питание',
+        link: '/nutrition',
+        icon: CakeIcon,
+    },
+    {
+        label: 'Техника упражнений',
+        link: '/management-techniques',
+        icon: PuzzlePieceIcon,
+    },
+    {
+        label: 'Советы',
+        link: '/advises',
+        icon: SparklesIcon,
+    },
+    {
+        label: 'Настройки',
+        link: '/settings',
+        icon: WrenchScrewdriverIcon,
+    },
+]

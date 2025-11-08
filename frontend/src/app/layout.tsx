@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.scss";
 import {ReactNode} from "react";
+import LayoutWrapper from "@/lib/utils/LayoutWrapper";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -19,7 +20,9 @@ export default function RootLayout({children}: Readonly<{ children: ReactNode}>)
         <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        {children}
+        <LayoutWrapper>
+            {children}
+        </LayoutWrapper>
         </body>
         </html>
     );

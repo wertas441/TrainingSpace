@@ -1,5 +1,3 @@
-import {ReactNode} from "react";
-
 export interface InputsStructure {
     id: string;
     label?: string;
@@ -10,7 +8,7 @@ export interface InputsStructure {
     error?: string;
 }
 
-
+// icon?: ComponentType<SVGProps<SVGSVGElement>>; //
 
 
 
