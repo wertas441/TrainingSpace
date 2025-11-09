@@ -2,7 +2,7 @@ import {
     CakeIcon,
     ChartBarIcon,
     HomeIcon,
-    PuzzlePieceIcon,
+    PuzzlePieceIcon, RectangleGroupIcon,
     SparklesIcon,
     Squares2X2Icon,
     SquaresPlusIcon,
@@ -29,6 +29,11 @@ export const mainSideBarItems = [
         label: 'Добавить активность',
         link: '/add-activity',
         icon: SquaresPlusIcon,
+    },
+    {
+        label: 'Мои тренировки',
+        link: '/my-training',
+        icon: RectangleGroupIcon,
     },
     {
         label: 'Статистика',

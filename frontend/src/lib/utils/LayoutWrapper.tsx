@@ -30,7 +30,7 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
                             onClose={toggleSidebar}
                         />
 					)}
-					<main className="flex-1 relative overflow-x-hidden">
+					<main className="flex-1 p-4 relative overflow-x-hidden">
 						{children}
 					</main>
 				</div>

@@ -6,7 +6,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
 import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
 import {MainInput} from "@/components/inputs/MainInput";
-import AuthContext from "@/components/UI/AuthContext";
+import BlockPageContext from "@/components/UI/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {baseUrlForBackend} from "@/lib";
@@ -72,7 +72,7 @@ export default function Login(){
     }
 
     return (
-        <AuthContext>
+        <BlockPageContext>
             <div className="space-y-6">
                 <div>
                     <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
@@ -139,6 +139,6 @@ export default function Login(){
                     Нет аккаунта? <Link href="/auth/registration" className={`font-medium textLinks`}>Зарегистрироваться</Link>
                 </div>
             </div>
-        </AuthContext>
+        </BlockPageContext>
     );
 }

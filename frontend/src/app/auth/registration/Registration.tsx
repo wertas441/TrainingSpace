@@ -10,7 +10,7 @@ import {
     validateUserPassword
 } from "@/lib/utils/validators";
 import {baseUrlForBackend} from "@/lib";
-import AuthContext from "@/components/UI/AuthContext";
+import BlockPageContext from "@/components/UI/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import {MainInput} from "@/components/inputs/MainInput";
 import {AtSymbolIcon, LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
@@ -87,7 +87,7 @@ export default function Registration(){
     }
 
     return (
-        <AuthContext>
+        <BlockPageContext>
             <div className="space-y-6">
                 <div>
                     <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
@@ -150,6 +150,6 @@ export default function Registration(){
                     Уже есть аккаунт? <Link href="/auth/login" className={`font-medium textLinks`}>Авторизуетесь</Link>
                 </div>
             </div>
-        </AuthContext>
+        </BlockPageContext>
     );
 }

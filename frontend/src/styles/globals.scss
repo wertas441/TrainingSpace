@@ -12,3 +12,9 @@ html, body {
 .textLinks {
   @apply text-emerald-600 hover:text-emerald-700 transition-colors duration-200;
 }
+
+
+.textDescriptionArea{
+  min-height: 70px;
+  max-height: 350px;
+}
