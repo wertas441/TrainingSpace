@@ -2,7 +2,7 @@
 
 import NutritionHeader from "@/components/UI/headers/NutritionHeader";
 import {NutritionDay} from "@/types/nutritionTypes";
-import NutritionDayItem from "@/app/nutrition/components/NutritionDayItem";
+import NutritionDayItem from "@/components/elements/NutritionDayItem";
 import {useNameDateFilter} from "@/lib/hooks/useNameDateFilter";
 
 export default function Nutrition() {

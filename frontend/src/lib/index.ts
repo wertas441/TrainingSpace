@@ -47,7 +47,7 @@ export const mainSideBarItems = [
     },
     {
         label: 'Техника упражнений',
-        link: '/management-techniques',
+        link: '/exercises-techniques',
         icon: PuzzlePieceIcon,
     },
     {
