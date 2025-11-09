@@ -15,10 +15,6 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 		setIsSidebarOpen(prev => !prev);
 	}, []);
 
-	const closeSidebar = useCallback(() => {
-		setIsSidebarOpen(false);
-	}, []);
-
 	return (
 		<div className="min-h-screen flex overflow-x-hidden">
 			<div className="flex-1 flex flex-col overflow-x-hidden">
@@ -31,7 +27,7 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 						<SideBar
                             activePage={pathname}
                             isOpen={isSidebarOpen}
-                            onClose={closeSidebar}
+                            onClose={toggleSidebar}
                         />
 					)}
 					<main className="flex-1 relative overflow-x-hidden">

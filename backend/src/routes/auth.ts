@@ -11,6 +11,7 @@ const router = Router();
 
 router.post('/registration', async (req, res) => {
     try {
+
         const { email, password, userName }: RegisterRequest = req.body;
         const nameValidation = userNameValidator(userName);
         const emailValidation = userEmailValidator(email)
@@ -34,8 +35,8 @@ router.post('/registration', async (req, res) => {
             return res.status(409).json(response);
         }
 
-        const existingByuserName = await UserModel.findByuserName(userName);
-        if (existingByuserName) {
+        const existingByUserName = await UserModel.findByuserName(userName);
+        if (existingByUserName) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Пользователь с таким именем уже существует.'
@@ -50,11 +51,7 @@ router.post('/registration', async (req, res) => {
         const created = await UserModel.create({ email, userName: userName, password: hashedPassword });
 
         const user = {
-            id: (created as any).id,
-            email: (created as any).email,
             userName: (created as any).userName,
-            createdAt: new Date((created as any).created_at || (created as any).createdAt),
-            updatedAt: new Date((created as any).updated_at || (created as any).updatedAt)
         };
 
         const response: ApiResponse = {
@@ -62,9 +59,10 @@ router.post('/registration', async (req, res) => {
             message: 'Пользователь успешно зарегистрирован',
             data: { user }
         };
-        res.status(201).json(response);
 
+        res.status(201).json(response);
     } catch (error) {
+
         console.error('Ошибка регистрации пользователя:', error);
         const err: any = error;
         const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
@@ -72,14 +70,14 @@ router.post('/registration', async (req, res) => {
             success: false,
             error: `Ошибка при регистрации пользователя${devSuffix}`
         };
+
         res.status(500).json(response);
     }
 });
 
 router.post('/login', async (req, res) => {
     try {
-        const { email, password }: LoginRequest = req.body;
-        const rememberMe: boolean = !!(req.body as any).remember_me;
+        const { email, password, rememberMe }: LoginRequest = req.body;
         const emailValidation = userEmailValidator(email)
         const passwordValidation = userPasswordValidator(password);
 
@@ -113,7 +111,7 @@ router.post('/login', async (req, res) => {
 
         // Генерация JWT токена
         const token = jwt.sign({ userId: (existingUser as any).id }, config.jwtSecret as string, {
-            expiresIn: rememberMe ? '7d' : '1d'
+            expiresIn: rememberMe ? '60d' : '1d'
         });
 
         // Устанавливаем httpOnly куки с токеном
@@ -121,19 +119,13 @@ router.post('/login', async (req, res) => {
             httpOnly: true,
             secure: config.nodeEnv === 'production',
             sameSite: 'lax',
-            maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : undefined
+            maxAge: rememberMe ? 60 * 24 * 60 * 60 * 1000 : undefined
         });
 
         const response: ApiResponse = {
             success: true,
             message: 'Успешный вход в систему',
             data: {
-                user: {
-                    id: (existingUser as any).id,
-                    email: (existingUser as any).email,
-                    userName: (existingUser as any).userName,
-                    createdAt: new Date((existingUser as any).created_at || (existingUser as any).createdAt)
-                },
                 token
             }
         };
@@ -153,31 +145,39 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', async (req, res) => {
     try {
+
         const userId = (req as any).userId as string | undefined;
+
         if (userId) {
             try {
                 await (await import('../config/database')).pool.query(
                     'UPDATE users SET last_seen_at = NOW() WHERE id = $1',
-                    [ userId ]
+                    [userId]
                 );
-            } catch {/* ignore */}
+            } catch {/* ignore */
+            }
         }
+
         res.clearCookie('token');
+
         const response: ApiResponse = {
             success: true,
             message: 'Успешный выход из системы'
         };
+
         res.json(response);
     } catch (error) {
+
         console.error('Ошибка выхода из системы:', error);
         res.clearCookie('token');
-        res.json({ success: true, message: 'Успешный выход из системы' });
+        res.json({success: true, message: 'Успешный выход из системы'});
     }
 });
 
 // Текущий пользователь по токену
 router.get('/me', authGuard, async (req, res) => {
     try {
+
         const userId = (req as any).userId as string;
         const existingUser = await UserModel.findById(userId);
         if (!existingUser) {
