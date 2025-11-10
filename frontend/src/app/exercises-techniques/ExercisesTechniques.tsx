@@ -20,7 +20,7 @@ export default function ExercisesTechniques() {
         setIsFilterWindowOpen(!isFilterWindowOpen);
     }, [isFilterWindowOpen]);
 
-    const filteredExercises = useMemo(() => {
+    const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
         return exercises.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
@@ -37,7 +37,7 @@ export default function ExercisesTechniques() {
         totalItems,
         totalPages,
         paginatedList,
-    } = usePagination(filteredExercises, itemsPerPage)
+    } = usePagination(filteredList, itemsPerPage)
 
     useEffect(() => {
         setCurrentPage(1);
@@ -58,7 +58,7 @@ export default function ExercisesTechniques() {
             />
 
             <div className="grid grid-cols-1 gap-3">
-                {filteredExercises.length > 0 ? (
+                {filteredList.length > 0 ? (
                     paginatedList.map(ex => (
                             <ExerciseRow
                                 key={ex.id}
@@ -73,7 +73,7 @@ export default function ExercisesTechniques() {
                 )}
             </div>
 
-            {totalItems > 0 && (
+            {totalItems > itemsPerPage && (
                 <MainPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
