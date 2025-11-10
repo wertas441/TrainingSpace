@@ -1,3 +1,4 @@
+import {memo} from "react";
 
 interface LightGreenGlassBtnProps{
     label: string;
@@ -5,7 +6,7 @@ interface LightGreenGlassBtnProps{
     className?: string;
 }
 
-export default function LightGreenGlassBtn({label, onClick, className = ''}: LightGreenGlassBtnProps ) {
+function LightGreenGlassBtn({label, onClick, className = ''}: LightGreenGlassBtnProps ) {
 
     return (
         <button
@@ -17,3 +18,5 @@ export default function LightGreenGlassBtn({label, onClick, className = ''}: Lig
         </button>
     )
 }
+
+export default memo(LightGreenGlassBtn)

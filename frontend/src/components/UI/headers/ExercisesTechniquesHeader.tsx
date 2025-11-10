@@ -1,7 +1,7 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {Bars3Icon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
-import {useEffect, useMemo, useRef} from "react";
+import {Ref, useCallback, useEffect, useMemo, useRef} from "react";
 import Select from "react-select";
 import {difficultOptions, exercises} from "@/lib/data/exercises";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
@@ -14,6 +14,7 @@ interface ExercisesTechniquesHeaderProps {
     difficultFilter: DifficultOptionsStructure;
     setDifficultFilter: (value: DifficultOptionsStructure) => void;
     partOfBodyFilter: string[];
+    ref: Ref<HTMLDivElement>;
     setPartOfBodyFilter: (value: string[]) => void;
 }
 
@@ -27,6 +28,7 @@ export default function ExercisesTechniquesHeader(
         setDifficultFilter,
         partOfBodyFilter,
         setPartOfBodyFilter,
+        ref,
     }: ExercisesTechniquesHeaderProps){
 
     // Опции для react-select из данных упражнений
@@ -67,13 +69,13 @@ export default function ExercisesTechniquesHeader(
         setPartOfBodyFilter(vals.map(v => v.value));
     };
 
-    const handleReset = () => {
+    const handleReset = useCallback(() => {
         setDifficultFilter(null);
         setPartOfBodyFilter([]);
-    };
+    }, [setDifficultFilter, setPartOfBodyFilter]) ;
 
     return (
-        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm relative">
+        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm relative" ref={ref}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
                     <h1 className="text-3xl font-semibold text-emerald-800">Техника выполнения упражнений</h1>
@@ -86,7 +88,7 @@ export default function ExercisesTechniquesHeader(
                             value={searchName}
                             onChange={onSearchChange}
                             placeholder="Поиск по названию..."
-                            icon={<MagnifyingGlassIcon className="h-4 w-4 text-gray-400" />}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" />, [])}
                         />
                     </div>
 
@@ -95,7 +97,7 @@ export default function ExercisesTechniquesHeader(
                         onClick={toggleFilterWindow}
                         ref={toggleBtnRef}
                     >
-                        <Bars3Icon className={`h-6 w-6 text-emerald-600`} />
+                        {useMemo(() => <Bars3Icon className={`h-6 w-6 text-emerald-600`} />, [])}
                     </button>
                 </div>
 
