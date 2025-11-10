@@ -7,6 +7,12 @@ interface ExercisesStructure {
     partOfTheBody: string[];
 }
 
+export const difficultOptions = [
+    { key: 'light', label: 'Лёгкая' },
+    { key: 'middle', label: 'Средняя' },
+    { key: 'hard', label: 'Сложная' }
+];
+
 export const exercises: ExercisesStructure[] = [
 	{
 		id: 0,

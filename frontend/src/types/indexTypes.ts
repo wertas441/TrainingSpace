@@ -11,4 +11,5 @@ export interface InputsStructure {
 // icon?: ComponentType<SVGProps<SVGSVGElement>>; //
 
 
+export type DifficultOptionsStructure = null | 'light' | 'middle' | 'hard';
 
