@@ -3,7 +3,7 @@
 import {InputsStructure} from "@/types/indexTypes";
 import {mainInputClasses} from "@/lib";
 
-interface MainTextareaProps extends InputsStructure {
+interface MainTextareaProps extends InputsStructure<string> {
     rows?: number;
 }
 

@@ -2,7 +2,7 @@ import {mainInputClasses} from "@/lib";
 import {ReactNode} from "react";
 import {InputsStructure} from "@/types/indexTypes";
 
-interface MainInputProps extends InputsStructure  {
+interface MainInputProps extends InputsStructure<string>  {
     type?: string;
     icon?: ReactNode;
 }

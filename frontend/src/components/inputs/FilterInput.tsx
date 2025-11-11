@@ -1,7 +1,7 @@
 import {InputsStructure} from "@/types/indexTypes";
 import {ReactNode} from "react";
 
-interface FilterInputProps extends InputsStructure {
+interface FilterInputProps extends InputsStructure<string | number> {
     type?: string;
     icon?: ReactNode;
 }

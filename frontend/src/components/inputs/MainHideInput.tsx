@@ -3,7 +3,7 @@ import {EyeIcon, EyeSlashIcon} from "@heroicons/react/24/outline";
 import {mainInputClasses} from "@/lib";
 import {InputsStructure} from "@/types/indexTypes";
 
-interface MainHideInputProps extends InputsStructure {
+interface MainHideInputProps extends InputsStructure<string> {
     icon?: ReactNode;
 }
 

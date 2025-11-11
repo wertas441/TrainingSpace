@@ -1,16 +1,36 @@
 import FilterInput from "@/components/inputs/FilterInput";
-import {Bars3Icon, CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
+import {Bars3Icon, CalendarIcon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
-import {Ref, RefObject, useMemo} from "react";
+import {Ref, useEffect, useMemo, useRef} from "react";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import Link from "next/link";
+import {PlusIcon} from "@heroicons/react/16/solid";
 
 interface NutritionHeaderProps {
     searchName: string;
     onSearchNameChange: (newValue: string) => void;
     searchDate: string; // формат YYYY-MM-DD
     onSearchDateChange: (newValue: string) => void;
+    caloriesMin: number;
+    onCaloriesMinChange: (newValue: number) => void;
+    caloriesMax: number;
+    onCaloriesMaxChange: (newValue: number) => void;
+    proteinMin: number;
+    onProteinMinChange: (newValue: number) => void;
+    proteinMax: number;
+    onProteinMaxChange: (newValue: number) => void;
+    fatMin: number;
+    onFatMinChange: (newValue: number) => void;
+    fatMax: number;
+    onFatMaxChange: (newValue: number) => void;
+    carbMin: number;
+    onCarbMinChange: (newValue: number) => void;
+    carbMax: number;
+    onCarbMaxChange: (newValue: number) => void;
     isFilterWindowOpen: boolean;
     ref: Ref<HTMLDivElement>;
     toggleFilterWindow: () => void;
+    onResetFilters: () => void;
 }
 
 export default function NutritionHeader(
@@ -19,10 +39,43 @@ export default function NutritionHeader(
         onSearchNameChange,
         searchDate,
         onSearchDateChange,
+        caloriesMin,
+        onCaloriesMinChange,
+        caloriesMax,
+        onCaloriesMaxChange,
+        proteinMin,
+        onProteinMinChange,
+        proteinMax,
+        onProteinMaxChange,
+        fatMin,
+        onFatMinChange,
+        fatMax,
+        onFatMaxChange,
+        carbMin,
+        onCarbMinChange,
+        carbMax,
+        onCarbMaxChange,
         isFilterWindowOpen,
         toggleFilterWindow,
-        ref
+        ref,
+        onResetFilters,
     }: NutritionHeaderProps) {
+
+    const panelRef = useRef<HTMLDivElement | null>(null);
+    const toggleBtnRef = useRef<HTMLButtonElement | null>(null);
+
+    useEffect(() => {
+        if (!isFilterWindowOpen) return;
+        const handleOutside = (e: MouseEvent) => {
+            const target = e.target as Node;
+            if (panelRef.current && panelRef.current.contains(target)) return;
+            if (toggleBtnRef.current && toggleBtnRef.current.contains(target)) return;
+            toggleFilterWindow();
+        };
+        document.addEventListener('mousedown', handleOutside);
+        return () => document.removeEventListener('mousedown', handleOutside);
+    }, [isFilterWindowOpen, toggleFilterWindow]);
+
 
     return (
         <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm">
@@ -32,12 +85,12 @@ export default function NutritionHeader(
                 </div>
 
                 <div className="flex items-center gap-5 " ref={ref}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <FilterInput
                             id="nutrition-search-name"
                             placeholder="Поиск по названию дня"
                             value={searchName}
-                            onChange={(v) => onSearchNameChange && onSearchNameChange(v)}
+                            onChange={(v) => onSearchNameChange(String(v))}
                             icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
                         />
 
@@ -46,27 +99,164 @@ export default function NutritionHeader(
                             type="date"
                             placeholder="Дата"
                             value={searchDate}
-                            onChange={(v) => onSearchDateChange && onSearchDateChange(v)}
+                            onChange={(v) => onSearchDateChange(String(v))}
                             icon={<CalendarIcon className="h-5 w-5 text-gray-400" />}
                         />
                     </div>
 
-                    <button
-                        className={'inline-flex items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
-                        onClick={toggleFilterWindow}
-                    >
-                        {useMemo(() => <Bars3Icon className={`h-6 w-6 text-emerald-600`} />, [])}
-                    </button>
-
-                    <div className="w-full md:w-auto">
-                        <LightGreenLinkBtn
-                            label="Добавить день"
+                    <div className="flew-row md:flex gap-2 ">
+                        <Link
+                            className={'inline-flex w-full items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
                             href={'/nutrition/add'}
-                            className="md:w-auto px-5 py-2.5"
-                        />
+                        >
+                            {useMemo(() => <PlusIcon className={`h-6 w-6 text-emerald-600`} />, [])}
+                        </Link>
+                        <button
+                            className={'inline-flex w-full cursor-pointer items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
+                            onClick={toggleFilterWindow}
+                            ref={toggleBtnRef}
+                        >
+                            {useMemo(() => <Bars3Icon className={`h-6 w-6 text-emerald-600`} />, [])}
+                        </button>
                     </div>
                 </div>
 
+                {isFilterWindowOpen && (
+                    <div ref={panelRef} className="absolute right-4 top-22 mt-2 z-20 w-full md:w-[560px] rounded-xl bg-white shadow-lg border border-emerald-100">
+                        <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100">
+                            <h2 className="text-lg font-semibold text-emerald-800">Фильтры</h2>
+                            <button
+                                onClick={toggleFilterWindow}
+                                className="rounded-md px-2 py-1 text-emerald-700 hover:bg-emerald-50"
+                            >
+                                <XMarkIcon className="h-6 w-6 text-emerald-600" />
+                            </button>
+                        </div>
+                        <div className="px-5 py-4 space-y-6 ">
+                            <div className="flex gap-3">
+                                <div>
+                                    <h1 className="text-sm font-medium text-gray-700 mb-2">Калории (ккал)</h1>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <FilterInput
+                                            id="calories-min"
+                                            type="number"
+                                            label="От"
+                                            placeholder="0"
+                                            value={Number.isFinite(caloriesMin) ? caloriesMin : ''}
+                                            onChange={(v) => {
+                                                const s = String(v);
+                                                onCaloriesMinChange(s.trim() === '' ? Number.NaN : Number(s));
+                                            }}
+                                        />
+                                        <FilterInput
+                                            id="calories-max"
+                                            type="number"
+                                            label="До"
+                                            placeholder="5000"
+                                            value={Number.isFinite(caloriesMax) ? caloriesMax : ''}
+                                            onChange={(v) => {
+                                                const s = String(v);
+                                                onCaloriesMaxChange(s.trim() === '' ? Number.NaN : Number(s));
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h1 className="text-sm font-medium text-gray-700 mb-2">Белки (г)</h1>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <FilterInput
+                                            id="protein-min"
+                                            type="number"
+                                            label="От"
+                                            placeholder="0"
+                                            value={Number.isFinite(proteinMin) ? proteinMin : ''}
+                                            onChange={(v) => {
+                                                const s = String(v);
+                                                onProteinMinChange(s.trim() === '' ? Number.NaN : Number(s));
+                                            }}
+                                        />
+                                        <FilterInput
+                                            id="protein-max"
+                                            type="number"
+                                            label="До"
+                                            placeholder="300"
+                                            value={Number.isFinite(proteinMax) ? proteinMax : ''}
+                                            onChange={(v) => {
+                                                const s = String(v);
+                                                onProteinMaxChange(s.trim() === '' ? Number.NaN : Number(s));
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <div>
+                                    <h1 className="text-sm font-medium text-gray-700 mb-2">Жиры (г)</h1>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <FilterInput
+                                            id="fat-min"
+                                            type="number"
+                                            label="От"
+                                            placeholder="0"
+                                            value={Number.isFinite(fatMin) ? fatMin : ''}
+                                            onChange={(v) => {
+                                                const s = String(v);
+                                                onFatMinChange(s.trim() === '' ? Number.NaN : Number(s));
+                                            }}
+                                        />
+                                        <FilterInput
+                                            id="fat-max"
+                                            type="number"
+                                            label="До"
+                                            placeholder="200"
+                                            value={Number.isFinite(fatMax) ? fatMax : ''}
+                                            onChange={(v) => {
+                                                const s = String(v);
+                                                onFatMaxChange(s.trim() === '' ? Number.NaN : Number(s));
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h1 className="text-sm font-medium text-gray-700 mb-2">Углеводы (г)</h1>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <FilterInput
+                                            id="carb-min"
+                                            type="number"
+                                            label="От"
+                                            placeholder="0"
+                                            value={Number.isFinite(carbMin) ? carbMin : ''}
+                                            onChange={(v) => {
+                                                const s = String(v);
+                                                onCarbMinChange(s.trim() === '' ? Number.NaN : Number(s));
+                                            }}
+                                        />
+                                        <FilterInput
+                                            id="carb-max"
+                                            type="number"
+                                            label="До"
+                                            placeholder="400"
+                                            value={Number.isFinite(carbMax) ? carbMax : ''}
+                                            onChange={(v) => {
+                                                const s = String(v);
+                                                onCarbMaxChange(s.trim() === '' ? Number.NaN : Number(s));
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-5 py-4 border-t border-emerald-100">
+                            <LightGreenGlassBtn
+                                label={`Сбросить`}
+                                onClick={onResetFilters}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )

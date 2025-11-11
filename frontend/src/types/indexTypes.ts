@@ -1,8 +1,8 @@
-export interface InputsStructure {
+export interface InputsStructure<T extends string | number> {
     id: string;
     label?: string;
-    value: string;
-    onChange: (newValue: string) => void;
+    value: T;
+    onChange: (newValue: T ) => void;
     required?: boolean;
     placeholder?: string;
     error?: string;

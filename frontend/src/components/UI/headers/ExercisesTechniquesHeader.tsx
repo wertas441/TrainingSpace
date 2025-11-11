@@ -86,7 +86,7 @@ export default function ExercisesTechniquesHeader(
                         <FilterInput
                             id="exercise-search"
                             value={searchName}
-                            onChange={onSearchChange}
+                            onChange={(v) => onSearchChange(String(v))}
                             placeholder="Поиск по названию..."
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" />, [])}
                         />
