@@ -1,37 +1,11 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {Bars3Icon, CalendarIcon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
-import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
-import {Ref, useEffect, useMemo, useRef} from "react";
+import {useMemo} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import Link from "next/link";
 import {PlusIcon} from "@heroicons/react/16/solid";
-
-interface NutritionHeaderProps {
-    searchName: string;
-    onSearchNameChange: (newValue: string) => void;
-    searchDate: string; // формат YYYY-MM-DD
-    onSearchDateChange: (newValue: string) => void;
-    caloriesMin: number;
-    onCaloriesMinChange: (newValue: number) => void;
-    caloriesMax: number;
-    onCaloriesMaxChange: (newValue: number) => void;
-    proteinMin: number;
-    onProteinMinChange: (newValue: number) => void;
-    proteinMax: number;
-    onProteinMaxChange: (newValue: number) => void;
-    fatMin: number;
-    onFatMinChange: (newValue: number) => void;
-    fatMax: number;
-    onFatMaxChange: (newValue: number) => void;
-    carbMin: number;
-    onCarbMinChange: (newValue: number) => void;
-    carbMax: number;
-    onCarbMaxChange: (newValue: number) => void;
-    isFilterWindowOpen: boolean;
-    ref: Ref<HTMLDivElement>;
-    toggleFilterWindow: () => void;
-    onResetFilters: () => void;
-}
+import {NutritionHeaderProps} from "@/types/nutritionTypes";
+import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 
 export default function NutritionHeader(
     {
@@ -61,21 +35,7 @@ export default function NutritionHeader(
         onResetFilters,
     }: NutritionHeaderProps) {
 
-    const panelRef = useRef<HTMLDivElement | null>(null);
-    const toggleBtnRef = useRef<HTMLButtonElement | null>(null);
-
-    useEffect(() => {
-        if (!isFilterWindowOpen) return;
-        const handleOutside = (e: MouseEvent) => {
-            const target = e.target as Node;
-            if (panelRef.current && panelRef.current.contains(target)) return;
-            if (toggleBtnRef.current && toggleBtnRef.current.contains(target)) return;
-            toggleFilterWindow();
-        };
-        document.addEventListener('mousedown', handleOutside);
-        return () => document.removeEventListener('mousedown', handleOutside);
-    }, [isFilterWindowOpen, toggleFilterWindow]);
-
+    const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
 
     return (
         <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm">
@@ -122,7 +82,7 @@ export default function NutritionHeader(
                 </div>
 
                 {isFilterWindowOpen && (
-                    <div ref={panelRef} className="absolute right-4 top-22 mt-2 z-20 w-full md:w-[560px] rounded-xl bg-white shadow-lg border border-emerald-100">
+                    <div ref={modalWindowRef} className="absolute right-4 top-22 mt-2 z-20 w-full md:w-[560px] rounded-xl bg-white shadow-lg border border-emerald-100">
                         <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100">
                             <h2 className="text-lg font-semibold text-emerald-800">Фильтры</h2>
                             <button
@@ -139,7 +99,6 @@ export default function NutritionHeader(
                                     <div className="grid grid-cols-2 gap-3">
                                         <FilterInput
                                             id="calories-min"
-                                            type="number"
                                             label="От"
                                             placeholder="0"
                                             value={Number.isFinite(caloriesMin) ? caloriesMin : ''}
@@ -150,7 +109,6 @@ export default function NutritionHeader(
                                         />
                                         <FilterInput
                                             id="calories-max"
-                                            type="number"
                                             label="До"
                                             placeholder="5000"
                                             value={Number.isFinite(caloriesMax) ? caloriesMax : ''}
@@ -167,7 +125,6 @@ export default function NutritionHeader(
                                     <div className="grid grid-cols-2 gap-3">
                                         <FilterInput
                                             id="protein-min"
-                                            type="number"
                                             label="От"
                                             placeholder="0"
                                             value={Number.isFinite(proteinMin) ? proteinMin : ''}
@@ -178,7 +135,6 @@ export default function NutritionHeader(
                                         />
                                         <FilterInput
                                             id="protein-max"
-                                            type="number"
                                             label="До"
                                             placeholder="300"
                                             value={Number.isFinite(proteinMax) ? proteinMax : ''}
@@ -197,7 +153,6 @@ export default function NutritionHeader(
                                     <div className="grid grid-cols-2 gap-3">
                                         <FilterInput
                                             id="fat-min"
-                                            type="number"
                                             label="От"
                                             placeholder="0"
                                             value={Number.isFinite(fatMin) ? fatMin : ''}
@@ -208,7 +163,6 @@ export default function NutritionHeader(
                                         />
                                         <FilterInput
                                             id="fat-max"
-                                            type="number"
                                             label="До"
                                             placeholder="200"
                                             value={Number.isFinite(fatMax) ? fatMax : ''}
@@ -225,7 +179,6 @@ export default function NutritionHeader(
                                     <div className="grid grid-cols-2 gap-3">
                                         <FilterInput
                                             id="carb-min"
-                                            type="number"
                                             label="От"
                                             placeholder="0"
                                             value={Number.isFinite(carbMin) ? carbMin : ''}
@@ -236,7 +189,6 @@ export default function NutritionHeader(
                                         />
                                         <FilterInput
                                             id="carb-max"
-                                            type="number"
                                             label="До"
                                             placeholder="400"
                                             value={Number.isFinite(carbMax) ? carbMax : ''}

@@ -1,22 +1,12 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {Bars3Icon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
-import {Ref, useCallback, useEffect, useMemo, useRef} from "react";
+import {useCallback, useMemo} from "react";
 import Select from "react-select";
 import {difficultOptions, exercises} from "@/lib/data/exercises";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
-
-interface ExercisesTechniquesHeaderProps {
-    searchName: string;
-    onSearchChange: (value: string) => void;
-    isFilterWindowOpen: boolean;
-    toggleFilterWindow: () => void;
-    difficultFilter: DifficultOptionsStructure;
-    setDifficultFilter: (value: DifficultOptionsStructure) => void;
-    partOfBodyFilter: string[];
-    ref: Ref<HTMLDivElement>;
-    setPartOfBodyFilter: (value: string[]) => void;
-}
+import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
+import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniquesTypes";
 
 export default function ExercisesTechniquesHeader(
     {
@@ -31,21 +21,7 @@ export default function ExercisesTechniquesHeader(
         ref,
     }: ExercisesTechniquesHeaderProps){
 
-    // Опции для react-select из данных упражнений
-    const panelRef = useRef<HTMLDivElement | null>(null);
-    const toggleBtnRef = useRef<HTMLButtonElement | null>(null);
-
-    useEffect(() => {
-        if (!isFilterWindowOpen) return;
-        const handleOutside = (e: MouseEvent) => {
-            const target = e.target as Node;
-            if (panelRef.current && panelRef.current.contains(target)) return;
-            if (toggleBtnRef.current && toggleBtnRef.current.contains(target)) return;
-            toggleFilterWindow();
-        };
-        document.addEventListener('mousedown', handleOutside);
-        return () => document.removeEventListener('mousedown', handleOutside);
-    }, [isFilterWindowOpen, toggleFilterWindow]);
+    const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
 
     // Опции для react-select из данных упражнений
     const muscleOptions = useMemo(() => {
@@ -102,7 +78,7 @@ export default function ExercisesTechniquesHeader(
                 </div>
 
                 {isFilterWindowOpen && (
-                    <div ref={panelRef} className="absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl bg-white shadow-lg border border-emerald-100">
+                    <div ref={modalWindowRef} className="absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl bg-white shadow-lg border border-emerald-100">
                         <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100">
                             <h2 className="text-lg font-semibold text-emerald-800">Фильтры</h2>
                             <button
