@@ -15,7 +15,7 @@ export default function MainHideInput({label, id, icon, required = false, placeh
     return (
         <div>
             {label && (
-                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-300">
+                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-400">
                     {label}
                 </label>
             )}

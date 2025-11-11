@@ -3,7 +3,7 @@
 import {ReactElement, ReactNode, useCallback, useState} from "react";
 import {usePathname} from "next/navigation";
 import MainHeader from "@/components/UI/headers/MainHeader";
-import SideBar from "@/components/UI/SideBar";
+import MainSideBar from "@/components/UI/sidebars/MainSideBar";
 
 export default function LayoutWrapper({children}: {children: ReactNode}):ReactElement {
 
@@ -24,7 +24,7 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 
 				<div className="flex flex-1 relative overflow-x-hidden">
 					{!isAuthPage && (
-						<SideBar
+						<MainSideBar
                             activePage={pathname}
                             isOpen={isSidebarOpen}
                             onClose={toggleSidebar}

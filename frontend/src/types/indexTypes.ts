@@ -1,3 +1,5 @@
+import {ElementType} from "react";
+
 export interface InputsStructure<T extends string | number> {
     id: string;
     label?: string;
@@ -13,3 +15,8 @@ export interface InputsStructure<T extends string | number> {
 
 export type DifficultOptionsStructure = null | 'light' | 'middle' | 'hard';
 
+export interface SettingsMenuItemsStructure{
+    id: string;
+    label: string;
+    icon: ElementType ;
+}

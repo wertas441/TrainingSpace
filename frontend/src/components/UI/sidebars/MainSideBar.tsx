@@ -8,7 +8,7 @@ interface SideBarProps {
 	onClose: () => void;
 }
 
-export default function SideBar({ activePage, isOpen = false, onClose }: SideBarProps) {
+export default function MainSideBar({ activePage, isOpen = false, onClose }: SideBarProps) {
 
 	return (
 		<>
