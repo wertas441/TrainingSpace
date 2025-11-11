@@ -161,7 +161,7 @@ export default function Nutrition() {
                     )
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Ничего не найдено. Попробуйте изменить запрос.
+                        Такого дня не найдено. Попробуйте изменить запрос.
                     </div>
                 )}
             </div>
