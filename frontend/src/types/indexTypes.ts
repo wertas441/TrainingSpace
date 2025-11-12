@@ -13,6 +13,16 @@ export interface InputsStructure<T extends string | number> {
 // icon?: ComponentType<SVGProps<SVGSVGElement>>; //
 
 
+
+export interface TrainingDataStructure {
+    id: number;
+    name: string;
+    description: string;
+    exercises: number[];
+}
+
+
+
 export type DifficultOptionsStructure = null | 'light' | 'middle' | 'hard';
 
 export interface SettingsMenuItemsStructure{

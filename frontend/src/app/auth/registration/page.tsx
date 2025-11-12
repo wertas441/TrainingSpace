@@ -8,7 +8,5 @@ export const metadata: Metadata = {
 
 export default function RegistrationPage() {
 
-    return (
-        <Registration />
-    )
+    return <Registration />
 }

@@ -8,7 +8,5 @@ export const metadata: Metadata = {
 
 export default function NutritionPage(){
 
-    return (
-        <Nutrition />
-    )
+    return <Nutrition />
 }

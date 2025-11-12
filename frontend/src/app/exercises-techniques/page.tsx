@@ -8,7 +8,5 @@ export const metadata: Metadata = {
 
 export default function ExercisesTechniquesPage(){
 
-    return (
-        <ExercisesTechniques />
-    )
+    return <ExercisesTechniques />
 }
