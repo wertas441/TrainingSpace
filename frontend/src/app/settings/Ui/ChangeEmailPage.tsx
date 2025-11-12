@@ -81,7 +81,7 @@ export default function ChangeEmailPage(){
                 <MainInput
                     id={'currentEmail'}
                     type={'email'}
-                    label={'Ваша текущая почта'}
+                    placeholder={'Ваша текущая почта'}
                     value={currentEmail.inputState.value}
                     onChange={currentEmail.setValue}
                     error={currentEmail.inputState.error || undefined}
@@ -90,7 +90,7 @@ export default function ChangeEmailPage(){
                 <MainInput
                     id={'newEmail'}
                     type={'email'}
-                    label={'Новая почта'}
+                    placeholder={'Новая почта'}
                     value={newEmail.inputState.value}
                     onChange={newEmail.setValue}
                     error={newEmail.inputState.error || undefined}
@@ -99,7 +99,7 @@ export default function ChangeEmailPage(){
                 <MainInput
                     id={'currentPassword'}
                     type={'password'}
-                    label={'Ваш текущий пароль'}
+                    placeholder={'Ваш текущий пароль'}
                     value={currentPassword.inputState.value}
                     onChange={currentPassword.setValue}
                     error={currentPassword.inputState.error || undefined}

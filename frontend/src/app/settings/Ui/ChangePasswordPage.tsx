@@ -81,7 +81,7 @@ export default function ChangePasswordPage(){
                 <MainInput
                     id={'currentPassword'}
                     type={'password'}
-                    label={'Ваш текущий пароль'}
+                    placeholder={'Ваш текущий пароль'}
                     value={currentPassword.inputState.value}
                     onChange={currentPassword.setValue}
                     error={currentPassword.inputState.error || undefined}
@@ -89,7 +89,7 @@ export default function ChangePasswordPage(){
 
                 <MainHideInput
                     id={'newPassword'}
-                    label={'Новый пароль'}
+                    placeholder={'Новый пароль'}
                     value={newPassword.inputState.value}
                     onChange={newPassword.setValue}
                     error={newPassword.inputState.error || undefined}
@@ -98,7 +98,7 @@ export default function ChangePasswordPage(){
                 <MainInput
                     id={'confirmPassword'}
                     type={'password'}
-                    label={'Подтверждение нового пароля'}
+                    placeholder={'Подтверждение нового пароля'}
                     value={confirmPassword.inputState.value}
                     onChange={confirmPassword.setValue}
                     error={confirmPassword.inputState.error || undefined}
