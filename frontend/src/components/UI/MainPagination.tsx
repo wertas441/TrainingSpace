@@ -1,3 +1,4 @@
+import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
 
 interface MainPaginationProps{
     currentPage: number;
@@ -21,11 +22,11 @@ export default function MainPagination(
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="hidden md:flex items-center gap-2">
                     <button
-                        className={`px-3 py-1 text-sm rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 text-sm rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
                     >
-                        Назад
+                        <ArrowLeftIcon className={'h-4 w-4'} />
                     </button>
                     <div className="flex items-center gap-2">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).slice(0, 7).map(p => (
@@ -42,11 +43,11 @@ export default function MainPagination(
                         )}
                     </div>
                     <button
-                        className={`px-3 py-1 text-sm rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 text-sm rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         disabled={currentPage === totalPages}
                     >
-                        Вперёд
+                        <ArrowRightIcon className={'h-4 w-4'} />
                     </button>
                 </div>
 
@@ -61,21 +62,21 @@ export default function MainPagination(
                 </div>
                 <div className="flex items-center py-3 justify-center gap-2">
                     <button
-                        className={`px-3 py-1 text-sm rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 text-sm rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
                     >
-                        Назад
+                        <ArrowLeftIcon className={'h-4 w-4'} />
                     </button>
                     <div className="px-3 py-1 bg-white rounded-md border border-emerald-600 text-sm text-emerald-800">
                         {currentPage} / {totalPages}
                     </div>
                     <button
-                        className={`px-3 py-1 text-sm rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 text-sm rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         disabled={currentPage === totalPages}
                     >
-                        Вперёд
+                        <ArrowRightIcon className={'h-4 w-4'} />
                     </button>
                 </div>
             </div>

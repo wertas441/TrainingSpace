@@ -163,3 +163,50 @@ export const validateDayDescription = (description: string): string | null => {
 
     return null;
 }
+
+/// Training Validators
+export const validateTrainingName = (trainingName: string): string | null => {
+    if (!trainingName.trim()) {
+        return ('Пожалуйста, введите имя тренировки');
+    }
+
+    if (trainingName.length < 3) {
+        return (`Имя тренировки должно содержать минимум 3 символа (сейчас ${trainingName.length})`);
+    }
+
+    if (trainingName.length > 30) {
+        return (`Имя тренировки может содержать максимум 30 символов (сейчас ${trainingName.length})`);
+    }
+
+    // Разрешаем латиницу, цифры и базовые спецсимволы как в остальных валидаторах
+    const trainingNameRegex = /^[a-zA-Z0-9!@#$%^&*.]+$/;
+    if (!trainingNameRegex.test(trainingName)) {
+        return ('Имя тренировки может содержать только латинские буквы, цифры и некоторые спец.символы');
+    }
+
+    return null;
+}
+
+export const validateTrainingDescription = (description: string): string | null => {
+    // Необязательное поле
+    if (!description.trim()) {
+        return null;
+    }
+    const maxLength = 500;
+    if (description.length > maxLength) {
+        return (`Описание не должно превышать ${maxLength} символов (сейчас ${description.length})`);
+    }
+    return null;
+}
+
+export const validateTrainingExercises = (exerciseIds: number[]): string | null => {
+    if (!Array.isArray(exerciseIds) || exerciseIds.length === 0) {
+        return ('Добавьте хотя бы одно упражнение в тренировку');
+    }
+    // Проверка на уникальность id
+    const unique = new Set(exerciseIds);
+    if (unique.size !== exerciseIds.length) {
+        return ('Список упражнений содержит дубликаты');
+    }
+    return null;
+}

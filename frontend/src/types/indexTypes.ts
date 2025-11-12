@@ -12,7 +12,7 @@ export interface InputsStructure<T extends string | number> {
 
 // icon?: ComponentType<SVGProps<SVGSVGElement>>; //
 
-
+// const today = new Date().toLocaleDateString();
 
 export interface TrainingDataStructure {
     id: number;
