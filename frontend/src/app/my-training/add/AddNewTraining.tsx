@@ -8,7 +8,7 @@ import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {baseUrlForBackend} from "@/lib";
-import Select from "react-select";
+import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
 import {exercises} from "@/lib/data/exercises";
 import {usePagination} from "@/lib/hooks/usePagination";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
@@ -29,7 +29,6 @@ export default function AddNewTraining(){
     const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
     const itemsPerPage:number = 8;
     const today = new Date().toLocaleDateString();
-    console.log(today);
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
@@ -41,7 +40,7 @@ export default function AddNewTraining(){
             .map(v => ({ value: v, label: v }));
     }, []);
 
-    const selectedMuscles = useMemo(
+    const selectedMuscles: OptionType[] = useMemo(
         () => muscleOptions.filter(o => partOfBodyFilter.includes(o.value)),
         [partOfBodyFilter, muscleOptions]
     );
@@ -179,17 +178,13 @@ export default function AddNewTraining(){
                             />
                         </div>
 
-                        <div>
-                            <Select
-                                classNamePrefix="rs"
-                                isMulti={true}
-                                placeholder="Поиск упражнения по группе мышц..."
-                                options={muscleOptions}
-                                value={selectedMuscles}
-                                onChange={(vals) => setPartOfBodyFilter((vals as { value: string; label: string }[]).map(v => v.value))}
-                                noOptionsMessage={() => 'Нет опций'}
-                            />
-                        </div>
+                        <MainMultiSelect
+                            id="muscle-groups"
+                            options={muscleOptions}
+                            value={selectedMuscles}
+                            onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
+                            placeholder="Поиск упражнения по группе мышц..."
+                        />
 
                         <div className="grid grid-cols-1 gap-3">
                             {filteredList.length > 0 ? (

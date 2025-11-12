@@ -2,11 +2,11 @@ import FilterInput from "@/components/inputs/FilterInput";
 import {Bars3Icon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
 import {useCallback, useMemo} from "react";
-import Select from "react-select";
 import {difficultOptions, exercises} from "@/lib/data/exercises";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniquesTypes";
+import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 
 export default function ExercisesTechniquesHeader(
     {
@@ -116,17 +116,15 @@ export default function ExercisesTechniquesHeader(
                             </div>
 
                             <div>
-                                <div className="text-sm font-medium text-emerald-900 mb-2">Группы мышц</div>
-                                <Select
-                                    classNamePrefix="rs"
-                                    isMulti={true}
-                                    placeholder="Выберите группы..."
+                                <div className="text-sm font-medium text-emerald-900 mb-3">Группы мышц</div>
+                                <MainMultiSelect
+                                    id="muscle-groups"
                                     options={muscleOptions}
                                     value={selectedMuscles}
                                     onChange={(vals) => handleMusclesChange(vals as { value: string; label: string }[])}
-                                    noOptionsMessage={() => 'Нет опций'}
+                                    placeholder="Выберите группы..."
                                 />
-                                <div className="mt-1 text-xs text-gray-500">По умолчанию показываются все группы</div>
+                                <div className="mt-1.5 text-xs text-gray-500">По умолчанию показываются все группы</div>
                             </div>
                         </div>
                         <div className="px-5 py-4 border-t border-emerald-100">
