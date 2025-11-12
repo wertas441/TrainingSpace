@@ -90,6 +90,15 @@ export default function AddNewTraining(){
 
         setIsSubmitting(true);
 
+        const payload = {
+            trainingName: trainingName.inputState.value,
+            trainingDescription: trainingDescription.inputState.value,
+            exercises: selectedExerciseIds,
+            date: today,
+        }
+
+        console.log(payload);
+
         try {
             const result = await fetch(`${baseUrlForBackend}/api/training/add`, {
                 method: "POST",
@@ -97,12 +106,7 @@ export default function AddNewTraining(){
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({
-                    trainingName: trainingName.inputState.value,
-                    trainingDescription: trainingDescription.inputState.value,
-                    exercises: selectedExerciseIds,
-                    date: today,
-                }),
+                body: JSON.stringify(payload),
             });
 
             if (result.ok) {
@@ -230,10 +234,10 @@ export default function AddNewTraining(){
                                                 key={id}
                                                 type="button"
                                                 onClick={() => handleToggleExercise(id)}
-                                                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs hover:bg-emerald-100"
+                                                className="inline-flex cursor-pointer items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs hover:bg-emerald-100"
                                             >
                                                 {ex.name}
-                                                <span className="ml-1 rounded-full bg-white/60 px-1.5 py-0.5 text-[10px] border border-emerald-200">убрать</span>
+                                                <span className=" rounded-full bg-white/60 px-1.5 py-1 text-xs border border-emerald-200">убрать</span>
                                             </button>
                                         )
                                     })}

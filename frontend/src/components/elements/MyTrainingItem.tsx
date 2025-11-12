@@ -20,6 +20,19 @@ export default function MyTrainingItem({name, description, exercises}: MyTrainin
                         </p>
                     )}
                 </div>
+                <div className="md:col-span-2">
+                    <div className="text-sm font-medium text-emerald-900 mb-2">Упражнения</div>
+                    <div className="flex flex-wrap gap-2">
+                        {exercises.map((exName, idx) => (
+                            <span
+                                key={`${exName}-${idx}`}
+                                className="px-2 py-0.5 text-xs border rounded-full border-emerald-200 text-emerald-800 bg-emerald-50"
+                            >
+                                {exName}
+                            </span>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     )

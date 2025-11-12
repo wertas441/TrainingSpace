@@ -51,7 +51,7 @@ export default function SelectableExerciseRow({exercise, selected, onToggle}: Se
                     <button
                         type="button"
                         onClick={() => onToggle(exercise.id)}
-                        className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition ${
+                        className={`inline-flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition ${
                             selected
                                 ? 'border-rose-200 text-rose-700 hover:bg-rose-50'
                                 : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50'

@@ -77,9 +77,10 @@ export const validateDayName = (dayName: string): string | null => {
         return (`Имя дня может содержать максимум 15 символов (сейчас ${dayName.length})`)
     }
 
-    const dayNameRegex = /^[a-zA-Z0-9!@#$%^&*.]+$/;
+    // Разрешаем латиницу, кириллицу, цифры, пробел и часть спецсимволов
+    const dayNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
     if(!dayNameRegex.test(dayName)) {
-        return ('Имя дня может содержать только латинские буквы, цифры и некоторые спец.символы')
+        return ('Имя дня может содержать буквы (лат/кир), цифры, пробелы и некоторые спец.символы')
     }
 
 
@@ -179,9 +180,9 @@ export const validateTrainingName = (trainingName: string): string | null => {
     }
 
     // Разрешаем латиницу, цифры и базовые спецсимволы как в остальных валидаторах
-    const trainingNameRegex = /^[a-zA-Z0-9!@#$%^&*.]+$/;
+    const trainingNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
     if (!trainingNameRegex.test(trainingName)) {
-        return ('Имя тренировки может содержать только латинские буквы, цифры и некоторые спец.символы');
+        return ('Имя тренировки может содержать буквы (лат/кир), цифры, пробелы и некоторые спец.символы')
     }
 
     return null;

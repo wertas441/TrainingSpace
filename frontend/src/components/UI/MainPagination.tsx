@@ -22,7 +22,7 @@ export default function MainPagination(
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="hidden md:flex items-center gap-2">
                     <button
-                        className={`px-3 py-1.5 text-sm rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 text-sm cursor-pointer rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
                     >
@@ -33,7 +33,7 @@ export default function MainPagination(
                             <button
                                 key={p}
                                 onClick={() => setCurrentPage(p)}
-                                className={`h-8 min-w-8 px-4 rounded-md text-sm border ${p === currentPage ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                                className={`h-8 min-w-8 px-4 rounded-md cursor-pointer text-sm border ${p === currentPage ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                             >
                                 {p}
                             </button>
@@ -43,7 +43,7 @@ export default function MainPagination(
                         )}
                     </div>
                     <button
-                        className={`px-3 py-1.5 text-sm rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 text-sm  cursor-pointer rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         disabled={currentPage === totalPages}
                     >
@@ -62,7 +62,7 @@ export default function MainPagination(
                 </div>
                 <div className="flex items-center py-3 justify-center gap-2">
                     <button
-                        className={`px-3 py-1.5 text-sm rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 cursor-pointer text-sm rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
                     >
@@ -72,7 +72,7 @@ export default function MainPagination(
                         {currentPage} / {totalPages}
                     </div>
                     <button
-                        className={`px-3 py-1.5 text-sm rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 cursor-pointer text-sm rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         disabled={currentPage === totalPages}
                     >
