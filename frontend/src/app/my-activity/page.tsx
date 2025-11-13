@@ -1,26 +1,10 @@
 import type { Metadata } from 'next';
 import MyActivity from "@/app/my-activity/MyActivity";
+import {ActivityDataStructure} from "@/types/activityTypes";
 
 export const metadata: Metadata = {
     title: 'Моя активность | TrainingSpace',
     description: 'На этой странице вы можете отследить вашу добавленную в сервис активность',
-}
-
-export interface ActivityDataStructure {
-    id: number;
-    name: string;
-    description: string;
-    type: 'Силовая' | 'Кардио' | 'Комбинированный';
-    difficulty: 'Лёгкая' | 'Средняя' | 'Тяжелая';
-    trainingId: number;
-    exercises: {
-        id: number;
-        try: {
-            id: number;
-            weight: number;
-            quantity: number;
-        }[];
-    }[];
 }
 
 export default function MyActivityPage(){

@@ -11,6 +11,7 @@ interface MainMultiSelectProps {
     placeholder?: string;
     error?: string;
     noOptionsMessage?: () => string;
+    isMulti?: boolean;
 }
 
 export default function MainMultiSelect({
@@ -21,7 +22,8 @@ export default function MainMultiSelect({
     onChange,
     placeholder = "Выберите...",
     error,
-    noOptionsMessage = () => 'Нет опций'
+    noOptionsMessage = () => 'Нет опций',
+    isMulti = true,
 }: MainMultiSelectProps) {
 
     return (
@@ -34,10 +36,18 @@ export default function MainMultiSelect({
             <Select
                 inputId={id}
                 classNamePrefix="rs"
-                isMulti
-                value={value}
+                isMulti={isMulti}
+                // Для одиночного выбора передаём один объект либо null
+                value={isMulti ? value : (value[0] ?? null)}
                 options={options}
-                onChange={(vals) => onChange(vals as OptionType[])}
+                onChange={(vals) => {
+                    if (isMulti) {
+                        onChange(vals as OptionType[]);
+                    } else {
+                        const single = vals as OptionType | null;
+                        onChange(single ? [single] : []);
+                    }
+                }}
                 placeholder={placeholder}
                 noOptionsMessage={noOptionsMessage}
                 styles={{

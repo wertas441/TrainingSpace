@@ -1,7 +1,6 @@
 'use client'
 
-import {ActivityDataStructure} from "@/app/my-activity/page";
-
+import {ActivityDataStructure} from "@/types/activityTypes";
 
 export default function MyActivity({ activityData = [] }: {activityData?: ActivityDataStructure[]; }) {
 

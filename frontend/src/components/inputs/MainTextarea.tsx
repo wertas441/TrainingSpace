@@ -12,7 +12,7 @@ export default function MainTextarea({label, id, required = false, placeholder, 
     return (
         <div>
             {label && (
-                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-300">
+                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-400">
                     {label}
                 </label>
             )}
@@ -36,5 +36,6 @@ export default function MainTextarea({label, id, required = false, placeholder, 
         </div>
     )
 }
+
 
 
