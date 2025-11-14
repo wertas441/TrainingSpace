@@ -13,7 +13,6 @@ export default function AddActivityPage(){
     const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'];
     const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'];
 
-
     return <AddActivity
         myTrainings = {testTrainingData}
         activityTypeChoices = {activityTypeChoices}

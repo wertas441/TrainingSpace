@@ -1,12 +1,12 @@
 import {InputsStructure} from "@/types/indexTypes";
-import {ReactNode} from "react";
+import {memo, ReactNode, useMemo} from "react";
 
 interface FilterInputProps extends InputsStructure<string | number> {
     type?: string;
     icon?: ReactNode;
 }
 
-export default function FilterInput({label, id, type = 'text', icon, required = false, placeholder, value, onChange, error}: FilterInputProps) {
+function FilterInput({label, id, type = 'text', icon, required = false, placeholder, value, onChange, error}: FilterInputProps) {
 
     return (
         <div>
@@ -44,5 +44,5 @@ export default function FilterInput({label, id, type = 'text', icon, required = 
     )
 }
 
-
+export default memo(FilterInput);
 

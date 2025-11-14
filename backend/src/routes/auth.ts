@@ -8,7 +8,6 @@ import { config } from '../config';
 import { authGuard } from '../middleware/authMiddleware';
 const router = Router();
 
-
 router.post('/registration', async (req, res) => {
     try {
 

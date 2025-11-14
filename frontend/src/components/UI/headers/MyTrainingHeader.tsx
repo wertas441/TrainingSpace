@@ -31,7 +31,7 @@ export default function MyTrainingHeader(
                             placeholder="Поиск по названию тренировки"
                             value={searchName}
                             onChange={(v) => onSearchNameChange(String(v))}
-                            icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />, [])}
                         />
                         <div className="flew-row md:flex gap-2 ">
                             <Link
