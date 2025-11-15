@@ -85,9 +85,9 @@ export default function AddNutrition(){
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    name: dayName.inputState.value,
-                    description: dayDescription.inputState.value,
-                    date: dayDate.inputState.value,
+                    dayName: dayName.inputState.value,
+                    dayDescription: dayDescription.inputState.value,
+                    dayDate: dayDate.inputState.value,
                     calories: parseInt(calories.inputState.value, 10),
                     protein: parseInt(protein.inputState.value, 10),
                     fat: parseInt(fat.inputState.value, 10),
