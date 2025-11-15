@@ -12,8 +12,8 @@ export default function Nutrition() {
     const testData: NutritionDay[] = [
         {
             id: 1,
-            date: '27.02.2025',
             name: 'Крутой день',
+            date: '27.02.2025',
             calories: 2320,
             protein: 135,
             fat: 70,

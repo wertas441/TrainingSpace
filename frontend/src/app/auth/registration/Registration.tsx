@@ -12,7 +12,7 @@ import {
 import {baseUrlForBackend} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
-import {MainInput} from "@/components/inputs/MainInput";
+import MainInput from "@/components/inputs/MainInput";
 import {AtSymbolIcon, LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -65,7 +65,6 @@ export default function Registration(){
                     userName: userName.inputState.value,
                     email: email.inputState.value,
                     password: password.inputState.value,
-                    rememberMe: false,
                 }),
             });
 

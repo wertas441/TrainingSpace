@@ -91,8 +91,7 @@ export default function ExercisesTechniquesHeader(
                         <div className="px-5 py-4 space-y-6">
                             <div>
                                 <div className="flex gap-1 mb-3">
-                                    <h1 className={`text-sm font-medium mb-0.5 text-emerald-900`}>Сложность</h1>
-                                    <h2 className={`ml-1 self-center text-xs text-gray-500`}>(по умолчанию: все)</h2>
+                                    <h1 className={`text-sm font-medium text-emerald-900`}>Сложность</h1>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
                                     {difficultOptions.map(opt => {

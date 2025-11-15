@@ -1,29 +1,28 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
-import {UserModel} from "../models/User";
 import {ApiResponse} from "../types";
-import {AddNewDayFrontendStructure} from "../types/nutritionBackendTypes";
+import {AddNewDayFrontendStructure, DayListFrontendStructure} from "../types/nutritionBackendTypes";
 import {
     validateCalories, validateCarb,
     validateDayDescription,
     validateDayName,
     validateFat, validateNutritionDay,
     validateProtein
-} from "../lib/validators";
+} from "../lib/backendValidators";
 
 const router = Router();
 
 router.post('/nutrition/add-new-day', authGuard, async (req, res) => {
     try {
-        const {dayName, dayDescription, calories, protein, fat, carb, dayDate}: AddNewDayFrontendStructure = req.body;
+        const {name, description, calories, protein, fat, carb, date}: AddNewDayFrontendStructure = req.body;
 
-        const dayNameError:boolean = validateDayName(dayName);
-        const dayDescriptionError:boolean = validateDayDescription(dayDescription);
+        const dayNameError:boolean = validateDayName(name);
+        const dayDescriptionError:boolean = validateDayDescription(description);
         const caloriesError:boolean = validateCalories(calories);
         const proteinError:boolean = validateProtein(protein);
         const fatError:boolean = validateFat(fat);
         const carbError:boolean = validateCarb(carb);
-        const dayDateError:boolean = validateNutritionDay(dayDate);
+        const dayDateError:boolean = validateNutritionDay(date);
 
         if (!dayNameError || !dayDescriptionError || !caloriesError || !proteinError || !fatError || !carbError || !dayDateError) {
             const response: ApiResponse = {
@@ -41,6 +40,8 @@ router.post('/nutrition/add-new-day', authGuard, async (req, res) => {
 });
 
 router.get('/nutrition/my-day-list', authGuard, async (req, res) => {
+    const {id, name, description, calories, protein, fat, carb, date}: DayListFrontendStructure = req.body;
+
 
 });
 

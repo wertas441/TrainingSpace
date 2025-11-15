@@ -3,7 +3,6 @@
 import {useInputField} from "@/lib/hooks/useInputField";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
-import {MainInput} from "@/components/inputs/MainInput";
 import {FormEvent, useMemo} from "react";
 import {
     BeakerIcon,
@@ -26,6 +25,7 @@ import {
     validateDayDescription
 } from "@/lib/utils/validators";
 import MainTextarea from "@/components/inputs/MainTextarea";
+import MainInput from "@/components/inputs/MainInput";
 
 export default function AddNutrition(){
 
@@ -85,9 +85,9 @@ export default function AddNutrition(){
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    dayName: dayName.inputState.value,
-                    dayDescription: dayDescription.inputState.value,
-                    dayDate: dayDate.inputState.value,
+                    name: dayName.inputState.value,
+                    description: dayDescription.inputState.value,
+                    date: dayDate.inputState.value,
                     calories: parseInt(calories.inputState.value, 10),
                     protein: parseInt(protein.inputState.value, 10),
                     fat: parseInt(fat.inputState.value, 10),

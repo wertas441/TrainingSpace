@@ -3,7 +3,7 @@
 import {useInputField} from "@/lib/hooks/useInputField";
 import {FormEvent, useEffect, useMemo, useState} from "react";
 import ServerError from "@/components/errors/ServerError";
-import {MainInput} from "@/components/inputs/MainInput";
+import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
@@ -91,8 +91,8 @@ export default function AddNewTraining(){
         setIsSubmitting(true);
 
         const payload = {
-            trainingName: trainingName.inputState.value,
-            trainingDescription: trainingDescription.inputState.value,
+            name: trainingName.inputState.value,
+            description: trainingDescription.inputState.value,
             exercises: selectedExerciseIds,
             date: today,
         }

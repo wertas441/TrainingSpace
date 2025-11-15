@@ -22,8 +22,12 @@ interface AddActivityProps {
 
 export default function AddActivity({myTrainings, activityTypeChoices, activityDifficultyChoices}: AddActivityProps) {
 
+    const today = new Date();
+    const initialDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
     const activityName = useInputField('');
     const activityDescription = useInputField('');
+    const activityDate = useInputField(initialDate);
     const [activityType, setActivityType] = useState<ActivityTypeStructure>('Силовая');
     const [activityDifficulty, setActivityDifficulty] = useState<ActivityDifficultyStructure>('Средняя');
     const trainingId = useInputField('');
@@ -133,6 +137,7 @@ export default function AddActivity({myTrainings, activityTypeChoices, activityD
         const payload = {
             name: activityName.inputState.value.trim(),
             description: activityDescription.inputState.value.trim(),
+            activityDate: activityDate.inputState.value,
             type: activityType,
             difficulty: activityDifficulty,
             trainingId: Number(trainingId.inputState.value),
@@ -201,6 +206,16 @@ export default function AddActivity({myTrainings, activityTypeChoices, activityD
                         rows={4}
                     />
 
+                    <MainInput
+                        id={'activityDate'}
+                        type={'date'}
+                        label="Дата активности"
+                        value={activityDate.inputState.value}
+                        onChange={activityDate.setValue}
+                        error={activityDate.inputState.error || undefined}
+                    />
+
+
                     <ChipRadioGroup<ActivityTypeStructure>
                         id="activity-type"
                         name="activityType"
@@ -225,7 +240,7 @@ export default function AddActivity({myTrainings, activityTypeChoices, activityD
                         options={trainingOptions}
                         value={selectedTrainingOption}
                         onChange={(vals) => handleChangeTraining(vals[0]?.value ?? '')}
-                        placeholder="Выберите тренировку-шаблон"
+                        placeholder="Выберите тренировку"
                         isMulti={false}
                         noOptionsMessage={() => 'Нет тренировок'}
                     />

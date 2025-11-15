@@ -1,5 +1,5 @@
 import ServerError from "@/components/errors/ServerError";
-import {MainInput} from "@/components/inputs/MainInput";
+import MainInput from "@/components/inputs/MainInput";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {useInputField} from "@/lib/hooks/useInputField";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { ApiResponse, LoginRequest, RegisterRequest } from '../types';
-import { userEmailValidator, userNameValidator, userPasswordValidator } from '../lib/validators'
+import { userEmailValidator, userNameValidator, userPasswordValidator } from '../lib/backendValidators'
 import { UserModel } from '../models/User';
 import { config } from '../config';
 import { authGuard } from '../middleware/authMiddleware';

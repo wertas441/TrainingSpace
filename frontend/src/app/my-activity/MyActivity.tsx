@@ -1,35 +1,71 @@
 'use client'
 
 import {ActivityDataStructure} from "@/types/activityTypes";
+import {useMemo, useState} from "react";
+import {usePagination} from "@/lib/hooks/usePagination";
+import MainPagination from "@/components/UI/MainPagination";
+import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
+import MyActivityItem from "@/components/elements/MyActivityItem";
 
-export default function MyActivity({ activityData = [] }: {activityData?: ActivityDataStructure[]; }) {
+export default function MyActivity({activityData}:{activityData: ActivityDataStructure[]; }) {
+
+    const [searchName, setSearchName] = useState<string>('');
+    const itemsPerPage:number = 10;
+
+    const filteredList = useMemo(() => {
+        const q = searchName.toLowerCase().trim();
+        return activityData.filter(e => {
+            return q.length === 0 || e.name.toLowerCase().includes(q) ;
+        });
+    }, [searchName, activityData]);
+
+    const {
+        currentPage,
+        setCurrentPage,
+        listTopRef,
+        totalItems,
+        totalPages,
+        paginatedList,
+    } = usePagination(filteredList, itemsPerPage)
+
 
     return (
-        <>
-            <h1>MyActivity</h1>
-            <div>
-                {activityData.map((activity) => (
-                    <div key={activity.id}>
-                        <h2>{activity.name}</h2>
-                        <p>{activity.description}</p>
-                        <p>Тип: {activity.type} · Сложность: {activity.difficulty}</p>
-                        <div>
-                            {activity.exercises.map((ex) => (
-                                <div key={ex.id}>
-                                    <strong>Упражнение #{ex.id}</strong>
-                                    <ul>
-                                        {ex.try.map((set) => (
-                                            <li key={set.id}>
-                                                Подход {set.id}: {set.quantity} повт · {set.weight} кг
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
+        <div className="activity">
+            <MyActivityHeader
+                searchName={searchName}
+                onSearchNameChange={setSearchName}
+                ref={listTopRef}
+            />
+
+            <div className="grid mt-6 grid-cols-1 gap-3">
+                {filteredList.length > 0 ? (
+                    paginatedList.map((item) => {
+
+                        return (
+                            <MyActivityItem
+                                key={item.id}
+                                name={item.name}
+                                date={item.activityDate}
+                                description={item.description}
+                            />
+                        )
+                    })
+                ) : (
+                    <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
+                        Такой активности не найдено. Попробуйте изменить запрос.
                     </div>
-                ))}
+                )}
             </div>
-        </>
+
+            {totalItems > itemsPerPage && (
+                <MainPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={totalItems}
+                    setCurrentPage={setCurrentPage}
+                    itemsPerPage={itemsPerPage}
+                />
+            )}
+        </div>
     )
 }

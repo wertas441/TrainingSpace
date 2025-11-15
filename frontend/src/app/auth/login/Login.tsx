@@ -5,7 +5,7 @@ import {FormEvent, useMemo, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
 import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
-import {MainInput} from "@/components/inputs/MainInput";
+import MainInput from "@/components/inputs/MainInput";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -48,9 +48,9 @@ export default function Login(){
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    login: email.inputState.value,
+                    email: email.inputState.value,
                     password: password.inputState.value,
-                    remember_me: rememberMe,
+                    rememberMe: rememberMe,
                 }),
             });
 

@@ -12,14 +12,15 @@ export default function MyActivityPage(){
     const activityData: ActivityDataStructure[] = [
         {
             id: 1,
-            name: 'Грудь + трицепс',
-            description: 'Тренировка с упором на грудные мышцы и трицепс',
+            name: 'Тренировка ног в среду ',
+            description: 'Тренировка с упором на мышцы икры и бедра, также почему то странно болели ноги и как будто плохо размялся',
+            activityDate: '26.08.2025',
             type: 'Силовая',
             difficulty: 'Средняя',
             trainingId: 3,
             exercises: [
                 {
-                    id: 2,
+                    exercisesId: 2,
                     try: [
                         { id: 1, weight: 60, quantity: 12 },
                         { id: 2, weight: 70, quantity: 10 },
@@ -27,7 +28,7 @@ export default function MyActivityPage(){
                     ],
                 },
                 {
-                    id: 3,
+                    exercisesId: 3,
                     try: [
                         { id: 1, weight: 40, quantity: 12 },
                         { id: 2, weight: 24, quantity: 12 },
@@ -40,12 +41,13 @@ export default function MyActivityPage(){
             id: 2,
             name: 'Ноги',
             description: 'Присед и жим ногами',
+            activityDate: '29.10.2025',
             type: 'Силовая',
             difficulty: 'Тяжелая',
             trainingId: 5,
             exercises: [
                 {
-                    id: 6,
+                    exercisesId: 6,
                     try: [
                         { id: 1, weight: 80, quantity: 10 },
                         { id: 2, weight: 90, quantity: 8 },
@@ -53,7 +55,7 @@ export default function MyActivityPage(){
                     ],
                 },
                 {
-                    id: 7,
+                    exercisesId: 7,
                     try: [
                         { id: 1, weight: 140, quantity: 12 },
                         { id: 2, weight: 160, quantity: 10 },
@@ -62,6 +64,8 @@ export default function MyActivityPage(){
             ],
         }
     ]
+
+
 
     return <MyActivity activityData = {activityData} />
 }

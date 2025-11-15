@@ -6,7 +6,7 @@ import {baseUrlForBackend} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import {MainInput} from "@/components/inputs/MainInput";
+import MainInput from "@/components/inputs/MainInput";
 
 export default function ChangePasswordPage(){
 

@@ -7,11 +7,12 @@ export interface ActivityDataStructure {
     id: number;
     name: string;
     description: string;
+    activityDate: string;
     type: ActivityTypeStructure;
     difficulty: ActivityDifficultyStructure;
     trainingId: number;
     exercises: {
-        id: number;
+        exercisesId: number;
         try: {
             id: number;
             weight: number;

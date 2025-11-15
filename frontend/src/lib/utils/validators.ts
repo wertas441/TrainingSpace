@@ -211,3 +211,5 @@ export const validateTrainingExercises = (exerciseIds: number[]): string | null 
     }
     return null;
 }
+
+
