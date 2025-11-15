@@ -1,13 +1,12 @@
-'use client'
-
 import {InputsStructure} from "@/types/indexTypes";
 import {mainInputClasses} from "@/lib";
+import {memo} from "react";
 
 interface MainTextareaProps extends InputsStructure<string> {
     rows?: number;
 }
 
-export default function MainTextarea({label, id, required = false, placeholder, value, onChange, error, rows = 4}: MainTextareaProps) {
+function MainTextarea({label, id, required = false, placeholder, value, onChange, error, rows = 4}: MainTextareaProps) {
 
     return (
         <div>
@@ -36,6 +35,9 @@ export default function MainTextarea({label, id, required = false, placeholder, 
         </div>
     )
 }
+
+export default memo(MainTextarea);
+
 
 
 

@@ -6,7 +6,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
 import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
 import {MainInput} from "@/components/inputs/MainInput";
-import BlockPageContext from "@/components/UI/BlockPageContext";
+import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {baseUrlForBackend} from "@/lib";

@@ -10,7 +10,7 @@ import {
     validateUserPassword
 } from "@/lib/utils/validators";
 import {baseUrlForBackend} from "@/lib";
-import BlockPageContext from "@/components/UI/BlockPageContext";
+import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import {MainInput} from "@/components/inputs/MainInput";
 import {AtSymbolIcon, LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";

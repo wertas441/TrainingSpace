@@ -1,3 +1,5 @@
+import {memo} from "react";
+
 interface ChipRadioGroupProps<T extends string> {
     id: string;
     label: string;
@@ -8,7 +10,7 @@ interface ChipRadioGroupProps<T extends string> {
     className?: string;
 }
 
-export default function ChipRadioGroup<T extends string>({ id, name, label, choices, value, onChange, className = "" }: ChipRadioGroupProps<T>) {
+function ChipRadioGroup<T extends string>({ id, name, label, choices, value, onChange, className = "" }: ChipRadioGroupProps<T>) {
 
     return (
         <div className="space-y-2">
@@ -41,3 +43,5 @@ export default function ChipRadioGroup<T extends string>({ id, name, label, choi
 
     );
 }
+
+export default memo(ChipRadioGroup);

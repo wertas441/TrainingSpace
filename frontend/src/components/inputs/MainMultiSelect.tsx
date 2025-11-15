@@ -1,4 +1,5 @@
 import Select from "react-select";
+import {memo} from "react";
 
 export type OptionType = { value: string; label: string };
 
@@ -14,17 +15,17 @@ interface MainMultiSelectProps {
     isMulti?: boolean;
 }
 
-export default function MainMultiSelect({
-    id,
-    label,
-    value,
-    options,
-    onChange,
-    placeholder = "Выберите...",
-    error,
-    noOptionsMessage = () => 'Нет опций',
-    isMulti = true,
-}: MainMultiSelectProps) {
+function MainMultiSelect({
+                                            id,
+                                            label,
+                                            value,
+                                            options,
+                                            onChange,
+                                            placeholder = "Выберите...",
+                                            error,
+                                            noOptionsMessage = () => 'Нет опций',
+                                            isMulti = true,
+                                        }: MainMultiSelectProps) {
 
     return (
         <div>
@@ -131,4 +132,4 @@ export default function MainMultiSelect({
     );
 }
 
-
+export default memo(MainMultiSelect)

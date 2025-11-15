@@ -1,5 +1,5 @@
 import {mainInputClasses} from "@/lib";
-import {ReactNode} from "react";
+import {memo, ReactNode} from "react";
 import {InputsStructure} from "@/types/indexTypes";
 
 interface MainInputProps extends InputsStructure<string>  {
@@ -7,7 +7,7 @@ interface MainInputProps extends InputsStructure<string>  {
     icon?: ReactNode;
 }
 
-export function MainInput({label, id, type = 'text', icon, required = false, placeholder,
+function MainInput({label, id, type = 'text', icon, required = false, placeholder,
                               value, onChange, error}: MainInputProps) {
 
     return (
@@ -43,3 +43,5 @@ export function MainInput({label, id, type = 'text', icon, required = false, pla
         </div>
     )
 }
+
+export default memo(MainInput);

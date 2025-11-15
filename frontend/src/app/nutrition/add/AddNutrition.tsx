@@ -1,7 +1,7 @@
 'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
-import BlockPageContext from "@/components/UI/BlockPageContext";
+import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import {MainInput} from "@/components/inputs/MainInput";
 import {FormEvent, useMemo} from "react";
