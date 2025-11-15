@@ -1,11 +1,12 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {Bars3Icon, CalendarIcon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
-import {useMemo} from "react";
+import {useCallback, useMemo} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import Link from "next/link";
 import {PlusIcon} from "@heroicons/react/16/solid";
 import {NutritionHeaderProps} from "@/types/nutritionTypes";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
+import {useRouter} from "next/navigation";
 
 export default function NutritionHeader(
     {
@@ -36,6 +37,7 @@ export default function NutritionHeader(
     }: NutritionHeaderProps) {
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
+    const router = useRouter();
 
     return (
         <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm">
@@ -65,12 +67,12 @@ export default function NutritionHeader(
                     </div>
 
                     <div className="flew-row md:flex gap-2 ">
-                        <Link
+                        <button
                             className={'inline-flex w-full items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
-                            href={'/nutrition/add'}
+                            onClick={useCallback(() => router.push('/nutrition/add'), [router])}
                         >
                             {useMemo(() => <PlusIcon className={`h-6 w-6 text-emerald-600`} />, [])}
-                        </Link>
+                        </button>
                         <button
                             className={'inline-flex w-full cursor-pointer items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
                             onClick={toggleFilterWindow}

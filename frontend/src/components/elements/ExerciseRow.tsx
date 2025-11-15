@@ -1,11 +1,7 @@
 import {exercises} from "@/lib/data/exercises";
-import React from "react";
+import {memo} from "react";
 
 type Exercise = typeof exercises[number];
-
-interface ExerciseRowProps {
-    exercise: Exercise;
-}
 
 function getDifficultyStyles(difficulty: Exercise["difficulty"]) {
     switch (difficulty) {
@@ -20,7 +16,7 @@ function getDifficultyStyles(difficulty: Exercise["difficulty"]) {
     }
 }
 
-export default function ExerciseRow({exercise}: ExerciseRowProps) {
+function ExerciseRow({exercise}:{exercise: Exercise}) {
     const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getDifficultyStyles(exercise.difficulty)}`;
 
     return (
@@ -52,5 +48,7 @@ export default function ExerciseRow({exercise}: ExerciseRowProps) {
         </div>
     );
 }
+
+export default memo(ExerciseRow);
 
 

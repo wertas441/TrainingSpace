@@ -1,3 +1,4 @@
+import {memo} from "react";
 
 interface MyTrainingItemProps {
     name: string;
@@ -5,7 +6,7 @@ interface MyTrainingItemProps {
     exercises: string[];
 }
 
-export default function MyTrainingItem({name, description, exercises}: MyTrainingItemProps ){
+function MyTrainingItem({name, description, exercises}: MyTrainingItemProps ){
 
     return (
         <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm hover:shadow-md transition">
@@ -37,3 +38,5 @@ export default function MyTrainingItem({name, description, exercises}: MyTrainin
         </div>
     )
 }
+
+export default memo(MyTrainingItem);

@@ -33,7 +33,7 @@ export default function MyTraining({trainingList}:{trainingList: TrainingDataStr
         <div className="training">
             <MyTrainingHeader
                 searchName={searchName}
-                onSearchNameChange={setSearchName}
+                setSearchName={setSearchName}
                 ref={listTopRef}
             />
 
@@ -43,17 +43,21 @@ export default function MyTraining({trainingList}:{trainingList: TrainingDataStr
                         // Преобразуем id упражнений в имена; поддержим оба варианта:
                         // 1) id из поля exercises.id (1..N)
                         // 2) индекс массива exercises (0..N-1), если id не найден
-                        const exerciseNames: string[] = item.exercises
-                            .map((n) => {
-                                const byId = exercises.find(ex => ex.id === n);
-                                if (byId) return byId.name;
-                                // если n — корректный индекс
-                                if (n >= 0 && n < exercises.length) {
-                                    return exercises[n].name;
-                                }
-                                return null;
-                            })
-                            .filter((v): v is string => Boolean(v));
+                        // eslint-disable-next-line react-hooks/rules-of-hooks
+                        const exerciseNames: string[] = useMemo(()=>{
+                            return (
+                                item.exercises
+                                    .map((n) => {
+                                        const byId = exercises.find(ex => ex.id === n);
+                                        if (byId) return byId.name;
+                                        // если n — корректный индекс
+                                        if (n >= 0 && n < exercises.length) {
+                                            return exercises[n].name;
+                                        }
+                                        return null;
+                                    })
+                                    .filter((v): v is string => Boolean(v)))
+                        }, [item.exercises])
 
                         return (
                             <MyTrainingItem

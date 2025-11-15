@@ -1,12 +1,13 @@
 import {CalendarDaysIcon, FireIcon, BeakerIcon, ScaleIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 import {NutritionDay} from "@/types/nutritionTypes";
+import {memo} from "react";
 
 function formatDateHuman(date: Date | string): string {
 	const d = typeof date === 'string' ? new Date(date) : date;
 	return d.toLocaleDateString();
 }
 
-export default function NutritionDayItem({ name, date, description, calories, protein, fat, carb }: NutritionDay) {
+function NutritionDayItem({ name, date, description, calories, protein, fat, carb }: NutritionDay) {
 
 	return (
 		<div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm hover:shadow-md transition">
@@ -63,4 +64,4 @@ export default function NutritionDayItem({ name, date, description, calories, pr
 	);
 }
 
-
+export default memo(NutritionDayItem);

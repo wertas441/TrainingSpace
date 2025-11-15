@@ -1,4 +1,5 @@
 import { CalendarDaysIcon} from "@heroicons/react/24/outline";
+import {memo} from "react";
 
 interface MyActivityItemProps {
     name: string;
@@ -6,7 +7,7 @@ interface MyActivityItemProps {
     description: string;
 }
 
-export default function MyActivityItem({name, date, description}:MyActivityItemProps){
+function MyActivityItem({name, date, description}:MyActivityItemProps){
 
     return (
         <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm hover:shadow-md transition">
@@ -33,3 +34,5 @@ export default function MyActivityItem({name, date, description}:MyActivityItemP
         </div>
     )
 }
+
+export default memo(MyActivityItem);

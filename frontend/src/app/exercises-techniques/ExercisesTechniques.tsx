@@ -48,7 +48,7 @@ export default function ExercisesTechniques() {
             <ExercisesTechniquesHeader
                 ref={listTopRef}
                 searchName={searchName}
-                onSearchChange={setSearchName}
+                setSearchName={setSearchName}
                 isFilterWindowOpen={isFilterWindowOpen}
                 toggleFilterWindow={toggleFilterWindow}
                 difficultFilter={difficultFilter}

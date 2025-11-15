@@ -1,4 +1,4 @@
-import {ElementType} from "react";
+import {ElementType, Ref} from "react";
 
 export interface InputsStructure<T extends string | number> {
     id: string;
@@ -19,6 +19,12 @@ export interface TrainingDataStructure {
     name: string;
     description: string;
     exercises: number[];
+}
+
+export interface HeaderMinimumProps {
+    ref: Ref<HTMLDivElement>;
+    searchName: string;
+    setSearchName: (newValue: string) => void;
 }
 
 

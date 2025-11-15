@@ -213,3 +213,37 @@ export const validateTrainingExercises = (exerciseIds: number[]): string | null 
 }
 
 
+/// Goal Validators
+
+export const validateGoalName = (goalName: string): string | null => {
+    if (!goalName.trim()) {
+        return ('Пожалуйста, введите имя цели');
+    }
+
+    if (goalName.length < 3) {
+        return (`Имя цели должно содержать минимум 3 символа (сейчас ${goalName.length})`);
+    }
+
+    if (goalName.length > 30) {
+        return (`Имя цели может содержать максимум 30 символов (сейчас ${goalName.length})`);
+    }
+
+    const goalNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
+    if (!goalNameRegex.test(goalName)) {
+        return ('Имя цели может содержать буквы (лат/кир), цифры, пробелы и некоторые спец.символы')
+    }
+
+    return null;
+}
+
+export const validateGoalDescription = (description: string): string | null => {
+    if (!description.trim()) {
+        return null;
+    }
+
+    if (description.length > 500) {
+        return (`Описание не должно превышать 500 символов (сейчас ${description.length})`);
+    }
+
+    return null;
+}

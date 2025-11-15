@@ -1,14 +1,13 @@
 import {
     CakeIcon,
-    ChartBarIcon, EnvelopeIcon,
-    HomeIcon, LockClosedIcon,
+    ChartBarIcon,
+    HomeIcon,
     PuzzlePieceIcon, RectangleGroupIcon,
     SparklesIcon,
     Squares2X2Icon,
-    SquaresPlusIcon, UserCircleIcon,
+    SquaresPlusIcon,
     WrenchScrewdriverIcon
 } from "@heroicons/react/24/outline";
-import {SettingsMenuItemsStructure} from "@/types/indexTypes";
 
 export const baseUrlForBackend:string = 'localhost:9000';
 
@@ -47,14 +46,14 @@ export const mainSideBarItems = [
         icon: CakeIcon,
     },
     {
+        label: 'Цели',
+        link: '/goals',
+        icon: SparklesIcon,
+    },
+    {
         label: 'Техника упражнений',
         link: '/exercises-techniques',
         icon: PuzzlePieceIcon,
-    },
-    {
-        label: 'Советы',
-        link: '/advises',
-        icon: SparklesIcon,
     },
     {
         label: 'Настройки',
@@ -63,9 +62,4 @@ export const mainSideBarItems = [
     },
 ]
 
-export const settingsMenuItems: SettingsMenuItemsStructure[] = [
-    { id: 'profile', label: 'Профиль', icon: UserCircleIcon },
-    { id: 'password', label: 'Сменить пароль', icon: LockClosedIcon },
-    { id: 'email', label: 'Сменить почту', icon: EnvelopeIcon },
-    { id: 'projectInformation', label: 'Информация о проекте', icon: LockClosedIcon },
-];
+

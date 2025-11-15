@@ -1,17 +1,17 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {Bars3Icon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
-import {useCallback, useMemo} from "react";
+import {memo, useCallback, useMemo} from "react";
 import {difficultOptions, exercises} from "@/lib/data/exercises";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniquesTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 
-export default function ExercisesTechniquesHeader(
+function ExercisesTechniquesHeader(
     {
         searchName,
-        onSearchChange,
+        setSearchName,
         isFilterWindowOpen,
         toggleFilterWindow,
         difficultFilter,
@@ -62,7 +62,7 @@ export default function ExercisesTechniquesHeader(
                         <FilterInput
                             id="exercise-search"
                             value={searchName}
-                            onChange={(v) => onSearchChange(String(v))}
+                            onChange={(v) => setSearchName(String(v))}
                             placeholder="Поиск по названию..."
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" />, [])}
                         />
@@ -138,3 +138,5 @@ export default function ExercisesTechniquesHeader(
         </div>
     )
 }
+
+export default memo(ExercisesTechniquesHeader)

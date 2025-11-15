@@ -1,4 +1,4 @@
-import {ReactNode, useState} from "react";
+import {memo, ReactNode, useState} from "react";
 import {EyeIcon, EyeSlashIcon} from "@heroicons/react/24/outline";
 import {mainInputClasses} from "@/lib";
 import {InputsStructure} from "@/types/indexTypes";
@@ -7,7 +7,7 @@ interface MainHideInputProps extends InputsStructure<string> {
     icon?: ReactNode;
 }
 
-export default function MainHideInput({label, id, icon, required = false, placeholder,
+function MainHideInput({label, id, icon, required = false, placeholder,
                                           value, onChange, error}:MainHideInputProps){
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -57,3 +57,5 @@ export default function MainHideInput({label, id, icon, required = false, placeh
         </div>
     )
 }
+
+export default memo(MainHideInput)

@@ -3,12 +3,21 @@
 import ProfilePage from "@/app/settings/Ui/ProfilePage";
 import ChangePasswordPage from "@/app/settings/Ui/ChangePasswordPage";
 import ChangeEmailPage from "@/app/settings/Ui/ChangeEmailPage";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import ProjectInformationPage from "@/app/settings/Ui/ProjectInformationPage";
-import {settingsMenuItems} from "@/lib";
-import {ArrowLeftOnRectangleIcon} from "@heroicons/react/24/outline";
+import {ArrowLeftOnRectangleIcon, EnvelopeIcon, LockClosedIcon, UserCircleIcon} from "@heroicons/react/24/outline";
+import {SettingsMenuItemsStructure} from "@/types/indexTypes";
 
 export default function Settings(){
+
+    const settingsMenuItems: SettingsMenuItemsStructure[] = useMemo(() => {
+        return [
+            { id: 'profile', label: 'Профиль', icon: UserCircleIcon },
+            { id: 'password', label: 'Сменить пароль', icon: LockClosedIcon },
+            { id: 'email', label: 'Сменить почту', icon: EnvelopeIcon },
+            { id: 'projectInformation', label: 'Информация о проекте', icon: LockClosedIcon },
+        ]
+    }, [])
 
     const [activeTab, setActiveTab] = useState('profile');
     const activeItem = settingsMenuItems.find(i => i.id === activeTab);
@@ -27,6 +36,7 @@ export default function Settings(){
                 return <ProfilePage />;
         }
     };
+
 
     return (
         <div className="w-full">

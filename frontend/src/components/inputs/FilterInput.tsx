@@ -1,5 +1,5 @@
 import {InputsStructure} from "@/types/indexTypes";
-import {memo, ReactNode, useMemo} from "react";
+import {memo, ReactNode} from "react";
 
 interface FilterInputProps extends InputsStructure<string | number> {
     type?: string;

@@ -1,23 +1,23 @@
 'use client'
 
-import {ActivityDataStructure} from "@/types/activityTypes";
-import {useMemo, useState} from "react";
-import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
-import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
-import MyActivityItem from "@/components/elements/MyActivityItem";
+import {usePagination} from "@/lib/hooks/usePagination";
+import {useMemo, useState} from "react";
+import GoalsHeader from "@/components/UI/headers/GoalsHeader";
+import {GoalsStructure} from "@/types/goalTypes";
+import GoalItem from "@/components/elements/GoalItem";
 
-export default function MyActivity({activityData}:{activityData: ActivityDataStructure[]; }) {
+export default function Goals({clientGoals}:{clientGoals: GoalsStructure[]}) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
-        return activityData.filter(e => {
+        return clientGoals.filter(e => {
             return q.length === 0 || e.name.toLowerCase().includes(q) ;
         });
-    }, [searchName, activityData]);
+    }, [searchName, clientGoals]);
 
     const {
         currentPage,
@@ -28,10 +28,9 @@ export default function MyActivity({activityData}:{activityData: ActivityDataStr
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
-
     return (
-        <div className="activity">
-            <MyActivityHeader
+        <div className="nutrition">
+            <GoalsHeader
                 searchName={searchName}
                 setSearchName={setSearchName}
                 ref={listTopRef}
@@ -39,20 +38,19 @@ export default function MyActivity({activityData}:{activityData: ActivityDataStr
 
             <div className="grid mt-6 grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
-                    paginatedList.map((item) => {
-
-                        return (
-                            <MyActivityItem
+                    paginatedList.map(item => (
+                            <GoalItem
                                 key={item.id}
+                                id={item.id}
                                 name={item.name}
-                                date={item.activityDate}
                                 description={item.description}
+                                priority={item.priority}
                             />
                         )
-                    })
+                    )
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Такой активности не найдено. Попробуйте изменить запрос.
+                        Такой цели не найдено. Попробуйте изменить запрос.
                     </div>
                 )}
             </div>

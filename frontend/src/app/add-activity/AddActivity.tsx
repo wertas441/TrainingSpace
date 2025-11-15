@@ -11,7 +11,7 @@ import type {TrainingDataStructure} from "@/types/indexTypes";
 import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
 import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
-import AddTrainingActivityItem from "@/components/UI/AddTrainingActivityItem";
+import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
 
 interface AddActivityProps {

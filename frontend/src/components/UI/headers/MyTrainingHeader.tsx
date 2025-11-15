@@ -1,21 +1,13 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import Link from "next/link";
-import {Ref, useMemo} from "react";
+import {useCallback, useMemo} from "react";
 import {PlusIcon} from "@heroicons/react/16/solid";
+import {HeaderMinimumProps} from "@/types/indexTypes";
+import {useRouter} from "next/navigation";
 
-interface MyTrainingHeaderProps {
-    ref: Ref<HTMLDivElement>;
-    searchName: string;
-    onSearchNameChange: (newValue: string) => void;
-}
+export default function MyTrainingHeader({ref, searchName, setSearchName}:HeaderMinimumProps) {
 
-export default function MyTrainingHeader(
-    {
-        ref,
-        searchName,
-        onSearchNameChange
-    }:MyTrainingHeaderProps) {
+    const router = useRouter();
 
     return (
         <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm">
@@ -30,16 +22,16 @@ export default function MyTrainingHeader(
                             id="training-search-name"
                             placeholder="Поиск по названию тренировки"
                             value={searchName}
-                            onChange={(v) => onSearchNameChange(String(v))}
+                            onChange={(v) => setSearchName(String(v))}
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />, [])}
                         />
                         <div className="flew-row md:flex gap-2 ">
-                            <Link
+                            <button
                                 className={'inline-flex  items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
-                                href={'/my-training/add'}
+                                onClick={useCallback(() => router.push('my-training/add'), [router])}
                             >
                                 {useMemo(() => <PlusIcon className={`h-6 w-6 text-emerald-600`} />, [])}
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>
