@@ -1,7 +1,7 @@
 import {GoalPriority, GoalsStructure} from "@/types/goalTypes";
-import {memo, useCallback, useMemo} from "react";
+import {memo, useCallback} from "react";
 import {useRouter} from "next/navigation";
-import {PencilSquareIcon} from "@heroicons/react/24/outline";
+import ChangeButton from "@/components/buttons/ChangeButton";
 
 function getDifficultyStyles(priority: GoalPriority) {
     switch (priority) {
@@ -16,15 +16,11 @@ function getDifficultyStyles(priority: GoalPriority) {
     }
 }
 
-function GoalItem({id, name, description, priority}: GoalsStructure ) {
+function GoalRow({id, name, description, priority}: GoalsStructure ) {
 
     const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getDifficultyStyles(priority)}`;
-
     const router = useRouter();
-    const callBackRouter = useCallback(() => {
-        router.push(`/goals/${id}`);
-    }, [id, router])
-    
+
     return (
         <div className="w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
@@ -40,17 +36,13 @@ function GoalItem({id, name, description, priority}: GoalsStructure ) {
                     </p>
                 </div>
                 <div className="flex items-center ">
-                    <button
-                        className={`inline-flex cursor-pointer  items-center justify-center rounded-md border border-emerald-200 bg-white
-                         py-2 px-2.5 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition`}
-                        onClick={callBackRouter}
-                    >
-                        {useMemo(() => <PencilSquareIcon className={`h-7 w-7`} />, [] )}
-                    </button>
+                    <ChangeButton
+                        onClick={useCallback(() => router.push(`/goals/${id}`), [id, router])}
+                    />
                 </div>
             </div>
         </div>
     );
 }
 
-export default memo(GoalItem);
+export default memo(GoalRow);

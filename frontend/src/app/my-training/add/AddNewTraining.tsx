@@ -18,6 +18,7 @@ import {
     validateTrainingName
 } from "@/lib/utils/validators";
 import MainPagination from "@/components/UI/MainPagination";
+import {TagIcon} from "@heroicons/react/24/outline";
 
 export default function AddNewTraining(){
 
@@ -160,7 +161,9 @@ export default function AddNewTraining(){
                             id={'trainingName'}
                             value={trainingName.inputState.value}
                             onChange={trainingName.setValue}
-                            placeholder={'Придумайте имя для тренировки'}
+                            icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
+                            label={`Название тренировки`}
+                            placeholder={'Силовая тренировка на грудь'}
                             error={trainingName.inputState.error || undefined}
                         />
 
@@ -168,7 +171,9 @@ export default function AddNewTraining(){
                             id={'trainingDescription'}
                             value={trainingDescription.inputState.value}
                             onChange={trainingDescription.setValue}
-                            placeholder={'Описание тренировки (необязательно)'}
+                            label={'Описание тренировки'}
+                            icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
+                            placeholder="Опционально: описание для тренировки"
                             error={trainingDescription.inputState.error || undefined}
                             rows={4}
                         />

@@ -1,13 +1,13 @@
 import {CalendarDaysIcon, FireIcon, BeakerIcon, ScaleIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 import {NutritionDay} from "@/types/nutritionTypes";
-import {memo} from "react";
+import {memo, useCallback} from "react";
+import ChangeButton from "@/components/buttons/ChangeButton";
+import {useRouter} from "next/navigation";
 
-function formatDateHuman(date: Date | string): string {
-	const d = typeof date === 'string' ? new Date(date) : date;
-	return d.toLocaleDateString();
-}
 
-function NutritionDayItem({ name, date, description, calories, protein, fat, carb }: NutritionDay) {
+function NutritionDayRow({ id, name, date, description, calories, protein, fat, carb }: NutritionDay) {
+
+    const router = useRouter();
 
 	return (
 		<div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm hover:shadow-md transition">
@@ -17,7 +17,7 @@ function NutritionDayItem({ name, date, description, calories, protein, fat, car
 						<h3 className="text-lg font-semibold text-gray-900">{name}</h3>
 						<span className="inline-flex items-center gap-1 text-sm text-gray-600">
 							<CalendarDaysIcon className="w-4 h-4" />
-							{formatDateHuman(date)}
+                            {date}
 						</span>
 					</div>
 					{description && (
@@ -27,8 +27,8 @@ function NutritionDayItem({ name, date, description, calories, protein, fat, car
 					)}
 				</div>
 
-				<div className="md:col-span-2">
-					<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+				<div className="flex justify-end gap-3 md:col-span-2">
+					<div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-3">
 						<div className="flex items-center gap-2 rounded-md border border-emerald-100 px-3 py-2">
 							<FireIcon className="w-5 h-5 text-emerald-600" />
 							<div className="text-sm">
@@ -58,10 +58,15 @@ function NutritionDayItem({ name, date, description, calories, protein, fat, car
 							</div>
 						</div>
 					</div>
+                    <div className="flex items-center ">
+                        <ChangeButton
+                            onClick={useCallback(() => router.push(`/nutrition/${id}`), [id, router])}
+                        />
+                    </div>
 				</div>
 			</div>
 		</div>
 	);
 }
 
-export default memo(NutritionDayItem);
+export default memo(NutritionDayRow);

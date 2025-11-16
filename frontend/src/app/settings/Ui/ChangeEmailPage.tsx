@@ -4,8 +4,9 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {useInputField} from "@/lib/hooks/useInputField";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators";
-import {FormEvent} from "react";
+import {FormEvent, useMemo} from "react";
 import {baseUrlForBackend} from "@/lib";
+import {LockClosedIcon, AtSymbolIcon} from "@heroicons/react/24/outline";
 
 export default function ChangeEmailPage(){
 
@@ -76,12 +77,13 @@ export default function ChangeEmailPage(){
 
             <ServerError message={serverError} />
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={handleSubmit}>
 
                 <MainInput
                     id={'currentEmail'}
                     type={'email'}
-                    placeholder={'Ваша текущая почта'}
+                    label={'Ваша текущая почта'}
+                    icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
                     value={currentEmail.inputState.value}
                     onChange={currentEmail.setValue}
                     error={currentEmail.inputState.error || undefined}
@@ -90,7 +92,8 @@ export default function ChangeEmailPage(){
                 <MainInput
                     id={'newEmail'}
                     type={'email'}
-                    placeholder={'Новая почта'}
+                    icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
+                    label={'Новая почта'}
                     value={newEmail.inputState.value}
                     onChange={newEmail.setValue}
                     error={newEmail.inputState.error || undefined}
@@ -99,7 +102,8 @@ export default function ChangeEmailPage(){
                 <MainInput
                     id={'currentPassword'}
                     type={'password'}
-                    placeholder={'Ваш текущий пароль'}
+                    label={'Ваш текущий пароль'}
+                    icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
                     value={currentPassword.inputState.value}
                     onChange={currentPassword.setValue}
                     error={currentPassword.inputState.error || undefined}

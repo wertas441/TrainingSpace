@@ -5,7 +5,7 @@ import MyTrainingHeader from "@/components/UI/headers/MyTrainingHeader";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {useMemo, useState} from "react";
 import {exercises} from "@/lib/data/exercises";
-import MyTrainingItem from "@/components/elements/MyTrainingItem";
+import MyTrainingItem from "@/components/elements/MyTrainingRow";
 import {TrainingDataStructure} from "@/types/indexTypes";
 
 export default function MyTraining({trainingList}:{trainingList: TrainingDataStructure[]} ) {

@@ -5,7 +5,7 @@ import {useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
-import MyActivityItem from "@/components/elements/MyActivityItem";
+import MyActivityItem from "@/components/elements/MyActivityRow";
 
 export default function MyActivity({activityData}:{activityData: ActivityDataStructure[]; }) {
 

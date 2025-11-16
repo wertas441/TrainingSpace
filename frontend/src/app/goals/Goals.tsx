@@ -5,7 +5,7 @@ import {usePagination} from "@/lib/hooks/usePagination";
 import {useMemo, useState} from "react";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
 import {GoalsStructure} from "@/types/goalTypes";
-import GoalItem from "@/components/elements/GoalItem";
+import GoalItem from "@/components/elements/GoalRow";
 
 export default function Goals({clientGoals}:{clientGoals: GoalsStructure[]}) {
 

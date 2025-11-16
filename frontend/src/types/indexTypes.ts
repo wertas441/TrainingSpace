@@ -27,7 +27,10 @@ export interface HeaderMinimumProps {
     setSearchName: (newValue: string) => void;
 }
 
-
+export interface BasicButtonProps {
+    onClick: () => void;
+    className?: string;
+}
 
 export type DifficultOptionsStructure = null | 'light' | 'middle' | 'hard';
 

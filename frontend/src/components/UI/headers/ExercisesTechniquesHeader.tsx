@@ -7,6 +7,7 @@ import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGre
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniquesTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
+import BarsButton from "@/components/buttons/BarsButton";
 
 function ExercisesTechniquesHeader(
     {
@@ -63,18 +64,17 @@ function ExercisesTechniquesHeader(
                             id="exercise-search"
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
-                            placeholder="Поиск по названию..."
+                            placeholder="Поиск по названию упражнения..."
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" />, [])}
                         />
                     </div>
 
-                    <button
-                        className={'inline-flex items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
+
+
+                    <BarsButton
                         onClick={toggleFilterWindow}
                         ref={toggleBtnRef}
-                    >
-                        {useMemo(() => <Bars3Icon className={`h-6 w-6 text-emerald-600`} />, [])}
-                    </button>
+                    />
                 </div>
 
                 {isFilterWindowOpen && (

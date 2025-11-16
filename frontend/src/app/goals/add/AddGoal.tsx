@@ -1,7 +1,7 @@
 'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useState} from "react";
+import {FormEvent, useMemo, useState} from "react";
 import {GoalPriority} from "@/types/goalTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -12,6 +12,7 @@ import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import {baseUrlForBackend} from "@/lib";
 import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators";
+import {TagIcon} from "@heroicons/react/24/outline";
 
 export default function AddGoal({goalPriorityOptions}: {goalPriorityOptions: GoalPriority[]}) {
 
@@ -93,12 +94,15 @@ export default function AddGoal({goalPriorityOptions}: {goalPriorityOptions: Goa
                         value={goalName.inputState.value}
                         onChange={goalName.setValue}
                         label={'Название цели'}
+                        placeholder={'Например: Пожать 100кг'}
+                        icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                         error={goalName.inputState.error || undefined}
                     />
 
                     <MainTextarea
                         id="activityDescription"
                         label="Описание"
+                        placeholder="Опционально: описание для цели"
                         value={goalDescription.inputState.value}
                         onChange={goalDescription.setValue}
                         error={goalDescription.inputState.error || undefined}

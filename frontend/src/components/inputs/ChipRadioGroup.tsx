@@ -47,3 +47,4 @@ function ChipRadioGroup<T extends string>({ id, name, label, choices, value, onC
 const ChipRadioGroupMemo = memo(ChipRadioGroup) as typeof ChipRadioGroup;
 
 export default ChipRadioGroupMemo;
+

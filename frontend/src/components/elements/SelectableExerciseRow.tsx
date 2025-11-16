@@ -1,6 +1,6 @@
 import React, {useMemo} from "react";
 import {exercises} from "@/lib/data/exercises";
-import {CheckCircleIcon, PlusCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
+import {PlusCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
 
 type Exercise = typeof exercises[number];
 

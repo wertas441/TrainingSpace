@@ -13,6 +13,7 @@ import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activi
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
+import {CalendarIcon, TagIcon} from "@heroicons/react/24/outline";
 
 interface AddActivityProps {
     myTrainings: TrainingDataStructure[];
@@ -188,12 +189,22 @@ export default function AddActivity({myTrainings, activityTypeChoices, activityD
 
                     <MainInput
                         id="activityName"
+                        icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                         label="Название активности"
-                        required
-                        placeholder="Например: Грудь + трицепс"
+                        placeholder={`Например: Тренировка груди`}
                         value={activityName.inputState.value}
                         onChange={activityName.setValue}
                         error={activityName.inputState.error || undefined}
+                    />
+
+                    <MainInput
+                        id={'activityDate'}
+                        type={'date'}
+                        icon={useMemo(() => <CalendarIcon className="h-5 w-5 text-gray-500" />, [])}
+                        label="Дата активности"
+                        value={activityDate.inputState.value}
+                        onChange={activityDate.setValue}
+                        error={activityDate.inputState.error || undefined}
                     />
 
                     <MainTextarea
@@ -205,16 +216,6 @@ export default function AddActivity({myTrainings, activityTypeChoices, activityD
                         error={activityDescription.inputState.error || undefined}
                         rows={4}
                     />
-
-                    <MainInput
-                        id={'activityDate'}
-                        type={'date'}
-                        label="Дата активности"
-                        value={activityDate.inputState.value}
-                        onChange={activityDate.setValue}
-                        error={activityDate.inputState.error || undefined}
-                    />
-
 
                     <ChipRadioGroup<ActivityTypeStructure>
                         id="activity-type"
@@ -243,6 +244,7 @@ export default function AddActivity({myTrainings, activityTypeChoices, activityD
                         placeholder="Выберите тренировку"
                         isMulti={false}
                         noOptionsMessage={() => 'Нет тренировок'}
+
                     />
 
                     {trainingId.inputState.error && (

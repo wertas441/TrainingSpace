@@ -2,7 +2,7 @@
 
 import NutritionHeader from "@/components/UI/headers/NutritionHeader";
 import {NutritionDay} from "@/types/nutritionTypes";
-import NutritionDayItem from "@/components/elements/NutritionDayItem";
+import NutritionDayItem from "@/components/elements/NutritionDayRow";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";

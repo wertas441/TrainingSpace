@@ -1,12 +1,13 @@
+import { CalendarDaysIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
 
-interface MyTrainingItemProps {
+interface MyActivityRowProps {
     name: string;
+    date: string;
     description: string;
-    exercises: string[];
 }
 
-function MyTrainingItem({name, description, exercises}: MyTrainingItemProps ){
+function MyActivityRow({name, date, description}:MyActivityRowProps){
 
     return (
         <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm hover:shadow-md transition">
@@ -14,6 +15,10 @@ function MyTrainingItem({name, description, exercises}: MyTrainingItemProps ){
                 <div className="md:col-span-2">
                     <div className="flex items-center gap-2">
                         <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
+                        <span className="inline-flex items-center gap-1 text-sm text-gray-600">
+							<CalendarDaysIcon className="w-4 h-4" />
+                            {date}
+						</span>
                     </div>
                     {description && (
                         <p className="mt-2 text-sm text-gray-600">
@@ -21,22 +26,13 @@ function MyTrainingItem({name, description, exercises}: MyTrainingItemProps ){
                         </p>
                     )}
                 </div>
+
                 <div className="md:col-span-2">
-                    <div className="text-sm font-medium text-emerald-900 mb-2">Упражнения</div>
-                    <div className="flex flex-wrap gap-2">
-                        {exercises.map((exName, idx) => (
-                            <span
-                                key={`${exName}-${idx}`}
-                                className="px-2 py-0.5 text-xs border rounded-full border-emerald-200 text-emerald-800 bg-emerald-50"
-                            >
-                                {exName}
-                            </span>
-                        ))}
-                    </div>
+
                 </div>
             </div>
         </div>
     )
 }
 
-export default memo(MyTrainingItem);
+export default memo(MyActivityRow);

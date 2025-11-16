@@ -7,6 +7,8 @@ import {PlusIcon} from "@heroicons/react/16/solid";
 import {NutritionHeaderProps} from "@/types/nutritionTypes";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {useRouter} from "next/navigation";
+import PlusButton from "@/components/buttons/PlusButton";
+import BarsButton from "@/components/buttons/BarsButton";
 
 export default function NutritionHeader(
     {
@@ -48,38 +50,37 @@ export default function NutritionHeader(
 
                 <div className="flex items-center gap-5 " ref={ref}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <FilterInput
-                            id="nutrition-search-name"
-                            placeholder="Поиск по названию дня"
-                            value={searchName}
-                            onChange={(v) => onSearchNameChange(String(v))}
-                            icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
-                        />
+                        <div className="w-full md:w-60">
+                            <FilterInput
+                                id="nutrition-search-name"
+                                placeholder="Поиск по названию дня..."
+                                value={searchName}
+                                onChange={(v) => onSearchNameChange(String(v))}
+                                icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
+                            />
+                        </div>
 
-                        <FilterInput
-                            id="nutrition-search-date"
-                            type="date"
-                            placeholder="Дата"
-                            value={searchDate}
-                            onChange={(v) => onSearchDateChange(String(v))}
-                            icon={<CalendarIcon className="h-5 w-5 text-gray-400" />}
-                        />
+                        <div className="w-full md:w-60">
+                            <FilterInput
+                                id="nutrition-search-date"
+                                type="date"
+                                placeholder="Дата"
+                                value={searchDate}
+                                onChange={(v) => onSearchDateChange(String(v))}
+                                icon={<CalendarIcon className="h-5 w-5 text-gray-400" />}
+                            />
+                        </div>
                     </div>
 
                     <div className="flew-row md:flex gap-2 ">
-                        <button
-                            className={'inline-flex w-full items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
+                        <PlusButton
                             onClick={useCallback(() => router.push('/nutrition/add'), [router])}
-                        >
-                            {useMemo(() => <PlusIcon className={`h-6 w-6 text-emerald-600`} />, [])}
-                        </button>
-                        <button
-                            className={'inline-flex w-full cursor-pointer items-center justify-center rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 active:bg-emerald-100 transition'}
+                        />
+
+                        <BarsButton
                             onClick={toggleFilterWindow}
                             ref={toggleBtnRef}
-                        >
-                            {useMemo(() => <Bars3Icon className={`h-6 w-6 text-emerald-600`} />, [])}
-                        </button>
+                        />
                     </div>
                 </div>
 

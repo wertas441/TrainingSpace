@@ -5,7 +5,7 @@ import ChangePasswordPage from "@/app/settings/Ui/ChangePasswordPage";
 import ChangeEmailPage from "@/app/settings/Ui/ChangeEmailPage";
 import {useMemo, useState} from "react";
 import ProjectInformationPage from "@/app/settings/Ui/ProjectInformationPage";
-import {ArrowLeftOnRectangleIcon, EnvelopeIcon, LockClosedIcon, UserCircleIcon} from "@heroicons/react/24/outline";
+import {ArrowLeftOnRectangleIcon, EnvelopeIcon, LockClosedIcon, UserCircleIcon, BookOpenIcon} from "@heroicons/react/24/outline";
 import {SettingsMenuItemsStructure} from "@/types/indexTypes";
 
 export default function Settings(){
@@ -15,7 +15,7 @@ export default function Settings(){
             { id: 'profile', label: 'Профиль', icon: UserCircleIcon },
             { id: 'password', label: 'Сменить пароль', icon: LockClosedIcon },
             { id: 'email', label: 'Сменить почту', icon: EnvelopeIcon },
-            { id: 'projectInformation', label: 'Информация о проекте', icon: LockClosedIcon },
+            { id: 'projectInformation', label: 'Информация о проекте', icon: BookOpenIcon },
         ]
     }, [])
 

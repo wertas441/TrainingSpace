@@ -17,6 +17,7 @@ function getDifficultyStyles(difficulty: Exercise["difficulty"]) {
 }
 
 function ExerciseRow({exercise}:{exercise: Exercise}) {
+
     const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getDifficultyStyles(exercise.difficulty)}`;
 
     return (
@@ -38,12 +39,14 @@ function ExerciseRow({exercise}:{exercise: Exercise}) {
                     {exercise.partOfTheBody.map((part) => (
                         <span
                             key={part}
-                            className="px-2 py-0.5 text-xs border rounded-full border-gray-200 text-gray-700 bg-gray-50"
+                            className="px-2 py-0.5 text-xs border rounded-full border-emerald-200 text-emerald-800 bg-emerald-50"
                         >
                             {part}
                         </span>
                     ))}
                 </div>
+
+
             </div>
         </div>
     );

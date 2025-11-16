@@ -1,12 +1,13 @@
 import {useInputField} from "@/lib/hooks/useInputField";
 import MainHideInput from "@/components/inputs/MainHideInput";
 import {validateConfirmPassword, validateUserPassword} from "@/lib/utils/validators";
-import {FormEvent} from "react";
+import {FormEvent, useMemo} from "react";
 import {baseUrlForBackend} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainInput from "@/components/inputs/MainInput";
+import {LockClosedIcon, CheckIcon} from "@heroicons/react/24/outline";
 
 export default function ChangePasswordPage(){
 
@@ -76,12 +77,13 @@ export default function ChangePasswordPage(){
 
             <ServerError message={serverError} />
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={handleSubmit}>
 
                 <MainInput
                     id={'currentPassword'}
                     type={'password'}
-                    placeholder={'Ваш текущий пароль'}
+                    icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
+                    label={'Ваш текущий пароль'}
                     value={currentPassword.inputState.value}
                     onChange={currentPassword.setValue}
                     error={currentPassword.inputState.error || undefined}
@@ -89,7 +91,8 @@ export default function ChangePasswordPage(){
 
                 <MainHideInput
                     id={'newPassword'}
-                    placeholder={'Новый пароль'}
+                    label={'Новый пароль'}
+                    icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
                     value={newPassword.inputState.value}
                     onChange={newPassword.setValue}
                     error={newPassword.inputState.error || undefined}
@@ -98,7 +101,8 @@ export default function ChangePasswordPage(){
                 <MainInput
                     id={'confirmPassword'}
                     type={'password'}
-                    placeholder={'Подтверждение нового пароля'}
+                    label={'Подтверждение нового пароля'}
+                    icon={useMemo(() => <CheckIcon className="h-5 w-5 text-gray-500" />, [])}
                     value={confirmPassword.inputState.value}
                     onChange={confirmPassword.setValue}
                     error={confirmPassword.inputState.error || undefined}

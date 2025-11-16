@@ -3,7 +3,7 @@ import {Ref} from "react";
 export interface NutritionDay {
     id: number | string;
     name: string;
-    date: Date | string;
+    date: string;
     description?: string;
     calories: number;
     protein: number;
