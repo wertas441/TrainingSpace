@@ -15,13 +15,7 @@ import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityIt
 import MainInput from "@/components/inputs/MainInput";
 import {CalendarIcon, TagIcon} from "@heroicons/react/24/outline";
 
-interface AddActivityProps {
-    myTrainings: TrainingDataStructure[];
-    activityTypeChoices: ActivityTypeStructure[];
-    activityDifficultyChoices: ActivityDifficultyStructure[];
-}
-
-export default function AddActivity({myTrainings, activityTypeChoices, activityDifficultyChoices}: AddActivityProps) {
+export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStructure[]; }) {
 
     const today = new Date();
     const initialDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -36,6 +30,9 @@ export default function AddActivity({myTrainings, activityTypeChoices, activityD
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
 
     const [exerciseSets, setExerciseSets] = useState<Record<number, { id: number; weight: number; quantity: number; }[]>>({});
+
+    const activityTypeChoices: ActivityTypeStructure[] = useMemo(() => ['Силовая', 'Кардио', 'Комбинированный'], []) ;
+    const activityDifficultyChoices: ActivityDifficultyStructure[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []) ;
 
 
     const trainingOptions: OptionType[] = useMemo(

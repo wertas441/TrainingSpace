@@ -1,11 +1,11 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {useCallback, useMemo} from "react";
+import {memo, useCallback, useMemo} from "react";
 import {HeaderMinimumProps} from "@/types/indexTypes";
 import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/PlusButton";
 
-export default function MyTrainingHeader({ref, searchName, setSearchName}:HeaderMinimumProps) {
+function MyTrainingHeader({ref, searchName, setSearchName}:HeaderMinimumProps) {
 
     const router = useRouter();
 
@@ -37,4 +37,6 @@ export default function MyTrainingHeader({ref, searchName, setSearchName}:Header
             </div>
         </div>
     )
-};
+}
+
+export default memo(MyTrainingHeader);

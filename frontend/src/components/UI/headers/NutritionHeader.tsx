@@ -1,16 +1,14 @@
 import FilterInput from "@/components/inputs/FilterInput";
-import {Bars3Icon, CalendarIcon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
-import {useCallback, useMemo} from "react";
+import {CalendarIcon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {memo, useCallback} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
-import Link from "next/link";
-import {PlusIcon} from "@heroicons/react/16/solid";
 import {NutritionHeaderProps} from "@/types/nutritionTypes";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/PlusButton";
 import BarsButton from "@/components/buttons/BarsButton";
 
-export default function NutritionHeader(
+function NutritionHeader(
     {
         searchName,
         onSearchNameChange,
@@ -216,3 +214,5 @@ export default function NutritionHeader(
         </div>
     )
 }
+
+export default memo(NutritionHeader);
