@@ -1,23 +1,23 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Login from '@/app/auth/login/Login';
-
-const replaceMock = jest.fn();
-const setServerErrorMock = jest.fn();
+import {
+	buildUsePageUtilsMock,
+	resetUsePageUtilsOverrides,
+	setServerErrorMock,
+} from '@/tests/utils/mockUsePageUtils';
+import { replaceMock } from '@/tests/utils/mockNextNavigation';
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
-	usePageUtils: () => ({
-		serverError: null,
-		setServerError: setServerErrorMock,
-		isSubmitting: false,
-		setIsSubmitting: jest.fn(),
-		router: { replace: replaceMock },
-	}),
+	// Берём общий мок из утилит
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+	...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));
 
 describe('Login', () => {
 	afterEach(() => {
 		jest.clearAllMocks();
+		resetUsePageUtilsOverrides();
 	});
 
 	it('Проверка работоспособности валидации', async () => {

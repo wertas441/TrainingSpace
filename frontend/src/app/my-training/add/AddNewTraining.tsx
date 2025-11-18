@@ -172,7 +172,6 @@ export default function AddNewTraining(){
                             value={trainingDescription.inputState.value}
                             onChange={trainingDescription.setValue}
                             label={'Описание тренировки'}
-                            icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                             placeholder="Опционально: описание для тренировки"
                             error={trainingDescription.inputState.error || undefined}
                             rows={4}

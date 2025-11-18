@@ -13,7 +13,7 @@ const customJestConfig = {
 		'^@/(.*)$': '<rootDir>/src/$1',
 		'\\.(css|scss|sass)$': 'identity-obj-proxy',
 	},
-	testMatch: ['**/tests/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+	testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
 };
 
 module.exports = createJestConfig(customJestConfig);
