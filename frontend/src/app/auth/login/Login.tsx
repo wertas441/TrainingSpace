@@ -4,7 +4,7 @@ import {useInputField} from "@/lib/hooks/useInputField";
 import {FormEvent, useMemo, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
-import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
+import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators";
 import MainInput from "@/components/inputs/MainInput";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -21,7 +21,7 @@ export default function Login(){
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
     const validateForm = () => {
-        const emailError = validateUserName(email.inputState.value);
+        const emailError = validateUserEmail(email.inputState.value);
         email.setError(emailError);
 
         const passwordError = validateUserPassword(password.inputState.value);
