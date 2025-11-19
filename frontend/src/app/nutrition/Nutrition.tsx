@@ -7,29 +7,7 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 
-export default function Nutrition() {
-
-    const testData: NutritionDay[] = [
-        {
-            id: 1,
-            name: 'Крутой день',
-            date: '27.02.2025',
-            calories: 2320,
-            protein: 135,
-            fat: 70,
-            carb: 260,
-        },
-        {
-            id: 2,
-            date: '27.04.2025',
-            name: 'Забыл записать день',
-            description: 'Обычный день: 10к шагов и тренировка на верх тела.',
-            calories: 2850,
-            protein: 160,
-            fat: 85,
-            carb: 310,
-        },
-    ];
+export default function Nutrition({userDays}: {userDays?: NutritionDay[]}) {
 
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
     const [searchName, setSearchName] = useState<string>('');
@@ -60,7 +38,7 @@ export default function Nutrition() {
         const cbMin = isSet(carbMin) ? carbMin : undefined;
         const cbMax = isSet(carbMax) ? carbMax : undefined;
 
-        return testData.filter(e => {
+        return userDays.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
             const matchesData = searchDate === '' || e.date === searchDate;
             const byCaloriesMin = cMin === undefined || e.calories >= cMin;
@@ -80,7 +58,7 @@ export default function Nutrition() {
                 && byCarbMin && byCarbMax;
         });
     }, [
-        searchName, testData, searchDate,
+        searchName, userDays, searchDate,
         caloriesMin, caloriesMax,
         proteinMin, proteinMax,
         fatMin, fatMax,

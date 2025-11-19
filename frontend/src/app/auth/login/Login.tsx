@@ -62,11 +62,10 @@ export default function Login(){
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             setServerError(result.message || "Ошибка авторизации. Проверьте правильность введенных данных.");
+            setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
             console.error("Login error:", error);
-            setIsSubmitting(false);
-        } finally {
             setIsSubmitting(false);
         }
     }
@@ -85,7 +84,7 @@ export default function Login(){
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-5" onSubmit={handleSubmit}>
 
                     <MainInput
                         id={'email'}
@@ -93,7 +92,7 @@ export default function Login(){
                         value={email.inputState.value}
                         onChange={email.setValue}
                         icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
-                        placeholder={'Email'}
+                        label={'Email'}
                         error={email.inputState.error || undefined}
                     />
 
@@ -103,7 +102,7 @@ export default function Login(){
                         value={password.inputState.value}
                         onChange={password.setValue}
                         icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
-                        placeholder={'Пароль'}
+                        label={'Пароль'}
                         error={password.inputState.error || undefined}
                     />
 

@@ -96,18 +96,17 @@ export default function AddNutrition(){
             });
 
             if (result.ok) {
-                router.replace("/nutrition");
+                router.push("/nutrition");
                 return;
             }
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             setServerError(result.message || "Не удалось добавить день. Проверьте корректность данных.");
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Проверьте интернет-соединение или попробуйте позже.");
-            console.error("Add nutrition day error:", error);
             setIsSubmitting(false);
-        } finally {
+        } catch (error) {
+            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
+            console.error("Add nutrition day error:", error);
             setIsSubmitting(false);
         }
     }

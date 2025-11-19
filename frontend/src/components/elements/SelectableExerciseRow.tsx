@@ -74,3 +74,4 @@ export default function SelectableExerciseRow({exercise, selected, onToggle}: Se
 
 
 
+

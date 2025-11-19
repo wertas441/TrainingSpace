@@ -76,11 +76,10 @@ export default function Registration(){
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             setServerError(result.message || "Ошибка регистрации. Проверьте правильность введенных данных.");
+            setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
             console.error("Registration error:", error);
-            setIsSubmitting(false);
-        } finally {
             setIsSubmitting(false);
         }
     }
@@ -99,14 +98,14 @@ export default function Registration(){
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-5" onSubmit={handleSubmit}>
 
                     <MainInput
                         id={'userName'}
                         value={userName.inputState.value}
                         onChange={userName.setValue}
                         icon={<UserIcon className="h-5 w-5 text-gray-500" />}
-                        placeholder={'Имя пользователя'}
+                        label={'Имя пользователя'}
                         error={userName.inputState.error || undefined}
                     />
 
@@ -116,7 +115,7 @@ export default function Registration(){
                         type="email"
                         onChange={email.setValue}
                         icon={<AtSymbolIcon className="h-5 w-5 text-gray-500" />}
-                        placeholder={'Email'}
+                        label={'Email'}
                         error={email.inputState.error || undefined}
                     />
 
@@ -125,7 +124,7 @@ export default function Registration(){
                         value={password.inputState.value}
                         onChange={password.setValue}
                         icon={<LockClosedIcon className="h-5 w-5 text-gray-500" />}
-                        placeholder={'Пароль'}
+                        label={'Пароль'}
                         error={password.inputState.error || undefined}
                     />
 
@@ -135,7 +134,7 @@ export default function Registration(){
                         value={confirmPassword.inputState.value}
                         onChange={confirmPassword.setValue}
                         icon={<LockClosedIcon className="h-5 w-5 text-gray-500" />}
-                        placeholder={'Подтверждение пароля'}
+                        label={'Подтверждение пароля'}
                         error={confirmPassword.inputState.error || undefined}
                     />
 
