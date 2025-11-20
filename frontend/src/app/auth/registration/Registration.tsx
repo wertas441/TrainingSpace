@@ -17,6 +17,7 @@ import {AtSymbolIcon, LockClosedIcon, UserIcon} from "@heroicons/react/24/outlin
 import Link from "next/link";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainHideInput from "@/components/inputs/MainHideInput";
+import type {BackendApiResponse} from "@/types/indexTypes";
 
 export default function Registration(){
 
@@ -55,7 +56,7 @@ export default function Registration(){
         setIsSubmitting(true);
 
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/user/registration`, {
+            const result = await fetch(`${baseUrlForBackend}/api/auth/registration`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -73,9 +74,8 @@ export default function Registration(){
                 return;
             }
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setServerError(result.message || "Ошибка регистрации. Проверьте правильность введенных данных.");
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка регистрации. Проверьте правильность введенных данных.");
             setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");

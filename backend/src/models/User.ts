@@ -6,10 +6,10 @@ export class UserModel {
     static async create(userData: {
         email: string;
         userName: string;
-        password: string;
+        password: string; // ожидаем уже захешированный пароль
     }): Promise<User> {
         const query = `
-      INSERT INTO users (email, username, password, created_at, updated_at)
+      INSERT INTO users (email, username, password_hash, created_at, updated_at)
       VALUES ($1, $2, $3, NOW(), NOW())
       RETURNING id, email, username, created_at, updated_at
     `;
@@ -28,7 +28,9 @@ export class UserModel {
 
     // Поиск пользователя по email
     static async findByEmail(email: string): Promise<User | null> {
-        const query = 'SELECT id, email, username, password, created_at, updated_at FROM users WHERE email = $1';
+        // Храним хеш в колонке password_hash, но в объекте пользователя
+        // возвращаем его в свойстве password (для последующей проверки при логине)
+        const query = 'SELECT id, email, username, password_hash AS password, created_at, updated_at FROM users WHERE email = $1';
         const result = await pool.query(query, [email]);
         const row = result.rows[0];
         if (!row) return null;
@@ -87,7 +89,8 @@ export class UserModel {
             values.push(updateData.userName);
         }
         if (updateData.password) {
-            fields.push(`password = $${paramCount++}`);
+            // сюда должен приходить УЖЕ захешированный пароль
+            fields.push(`password_hash = $${paramCount++}`);
             values.push(updateData.password);
         }
 

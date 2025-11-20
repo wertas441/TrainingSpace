@@ -39,3 +39,11 @@ export interface SettingsMenuItemsStructure{
     label: string;
     icon: ElementType ;
 }
+
+// Тип ответа backend (совпадает с ApiResponse на сервере)
+export interface BackendApiResponse<T = any> {
+    success: boolean;
+    data?: T;
+    message?: string;
+    error?: string;
+}
