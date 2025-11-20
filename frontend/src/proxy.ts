@@ -6,7 +6,7 @@ const AUTH_PATHS = ['/auth/login', '/auth/registration'];
 const LOGIN_PATH = '/auth/login';
 const DEFAULT_REDIRECT_PATH = '/';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
 
     // console.log(`>>> Middleware triggered for path: ${request.nextUrl.pathname}`); можно включить для отладки
 

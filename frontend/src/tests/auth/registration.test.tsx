@@ -7,7 +7,7 @@ import {
     resetUsePageUtilsOverrides,
     setServerErrorMock,
 } from '@/tests/utils/mockUsePageUtils';
-import { replaceMock } from '@/tests/utils/mockNextNavigation';
+import {pushMock} from '@/tests/utils/mockNextNavigation';
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -71,7 +71,7 @@ describe('Регистрация', () => {
 
         await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
-        await waitFor(() => expect(replaceMock).toHaveBeenCalledWith('/'));
+        await waitFor(() => expect(pushMock).toHaveBeenCalledWith('/auth/login'));
     });
 });
 

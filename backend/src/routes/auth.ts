@@ -59,7 +59,7 @@ router.post('/registration', async (req, res) => {
             data: { user }
         };
 
-        res.status(201).json(response);
+        res.status(200).json(response);
     } catch (error) {
 
         console.error('Ошибка регистрации пользователя:', error);

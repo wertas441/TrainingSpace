@@ -70,7 +70,7 @@ export default function Registration(){
             });
 
             if (result.ok) {
-                router.replace("/");
+                router.push("/auth/login");
                 return;
             }
 

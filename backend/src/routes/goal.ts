@@ -33,7 +33,7 @@ router.post('/add-new-goal', authGuard, async (req, res) => {
             message: 'goal created successfully',
         };
 
-        res.status(201).json(response);
+        res.status(200).json(response);
     } catch (error){
 
         console.error('Ошибка добавления цели', error);
@@ -49,7 +49,31 @@ router.post('/add-new-goal', authGuard, async (req, res) => {
 });
 
 router.get('/my-goals-list', authGuard, async (req, res) => {
+    try {
 
+        const userId = (req as any).userId as number;
+
+        const goals = await GoalModel.getList(userId);
+        
+        const response: ApiResponse = {
+            success: true,
+            message: 'success of getting list of goals',
+            data: { goals }
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+
+        console.error('Ошибка показа списка целей', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при показе списка целей ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
 });
 
 router.delete('/delete-my-goal', authGuard, async (req, res) => {

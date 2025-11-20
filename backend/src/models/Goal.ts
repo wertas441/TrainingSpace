@@ -25,5 +25,27 @@ export class GoalModel {
         await pool.query(query, values);
     }
 
+    // Список целей пользователя
+    static async getList(userId: number): Promise<{
+        id: number;
+        name: string;
+        description: string | null;
+        priority: GoalPriority;
+    }[]> {
+        const query = `
+            SELECT id, name, description, priority
+            FROM goal
+            WHERE user_id = $1
+            ORDER BY created_at DESC, id DESC
+        `;
 
+        const { rows } = await pool.query(query, [userId]);
+
+        return rows as {
+            id: number;
+            name: string;
+            description: string | null;
+            priority: GoalPriority;
+        }[];
+    }
 }
