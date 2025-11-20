@@ -14,13 +14,15 @@ import {baseUrlForBackend} from "@/lib";
 import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators";
 import {TagIcon} from "@heroicons/react/24/outline";
 
-export default function AddGoal({goalPriorityOptions}: {goalPriorityOptions: GoalPriority[]}) {
+export default function AddGoal() {
 
     const goalName = useInputField('');
     const goalDescription = useInputField('');
     const [goalPriority, setGoalPriority] = useState<GoalPriority>('Средний');
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
+
+    const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'];
 
     const validateForm = (): boolean => {
         const goalNameError = validateGoalName(goalName.inputState.value);
@@ -64,11 +66,10 @@ export default function AddGoal({goalPriorityOptions}: {goalPriorityOptions: Goa
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             setServerError(result.message || "Ошибка добавление цели. Проверьте правильность введенных данных.");
+            setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
             console.error("Add goal error:", error);
-            setIsSubmitting(false);
-        } finally {
             setIsSubmitting(false);
         }
     }

@@ -50,7 +50,7 @@ export default function Goals({clientGoals}:{clientGoals: GoalsStructure[]}) {
                     )
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Такой цели не найдено. Попробуйте изменить запрос.
+                        Добавленных целей не найдено, попробуйте изменить фильтр и проверить подключение к сети.
                     </div>
                 )}
             </div>

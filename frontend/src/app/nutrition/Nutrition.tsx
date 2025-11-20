@@ -7,7 +7,7 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 
-export default function Nutrition({userDays}: {userDays?: NutritionDay[]}) {
+export default function Nutrition({userDays = []}: {userDays?: NutritionDay[]}) {
 
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
     const [searchName, setSearchName] = useState<string>('');
@@ -139,7 +139,7 @@ export default function Nutrition({userDays}: {userDays?: NutritionDay[]}) {
                     )
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Такого дня не найдено. Попробуйте изменить запрос.
+                        Добавленных дней не найдено, попробуйте изменить фильтры и проверить подключение к сети.
                     </div>
                 )}
             </div>

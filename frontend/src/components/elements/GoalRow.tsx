@@ -28,7 +28,7 @@ function GoalRow({id, name, description, priority}: GoalsStructure ) {
                     <div className="flex items-center gap-2 ">
                         <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
                         <span className={badgeClasses}>
-                            {priority === 'Низкий' ? 'Лёгкий' : priority === 'Средний' ? 'Средний' : 'Высокий'}
+                            {priority === 'Низкий' ? 'Низкий' : priority === 'Средний' ? 'Средний' : 'Высокий'}
                         </span>
                     </div>
                     <p className="mt-1 text-sm text-gray-600">
