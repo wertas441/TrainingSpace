@@ -11,6 +11,7 @@ import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {baseUrlForBackend} from "@/lib";
 import {AtSymbolIcon, LockClosedIcon} from "@heroicons/react/24/outline";
+import type {BackendApiResponse} from "@/types/indexTypes";
 
 export default function Login(){
 
@@ -41,7 +42,7 @@ export default function Login(){
         setIsSubmitting(true);
 
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/user/authorize`, {
+            const result = await fetch(`${baseUrlForBackend}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,9 +60,8 @@ export default function Login(){
                 return;
             }
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setServerError(result.message || "Ошибка авторизации. Проверьте правильность введенных данных.");
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка авторизации. Проверьте правильность введенных данных.");
             setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");

@@ -11,8 +11,9 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import {baseUrlForBackend} from "@/lib";
-import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators";
+import {validateGoalDescription, validateGoalName, validateGoalPriority} from "@/lib/utils/validators";
 import {TagIcon} from "@heroicons/react/24/outline";
+import type {BackendApiResponse} from "@/types/indexTypes";
 
 export default function AddGoal() {
 
@@ -31,7 +32,9 @@ export default function AddGoal() {
         const goalDescriptionError = validateGoalDescription(goalDescription.inputState.value);
         goalDescription.setError(goalDescriptionError);
 
-        return !(goalDescriptionError || goalNameError);
+        const goalPriorityError = validateGoalPriority(goalPriority);
+
+        return !(goalDescriptionError || goalNameError || goalPriorityError);
     }
 
     const handleSubmit = async (event: FormEvent):Promise<void> => {
@@ -63,9 +66,8 @@ export default function AddGoal() {
                 return;
             }
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setServerError(result.message || "Ошибка добавление цели. Проверьте правильность введенных данных.");
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка добавление цели. Проверьте правильность введенных данных.");
             setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");

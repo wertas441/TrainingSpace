@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
 import authRoutes from './routes/auth';
+import goalRoutes from './routes/goal';
 import { config } from './config';
 import { testConnection, closePool } from './config/database';
 import { initDatabase, seedDatabase } from './database/init';
@@ -40,6 +41,8 @@ app.use(cookieParser()); // Куки
 // API роуты
 app.use('/api', apiRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/goal', goalRoutes);
+
 
 // Обработка 404
 app.use((req, res) => {

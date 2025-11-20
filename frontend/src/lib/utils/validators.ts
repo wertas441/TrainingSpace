@@ -1,5 +1,7 @@
 /// USER VALIDATOR
 
+import {GoalPriority} from "@/types/goalTypes";
+
 export const validateUserName = (userName: string): string | null => {
     if(!userName.trim()){
         return ('Пожалуйста, введите имя для вашего аккаунта')
@@ -247,3 +249,12 @@ export const validateGoalDescription = (description: string): string | null => {
 
     return null;
 }
+
+export const validateGoalPriority = (priority: GoalPriority): boolean => {
+    if(!priority.trim()){
+        return true;
+    }
+
+    return false;
+}
+

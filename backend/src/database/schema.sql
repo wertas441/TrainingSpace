@@ -1,7 +1,3 @@
--- Создание базы данных (выполнить в PostgreSQL)
--- CREATE DATABASE training_space;
-
--- \c training_space;
 
 -- Включаем расширение для функции gen_random_uuid
 CREATE EXTENSION IF NOT EXISTS pgcrypto;

@@ -6,9 +6,9 @@ import {
     validateCalories, validateCarb,
     validateDayDescription,
     validateDayName,
-    validateFat, validateNutritionDay,
+    validateFat, validateNutritionDayDate,
     validateProtein
-} from "../lib/backendValidators";
+} from "../lib/backendValidators/nutrationValidators";
 
 const router = Router();
 
@@ -22,7 +22,7 @@ router.post('/nutrition/add-new-day', authGuard, async (req, res) => {
         const proteinError:boolean = validateProtein(protein);
         const fatError:boolean = validateFat(fat);
         const carbError:boolean = validateCarb(carb);
-        const dayDateError:boolean = validateNutritionDay(date);
+        const dayDateError:boolean = validateNutritionDayDate(date);
 
         if (!dayNameError || !dayDescriptionError || !caloriesError || !proteinError || !fatError || !carbError || !dayDateError) {
             const response: ApiResponse = {

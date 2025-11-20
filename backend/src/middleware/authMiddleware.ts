@@ -9,7 +9,7 @@ export function authGuard(req: Request, res: Response, next: NextFunction) {
         const token = (req as any).cookies?.token || bearer;
         if (!token) return res.status(401).json({ success: false, error: 'Не авторизовано' });
 
-        const payload = jwt.verify(token, config.jwtSecret as string) as { userId: string };
+        const payload = jwt.verify(token, config.jwtSecret as string) as { userId: number };
         (req as any).userId = payload.userId;
 
         next();
