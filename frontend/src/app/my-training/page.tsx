@@ -1,13 +1,22 @@
 import type { Metadata } from 'next';
 import MyTraining from "@/app/my-training/MyTraining";
-import {testTrainingData} from "@/lib/data/training";
+import {cookies} from "next/headers";
+import {getExercisesList} from "@/lib";
+import {getTrainingList} from "@/lib/controllers/trainingController";
 
 export const metadata: Metadata = {
     title: 'Мои тренировки | TrainingSpace',
     description: 'Страница на которой вы можете найти список созданных вами тренировок',
 }
 
-export default function MyTrainingPage() {
+export default async function MyTrainingPage() {
 
-    return <MyTraining trainingList={testTrainingData} />
+    const cookieStore = await cookies();
+    const authTokenCookie = cookieStore.get('token');
+    const tokenValue = authTokenCookie?.value;
+
+    const clientTrainings = await getTrainingList(tokenValue)
+    const exercises = await getExercisesList(tokenValue);
+
+    return <MyTraining trainingList={clientTrainings} exercises={exercises} />
 }

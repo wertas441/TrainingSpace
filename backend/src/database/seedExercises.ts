@@ -390,17 +390,18 @@ export async function seedExercises(): Promise<void> {
             )
         `);
 
-        // Сидим таблицу exercises (id + exercise_name + description)
+        // Сидим таблицу exercises (id + exercise_name + description + difficulty)
         for (const ex of exercisesSeed) {
             await client.query(
                 `
-                    INSERT INTO exercises (id, exercise_name, description)
-                    VALUES ($1, $2, $3)
+                    INSERT INTO exercises (id, exercise_name, description, difficulty)
+                    VALUES ($1, $2, $3, $4)
                     ON CONFLICT (id) DO UPDATE
                         SET exercise_name = EXCLUDED.exercise_name,
-                            description   = EXCLUDED.description
+                            description   = EXCLUDED.description,
+                            difficulty    = EXCLUDED.difficulty
                 `,
-                [ex.id, ex.name, ex.description]
+                [ex.id, ex.name, ex.description, ex.difficulty]
             );
         }
 

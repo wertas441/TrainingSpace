@@ -70,7 +70,6 @@ export const mainSideBarItems = [
     },
 ]
 
-
 export async function getExercisesList(tokenValue: string | undefined):Promise<ExerciseTechniqueItem[]>{
     try {
         const response = await fetch(`${baseUrlForBackend}/api/exercises/exercises-list`, {

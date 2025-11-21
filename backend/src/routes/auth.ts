@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { ApiResponse, LoginRequest, RegisterRequest } from '../types';
+import { ApiResponse } from '../types';
 import { userEmailValidator, userNameValidator, userPasswordValidator } from '../lib/backendValidators/indexValidators'
 import { UserModel } from '../models/User';
 import { config } from '../config';
 import { authGuard } from '../middleware/authMiddleware';
+import {LoginRequest, RegisterRequest} from "../types/authBackendTypes";
 const router = Router();
 
 router.post('/registration', async (req, res) => {

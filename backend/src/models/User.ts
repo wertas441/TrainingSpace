@@ -1,12 +1,13 @@
 import { pool } from '../config/database';
-import { User } from '../types';
+import {User} from "../types/authBackendTypes";
 
 export class UserModel {
+
     // Создание нового пользователя
     static async create(userData: {
         email: string;
         userName: string;
-        password: string; // ожидаем уже захешированный пароль
+        password: string;
     }): Promise<User> {
         const query = `
       INSERT INTO users (email, username, password_hash, created_at, updated_at)
