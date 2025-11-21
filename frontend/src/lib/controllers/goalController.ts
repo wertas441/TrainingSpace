@@ -2,7 +2,7 @@ import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import type {GoalsStructure} from "@/types/goalTypes";
 
-export async function getGoalList(tokenValue: string):Promise<GoalsStructure[]> {
+export async function getGoalList(tokenValue: string | undefined):Promise<GoalsStructure[]> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/my-goals-list`, {
             method: "GET",

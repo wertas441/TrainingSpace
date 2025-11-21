@@ -8,9 +8,12 @@ import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
 import authRoutes from './routes/auth';
 import goalRoutes from './routes/goal';
+import nutritionRoutes from './routes/nutrition';
+
 import { config } from './config';
 import { testConnection, closePool } from './config/database';
 import { initDatabase, seedDatabase } from './database/init';
+import nutrition from "./routes/nutrition";
 
 // Загружаем переменные окружения
 dotenv.config();
@@ -42,7 +45,7 @@ app.use(cookieParser()); // Куки
 app.use('/api', apiRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/goal', goalRoutes);
-
+app.use('/api/nutrition', nutritionRoutes);
 
 // Обработка 404
 app.use((req, res) => {

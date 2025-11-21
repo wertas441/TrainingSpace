@@ -78,7 +78,7 @@ export default function AddNutrition(){
         setIsSubmitting(true);
 
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/nutrition/add-day`, {
+            const result = await fetch(`${baseUrlForBackend}/api/nutrition/add-new-day`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
