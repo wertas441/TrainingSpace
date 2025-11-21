@@ -10,11 +10,11 @@ import authRoutes from './routes/auth';
 import goalRoutes from './routes/goal';
 import trainingRoutes from './routes/training';
 import nutritionRoutes from './routes/nutrition';
-
+import exercisesRoutes from './routes/exercises';
 import { config } from './config';
 import { testConnection, closePool } from './config/database';
-import { initDatabase, seedDatabase } from './database/init';
-import nutrition from "./routes/nutrition";
+import { initDatabase } from './database/init';
+
 
 // Загружаем переменные окружения
 dotenv.config();
@@ -48,6 +48,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/goal', goalRoutes);
 app.use('/api/nutrition', nutritionRoutes);
 app.use('/api/training', trainingRoutes);
+app.use('/api/exercises', exercisesRoutes);
 
 
 // Обработка 404
@@ -87,9 +88,6 @@ const startServer = async () => {
         // Инициализация схемы и сидирование включаются флагами окружения
         if (shouldInit) {
             await initDatabase();
-        }
-        if (shouldSeed) {
-            await seedDatabase();
         }
 
         // Запускаем HTTP сервер

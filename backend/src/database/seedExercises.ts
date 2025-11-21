@@ -5,15 +5,15 @@ interface ExercisesStructure {
     name: string;
     difficulty: 'light' | 'middle' | 'hard';
     description: string;
-    partOfTheBody: any[];
+    partOfTheBody: number[];
 }
 
-interface partOfBodyStructure {
+interface PartOfBodyStructure {
     id: number;
     partName: string;
-} 
+}
 
-const partOfBodySeed: partOfBodyStructure[] = [
+const partOfBodySeed: PartOfBodyStructure[] = [
     {
         id: 1,
         partName: 'Грудь',
@@ -362,30 +362,90 @@ const exercisesSeed: ExercisesStructure[] = [
 ];
 
 export async function seedExercises(): Promise<void> {
-    console.log('Seeding exercises table...');
+    console.log('Seeding body_parts, exercises and exercise_body_parts...');
 
-    for (const ex of exercisesSeed) {
-        await pool.query(
-            `
-                INSERT INTO exercises (id, exercise_name, description)
-                VALUES ($1, $2, $3)
-                ON CONFLICT (id) DO UPDATE
-                    SET exercise_name = EXCLUDED.exercise_name,
-                        description   = EXCLUDED.description
-            `,
-            [ex.id, ex.name, ex.description]
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        // Сидим таблицу body_parts (id + part_name)
+        for (const part of partOfBodySeed) {
+            await client.query(
+                `
+                    INSERT INTO body_parts (id, part_name)
+                    VALUES ($1, $2)
+                    ON CONFLICT (id) DO UPDATE
+                        SET part_name = EXCLUDED.part_name
+                `,
+                [part.id, part.partName]
+            );
+        }
+
+        // Сдвигаем sequence для body_parts
+        await client.query(`
+            SELECT setval(
+                pg_get_serial_sequence('body_parts', 'id'),
+                (SELECT COALESCE(MAX(id), 0) FROM body_parts)
+            )
+        `);
+
+        // Сидим таблицу exercises (id + exercise_name + description)
+        for (const ex of exercisesSeed) {
+            await client.query(
+                `
+                    INSERT INTO exercises (id, exercise_name, description)
+                    VALUES ($1, $2, $3)
+                    ON CONFLICT (id) DO UPDATE
+                        SET exercise_name = EXCLUDED.exercise_name,
+                            description   = EXCLUDED.description
+                `,
+                [ex.id, ex.name, ex.description]
+            );
+        }
+
+        // Сдвигаем sequence для exercises
+        await client.query(`
+            SELECT setval(
+                pg_get_serial_sequence('exercises', 'id'),
+                (SELECT COALESCE(MAX(id), 0) FROM exercises)
+            )
+        `);
+
+        // Сидим связующую таблицу exercise_body_parts
+        for (const ex of exercisesSeed) {
+            const exerciseId = ex.id;
+
+            // Очищаем старые связи, чтобы сид приводил к актуальному состоянию
+            await client.query(
+                'DELETE FROM exercise_body_parts WHERE exercise_id = $1',
+                [exerciseId]
+            );
+
+            for (const bodyPartId of ex.partOfTheBody) {
+                await client.query(
+                    `
+                        INSERT INTO exercise_body_parts (exercise_id, body_part_id)
+                        VALUES ($1, $2)
+                        ON CONFLICT (exercise_id, body_part_id) DO NOTHING
+                    `,
+                    [exerciseId, bodyPartId]
+                );
+            }
+        }
+
+        await client.query('COMMIT');
+
+        console.log(
+            `Seeding finished. body_parts: ${partOfBodySeed.length}, exercises: ${exercisesSeed.length}`
         );
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error while seeding exercises/body parts:', err);
+        throw err;
+    } finally {
+        client.release();
     }
-
-    // Сдвигаем sequence, чтобы новые id не конфликтовали с заданными вручную
-    await pool.query(`
-        SELECT setval(
-            pg_get_serial_sequence('exercises', 'id'),
-            (SELECT COALESCE(MAX(id), 0) FROM exercises)
-        )
-    `);
-
-    console.log(`Exercises seeding finished. Total: ${exercisesSeed.length}`);
 }
 
 // Позволяем запускать файл напрямую: `ts-node src/database/seedExercises.ts` или через скомпилированный JS
@@ -400,5 +460,3 @@ if (require.main === module) {
             process.exit(1);
         });
 }
-
-

@@ -2,13 +2,13 @@
 
 import ExercisesTechniquesHeader from "@/components/UI/headers/ExercisesTechniquesHeader";
 import {useCallback, useEffect, useMemo, useState} from "react";
-import {exercises} from "@/lib/data/exercises";
 import ExerciseRow from "@/components/elements/ExerciseRow";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 
-export default function ExercisesTechniques() {
+export default function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
     const [searchName, setSearchName] = useState<string>('');
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
@@ -28,7 +28,7 @@ export default function ExercisesTechniques() {
             const matchesPart = partOfBodyFilter.length === 0 || e.partOfTheBody.some(p => partOfBodyFilter.includes(p));
             return matchesName && matchesDifficulty && matchesPart;
         });
-    }, [searchName, difficultFilter, partOfBodyFilter]);
+    }, [searchName, exercises, difficultFilter, partOfBodyFilter]);
 
     const {
         currentPage,
@@ -55,6 +55,7 @@ export default function ExercisesTechniques() {
                 setDifficultFilter={setDifficultFilter}
                 partOfBodyFilter={partOfBodyFilter}
                 setPartOfBodyFilter={setPartOfBodyFilter}
+                exercises={exercises}
             />
 
             <div className="grid grid-cols-1 gap-3">

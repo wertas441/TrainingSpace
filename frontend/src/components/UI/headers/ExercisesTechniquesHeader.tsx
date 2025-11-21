@@ -1,13 +1,13 @@
 import FilterInput from "@/components/inputs/FilterInput";
-import {Bars3Icon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
-import {DifficultOptionsStructure} from "@/types/indexTypes";
+import {MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback, useMemo} from "react";
-import {difficultOptions, exercises} from "@/lib/data/exercises";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniquesTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import BarsButton from "@/components/buttons/BarsButton";
+import {difficultOptions} from "@/lib";
+import {DifficultOptionsStructure} from "@/types/indexTypes";
 
 function ExercisesTechniquesHeader(
     {
@@ -19,6 +19,7 @@ function ExercisesTechniquesHeader(
         setDifficultFilter,
         partOfBodyFilter,
         setPartOfBodyFilter,
+        exercises,
         ref,
     }: ExercisesTechniquesHeaderProps){
 
@@ -31,7 +32,7 @@ function ExercisesTechniquesHeader(
         return Array.from(set)
             .sort((a, b) => a.localeCompare(b, 'ru'))
             .map(v => ({ value: v, label: v }));
-    }, []);
+    }, [exercises]);
 
     const selectedMuscles = useMemo(
         () => muscleOptions.filter(o => partOfBodyFilter.includes(o.value)),

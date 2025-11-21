@@ -9,7 +9,6 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {baseUrlForBackend} from "@/lib";
 import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
-import {exercises} from "@/lib/data/exercises";
 import {usePagination} from "@/lib/hooks/usePagination";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
 import {
@@ -20,8 +19,9 @@ import {
 import MainPagination from "@/components/UI/MainPagination";
 import {TagIcon} from "@heroicons/react/24/outline";
 import type {BackendApiResponse} from "@/types/indexTypes";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 
-export default function AddNewTraining(){
+export default function AddNewTraining({exercises}:{exercises: ExerciseTechniqueItem[]}){
 
     const trainingName = useInputField("");
     const trainingDescription = useInputField("");
@@ -39,7 +39,7 @@ export default function AddNewTraining(){
         return Array.from(set)
             .sort((a, b) => a.localeCompare(b, 'ru'))
             .map(v => ({ value: v, label: v }));
-    }, []);
+    }, [exercises]);
 
     const selectedMuscles: OptionType[] = useMemo(
         () => muscleOptions.filter(o => partOfBodyFilter.includes(o.value)),
@@ -53,7 +53,7 @@ export default function AddNewTraining(){
             const matchesPart = partOfBodyFilter.length === 0 || e.partOfTheBody.some(p => partOfBodyFilter.includes(p));
             return matchesName && matchesPart;
         });
-    }, [searchName, partOfBodyFilter]);
+    }, [searchName, exercises, partOfBodyFilter]);
 
     const {
         currentPage,
@@ -91,13 +91,6 @@ export default function AddNewTraining(){
 
         setIsSubmitting(true);
 
-        const payload = {
-            // backend ожидает поле `name`, см. AddTrainingFrontendStructure
-            name: trainingName.inputState.value,
-            description: trainingDescription.inputState.value,
-            exercises: selectedExerciseIds,
-        }
-
         try {
             const result = await fetch(`${baseUrlForBackend}/api/training/add-new-training`, {
                 method: "POST",
@@ -105,7 +98,11 @@ export default function AddNewTraining(){
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify(payload),
+                body: JSON.stringify({
+                    name: trainingName.inputState.value,
+                    description: trainingDescription.inputState.value,
+                    exercises: selectedExerciseIds,
+                }),
             });
 
             if (result.ok) {

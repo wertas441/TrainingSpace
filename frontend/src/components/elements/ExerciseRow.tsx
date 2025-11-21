@@ -1,9 +1,7 @@
-import {exercises} from "@/lib/data/exercises";
 import {memo} from "react";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 
-type Exercise = typeof exercises[number];
-
-function getDifficultyStyles(difficulty: Exercise["difficulty"]) {
+function getDifficultyStyles(difficulty: ExerciseTechniqueItem["difficulty"]) {
     switch (difficulty) {
         case "light":
             return "border-emerald-200 bg-emerald-50 text-emerald-700";
@@ -16,7 +14,7 @@ function getDifficultyStyles(difficulty: Exercise["difficulty"]) {
     }
 }
 
-function ExerciseRow({exercise}:{exercise: Exercise}) {
+function ExerciseRow({exercise}:{exercise: ExerciseTechniqueItem}) {
 
     const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getDifficultyStyles(exercise.difficulty)}`;
 
