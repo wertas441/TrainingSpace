@@ -6,14 +6,15 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
-import {baseUrlForBackend} from "@/lib";
-import type {TrainingDataStructure} from "@/types/indexTypes";
+import {baseUrlForBackend, getTrainingExercises} from "@/lib";
+import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
 import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
 import {CalendarIcon, TagIcon} from "@heroicons/react/24/outline";
+import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 
 export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStructure[]; }) {
 
@@ -30,6 +31,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
 
     const [exerciseSets, setExerciseSets] = useState<Record<number, { id: number; weight: number; quantity: number; }[]>>({});
+    const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[]>([]);
 
     const activityTypeChoices: ActivityTypeStructure[] = useMemo(() => ['Силовая', 'Кардио', 'Комбинированный'], []) ;
     const activityDifficultyChoices: ActivityDifficultyStructure[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []) ;
@@ -67,6 +69,16 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         trainingId.setValue(val);
         const found = val ? myTrainings.find(t => t.id === Number(val)) : undefined;
         initSetsForTraining(found);
+        if (found) {
+            getTrainingExercises(found.id)
+                .then(setTrainingExercises)
+                .catch((err) => {
+                    console.error('Ошибка загрузки упражнений тренировки:', err);
+                    setTrainingExercises([]);
+                });
+        } else {
+            setTrainingExercises([]);
+        }
     };
 
     const addSet = (exerciseId: number) => {
@@ -133,12 +145,12 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         setIsSubmitting(true);
 
         const payload = {
-            name: activityName.inputState.value.trim(),
+            activity_name: activityName.inputState.value.trim(),
             description: activityDescription.inputState.value.trim(),
-            activityDate: activityDate.inputState.value,
-            type: activityType,
-            difficulty: activityDifficulty,
-            trainingId: Number(trainingId.inputState.value),
+            performed_at: activityDate.inputState.value,
+            activity_type: activityType,
+            activity_difficult: activityDifficulty,
+            training_id: Number(trainingId.inputState.value),
             exercises: Object.entries(exerciseSets).map(([exId, sets]) => ({
                 id: Number(exId),
                 try: sets.map(s => ({
@@ -150,7 +162,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         };
 
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/activity/add`, {
+            const result = await fetch(`${baseUrlForBackend}/api/activity/add-new-activity`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -162,13 +174,12 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                 return;
             }
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setServerError(result.message || "Не удалось добавить активность. Проверьте корректность данных.");
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка добавление активности. Проверьте правильность введенных данных.");
+            setIsSubmitting(false);
         } catch (error) {
-            setServerError("Не удалось связаться с сервером. Проверьте интернет-соединение или попробуйте позже.");
-            console.error("Add activity error:", error);
-        } finally {
+            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
+            console.error("Add new activity error:", error);
             setIsSubmitting(false);
         }
     };
@@ -255,6 +266,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                             addSet={addSet}
                             updateSet={updateSet}
                             removeSet={removeSet}
+                            trainingExercises={trainingExercises}
                         />
                     )}
 

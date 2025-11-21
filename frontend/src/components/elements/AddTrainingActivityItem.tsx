@@ -1,7 +1,7 @@
-import {exercises as exercisesDirectory} from "@/lib/data/exercises";
 import {PlusIcon} from "@heroicons/react/16/solid";
 import {TrashIcon} from "@heroicons/react/24/outline";
 import type {TrainingDataStructure} from "@/types/indexTypes";
+import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {JSX, useMemo} from "react";
 
 interface AddTrainingActivityItemProps {
@@ -10,6 +10,7 @@ interface AddTrainingActivityItemProps {
 	addSet: (exerciseId: number) => void;
 	updateSet: (exerciseId: number, setId: number, field: 'weight' | 'quantity', value: string) => void;
 	removeSet: (exerciseId: number, setId: number) => void;
+    trainingExercises: ExerciseTechniqueItem[];
 }
 
 export default function AddTrainingActivityItem(
@@ -18,7 +19,8 @@ export default function AddTrainingActivityItem(
         exerciseSets,
         addSet,
         updateSet,
-        removeSet
+        removeSet,
+        trainingExercises,
 	}:AddTrainingActivityItemProps): JSX.Element{
 
     const TrashIconComponent = useMemo(() => <TrashIcon className="w-5 h-5" />, [])
@@ -29,7 +31,7 @@ export default function AddTrainingActivityItem(
             <h2 className="text-lg font-semibold text-gray-800">Упражнения из тренировки</h2>
 
             {selectedTraining.exercises.map((exId) => {
-                const ex = exercisesDirectory.find(e => e.id === exId);
+                const ex = trainingExercises.find(e => e.id === exId);
                 const sets = exerciseSets[exId] || [{ id: 1, weight: 0, quantity: 0 }];
                 return (
                     <div key={exId} className="rounded-lg border border-emerald-100 bg-white p-4">

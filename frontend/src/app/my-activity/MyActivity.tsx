@@ -7,17 +7,17 @@ import MainPagination from "@/components/UI/MainPagination";
 import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
 import MyActivityItem from "@/components/elements/MyActivityRow";
 
-export default function MyActivity({activityData}:{activityData: ActivityDataStructure[]; }) {
+export default function MyActivity({clientActivity}:{clientActivity: ActivityDataStructure[]; }) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
-        return activityData.filter(e => {
+        return clientActivity.filter(e => {
             return q.length === 0 || e.name.toLowerCase().includes(q) ;
         });
-    }, [searchName, activityData]);
+    }, [searchName, clientActivity]);
 
     const {
         currentPage,

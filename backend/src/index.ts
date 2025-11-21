@@ -11,6 +11,7 @@ import goalRoutes from './routes/goal';
 import trainingRoutes from './routes/training';
 import nutritionRoutes from './routes/nutrition';
 import exercisesRoutes from './routes/exercises';
+import activityRoutes from './routes/activity';
 import { config } from './config';
 import { testConnection, closePool } from './config/database';
 import { initDatabase } from './database/init';
@@ -49,7 +50,7 @@ app.use('/api/goal', goalRoutes);
 app.use('/api/nutrition', nutritionRoutes);
 app.use('/api/training', trainingRoutes);
 app.use('/api/exercises', exercisesRoutes);
-
+app.use('/api/activity', activityRoutes);
 
 // Обработка 404
 app.use((req, res) => {

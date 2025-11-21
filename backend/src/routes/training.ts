@@ -9,6 +9,7 @@ import {
     validateTrainingName
 } from "../lib/backendValidators/trainingValidators";
 import {TrainingModel} from "../models/Training";
+import {ExerciseModel} from "../models/Exercise";
 
 const router = Router();
 
@@ -66,6 +67,42 @@ router.get('/my-training-list', authGuard, async (req, res) => {
         res.status(500).json(response);
     }
 
+});
+
+// Упражнения конкретной тренировки пользователя
+router.get('/:id/exercises', authGuard, async (req, res) => {
+    try {
+        const trainingId = Number(req.params.id);
+        if (!Number.isFinite(trainingId)) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный id тренировки',
+            };
+            return res.status(400).json(response);
+        }
+
+        const userId = (req as any).userId as number;
+
+        const exercises = await ExerciseModel.getByTrainingId(trainingId, userId);
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'success of getting exercises for training',
+            data: { exercises },
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Ошибка показа упражнений тренировки', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при показе упражнений тренировки ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
 });
 
 router.delete('/delete-my-training', authGuard, async (req, res) => {
