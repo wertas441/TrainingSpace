@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
 import authRoutes from './routes/auth';
 import goalRoutes from './routes/goal';
+import trainingRoutes from './routes/training';
 import nutritionRoutes from './routes/nutrition';
 
 import { config } from './config';
@@ -46,6 +47,8 @@ app.use('/api', apiRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/goal', goalRoutes);
 app.use('/api/nutrition', nutritionRoutes);
+app.use('/api/training', trainingRoutes);
+
 
 // Обработка 404
 app.use((req, res) => {

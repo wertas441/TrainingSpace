@@ -26,6 +26,7 @@ import {
 } from "@/lib/utils/validators";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import MainInput from "@/components/inputs/MainInput";
+import type {BackendApiResponse} from "@/types/indexTypes";
 
 export default function AddNutrition(){
 
@@ -100,9 +101,8 @@ export default function AddNutrition(){
                 return;
             }
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setServerError(result.message || "Не удалось добавить день. Проверьте корректность данных.");
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка добавление дня. Проверьте правильность введенных данных.");
             setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");

@@ -3,12 +3,13 @@ export interface AddTrainingFrontendStructure {
     name: string;
     description: string;
     exercises: number[];
-    date: string;
 }
 
-export interface TrainingListFrontendStructure {
+export interface TrainingListFrontendStructure extends AddTrainingFrontendStructure {
     id: number;
-    name: string;
-    description: string;
-    exercises: number[];
 }
+
+export interface AddTrainingModelRequestStructure extends AddTrainingFrontendStructure {
+    user_id: number;
+}
+

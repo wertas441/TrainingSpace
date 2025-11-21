@@ -19,6 +19,7 @@ import {
 } from "@/lib/utils/validators";
 import MainPagination from "@/components/UI/MainPagination";
 import {TagIcon} from "@heroicons/react/24/outline";
+import type {BackendApiResponse} from "@/types/indexTypes";
 
 export default function AddNewTraining(){
 
@@ -29,7 +30,6 @@ export default function AddNewTraining(){
     const [searchName, setSearchName] = useState<string>('');
     const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
     const itemsPerPage:number = 8;
-    const today = new Date().toLocaleDateString();
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
@@ -92,16 +92,14 @@ export default function AddNewTraining(){
         setIsSubmitting(true);
 
         const payload = {
+            // backend ожидает поле `name`, см. AddTrainingFrontendStructure
             name: trainingName.inputState.value,
             description: trainingDescription.inputState.value,
             exercises: selectedExerciseIds,
-            date: today,
         }
 
-        console.log(payload);
-
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/training/add`, {
+            const result = await fetch(`${baseUrlForBackend}/api/training/add-new-training`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -111,18 +109,16 @@ export default function AddNewTraining(){
             });
 
             if (result.ok) {
-                router.replace("/my-training");
+                router.push("/my-training");
                 return;
             }
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setServerError(result.message || "Не удалось добавить тренировку. Проверьте корректность данных.");
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Проверьте интернет-соединение или попробуйте позже.");
-            console.error("Add new training error:", error);
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка добавление тренировки. Проверьте правильность введенных данных.");
             setIsSubmitting(false);
-        } finally {
+        } catch (error) {
+            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
+            console.error("Add new training error:", error);
             setIsSubmitting(false);
         }
     }
