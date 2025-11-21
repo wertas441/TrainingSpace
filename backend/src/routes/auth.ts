@@ -145,7 +145,7 @@ router.post('/login', async (req, res) => {
 router.post('/logout', async (req, res) => {
     try {
 
-        const userId = (req as any).userId as string | undefined;
+        const userId = (req as any).userId as number;
 
         if (userId) {
             try {
