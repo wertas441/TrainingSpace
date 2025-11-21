@@ -1,16 +1,16 @@
-import React, {useMemo} from "react";
-import {exercises} from "@/lib/data/exercises";
+import {useMemo} from "react";
 import {PlusCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 
-type Exercise = typeof exercises[number];
+type difficultOptions = | 'light' | 'middle' | 'hard';
 
 interface SelectableExerciseRowProps {
-    exercise: Exercise;
+    exercise: ExerciseTechniqueItem;
     selected: boolean;
     onToggle: (id: number) => void;
 }
 
-function getDifficultyStyles(difficulty: Exercise["difficulty"]) {
+function getDifficultyStyles(difficulty: difficultOptions) {
     switch (difficulty) {
         case "light":
             return "border-emerald-200 bg-emerald-50 text-emerald-700";

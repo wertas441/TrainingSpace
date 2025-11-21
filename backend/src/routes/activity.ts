@@ -1,14 +1,6 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
-import {UserModel} from "../models/User";
 import {ApiResponse} from "../types";
-import {
-    validateCalories, validateCarb,
-    validateDayDescription,
-    validateDayName, validateFat, validateNutritionDayDate,
-    validateProtein
-} from "../lib/backendValidators/nutrationValidators";
-import {NutritionModel} from "../models/Nutrition";
 import { config } from '../config';
 import {
     validateActivityDescription, validateActivityDifficult,
@@ -16,14 +8,21 @@ import {
     validateActivityType
 } from "../lib/backendValidators/activityValidators";
 import {AddActivityFrontendRequest} from "../types/activityBackendTypes";
-import {GoalModel} from "../models/Goal";
 import {ActivityModel} from "../models/Activity";
 
 const router = Router();
 
 router.post('/add-new-activity', authGuard, async (req, res) => {
     try {
-        const {activity_name, description, activity_type, activity_difficult, training_id, performed_at}: AddActivityFrontendRequest = req.body;
+        const {
+            activity_name,
+            description,
+            activity_type,
+            activity_difficult,
+            training_id,
+            performed_at,
+            exercises,
+        }: AddActivityFrontendRequest = req.body;
 
         const activityNameError:boolean = validateActivityName(activity_name);
         const activityDescriptionError:boolean = validateActivityDescription(description);
@@ -42,7 +41,16 @@ router.post('/add-new-activity', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await ActivityModel.create({user_id: userId, activity_name, description, activity_type, activity_difficult, training_id, performed_at});
+        await ActivityModel.create({
+            user_id: userId,
+            activity_name,
+            description,
+            activity_type,
+            activity_difficult,
+            training_id,
+            performed_at,
+            exercises,
+        });
 
         const response: ApiResponse = {
             success: true,
@@ -50,8 +58,6 @@ router.post('/add-new-activity', authGuard, async (req, res) => {
         };
 
         res.status(200).json(response);
-
-
     } catch (error) {
         console.error('Ошибка добавления активности ', error);
         const err: any = error;
@@ -80,7 +86,6 @@ router.get('/my-activity-list', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
         console.error('Ошибка показа списка активностей', error);
         const err: any = error;
         const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';

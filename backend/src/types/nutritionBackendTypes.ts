@@ -13,7 +13,6 @@ export interface DayListFrontendStructure extends AddNewDayFrontendStructure {
     id: number;
 }
 
-
 export interface AddDayModelRequestStructure {
     user_id: number;
     name: string;

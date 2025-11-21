@@ -62,7 +62,6 @@ router.post('/registration', async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-
         console.error('Ошибка регистрации пользователя:', error);
         const err: any = error;
         const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
@@ -167,7 +166,6 @@ router.post('/logout', async (req, res) => {
 
         res.json(response);
     } catch (error) {
-
         console.error('Ошибка выхода из системы:', error);
         res.clearCookie('token');
         res.json({success: true, message: 'Успешный выход из системы'});

@@ -15,7 +15,6 @@ export async function getGoalList(tokenValue: string | undefined):Promise<GoalsS
         });
 
         if (!response.ok) {
-            // Если backend вернул ошибку, попробуем прочитать тело
             let errorMessage = "Ошибка получения списка целей.";
             try {
                 const data = await response.json() as BackendApiResponse<{ goals: GoalsStructure[] }>;
@@ -26,6 +25,7 @@ export async function getGoalList(tokenValue: string | undefined):Promise<GoalsS
                 // игнорируем, оставляем дефолтное сообщение
             }
             console.error(errorMessage);
+
             return [];
         }
 
@@ -38,7 +38,7 @@ export async function getGoalList(tokenValue: string | undefined):Promise<GoalsS
         return data.data.goals;
     } catch (error) {
         console.error("Ошибка запроса списка целей:", error);
-        // В случае сетевой ошибки просто возвращаем пустой список — UI уже умеет с этим работать
+
         return [];
     }
 }

@@ -7,7 +7,6 @@ export interface User {
     updatedAt: Date;
 }
 
-// Типы для запросов
 export interface LoginRequest {
     email: string;
     password: string;

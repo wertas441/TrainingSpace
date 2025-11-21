@@ -1,7 +1,5 @@
 import {GoalPriority} from "../../types/goalBackendTypes";
 
-/// Goal Validators
-
 export const validateGoalName = (goalName: string): boolean => {
     if(!goalName.trim()){
         return false;

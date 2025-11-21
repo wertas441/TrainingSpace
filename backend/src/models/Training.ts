@@ -28,6 +28,7 @@ export class TrainingModel {
                 trainingData.description,
                 trainingData.user_id,
             ];
+
             const { rows } = await client.query(insertTrainingQuery, insertTrainingValues);
             const trainingId: number = rows[0]?.id;
 

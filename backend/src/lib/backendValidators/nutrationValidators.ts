@@ -1,4 +1,3 @@
-/// Nutrition Validators
 export const validateDayName = (dayName: string): boolean => {
     if(!dayName.trim()){
         return false;

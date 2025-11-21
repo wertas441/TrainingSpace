@@ -54,7 +54,6 @@ export const validateActivityTrainingId = (trainingId: number ): boolean => {
     return true;
 }
 
-
 export const validateActivityPerformedAt = (performedAt: string): boolean => {
     if (!performedAt.trim()) {
         return false;

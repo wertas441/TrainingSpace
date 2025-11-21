@@ -26,6 +26,7 @@ export async function getDayList(tokenValue: string | undefined):Promise<Nutriti
 
             }
             console.error(errorMessage);
+
             return [];
         }
 

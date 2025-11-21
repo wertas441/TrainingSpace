@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config';
 
 export function authGuard(req: Request, res: Response, next: NextFunction) {
-
     try {
         const bearer = req.headers.authorization?.replace('Bearer ', '');
         const token = (req as any).cookies?.token || bearer;

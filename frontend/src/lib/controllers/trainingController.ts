@@ -26,6 +26,7 @@ export async function getTrainingList(tokenValue: string | undefined):Promise<Tr
                 // игнорируем, оставляем дефолтное сообщение
             }
             console.error(errorMessage);
+
             return [];
         }
 

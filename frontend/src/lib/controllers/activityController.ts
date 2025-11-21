@@ -25,6 +25,7 @@ export async function getActivityList(tokenValue: string | undefined):Promise<Ac
                 // игнорируем, оставляем дефолтное сообщение
             }
             console.error(errorMessage);
+
             return [];
         }
 

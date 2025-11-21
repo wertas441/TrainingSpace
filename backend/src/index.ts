@@ -16,7 +16,6 @@ import { config } from './config';
 import { testConnection, closePool } from './config/database';
 import { initDatabase } from './database/init';
 
-
 // Загружаем переменные окружения
 dotenv.config();
 
@@ -43,7 +42,6 @@ app.use(express.json()); // Парсинг JSON
 app.use(express.urlencoded({ extended: true })); // Парсинг URL-encoded данных
 app.use(cookieParser()); // Куки
 
-// API роуты
 app.use('/api', apiRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/goal', goalRoutes);
@@ -52,7 +50,6 @@ app.use('/api/training', trainingRoutes);
 app.use('/api/exercises', exercisesRoutes);
 app.use('/api/activity', activityRoutes);
 
-// Обработка 404
 app.use((req, res) => {
     res.status(404).json({
         error: 'Маршрут не найден',
