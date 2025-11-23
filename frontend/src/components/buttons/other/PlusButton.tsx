@@ -1,8 +1,8 @@
 import {memo, useMemo} from "react";
 import {PlusIcon} from "@heroicons/react/16/solid";
-import {BasicButtonProps} from "@/types/indexTypes";
+import {BasicIconButtonProps} from "@/types/indexTypes";
 
-function PlusButton({onClick, className = ''}:BasicButtonProps) {
+function PlusButton({onClick, className = ''}:BasicIconButtonProps) {
 
     return (
         <button

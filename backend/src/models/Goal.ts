@@ -1,7 +1,7 @@
 import { pool } from '../config/database';
 import {
     CreateGoalFrontendStructure,
-    GoalListFrontendResponse,
+    GoalListFrontendResponse, GoalUpdateFrontendResponse,
 } from "../types/goalBackendTypes";
 
 export class GoalModel {
@@ -35,5 +35,41 @@ export class GoalModel {
         const { rows } = await pool.query(query, [userId]);
 
         return rows as GoalListFrontendResponse[];
+    }
+
+    // Информация по конкретной цели пользователя
+    static async information(userId: number, goalId: number): Promise<GoalListFrontendResponse | null> {
+        const query = `
+            SELECT id, name, description, priority
+            FROM goal
+            WHERE id = $1 AND user_id = $2
+        `;
+
+        const { rows } = await pool.query(query, [goalId, userId]);
+
+        return rows[0] ?? null;
+    }
+
+    // Обновление существующей цели пользователя
+    static async update(updateData: GoalUpdateFrontendResponse): Promise<void> {
+        const query = `
+            UPDATE goal
+            SET name = $1, description = $2, priority = $3
+            WHERE id = $4 AND user_id = $5
+        `;
+
+        const values = [
+            updateData.name,
+            updateData.description,
+            updateData.priority,
+            updateData.goalId,
+            updateData.userId,
+        ];
+
+        const { rowCount } = await pool.query(query, values);
+
+        if (!rowCount) {
+            throw new Error('Goal not found or access denied');
+        }
     }
 }

@@ -27,7 +27,7 @@ export interface HeaderMinimumProps {
     setSearchName: (newValue: string) => void;
 }
 
-export interface BasicButtonProps {
+export interface BasicIconButtonProps {
     onClick: () => void;
     className?: string;
 }
@@ -46,4 +46,10 @@ export interface BackendApiResponse<T = any> {
     data?: T;
     message?: string;
     error?: string;
+}
+
+export interface SimpleButtonProps {
+    label: string;
+    onClick: () => void;
+    className?: string;
 }

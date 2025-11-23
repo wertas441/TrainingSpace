@@ -1,11 +1,145 @@
 'use client'
 
+import {useInputField} from "@/lib/hooks/useInputField";
+import {FormEvent, useMemo, useState} from "react";
+import {GoalPriority, GoalsStructure} from "@/types/goalTypes";
+import {usePageUtils} from "@/lib/hooks/usePageUtils";
+import {validateGoalDescription, validateGoalName, validateGoalPriority} from "@/lib/utils/validators";
+import {baseUrlForBackend} from "@/lib";
+import type {BackendApiResponse} from "@/types/indexTypes";
+import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
+import ServerError from "@/components/errors/ServerError";
+import MainInput from "@/components/inputs/MainInput";
+import {TagIcon} from "@heroicons/react/24/outline";
+import MainTextarea from "@/components/inputs/MainTextarea";
+import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
+import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
+import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 
-export default function ChangeGoal(){
+export default function ChangeGoal({goalInfo}: {goalInfo: GoalsStructure}){
+
+    const goalName = useInputField(goalInfo.name);
+    const goalDescription = useInputField(goalInfo.description);
+    const [goalPriority, setGoalPriority] = useState<GoalPriority>(goalInfo.priority);
+
+    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
+
+    const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'];
+
+    const validateForm = (): boolean => {
+        const goalNameError = validateGoalName(goalName.inputState.value);
+        goalName.setError(goalNameError);
+
+        const goalDescriptionError = validateGoalDescription(goalDescription.inputState.value);
+        goalDescription.setError(goalDescriptionError);
+
+        const goalPriorityError = validateGoalPriority(goalPriority);
+
+        return !(goalDescriptionError || goalNameError || goalPriorityError);
+    }
+
+    const handleSubmit = async (event: FormEvent):Promise<void> => {
+        event.preventDefault();
+        setServerError(null);
+
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            const result = await fetch(`${baseUrlForBackend}/api/goal/update-my-goal`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    goalId: goalInfo.id,
+                    name: goalName.inputState.value,
+                    description: goalDescription.inputState.value,
+                    priority: goalPriority,
+                }),
+            });
+
+            if (result.ok) {
+                router.push("/goals");
+                return;
+            }
+
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка изменения цели. Проверьте правильность введенных данных.");
+            setIsSubmitting(false);
+        } catch (error) {
+            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
+            console.error("change goal error:", error);
+            setIsSubmitting(false);
+        }
+    }
+
+
+    const deleteNothing = () => {
+        setIsSubmitting(false);
+    }
 
     return (
-        <h1>
-            ChangeGoal
-        </h1>
+        <BlockPageContext>
+            <div className="space-y-6">
+                <div>
+                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
+                        Изменение цели
+                    </h2>
+                    <p className="text-center text-gray-600">
+                        Измените данные своей цели и сохрани изменения вступления их в силу
+                    </p>
+                </div>
+
+                <ServerError message={serverError} />
+
+                <form className="space-y-6" onSubmit={handleSubmit}>
+
+                    <MainInput
+                        id={'goalName'}
+                        value={goalName.inputState.value}
+                        onChange={goalName.setValue}
+                        label={'Название цели'}
+                        placeholder={'Например: Пожать 100кг'}
+                        icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
+                        error={goalName.inputState.error || undefined}
+                    />
+
+                    <MainTextarea
+                        id="activityDescription"
+                        label="Описание"
+                        placeholder="Опционально: описание для цели"
+                        value={goalDescription.inputState.value}
+                        onChange={goalDescription.setValue}
+                        error={goalDescription.inputState.error || undefined}
+                        rows={4}
+                    />
+
+                    <ChipRadioGroup<GoalPriority>
+                        id="goal-Priority"
+                        name="goalPriority"
+                        label={`Приоритет цели`}
+                        choices={goalPriorityOptions}
+                        value={goalPriority}
+                        onChange={setGoalPriority}
+                    />
+
+                    <div className="mt-10 flex items-center gap-x-2">
+                        <LightGreenSubmitBtn
+                            label={!isSubmitting ? 'Изменить' : 'Процесс...'}
+                            disabled={isSubmitting}
+                        />
+                        <RedGlassBtn
+                            label = {'Удалить цель'}
+                            onClick = {deleteNothing}
+                        />
+                    </div>
+                </form>
+            </div>
+        </BlockPageContext>
     )
 }
