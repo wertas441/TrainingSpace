@@ -8,7 +8,7 @@ import {
     validateTwoPassword,
     validateUserPassword
 } from "../lib/backendValidators/settingsValidators";
-import {SettingMode} from "../models/Setting";
+import {SettingModel} from "../models/Setting";
 
 const router = Router();
 
@@ -37,7 +37,7 @@ router.post('/change-password', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await SettingMode.changePassword(
+        await SettingModel.changePassword(
             {
                 user_id: userId,
                 current_password: currentPassword,

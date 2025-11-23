@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     description: 'Страница для получения и изменения информации об аккаунте',
 }
 
-export default function SettingsPage(){
+export default async function SettingsPage(){
 
     return <Settings />
 }
