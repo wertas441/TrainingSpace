@@ -1,7 +1,7 @@
 import {Ref} from "react";
 
 export interface NutritionDay {
-    id: number | string;
+    id: number;
     name: string;
     date: string;
     description?: string;

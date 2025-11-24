@@ -13,13 +13,12 @@ export interface DayListFrontendStructure extends AddNewDayFrontendStructure {
     id: number;
 }
 
-export interface AddDayModelRequestStructure {
+export interface DayUpgradeRequestStructure extends AddNewDayFrontendStructure {
+    id: number;
     user_id: number;
-    name: string;
-    description: string;
-    day_date: string;
-    calories: number;
-    protein: number;
-    fat: number;
-    carb: number;
+}
+
+
+export interface AddDayModelRequestStructure extends AddNewDayFrontendStructure {
+    user_id: number;
 }

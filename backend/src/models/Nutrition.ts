@@ -1,9 +1,12 @@
 import { pool } from '../config/database';
-import {AddDayModelRequestStructure, DayListFrontendStructure} from "../types/nutritionBackendTypes";
+import {
+    AddDayModelRequestStructure,
+    DayListFrontendStructure,
+    DayUpgradeRequestStructure
+} from "../types/nutritionBackendTypes";
 
 export class NutritionModel {
 
-    // Создание нового дня
     static async create(nutritionData: AddDayModelRequestStructure) {
 
         const query = `
@@ -29,13 +32,12 @@ export class NutritionModel {
             nutritionData.protein,
             nutritionData.fat,
             nutritionData.carb,
-            nutritionData.day_date,
+            nutritionData.date,
         ];
 
         await pool.query(query, values);
     }
 
-    // Список дней пользователя
     static async getList(userId: number): Promise<DayListFrontendStructure[]> {
 
         const query = `
@@ -47,7 +49,7 @@ export class NutritionModel {
                 protein,
                 fat,
                 carb,
-                day_date AS date
+                to_char(day_date::date, 'YYYY-MM-DD') AS date
             FROM nutrition
             WHERE user_id = $1
             ORDER BY created_at DESC, id DESC
@@ -56,5 +58,69 @@ export class NutritionModel {
         const { rows } = await pool.query(query, [userId]);
 
         return rows as DayListFrontendStructure[];
+    }
+
+    static async information(userId: number, dayId: number): Promise<DayListFrontendStructure | null> {
+        const query = `
+            SELECT 
+                id, 
+                name, 
+                description, 
+                calories, 
+                protein, 
+                fat, 
+                carb, 
+                to_char(day_date::date, 'YYYY-MM-DD') AS date
+            FROM nutrition
+            WHERE id = $1 AND user_id = $2
+        `;
+
+        const { rows } = await pool.query(query, [dayId, userId]);
+
+        return rows[0] ?? null;
+    }
+
+    static async update(updateData: DayUpgradeRequestStructure): Promise<void> {
+        const query = `
+            UPDATE nutrition
+            SET name = $1, 
+                description = $2,
+                calories = $3, 
+                protein = $4, 
+                fat = $5 , 
+                carb = $6, 
+                day_date = $7
+            WHERE id = $8 AND user_id = $9
+        `;
+
+        const values = [
+            updateData.name,
+            updateData.description,
+            updateData.calories,
+            updateData.protein,
+            updateData.fat,
+            updateData.carb,
+            updateData.date,
+            updateData.id,
+            updateData.user_id
+        ];
+
+        const { rowCount } = await pool.query(query, values);
+
+        if (!rowCount) {
+            throw new Error('day not found or access denied');
+        }
+    }
+
+    static async delete(userId: number, dayId: number): Promise<boolean> {
+        const query = `
+            DELETE FROM nutrition
+            WHERE id = $1 AND user_id = $2
+            RETURNING id
+        `;
+
+        const { rowCount } = await pool.query(query, [dayId, userId]);
+
+        return !!rowCount;
     }
 }

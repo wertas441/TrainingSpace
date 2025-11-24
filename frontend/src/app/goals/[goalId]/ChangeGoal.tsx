@@ -109,7 +109,7 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
                             Изменение цели
                         </h2>
                         <p className="text-center text-gray-600">
-                            Измените данные своей цели и сохрани изменения вступления их в силу
+                            Измените данные своей цели и сохраните изменения для вступления их в силу
                         </p>
                     </div>
 

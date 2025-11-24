@@ -117,7 +117,7 @@ router.delete('/delete-my-goal', authGuard, async (req, res) => {
         const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
         const response: ApiResponse = {
             success: false,
-            error: `Ошибка при удалении цели цели ${devSuffix}`
+            error: `Ошибка при удалении цели ${devSuffix}`
         };
 
         res.status(500).json(response);
@@ -217,6 +217,5 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
         res.status(500).json(response);
     }
 });
-
 
 export default router;
