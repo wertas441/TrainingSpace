@@ -1,58 +1,52 @@
 import { pool } from '../config/database';
 import {AddDayModelRequestStructure, DayListFrontendStructure} from "../types/nutritionBackendTypes";
+import {ChangePasswordBackendRequest} from "../types/settingsBackendTypes";
 
-export class SettingMode {
-    static async ca(nutritionData: AddDayModelRequestStructure) {
+export class SettingModel {
+
+    static async changePassword(userData: ChangePasswordBackendRequest)  {
 
         const query = `
             INSERT INTO nutrition 
                 (
                  user_id, 
-                 name, 
-                 description, 
-                 calories, 
-                 protein, 
-                 fat, 
-                 carb, 
-                 day_date 
+                 current_password,
+                 new_password,
+                 confirm_password,
                 )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8 )
+            VALUES ($1, $2, $3, $4,)
         `;
 
         const values = [
-            nutritionData.user_id,
-            nutritionData.name,
-            nutritionData.description,
-            nutritionData.calories,
-            nutritionData.protein,
-            nutritionData.fat,
-            nutritionData.carb,
-            nutritionData.day_date,
+            userData.user_id,
+            userData.current_password,
+            userData.new_password,
+            userData.confirm_password,
         ];
 
         await pool.query(query, values);
     }
 
     // Список дней пользователя
-    static async getList(userId: number): Promise<DayListFrontendStructure[]> {
-
-        const query = `
-            SELECT 
-                id,
-                name,
-                description,
-                calories,
-                protein,
-                fat,
-                carb,
-                day_date AS date
-            FROM nutrition
-            WHERE user_id = $1
-            ORDER BY created_at DESC, id DESC
-        `;
-
-        const { rows } = await pool.query(query, [userId]);
-
-        return rows as DayListFrontendStructure[];
-    }
+    // static async changeEmail(userId: number): Promise<DayListFrontendStructure[]> {
+    //
+    //     const query = `
+    //         SELECT
+    //             id,
+    //             name,
+    //             description,
+    //             calories,
+    //             protein,
+    //             fat,
+    //             carb,
+    //             day_date AS date
+    //         FROM nutrition
+    //         WHERE user_id = $1
+    //         ORDER BY created_at DESC, id DESC
+    //     `;
+    //
+    //     const { rows } = await pool.query(query, [userId]);
+    //
+    //     return rows as DayListFrontendStructure[];
+    // }
 }

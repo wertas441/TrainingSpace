@@ -5,8 +5,8 @@ import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGre
 import {NutritionHeaderProps} from "@/types/nutritionTypes";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {useRouter} from "next/navigation";
-import PlusButton from "@/components/buttons/PlusButton";
-import BarsButton from "@/components/buttons/BarsButton";
+import PlusButton from "@/components/buttons/other/PlusButton";
+import BarsButton from "@/components/buttons/other/BarsButton";
 
 function NutritionHeader(
     {

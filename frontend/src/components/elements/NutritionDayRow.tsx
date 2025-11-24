@@ -1,7 +1,7 @@
 import {CalendarDaysIcon, FireIcon, BeakerIcon, ScaleIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 import {NutritionDay} from "@/types/nutritionTypes";
 import {memo, useCallback} from "react";
-import ChangeButton from "@/components/buttons/ChangeButton";
+import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {useRouter} from "next/navigation";
 
 

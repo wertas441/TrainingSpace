@@ -6,7 +6,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
-import {baseUrlForBackend, getTrainingExercises} from "@/lib";
+import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
 import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
@@ -15,6 +15,7 @@ import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityIt
 import MainInput from "@/components/inputs/MainInput";
 import {CalendarIcon, TagIcon} from "@heroicons/react/24/outline";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {getTrainingExercises} from "@/lib/controllers/activityController";
 
 export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStructure[]; }) {
 

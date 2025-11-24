@@ -1,7 +1,7 @@
 import {GoalPriority, GoalsStructure} from "@/types/goalTypes";
 import {memo, useCallback} from "react";
 import {useRouter} from "next/navigation";
-import ChangeButton from "@/components/buttons/ChangeButton";
+import ChangeButton from "@/components/buttons/other/ChangeButton";
 
 function getDifficultyStyles(priority: GoalPriority) {
     switch (priority) {

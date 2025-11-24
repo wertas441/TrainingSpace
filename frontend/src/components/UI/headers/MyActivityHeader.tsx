@@ -3,7 +3,7 @@ import {useCallback, useMemo} from "react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {HeaderMinimumProps} from "@/types/indexTypes";
 import {useRouter} from "next/navigation";
-import PlusButton from "@/components/buttons/PlusButton";
+import PlusButton from "@/components/buttons/other/PlusButton";
 
 export default function MyActivityHeader({ref, searchName, setSearchName}: HeaderMinimumProps){
 

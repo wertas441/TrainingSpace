@@ -1,17 +1,17 @@
 import {memo} from "react";
 import {SimpleButtonProps} from "@/types/indexTypes";
 
-function LightGreenGlassBtn({label, onClick, className = ''}: SimpleButtonProps ) {
+function RedGlassBtn({label, onClick, className = ''}: SimpleButtonProps ) {
 
     return (
         <button
             onClick={onClick}
             className={`px-4 w-full cursor-pointer py-2 text-sm rounded-md border 
-                border-emerald-200 text-emerald-700 hover:bg-emerald-50 ${className}`}
+                border-red-200 text-red-700 hover:bg-red-50 ${className}`}
         >
             {label}
         </button>
     )
 }
 
-export default memo(LightGreenGlassBtn)
+export default memo(RedGlassBtn)

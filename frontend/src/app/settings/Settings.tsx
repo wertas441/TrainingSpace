@@ -7,9 +7,10 @@ import {useMemo, useState} from "react";
 import ProjectInformationPage from "@/app/settings/Ui/ProjectInformationPage";
 import {ArrowLeftOnRectangleIcon, EnvelopeIcon, LockClosedIcon, UserCircleIcon, BookOpenIcon} from "@heroicons/react/24/outline";
 import {SettingsMenuItemsStructure} from "@/types/indexTypes";
-import {logOut} from "@/lib/controllers/settingsController";
+import {logout} from "@/lib/controllers/settingController";
+import {usePageUtils} from "@/lib/hooks/usePageUtils";
 
-export default function Settings({token}){
+export default function Settings() {
 
     const settingsMenuItems: SettingsMenuItemsStructure[] = useMemo(() => {
         return [
@@ -22,6 +23,7 @@ export default function Settings({token}){
 
     const [activeTab, setActiveTab] = useState('profile');
     const activeItem = settingsMenuItems.find(i => i.id === activeTab);
+    const {router} = usePageUtils()
 
     const renderContent = () => {
         switch (activeTab) {
@@ -38,8 +40,10 @@ export default function Settings({token}){
         }
     };
 
-    const logOutFunction = () => {
-        logOut(token)
+
+    const logOutButton = () => {
+        logout();
+        router.replace("/login");
     }
 
     return (
@@ -68,7 +72,7 @@ export default function Settings({token}){
                         <button
                             className="w-full flex items-center cursor-pointer gap-3 py-2.5 px-3 rounded-md transition-colors
                             text-left text-red-700 bg-white hover:bg-red-50"
-                            onClick={logOutFunction}
+                            onClick={logOutButton}
                         >
                             <ArrowLeftOnRectangleIcon className="h-5 w-5" />
                             <span className="text-sm font-medium">Выйти</span>

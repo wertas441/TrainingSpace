@@ -5,7 +5,7 @@ import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGre
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniquesTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import BarsButton from "@/components/buttons/BarsButton";
+import BarsButton from "@/components/buttons/other/BarsButton";
 import {difficultOptions} from "@/lib";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
 
