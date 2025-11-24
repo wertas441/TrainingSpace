@@ -52,4 +52,5 @@ export interface SimpleButtonProps {
     label: string;
     onClick: () => void;
     className?: string;
+    type?: "button" | "submit" | "reset";
 }

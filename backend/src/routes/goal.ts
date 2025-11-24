@@ -3,8 +3,7 @@ import { authGuard } from '../middleware/authMiddleware';
 import { ApiResponse } from "../types";
 import {
     AddNewGoalFrontendStructure,
-    CreateGoalFrontendStructure,
-    GoalPriority, GoalUpdateFrontendResponse,
+    GoalUpdateFrontendResponse,
     GoalUpdateFrontendStructure
 } from "../types/goalBackendTypes";
 import { validateGoalDescription, validateGoalName, validateGoalPriority } from "../lib/backendValidators/goalValidators";
@@ -82,7 +81,47 @@ router.get('/my-goals-list', authGuard, async (req, res) => {
 });
 
 router.delete('/delete-my-goal', authGuard, async (req, res) => {
+    try {
+        const { goalId: goalIdRaw } = req.body;
+        const userId = (req as any).userId as number;
 
+        const goalId = Number(goalIdRaw);
+
+        if (!goalIdRaw || Number.isNaN(goalId) || goalId <= 0) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный идентификатор цели.',
+            };
+            return res.status(400).json(response);
+        }
+
+        const isDeleted = await GoalModel.delete(userId, goalId);
+
+        if (!isDeleted) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Цель не найдена или у вас нет доступа для ее удаления.',
+            };
+            return res.status(404).json(response);
+        }
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'goal delete successfully',
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+        console.error('Ошибка удаления цели', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при удалении цели цели ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
 });
 
 router.get('/about-my-goal', authGuard, async (req, res) => {
@@ -120,12 +159,12 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
         res.status(200).json(response);
     } catch (error){
 
-        console.error('Ошибка изменения цели', error);
+        console.error('Ошибка получения информации о цели', error);
         const err: any = error;
         const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
         const response: ApiResponse = {
             success: false,
-            error: `Ошибка при изменении цели ${devSuffix}`
+            error: `Ошибка при получении информации о цели ${devSuffix}`
         };
 
         res.status(500).json(response);

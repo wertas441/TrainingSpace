@@ -72,4 +72,17 @@ export class GoalModel {
             throw new Error('Goal not found or access denied');
         }
     }
+
+    // Удаление цели пользователя
+    static async delete(userId: number, goalId: number): Promise<boolean> {
+        const query = `
+            DELETE FROM goal
+            WHERE id = $1 AND user_id = $2
+            RETURNING id
+        `;
+
+        const { rowCount } = await pool.query(query, [goalId, userId]);
+
+        return !!rowCount;
+    }
 }

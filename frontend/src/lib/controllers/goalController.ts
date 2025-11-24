@@ -78,3 +78,45 @@ export async function getGoalInformation(tokenValue: string | undefined, goalId:
         return null;
     }
 }
+
+export async function deleteGoal(tokenValue: string | undefined, goalId: number):Promise<void> {
+    try {
+        const response = await fetch(`${baseUrlForBackend}/api/goal/delete-my-goal`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Cookie': `token=${tokenValue}`
+            },
+            body: JSON.stringify({goalId: goalId}),
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            let errorMessage = "Ошибка удаления цели.";
+            try {
+                const data = await response.json() as BackendApiResponse;
+                if (data.error || data.message) {
+                    errorMessage = (data.error || data.message) as string;
+                }
+            } catch {
+                // игнорируем, оставляем дефолтное сообщение
+            }
+
+            console.error(errorMessage);
+            return;
+        }
+
+        const data = await response.json() as BackendApiResponse;
+
+        if (!data.success) {
+            console.error(data.error || data.message || "Ошибка удаления цели.");
+        }
+
+        return;
+    } catch (error) {
+        console.error("Ошибка запроса удаления цели:", error);
+        return;
+    }
+}

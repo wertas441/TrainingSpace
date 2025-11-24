@@ -15,8 +15,14 @@ import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
+import {deleteGoal} from "@/lib/controllers/goalController";
 
-export default function ChangeGoal({goalInfo}: {goalInfo: GoalsStructure}){
+interface ChangeGoalProps {
+    goalInfo: GoalsStructure;
+    token: string | undefined;
+}
+
+export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
 
     const goalName = useInputField(goalInfo.name);
     const goalDescription = useInputField(goalInfo.description);
@@ -64,7 +70,7 @@ export default function ChangeGoal({goalInfo}: {goalInfo: GoalsStructure}){
             });
 
             if (result.ok) {
-                router.push("/goals");
+                router.replace("/goals");
                 return;
             }
 
@@ -78,9 +84,16 @@ export default function ChangeGoal({goalInfo}: {goalInfo: GoalsStructure}){
         }
     }
 
+    const deleteGoalBtn = async () => {
+        setServerError(null);
 
-    const deleteNothing = () => {
-        setIsSubmitting(false);
+        try {
+            await deleteGoal(token, goalInfo.id);
+            router.replace("/goals");
+        } catch (error) {
+            console.error("delete goal error:", error);
+            setServerError("Не удалось удалить цель. Попробуйте ещё раз позже.");
+        }
     }
 
     return (
@@ -128,14 +141,14 @@ export default function ChangeGoal({goalInfo}: {goalInfo: GoalsStructure}){
                         onChange={setGoalPriority}
                     />
 
-                    <div className="mt-10 flex items-center gap-x-2">
+                    <div className="mt-10 flex items-center gap-x-8">
                         <LightGreenSubmitBtn
                             label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                             disabled={isSubmitting}
                         />
                         <RedGlassBtn
                             label = {'Удалить цель'}
-                            onClick = {deleteNothing}
+                            onClick = {deleteGoalBtn}
                         />
                     </div>
                 </form>

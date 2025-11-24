@@ -5,8 +5,8 @@ import { getGoalInformation } from "@/lib/controllers/goalController";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-    title: "Goal",
-    description: 'Goal',
+    title: "Изменение цели | TrainingSpace",
+    description: 'Страница изменения существующей цели пользователя в сервисе TrainingSpace',
 }
 
 interface ChangeGoalPageProps {
@@ -29,5 +29,5 @@ export default async function ChangeGoalPage({ params }: ChangeGoalPageProps){
         notFound();
     }
 
-    return <ChangeGoal goalInfo={goalInfo} />
+    return <ChangeGoal goalInfo={goalInfo} token={tokenValue} />
 }
