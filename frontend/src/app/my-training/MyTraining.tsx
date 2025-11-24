@@ -67,6 +67,7 @@ export default function MyTraining({trainingList, exercises}: MyTrainingProps) {
                         return (
                             <MyTrainingRow
                                 key={item.id}
+                                id={item.id}
                                 name={item.name}
                                 description={item.description}
                                 exercises={exerciseNames}

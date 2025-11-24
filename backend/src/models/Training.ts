@@ -1,5 +1,6 @@
 import { pool } from '../config/database';
 import {
+    AddTrainingFrontendStructure,
     AddTrainingModelRequestStructure,
     TrainingListFrontendStructure
 } from "../types/trainingBackendTypes";
@@ -74,7 +75,6 @@ export class TrainingModel {
         }
     }
 
-
     static async getList(userId: number): Promise<TrainingListFrontendStructure[]> {
         const query = `
             SELECT
@@ -96,5 +96,125 @@ export class TrainingModel {
         const { rows } = await pool.query(query, [userId]);
 
         return rows as TrainingListFrontendStructure[];
+    }
+
+    static async information(userId: number, trainingId: number): Promise<TrainingListFrontendStructure | null> {
+        const query = `
+            SELECT
+                t.id,
+                t.training_name AS name,
+                COALESCE(t.description, '') AS description,
+                COALESCE(
+                    ARRAY_AGG(te.exercise_id ORDER BY te.order_index)
+                    FILTER (WHERE te.exercise_id IS NOT NULL),
+                    '{}'::INT[]
+                ) AS exercises
+            FROM training t
+                     LEFT JOIN training_exercises te ON te.training_id = t.id
+            WHERE t.id = $1 AND t.user_id = $2
+            GROUP BY t.id, t.training_name, t.description
+        `;
+
+        const { rows } = await pool.query(query, [trainingId, userId]);
+
+        return rows[0] ?? null;
+    }
+
+    static async update(userId: number, trainingId: number, data: AddTrainingFrontendStructure): Promise<void> {
+        const client = await pool.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            const updateTrainingQuery = `
+                UPDATE training
+                SET training_name = $1,
+                    description   = $2
+                WHERE id = $3 AND user_id = $4
+            `;
+
+            const { rowCount } = await client.query(updateTrainingQuery, [
+                data.name,
+                data.description,
+                trainingId,
+                userId,
+            ]);
+
+            if (!rowCount) {
+                throw new Error('Training not found or access denied');
+            }
+
+            // Пересобираем список упражнений
+            await client.query('DELETE FROM training_exercises WHERE training_id = $1', [trainingId]);
+
+            if (data.exercises.length > 0) {
+                const insertExerciseQuery = `
+                    INSERT INTO training_exercises (training_id, exercise_id, order_index)
+                    VALUES ($1, $2, $3)
+                `;
+
+                for (let i = 0; i < data.exercises.length; i++) {
+                    const exerciseId = data.exercises[i];
+
+                    // Гарантируем существование упражнения
+                    const existing = await client.query(
+                        'SELECT id FROM exercises WHERE id = $1',
+                        [exerciseId]
+                    );
+
+                    if (existing.rows.length === 0) {
+                        await client.query(
+                            'INSERT INTO exercises (id, exercise_name, description) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING',
+                            [exerciseId, `Exercise #${exerciseId}`, null]
+                        );
+                    }
+
+                    await client.query(insertExerciseQuery, [
+                        trainingId,
+                        exerciseId,
+                        i + 1,
+                    ]);
+                }
+            }
+
+            await client.query('COMMIT');
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
+    }
+
+    static async delete(userId: number, trainingId: number): Promise<boolean> {
+        const client = await pool.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            // сначала удаляем связи упражнений
+            await client.query('DELETE FROM training_exercises WHERE training_id = $1', [trainingId]);
+
+            const deleteTrainingQuery = `
+                DELETE FROM training
+                WHERE id = $1 AND user_id = $2
+                RETURNING id
+            `;
+
+            const { rowCount } = await client.query(deleteTrainingQuery, [trainingId, userId]);
+
+            if (!rowCount) {
+                await client.query('ROLLBACK');
+                return false;
+            }
+
+            await client.query('COMMIT');
+            return true;
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
     }
 }

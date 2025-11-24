@@ -1,6 +1,5 @@
 import {Metadata} from "next";
 import Settings from "@/app/settings/Settings";
-import {cookies} from "next/headers";
 
 export const metadata: Metadata = {
     title: 'Настройки | TrainingSpace',
@@ -9,9 +8,5 @@ export const metadata: Metadata = {
 
 export default async function SettingsPage(){
 
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
-    const tokenValue = authTokenCookie?.value;
-
-    return <Settings token = {tokenValue} />
+    return <Settings />
 }
