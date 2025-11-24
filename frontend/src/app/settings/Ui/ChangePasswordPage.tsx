@@ -1,6 +1,6 @@
 import {useInputField} from "@/lib/hooks/useInputField";
 import MainHideInput from "@/components/inputs/MainHideInput";
-import {validateConfirmPassword, validateUserPassword} from "@/lib/utils/validators";
+import {validateConfirmPassword, validateTwoPassword, validateUserPassword} from "@/lib/utils/validators";
 import {FormEvent, useMemo} from "react";
 import {baseUrlForBackend} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
@@ -27,7 +27,10 @@ export default function ChangePasswordPage(){
         const confirmPasswordError = validateConfirmPassword(newPassword.inputState.value, confirmPassword.inputState.value);
         confirmPassword.setError(confirmPasswordError);
 
-        return !(currentPasswordError || newPasswordError || confirmPasswordError);
+        const twoPasswordError = validateTwoPassword(currentPassword.inputState.value, newPassword.inputState.value )
+        newPassword.setError(twoPasswordError);
+
+        return !(currentPasswordError || newPasswordError || confirmPasswordError || twoPasswordError);
     }
 
     const handleSubmit = async (event: FormEvent):Promise<void> => {
@@ -41,7 +44,7 @@ export default function ChangePasswordPage(){
         setIsSubmitting(true);
 
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/user/change-password`, {
+            const result = await fetch(`${baseUrlForBackend}/api/settings/change-password`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -50,6 +53,7 @@ export default function ChangePasswordPage(){
                 body: JSON.stringify({
                     currentPassword: currentPassword.inputState.value,
                     newPassword: newPassword.inputState.value,
+                    confirmPassword: confirmPassword.inputState.value,
                 }),
             });
 

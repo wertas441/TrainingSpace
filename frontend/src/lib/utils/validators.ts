@@ -63,6 +63,14 @@ export const validateConfirmPassword = (password:string, confirmPassword:string)
     return null;
 }
 
+export const validateTwoPassword = (currentPassword:string, newPassword:string):string | null => {
+    if (currentPassword === newPassword){
+        return ('Ваш новый пароль такой же как и нынешний')
+    }
+
+    return null;
+}
+
 
 /// Nutrition Validators
 

@@ -3,12 +3,10 @@ import {Metadata} from "next";
 
 export const metadata: Metadata = {
     title: "Главная | TrainingSpace",
-    description: 'Dashboard',
+    description: 'Главная страница сервиса TrainingSpace',
 }
 
 export default function Home() {
 
-    return (
-        <Dashboard />
-    );
+    return <Dashboard />
 }

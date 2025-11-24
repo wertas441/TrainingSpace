@@ -7,8 +7,9 @@ import {useMemo, useState} from "react";
 import ProjectInformationPage from "@/app/settings/Ui/ProjectInformationPage";
 import {ArrowLeftOnRectangleIcon, EnvelopeIcon, LockClosedIcon, UserCircleIcon, BookOpenIcon} from "@heroicons/react/24/outline";
 import {SettingsMenuItemsStructure} from "@/types/indexTypes";
+import {logOut} from "@/lib/controllers/settingsController";
 
-export default function Settings(){
+export default function Settings({token}){
 
     const settingsMenuItems: SettingsMenuItemsStructure[] = useMemo(() => {
         return [
@@ -37,6 +38,9 @@ export default function Settings(){
         }
     };
 
+    const logOutFunction = () => {
+        logOut(token)
+    }
 
     return (
         <div className="w-full">
@@ -64,6 +68,7 @@ export default function Settings(){
                         <button
                             className="w-full flex items-center cursor-pointer gap-3 py-2.5 px-3 rounded-md transition-colors
                             text-left text-red-700 bg-white hover:bg-red-50"
+                            onClick={logOutFunction}
                         >
                             <ArrowLeftOnRectangleIcon className="h-5 w-5" />
                             <span className="text-sm font-medium">Выйти</span>
