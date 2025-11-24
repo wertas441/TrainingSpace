@@ -1,7 +1,7 @@
 'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useMemo, useState} from "react";
+import {FormEvent, useCallback, useMemo, useState} from "react";
 import {GoalPriority, GoalsStructure} from "@/types/goalTypes";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateGoalDescription, validateGoalName, validateGoalPriority} from "@/lib/utils/validators";
@@ -16,6 +16,8 @@ import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import {deleteGoal} from "@/lib/controllers/goalController";
+import {useModalWindow} from "@/lib/hooks/useModalWindow";
+import ModalWindow from "@/components/UI/ModalWindow";
 
 interface ChangeGoalProps {
     goalInfo: GoalsStructure;
@@ -30,7 +32,9 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
 
-    const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'];
+    const goalPriorityOptions: GoalPriority[] = useMemo(() => ['Низкий', 'Средний', 'Высокий'], []) ;
+
+    const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
     const validateForm = (): boolean => {
         const goalNameError = validateGoalName(goalName.inputState.value);
@@ -84,7 +88,7 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
         }
     }
 
-    const deleteGoalBtn = async () => {
+    const deleteGoalBtn = useCallback(async () => {
         setServerError(null);
 
         try {
@@ -94,65 +98,81 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
             console.error("delete goal error:", error);
             setServerError("Не удалось удалить цель. Попробуйте ещё раз позже.");
         }
-    }
+    }, [goalInfo.id, router, setServerError, token])
 
     return (
-        <BlockPageContext>
-            <div className="space-y-6">
-                <div>
-                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
-                        Изменение цели
-                    </h2>
-                    <p className="text-center text-gray-600">
-                        Измените данные своей цели и сохрани изменения вступления их в силу
-                    </p>
-                </div>
-
-                <ServerError message={serverError} />
-
-                <form className="space-y-6" onSubmit={handleSubmit}>
-
-                    <MainInput
-                        id={'goalName'}
-                        value={goalName.inputState.value}
-                        onChange={goalName.setValue}
-                        label={'Название цели'}
-                        placeholder={'Например: Пожать 100кг'}
-                        icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
-                        error={goalName.inputState.error || undefined}
-                    />
-
-                    <MainTextarea
-                        id="activityDescription"
-                        label="Описание"
-                        placeholder="Опционально: описание для цели"
-                        value={goalDescription.inputState.value}
-                        onChange={goalDescription.setValue}
-                        error={goalDescription.inputState.error || undefined}
-                        rows={4}
-                    />
-
-                    <ChipRadioGroup<GoalPriority>
-                        id="goal-Priority"
-                        name="goalPriority"
-                        label={`Приоритет цели`}
-                        choices={goalPriorityOptions}
-                        value={goalPriority}
-                        onChange={setGoalPriority}
-                    />
-
-                    <div className="mt-10 flex items-center gap-x-8">
-                        <LightGreenSubmitBtn
-                            label={!isSubmitting ? 'Изменить' : 'Процесс...'}
-                            disabled={isSubmitting}
-                        />
-                        <RedGlassBtn
-                            label = {'Удалить цель'}
-                            onClick = {deleteGoalBtn}
-                        />
+        <>
+            <BlockPageContext>
+                <div className="space-y-6">
+                    <div>
+                        <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
+                            Изменение цели
+                        </h2>
+                        <p className="text-center text-gray-600">
+                            Измените данные своей цели и сохрани изменения вступления их в силу
+                        </p>
                     </div>
-                </form>
-            </div>
-        </BlockPageContext>
+
+                    <ServerError message={serverError} />
+
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+
+                        <MainInput
+                            id={'goalName'}
+                            value={goalName.inputState.value}
+                            onChange={goalName.setValue}
+                            label={'Название цели'}
+                            placeholder={'Например: Пожать 100кг'}
+                            icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
+                            error={goalName.inputState.error || undefined}
+                        />
+
+                        <MainTextarea
+                            id="activityDescription"
+                            label="Описание"
+                            placeholder="Опционально: описание для цели"
+                            value={goalDescription.inputState.value}
+                            onChange={goalDescription.setValue}
+                            error={goalDescription.inputState.error || undefined}
+                            rows={4}
+                        />
+
+                        <ChipRadioGroup<GoalPriority>
+                            id="goal-Priority"
+                            name="goalPriority"
+                            label={`Приоритет цели`}
+                            choices={goalPriorityOptions}
+                            value={goalPriority}
+                            onChange={setGoalPriority}
+                        />
+
+                        <div className="mt-10 flex items-center gap-x-8">
+                            <LightGreenSubmitBtn
+                                label={!isSubmitting ? 'Изменить' : 'Процесс...'}
+                                disabled={isSubmitting}
+                            />
+                            <RedGlassBtn
+                                label = {'Удалить цель'}
+                                onClick = {toggleModalWindow}
+                            />
+                        </div>
+                    </form>
+                </div>
+            </BlockPageContext>
+
+            <ModalWindow
+                isExiting = {isExiting}
+                modalRef = {windowModalRef}
+                windowLabel = {'Подтверждение удаления'}
+                windowText = {`Вы действительно хотите удалить цель ${goalInfo.name}? Это действие необратимо.`}
+                error = {serverError}
+                cancelButtonLabel = {'Отмена'}
+                cancelFunction = {toggleModalWindow}
+                confirmButtonLabel = {'Удалить'}
+                confirmFunction = {deleteGoalBtn}
+                isProcess = {isProcess}
+                isRendered = {isRendered}
+            />
+        </>
     )
 }

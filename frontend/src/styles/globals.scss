@@ -1,4 +1,5 @@
 @use "tailwindcss";
+@use "./animations";
 
 html, body {
   min-height: 100%;
@@ -18,3 +19,4 @@ html, body {
   min-height: 70px;
   max-height: 350px;
 }
+
