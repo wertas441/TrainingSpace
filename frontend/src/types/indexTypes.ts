@@ -37,6 +37,7 @@ export type DifficultOptionsStructure = null | 'light' | 'middle' | 'hard';
 export interface SettingsMenuItemsStructure{
     id: string;
     label: string;
+    link: string;
     icon: ElementType ;
 }
 

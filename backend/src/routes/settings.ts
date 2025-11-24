@@ -37,13 +37,7 @@ router.post('/change-password', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await SettingModel.changePassword(
-            {
-                user_id: userId,
-                current_password: currentPassword,
-                new_password: newPassword,
-                confirm_password: confirmPassword,
-            });
+        await SettingModel.changePassword({userId, currentPassword, newPassword, confirmPassword});
 
         const response: ApiResponse = {
             success: true,
@@ -52,8 +46,27 @@ router.post('/change-password', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка смены пароля', error);
         const err: any = error;
+
+        // Специальная обработка ошибок смены пароля
+        if (err?.code === 'INVALID_CURRENT_PASSWORD') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Текущий пароль указан неверно.'
+            };
+            return res.status(400).json(response);
+        }
+
+        if (err?.code === 'USER_NOT_FOUND') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Пользователь не найден.'
+            };
+            return res.status(404).json(response);
+        }
+
+        console.error('Ошибка смены пароля', error);
+
         const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
         const response: ApiResponse = {
             success: false,

@@ -1,3 +1,5 @@
+'use client'
+
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -8,7 +10,7 @@ import {FormEvent, useMemo} from "react";
 import {baseUrlForBackend} from "@/lib";
 import {LockClosedIcon, AtSymbolIcon} from "@heroicons/react/24/outline";
 
-export default function ChangeEmailPage(){
+export default function ChangeEmail(){
 
     const currentEmail = useInputField('');
     const newEmail = useInputField('');

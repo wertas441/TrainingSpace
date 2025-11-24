@@ -65,7 +65,7 @@ export const mainSideBarItems = [
     },
     {
         label: 'Настройки',
-        link: '/settings',
+        link: '/settings/profile',
         icon: WrenchScrewdriverIcon,
     },
 ]

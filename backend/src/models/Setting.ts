@@ -1,30 +1,50 @@
 import { pool } from '../config/database';
-import {AddDayModelRequestStructure, DayListFrontendStructure} from "../types/nutritionBackendTypes";
+import bcrypt from 'bcryptjs';
 import {ChangePasswordBackendRequest} from "../types/settingsBackendTypes";
 
 export class SettingModel {
 
     static async changePassword(userData: ChangePasswordBackendRequest)  {
 
-        const query = `
-            INSERT INTO nutrition 
-                (
-                 user_id, 
-                 current_password,
-                 new_password,
-                 confirm_password,
-                )
-            VALUES ($1, $2, $3, $4,)
+        // Находим пользователя и его текущий хеш пароля
+        const getUserQuery = `
+            SELECT id, password_hash
+            FROM users
+            WHERE id = $1
         `;
 
-        const values = [
-            userData.user_id,
-            userData.current_password,
-            userData.new_password,
-            userData.confirm_password,
-        ];
+        const userResult = await pool.query(getUserQuery, [userData.userId]);
+        const userRow = userResult.rows[0];
 
-        await pool.query(query, values);
+        if (!userRow) {
+            const error: any = new Error('User not found');
+            error.code = 'USER_NOT_FOUND';
+            throw error;
+        }
+
+        // Проверяем, что текущий пароль введён верно
+        const isPasswordValid = await bcrypt.compare(
+            userData.currentPassword,
+            userRow.password_hash
+        );
+
+        if (!isPasswordValid) {
+            const error: any = new Error('Неверный текущий пароль');
+            error.code = 'INVALID_CURRENT_PASSWORD';
+            throw error;
+        }
+
+        // Хешируем новый пароль и обновляем его в таблице users
+        const newHashedPassword = await bcrypt.hash(userData.newPassword, 10);
+
+        const updateQuery = `
+            UPDATE users
+            SET password_hash = $1,
+                updated_at = NOW()
+            WHERE id = $2
+        `;
+
+        await pool.query(updateQuery, [newHashedPassword, userData.userId]);
     }
 
     // Список дней пользователя

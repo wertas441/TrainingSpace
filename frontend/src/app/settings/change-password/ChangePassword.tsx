@@ -1,3 +1,5 @@
+'use client'
+
 import {useInputField} from "@/lib/hooks/useInputField";
 import MainHideInput from "@/components/inputs/MainHideInput";
 import {validateConfirmPassword, validateTwoPassword, validateUserPassword} from "@/lib/utils/validators";
@@ -9,7 +11,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import MainInput from "@/components/inputs/MainInput";
 import {LockClosedIcon, CheckIcon} from "@heroicons/react/24/outline";
 
-export default function ChangePasswordPage(){
+export default function ChangePassword(){
 
     const currentPassword = useInputField('');
     const newPassword = useInputField('');
@@ -58,17 +60,20 @@ export default function ChangePasswordPage(){
             });
 
             if (result.ok) {
+                // При успешной смене пароля можно редиректнуть пользователя
+                // и/или показать уведомление. Сбрасываем флаг отправки,
+                // чтобы не залипало состояние кнопки, если остаёмся на этой же странице.
+                setIsSubmitting(false);
                 router.push("/settings");
                 return;
             }
 
             const data = await result.json().catch(() => null);
             setServerError((data && (data.error || data.message)) || "Ошибка смены пароля. Проверьте правильность введенных данных.");
+            setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
             console.error("Change password error:", error);
-            setIsSubmitting(false);
-        } finally {
             setIsSubmitting(false);
         }
     }
