@@ -52,8 +52,8 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
                 })}
                 <div className="border-t border-emerald-100 my-2"></div>
                 <button
-                    className="w-full flex items-center cursor-pointer gap-3 py-2.5 px-3 rounded-md transition-colors
-                            text-left text-red-700 bg-white hover:bg-red-50"
+                    className={`w-full flex items-center cursor-pointer gap-3 py-2.5 px-3 rounded-md transition-colors
+                        text-left text-red-700 bg-white hover:bg-red-50`}
                     onClick={logOutButton}
                 >
                     <ArrowLeftOnRectangleIcon className="h-5 w-5" />

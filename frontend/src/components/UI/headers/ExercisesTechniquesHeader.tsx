@@ -6,7 +6,6 @@ import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniquesTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import BarsButton from "@/components/buttons/other/BarsButton";
-import {difficultOptions} from "@/lib";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
 
 function ExercisesTechniquesHeader(
@@ -22,6 +21,12 @@ function ExercisesTechniquesHeader(
         exercises,
         ref,
     }: ExercisesTechniquesHeaderProps){
+
+    const difficultOptions = useMemo(() => [
+        { key: 'light', label: 'Лёгкий' },
+        { key: 'middle', label: 'Средний' },
+        { key: 'hard', label: 'Сложный' }
+    ], []);
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
 
@@ -70,8 +75,6 @@ function ExercisesTechniquesHeader(
                         />
                     </div>
 
-
-
                     <BarsButton
                         onClick={toggleFilterWindow}
                         ref={toggleBtnRef}
@@ -92,9 +95,9 @@ function ExercisesTechniquesHeader(
                         <div className="px-5 py-4 space-y-6">
                             <div>
                                 <div className="flex gap-1 mb-3">
-                                    <h1 className={`text-sm font-medium text-emerald-900`}>Сложность</h1>
+                                    <h1 className={`text-sm font-medium text-emerald-900`}>Уровень сложности</h1>
                                 </div>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-3">
                                     {difficultOptions.map(opt => {
                                         const active = difficultFilter === (opt.key as Exclude<DifficultOptionsStructure, null>);
                                         return (
@@ -104,10 +107,10 @@ function ExercisesTechniquesHeader(
                                                 onClick={() => handleToggleDifficulty(opt.key as Exclude<DifficultOptionsStructure, null>)}
                                                 className={`px-3 py-2 cursor-pointer rounded-lg text-sm border transition 
                                                     ${active 
-                                                        ? `bg-emerald-600 text-white border-emerald-600 shadow` 
-                                                        : `bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50`}`}
+                                                        ? `border-emerald-300 bg-emerald-50 text-emerald-800` 
+                                                        : `border-gray-200 bg-gray-50 text-gray-700`}`}
                                             >
-                                                <span className={`mr-2 inline-block h-4 w-4 rounded-md border ${active ? 'bg-white/90' : 'bg-white border-emerald-300'}`} />
+                                                <span className={`mr-2 inline-block h-3 w-3 rounded-full border ${active ? 'bg-emerald-500 border-emerald-500' : 'border-gray-200 bg-white text-gray-700'}`} />
                                                 {opt.label}
                                             </button>
                                         )
