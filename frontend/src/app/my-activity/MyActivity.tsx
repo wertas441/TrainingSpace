@@ -1,7 +1,7 @@
 'use client'
 
-import {ActivityDataStructure} from "@/types/activityTypes";
-import {useMemo, useState} from "react";
+import {ActivityDataStructure, ActivityDifficultyFilter, ActivityTypeFilter} from "@/types/activityTypes";
+import {useCallback, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
@@ -10,7 +10,17 @@ import MyActivityItem from "@/components/elements/MyActivityRow";
 export default function MyActivity({clientActivity}:{clientActivity: ActivityDataStructure[]; }) {
 
     const [searchName, setSearchName] = useState<string>('');
+    const [searchDate, setSearchDate] = useState<string>('');
+
+    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
+    const [difficultFilter, setDifficultFilter] = useState<ActivityDifficultyFilter>(null);
+    const [typeFilter, setTypeFilter] = useState<ActivityTypeFilter>(null);
+
     const itemsPerPage:number = 10;
+
+    const toggleFilterWindow = useCallback(() => {
+        setIsFilterWindowOpen(!isFilterWindowOpen);
+    }, [isFilterWindowOpen]);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
@@ -34,6 +44,14 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
             <MyActivityHeader
                 searchName={searchName}
                 setSearchName={setSearchName}
+                searchDate={searchDate}
+                setSearchDate={setSearchDate}
+                isFilterWindowOpen={isFilterWindowOpen}
+                toggleFilterWindow={toggleFilterWindow}
+                difficultFilter={difficultFilter}
+                setDifficultFilter={setDifficultFilter}
+                typeFilter={typeFilter}
+                setTypeFilter={setTypeFilter}
                 ref={listTopRef}
             />
 
@@ -47,6 +65,8 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
                                 name={item.name}
                                 date={item.activityDate}
                                 description={item.description}
+                                type={item.type}
+                                difficulty={item.difficulty}
                             />
                         )
                     })

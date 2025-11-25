@@ -1,7 +1,12 @@
+import {HeaderMinimumProps} from "@/types/indexTypes";
 
 export type ActivityTypeStructure = 'Силовая' | 'Кардио' | 'Комбинированный';
 
 export type ActivityDifficultyStructure = 'Лёгкая' | 'Средняя' | 'Тяжелая';
+
+export type ActivityDifficultyFilter= ActivityDifficultyStructure | null ;
+
+export type ActivityTypeFilter = ActivityTypeStructure | null;
 
 export interface ActivityDataStructure {
     id: number;
@@ -19,4 +24,15 @@ export interface ActivityDataStructure {
             quantity: number;
         }[];
     }[];
+}
+
+export interface ActivityHeaderProps extends HeaderMinimumProps {
+    searchDate: string;
+    setSearchDate: (newValue: string) => void;
+    isFilterWindowOpen: boolean;
+    toggleFilterWindow: () => void;
+    difficultFilter: ActivityDifficultyFilter,
+    setDifficultFilter: (newValue: ActivityDifficultyFilter) => void;
+    typeFilter: ActivityTypeFilter,
+    setTypeFilter: (newValue: ActivityTypeFilter) => void;
 }
