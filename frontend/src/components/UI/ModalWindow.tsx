@@ -7,7 +7,7 @@ interface ModalWindowProps {
     modalRef: Ref<HTMLDivElement | null>;
     windowLabel: string;
     windowText: string;
-    error: string | null;
+    error?: string | null;
     cancelButtonLabel: string;
     cancelFunction: () => void;
     confirmButtonLabel: string;

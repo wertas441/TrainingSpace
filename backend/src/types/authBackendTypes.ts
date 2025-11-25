@@ -7,6 +7,13 @@ export interface User {
     updatedAt: Date;
 }
 
+export interface UserProfileResponse {
+    id: string;
+    email: string;
+    userName: string;
+    createdAt: Date;
+}
+
 export interface LoginRequest {
     email: string;
     password: string;
@@ -18,3 +25,5 @@ export interface RegisterRequest {
     email: string;
     password: string;
 }
+
+

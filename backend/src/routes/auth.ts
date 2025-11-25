@@ -175,27 +175,24 @@ router.post('/logout', async (req, res) => {
 // Текущий пользователь по токену
 router.get('/me', authGuard, async (req, res) => {
     try {
+        const userId = (req as any).userId as number;
+        const userData = await UserModel.findById(userId);
 
-        const userId = (req as any).userId as string;
-        const existingUser = await UserModel.findById(userId);
-        if (!existingUser) {
+        if (!userData) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Пользователь не найден'
             };
             return res.status(404).json(response);
         }
+
         const response: ApiResponse = {
             success: true,
-            data: {
-                user: {
-                    id: (existingUser as any).id,
-                    email: (existingUser as any).email,
-                    userName: (existingUser as any).userName,
-                    createdAt: new Date((existingUser as any).created_at || (existingUser as any).createdAt)
-                }
-            }
+            message: 'success of getting user information',
+            data: { userData: userData }
         };
+
+
         res.json(response);
     } catch (error) {
         console.error('Ошибка получения текущего пользователя:', error);

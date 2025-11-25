@@ -79,51 +79,62 @@ export default function ChangePassword(){
     }
 
     return (
-        <div className={`max-w-lg text-black`}>
-            <div className="mb-5">
-                <p className="text-sm text-gray-600 mt-1">Введите текущий пароль и новый, затем подтвердите новый пароль.</p>
+        <div className="bg-white border border-emerald-100 rounded-2xl shadow-sm overflow-hidden">
+            <div className="border-b border-emerald-50 px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40 flex items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900">
+                        Смена пароля
+                    </h1>
+                    <p className="mt-1 text-sm text-emerald-900/70">
+                        Введите текущий пароль и новый, затем подтвердите новый пароль.
+                    </p>
+                </div>
+                <div className="hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+                    <LockClosedIcon className="h-6 w-6 text-emerald-600" />
+                </div>
             </div>
 
-            <ServerError message={serverError} />
+            <div className="px-6 py-6 max-w-xl sm:px-8 sm:py-8">
+                <ServerError message={serverError} />
 
-            <form className="space-y-4" onSubmit={handleSubmit}>
-
-                <MainInput
-                    id={'currentPassword'}
-                    type={'password'}
-                    icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
-                    label={'Ваш текущий пароль'}
-                    value={currentPassword.inputState.value}
-                    onChange={currentPassword.setValue}
-                    error={currentPassword.inputState.error || undefined}
-                />
-
-                <MainHideInput
-                    id={'newPassword'}
-                    label={'Новый пароль'}
-                    icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
-                    value={newPassword.inputState.value}
-                    onChange={newPassword.setValue}
-                    error={newPassword.inputState.error || undefined}
-                />
-
-                <MainInput
-                    id={'confirmPassword'}
-                    type={'password'}
-                    label={'Подтверждение нового пароля'}
-                    icon={useMemo(() => <CheckIcon className="h-5 w-5 text-gray-500" />, [])}
-                    value={confirmPassword.inputState.value}
-                    onChange={confirmPassword.setValue}
-                    error={confirmPassword.inputState.error || undefined}
-                />
-
-                <div className="pt-2">
-                    <LightGreenSubmitBtn
-                        label={!isSubmitting ? 'Сменить пароль' : 'Сохраняем...'}
-                        disabled={isSubmitting}
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                    <MainInput
+                        id={'currentPassword'}
+                        type={'password'}
+                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
+                        label={'Ваш текущий пароль'}
+                        value={currentPassword.inputState.value}
+                        onChange={currentPassword.setValue}
+                        error={currentPassword.inputState.error || undefined}
                     />
-                </div>
-            </form>
+
+                    <MainHideInput
+                        id={'newPassword'}
+                        label={'Новый пароль'}
+                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
+                        value={newPassword.inputState.value}
+                        onChange={newPassword.setValue}
+                        error={newPassword.inputState.error || undefined}
+                    />
+
+                    <MainInput
+                        id={'confirmPassword'}
+                        type={'password'}
+                        label={'Подтверждение нового пароля'}
+                        icon={useMemo(() => <CheckIcon className="h-5 w-5 text-gray-500" />, [])}
+                        value={confirmPassword.inputState.value}
+                        onChange={confirmPassword.setValue}
+                        error={confirmPassword.inputState.error || undefined}
+                    />
+
+                    <div className="pt-2">
+                        <LightGreenSubmitBtn
+                            label={!isSubmitting ? 'Сменить пароль' : 'Сохраняем...'}
+                            disabled={isSubmitting}
+                        />
+                    </div>
+                </form>
+            </div>
         </div>
     )
 }

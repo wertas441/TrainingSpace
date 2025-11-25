@@ -1,5 +1,5 @@
 import { pool } from '../config/database';
-import {User} from "../types/authBackendTypes";
+import {User, UserProfileResponse} from "../types/authBackendTypes";
 
 export class UserModel {
 
@@ -46,18 +46,21 @@ export class UserModel {
     }
 
     // Поиск пользователя по ID
-    static async findById(id: string): Promise<User | null> {
-        const query = 'SELECT id, email, username, created_at, updated_at FROM users WHERE id = $1';
+    static async findById(id: number): Promise<UserProfileResponse | null> {
+        const query = 'SELECT id, email, username, created_at FROM users WHERE id = $1';
+
         const result = await pool.query(query, [id]);
+
         const row = result.rows[0];
+
         if (!row) return null;
+
         return {
             id: row.id,
             email: row.email,
             userName: row.username,
             createdAt: row.created_at,
-            updatedAt: row.updated_at,
-        } as unknown as User;
+        } as unknown as UserProfileResponse;
     }
 
     // Поиск пользователя по userName

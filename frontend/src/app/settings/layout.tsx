@@ -12,9 +12,9 @@ export default function SettingsLayout({children}:{children: ReactNode}) {
         <div className="w-full">
             <div className="w-full flex flex-col lg:flex-row gap-6">
 
-               <SettingsSideBar pathname={pathname } />
+               <SettingsSideBar pathname={pathname} />
 
-                <main className="w-full p-6 rounded-lg border border-emerald-100 bg-white shadow-sm">
+                <main className="w-full rounded-lg bg-white">
                     {children}
                 </main>
             </div>

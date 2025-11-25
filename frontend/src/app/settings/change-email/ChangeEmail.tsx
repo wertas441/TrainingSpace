@@ -72,52 +72,63 @@ export default function ChangeEmail(){
     }
 
     return (
-        <div className={`max-w-lg text-black`}>
-            <div className="mb-5">
-                <p className="text-sm text-gray-600 mt-1">Введите текущую почту и новую, затем подтвердите ваш пароль.</p>
+        <div className="bg-white border border-emerald-100 rounded-2xl shadow-sm overflow-hidden">
+            <div className="border-b border-emerald-50 px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40 flex items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900">
+                        Смена почты
+                    </h1>
+                    <p className="mt-1 text-sm text-emerald-900/70">
+                        Введите текущую и новую почту, затем подтвердите изменение паролем.
+                    </p>
+                </div>
+                <div className="hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+                    <AtSymbolIcon className="h-6 w-6 text-emerald-600" />
+                </div>
             </div>
 
-            <ServerError message={serverError} />
+            <div className="px-6 py-6 max-w-xl sm:px-8 sm:py-8">
+                <ServerError message={serverError} />
 
-            <form className="space-y-4" onSubmit={handleSubmit}>
-
-                <MainInput
-                    id={'currentEmail'}
-                    type={'email'}
-                    label={'Ваша текущая почта'}
-                    icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
-                    value={currentEmail.inputState.value}
-                    onChange={currentEmail.setValue}
-                    error={currentEmail.inputState.error || undefined}
-                />
-
-                <MainInput
-                    id={'newEmail'}
-                    type={'email'}
-                    icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
-                    label={'Новая почта'}
-                    value={newEmail.inputState.value}
-                    onChange={newEmail.setValue}
-                    error={newEmail.inputState.error || undefined}
-                />
-
-                <MainInput
-                    id={'currentPassword'}
-                    type={'password'}
-                    label={'Ваш текущий пароль'}
-                    icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
-                    value={currentPassword.inputState.value}
-                    onChange={currentPassword.setValue}
-                    error={currentPassword.inputState.error || undefined}
-                />
-
-                <div className="pt-2">
-                    <LightGreenSubmitBtn
-                        label={!isSubmitting ? 'Сменить почту' : 'Сохраняем...'}
-                        disabled={isSubmitting}
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                    <MainInput
+                        id={'currentEmail'}
+                        type={'email'}
+                        label={'Ваша текущая почта'}
+                        icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
+                        value={currentEmail.inputState.value}
+                        onChange={currentEmail.setValue}
+                        error={currentEmail.inputState.error || undefined}
                     />
-                </div>
-            </form>
+
+                    <MainInput
+                        id={'newEmail'}
+                        type={'email'}
+                        icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
+                        label={'Новая почта'}
+                        value={newEmail.inputState.value}
+                        onChange={newEmail.setValue}
+                        error={newEmail.inputState.error || undefined}
+                    />
+
+                    <MainInput
+                        id={'currentPassword'}
+                        type={'password'}
+                        label={'Ваш текущий пароль'}
+                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
+                        value={currentPassword.inputState.value}
+                        onChange={currentPassword.setValue}
+                        error={currentPassword.inputState.error || undefined}
+                    />
+
+                    <div className="pt-2">
+                        <LightGreenSubmitBtn
+                            label={!isSubmitting ? 'Сменить почту' : 'Сохраняем...'}
+                            disabled={isSubmitting}
+                        />
+                    </div>
+                </form>
+            </div>
         </div>
     )
 }

@@ -1,5 +1,4 @@
 import {ElementType, Ref} from "react";
-import {ActivityDifficultyFilter, ActivityTypeFilter} from "@/types/activityTypes";
 
 export interface InputsStructure<T extends string | number> {
     id: string;
