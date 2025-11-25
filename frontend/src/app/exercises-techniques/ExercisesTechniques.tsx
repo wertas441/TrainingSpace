@@ -1,0 +1,89 @@
+'use client'
+
+import ExercisesTechniquesHeader from "@/components/UI/headers/ExercisesTechniquesHeader";
+import {useCallback, useEffect, useMemo, useState} from "react";
+import ExerciseRow from "@/components/elements/ExerciseRow";
+import {usePagination} from "@/lib/hooks/usePagination";
+import MainPagination from "@/components/UI/MainPagination";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseDifficultFilter} from "@/types/indexTypes";
+
+export default function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
+
+    const [searchName, setSearchName] = useState<string>('');
+    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
+    // null = показывать упражнения любого уровня сложности
+    const [difficultFilter, setDifficultFilter] = useState<ExerciseDifficultFilter>(null);
+    const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
+    const itemsPerPage:number = 10;
+
+    const toggleFilterWindow = useCallback(() => {
+        setIsFilterWindowOpen(!isFilterWindowOpen);
+    }, [isFilterWindowOpen]);
+
+    const filteredList = useMemo(() => {
+        const q = searchName.toLowerCase().trim();
+        return exercises.filter(e => {
+            const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
+            const matchesDifficulty = difficultFilter === null || e.difficulty === difficultFilter;
+            const matchesPart = partOfBodyFilter.length === 0 || e.partOfTheBody.some(p => partOfBodyFilter.includes(p));
+            return matchesName && matchesDifficulty && matchesPart;
+        });
+    }, [searchName, exercises, difficultFilter, partOfBodyFilter]);
+
+    const {
+        currentPage,
+        setCurrentPage,
+        listTopRef,
+        totalItems,
+        totalPages,
+        paginatedList,
+    } = usePagination(filteredList, itemsPerPage)
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchName, difficultFilter, partOfBodyFilter, setCurrentPage]);
+
+    return (
+        <div className="space-y-4">
+            <ExercisesTechniquesHeader
+                ref={listTopRef}
+                searchName={searchName}
+                setSearchName={setSearchName}
+                isFilterWindowOpen={isFilterWindowOpen}
+                toggleFilterWindow={toggleFilterWindow}
+                difficultFilter={difficultFilter}
+                setDifficultFilter={setDifficultFilter}
+                partOfBodyFilter={partOfBodyFilter}
+                setPartOfBodyFilter={setPartOfBodyFilter}
+                exercises={exercises}
+            />
+
+            <div className="grid grid-cols-1 gap-3">
+                {filteredList.length > 0 ? (
+                    paginatedList.map(ex => (
+                            <ExerciseRow
+                                key={ex.id}
+                                exercise={ex}
+                            />
+                        )
+                    )
+                ) : (
+                    <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
+                        Таких упражнений не найдено. Попробуйте изменить запрос.
+                    </div>
+                )}
+            </div>
+
+            {totalItems > itemsPerPage && (
+                <MainPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={totalItems}
+                    setCurrentPage={setCurrentPage}
+                    itemsPerPage={itemsPerPage}
+                />
+            )}
+        </div>
+    );
+}

@@ -7,9 +7,15 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
 import authRoutes from './routes/auth';
+import goalRoutes from './routes/goal';
+import trainingRoutes from './routes/training';
+import nutritionRoutes from './routes/nutrition';
+import exercisesRoutes from './routes/exercises';
+import activityRoutes from './routes/activity';
+import settingsRoutes from './routes/settings';
 import { config } from './config';
 import { testConnection, closePool } from './config/database';
-import { initDatabase, seedDatabase } from './database/init';
+import { initDatabase } from './database/init';
 
 // Загружаем переменные окружения
 dotenv.config();
@@ -18,6 +24,9 @@ const app = express();
 const PORT = config.port;
 const shouldInit = process.env.DB_AUTO_INIT === 'true';
 const shouldSeed = process.env.DB_AUTO_SEED === 'true' && config.nodeEnv === 'development';
+
+// HTTP-сервер, чтобы можно было корректно его останавливать
+let server: http.Server | null = null;
 
 // Middleware
 app.use(helmet()); // Безопасность
@@ -34,11 +43,16 @@ app.use(express.json()); // Парсинг JSON
 app.use(express.urlencoded({ extended: true })); // Парсинг URL-encoded данных
 app.use(cookieParser()); // Куки
 
-// API роуты
 app.use('/api', apiRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/goal', goalRoutes);
+app.use('/api/nutrition', nutritionRoutes);
+app.use('/api/training', trainingRoutes);
+app.use('/api/exercises', exercisesRoutes);
+app.use('/api/activity', activityRoutes);
+app.use('/api/settings', settingsRoutes);
 
-// Обработка 404
+
 app.use((req, res) => {
     res.status(404).json({
         error: 'Маршрут не найден',
@@ -76,12 +90,9 @@ const startServer = async () => {
         if (shouldInit) {
             await initDatabase();
         }
-        if (shouldSeed) {
-            await seedDatabase();
-        }
 
         // Запускаем HTTP сервер
-        const server = http.createServer(app);
+        server = http.createServer(app);
 
         server.listen(PORT, () => {
             console.log(`Сервер запущен на порту ${PORT}`);
@@ -95,17 +106,39 @@ const startServer = async () => {
 };
 
 // Обработка завершения процесса
-process.on('SIGINT', async () => {
-    console.log('\nПолучен сигнал SIGINT, завершаем работу...');
-    await closePool();
-    process.exit(0);
-});
+let isShuttingDown = false;
 
-process.on('SIGTERM', async () => {
-    console.log('\nПолучен сигнал SIGTERM, завершаем работу...');
-    await closePool();
-    process.exit(0);
-});
+const gracefulShutdown = async (signal: string) => {
+    if (isShuttingDown) return;
+    isShuttingDown = true;
+
+    console.log(`\nПолучен сигнал ${signal}, завершаем работу...`);
+
+    try {
+        if (server) {
+            await new Promise<void>((resolve, reject) => {
+                server!.close((err) => {
+                    if (err) {
+                        console.error('Ошибка при остановке HTTP сервера:', err);
+                        return reject(err);
+                    }
+                    console.log('HTTP сервер корректно остановлен');
+                    resolve();
+                });
+            });
+        }
+
+        await closePool();
+        console.log('Пул соединений с БД корректно закрыт');
+    } catch (error) {
+        console.error('Ошибка при корректном завершении работы:', error);
+    } finally {
+        process.exit(0);
+    }
+};
+
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 
 // Запускаем сервер
 startServer();

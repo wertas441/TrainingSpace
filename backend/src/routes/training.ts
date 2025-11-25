@@ -1,0 +1,247 @@
+import { Router } from 'express';
+import { authGuard } from '../middleware/authMiddleware';
+import {ApiResponse} from "../types";
+import {AddTrainingFrontendStructure, TrainingListFrontendStructure} from "../types/trainingBackendTypes";
+import { config } from '../config';
+import {
+    validateTrainingDescription,
+    validateTrainingExercises,
+    validateTrainingName
+} from "../lib/backendValidators/trainingValidators";
+import {TrainingModel} from "../models/Training";
+import {ExerciseModel} from "../models/Exercise";
+
+const router = Router();
+
+router.post('/add-new-training', authGuard, async (req, res) => {
+    const {name, description, exercises}: AddTrainingFrontendStructure = req.body;
+
+    const trainingNameError:boolean = validateTrainingName(name);
+    const trainingDescriptionError:boolean = validateTrainingDescription(description);
+    const exercisesError:boolean = validateTrainingExercises(exercises);
+
+    const userId = (req as any).userId as number;
+
+    if (!trainingNameError || !trainingDescriptionError || !exercisesError) {
+        const response: ApiResponse = {
+            success: false,
+            error: 'Ошибка добавления новой тренировки, пожалуйста проверьте введенные вами данные.'
+        };
+        return res.status(400).json(response);
+    }
+
+    await TrainingModel.create({user_id: userId, name, description, exercises});
+
+    const response: ApiResponse = {
+        success: true,
+        message: 'training created successfully',
+    };
+
+    res.status(200).json(response);
+});
+
+router.get('/my-training-list', authGuard, async (req, res) => {
+    try {
+
+        const userId = (req as any).userId as number;
+
+        const trainings = await TrainingModel.getList(userId);
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'success of getting list of trainings',
+            data: { trainings }
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+
+        console.error('Ошибка показа списка тренировок', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при показе списка тренировок ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+
+});
+
+// Упражнения конкретной тренировки пользователя
+router.get('/:id/exercises', authGuard, async (req, res) => {
+    try {
+        const trainingId = Number(req.params.id);
+        if (!Number.isFinite(trainingId)) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный id тренировки',
+            };
+            return res.status(400).json(response);
+        }
+
+        const userId = (req as any).userId as number;
+
+        const exercises = await ExerciseModel.getByTrainingId(trainingId, userId);
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'success of getting exercises for training',
+            data: { exercises },
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Ошибка показа упражнений тренировки', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при показе упражнений тренировки ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+});
+
+router.get('/about-my-training', authGuard, async (req, res) => {
+    try {
+        const userId = (req as any).userId as number;
+        const trainingIdRaw = req.query.trainingId;
+
+        const trainingId = Number(trainingIdRaw);
+
+        if (!trainingIdRaw || Number.isNaN(trainingId) || trainingId <= 0) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный идентификатор тренировки.',
+            };
+            return res.status(400).json(response);
+        }
+
+        const trainingInfo = await TrainingModel.information(userId, trainingId);
+
+        if (!trainingInfo) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Тренировка не найдена или у вас нет к ней доступа.',
+            };
+            return res.status(404).json(response);
+        }
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'success of getting training information',
+            data: { training: trainingInfo }
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+        console.error('Ошибка получения информации о тренировке', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при получении информации о тренировке ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+
+});
+
+router.delete('/delete-my-training', authGuard, async (req, res) => {
+    try {
+        const { trainingId: trainingIdRaw } = req.body;
+        const userId = (req as any).userId as number;
+
+        const trainingId = Number(trainingIdRaw);
+
+        if (!trainingIdRaw || Number.isNaN(trainingId) || trainingId <= 0) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный идентификатор тренировки.',
+            };
+            return res.status(400).json(response);
+        }
+
+        const isDeleted = await TrainingModel.delete(userId, trainingId);
+
+        if (!isDeleted) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Тренировка не найдена или у вас нет доступа для ее удаления.',
+            };
+            return res.status(404).json(response);
+        }
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'training delete successfully',
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+        console.error('Ошибка удаления тренировки', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при удалении тренировки ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+
+});
+
+router.put('/update-my-training', authGuard, async (req, res) => {
+    try {
+        const {id, name, description, exercises}: TrainingListFrontendStructure = req.body;
+        const userId = (req as any).userId as number;
+
+        if (!id || Number.isNaN(id) || id <= 0) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный идентификатор тренировки.',
+            };
+            return res.status(400).json(response);
+        }
+
+        const trainingNameError:boolean = validateTrainingName(name);
+        const trainingDescriptionError:boolean = validateTrainingDescription(description);
+        const exercisesError:boolean = validateTrainingExercises(exercises);
+
+        if (!trainingNameError || !trainingDescriptionError || !exercisesError) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Ошибка изменения тренировки, пожалуйста проверьте введенные вами данные.'
+            };
+            return res.status(400).json(response);
+        }
+
+        await TrainingModel.update(userId, id, {name, description, exercises});
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'training updated successfully',
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+        console.error('Ошибка изменения тренировки', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при изменении тренировки ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+
+});
+
+
+export default router;

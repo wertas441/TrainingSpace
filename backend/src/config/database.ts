@@ -4,7 +4,7 @@ import { Pool } from 'pg';
 export const pool = new Pool({
     user: process.env.DB_USER || 'postgres',
     host: process.env.DB_HOST || 'localhost',
-    database: process.env.DB_NAME || 'dove_messenger',
+    database: process.env.DB_NAME || 'training_space',
     password: process.env.DB_PASSWORD || 'password',
     port: parseInt(process.env.DB_PORT || '5436'),
     max: 20, // максимальное количество соединений в пуле

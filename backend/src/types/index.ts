@@ -6,23 +6,11 @@ export interface ApiResponse<T = any> {
     error?: string;
 }
 
-export interface User {
-    id: string;
-    email: string;
-    userName: string;
-    password?: string;
-    createdAt: Date;
-    updatedAt: Date;
+export interface ExerciseListFrontendStructure {
+    id: number;
+    name: string;
+    difficulty: 'light' | 'middle' | 'hard';
+    description: string;
+    partOfTheBody: string[];
 }
 
-// Типы для запросов
-export interface LoginRequest {
-    email: string;
-    password: string;
-}
-
-export interface RegisterRequest {
-    userName: string;
-    email: string;
-    password: string;
-}

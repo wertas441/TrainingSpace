@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {ComponentType, SVGProps} from "react";
+import {ComponentType, memo, SVGProps} from "react";
 
 interface SideBarElementProps {
 	label: string;
@@ -7,9 +7,10 @@ interface SideBarElementProps {
 	link: string;
 	className?: string;
 	active: boolean;
+    onClick: () => void;
 }
 
-export default function SideBarElement({ label, icon: Icon, link, className = '', active }: SideBarElementProps) {
+function SideBarElement({ label, icon: Icon, link, className = '', active, onClick }: SideBarElementProps) {
 
 	const baseItemClasses: string = 'group flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200';
 	const activeClass: string = `${baseItemClasses} text-emerald-900 bg-emerald-50 ring-1 ring-inset ring-emerald-200`;
@@ -21,6 +22,7 @@ export default function SideBarElement({ label, icon: Icon, link, className = ''
 				href={link}
 				aria-current={active ? 'page' : undefined}
 				className={`${active ? activeClass : inActiveClass} ${className}`}
+                onClick={onClick}
 			>
 				{Icon && <Icon className="h-5 w-5 shrink-0 text-emerald-600 group-hover:text-emerald-700 transition-colors" />}
 				<span className="truncate">{label}</span>
@@ -28,3 +30,5 @@ export default function SideBarElement({ label, icon: Icon, link, className = ''
 		</li>
 	);
 }
+
+export default memo(SideBarElement);

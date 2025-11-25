@@ -1,19 +1,19 @@
 import {mainInputClasses} from "@/lib";
-import {ReactNode} from "react";
+import {memo, ReactNode} from "react";
 import {InputsStructure} from "@/types/indexTypes";
 
-interface MainInputProps extends InputsStructure  {
+interface MainInputProps extends InputsStructure<string>  {
     type?: string;
     icon?: ReactNode;
 }
 
-export function MainInput({label, id, type = 'text', icon, required = false, placeholder,
+function MainInput({label, id, type = 'text', icon, required = false, placeholder,
                               value, onChange, error}: MainInputProps) {
 
     return (
         <div>
             {label && (
-                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-300">
+                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-400">
                     {label}
                 </label>
             )}
@@ -43,3 +43,5 @@ export function MainInput({label, id, type = 'text', icon, required = false, pla
         </div>
     )
 }
+
+export default memo(MainInput);

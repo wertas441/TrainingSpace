@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: training_space_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: training_space
+    ports:
+      # Внутри контейнера Postgres слушает 5432, наружу пробрасываем на 5436 (как в конфиге backend по умолчанию)
+      - "5436:5432"
+    volumes:
+      - training_space_db_data:/var/lib/postgresql/data
+
+volumes:
+  training_space_db_data:
+    driver: local
+
+

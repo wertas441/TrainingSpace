@@ -1,0 +1,463 @@
+import { pool } from '../config/database';
+
+interface ExercisesStructure {
+    id: number;
+    name: string;
+    difficulty: 'Лёгкий' | 'Средний' | 'Сложный';
+    description: string;
+    partOfTheBody: number[];
+}
+
+interface PartOfBodyStructure {
+    id: number;
+    partName: string;
+}
+
+const partOfBodySeed: PartOfBodyStructure[] = [
+    {
+        id: 1,
+        partName: 'Грудь',
+    },
+    {
+        id: 2,
+        partName: 'Передние дельты',
+    },
+    {
+        id: 3,
+        partName: 'Трицепс',
+    },
+    {
+        id: 4,
+        partName: 'Верх груди',
+    },
+    {
+        id: 5,
+        partName: 'Широчайшие',
+    },
+    {
+        id: 6,
+        partName: 'Ромбовидные',
+    },
+    {
+        id: 7,
+        partName: 'Задние дельты',
+    },
+    {
+        id: 8,
+        partName: 'Бицепс',
+    },
+    {
+        id: 9,
+        partName: 'Предплечья',
+    },
+    {
+        id: 10,
+        partName: 'Квадрицепсы',
+    },
+    {
+        id: 11,
+        partName: 'Ягодичные',
+    },
+    {
+        id: 12,
+        partName: 'Задняя поверхность бедра',
+    },
+    {
+        id: 13,
+        partName: 'Кор',
+    },
+    {
+        id: 14,
+        partName: 'Приводящие',
+    },
+    {
+        id: 15,
+        partName: 'Бицепс бедра',
+    },
+    {
+        id: 16,
+        partName: 'Разгибатели спины',
+    },
+    {
+        id: 17,
+        partName: 'Средние дельты',
+    },
+    {
+        id: 18,
+        partName: 'Стабилизаторы кора',
+    },
+    {
+        id: 19,
+        partName: 'Сердечно-сосудистая система',
+    },
+    {
+        id: 20,
+        partName: 'Икроножные',
+    },
+    {
+        id: 21,
+        partName: 'Плечи',
+    },
+    {
+        id: 22,
+        partName: 'Пресс',
+    },
+    {
+        id: 23,
+        partName: 'Косые мышцы живота',
+    },
+    {
+        id: 24,
+        partName: 'Прямые мышцы живота',
+    },
+    {
+        id: 25,
+        partName: 'Нижний пресс',
+    },
+    {
+        id: 26,
+        partName: 'Трапеции',
+    },
+    {
+        id: 27,
+        partName: 'Подвздошно-поясничные',
+    },
+    {
+        id: 28,
+        partName: 'Стабилизаторы плеч',
+    },
+    {
+        id: 29,
+        partName: 'Квадратная мышца поясницы',
+    },
+    {
+        id: 30,
+        partName: 'Стабилизаторы бедра',
+    },
+    {
+        id: 31,
+        partName: 'Поперечная мышца живота',
+    },
+    {
+        id: 32,
+        partName: 'Камбаловидные',
+    },
+    {
+        id: 33,
+        partName: 'Плечелучевая',
+    },
+];
+
+const exercisesSeed: ExercisesStructure[] = [
+    {
+        id: 1,
+        name: 'Жим штанги лёжа',
+        difficulty: 'Средний',
+        description: 'Лягте на скамью, стопы прижаты к полу, лопатки сведены, поясница в естественном прогибе. Опускайте штангу к нижней части груди с контролем и выжимайте вверх без отрыва таза. Избегайте отбивания от груди и разведения локтей слишком широко.',
+        partOfTheBody: [1, 2, 3]
+    },
+    {
+        id: 2,
+        name: 'Жим гантелей на наклонной скамье',
+        difficulty: 'Средний',
+        description: 'Скамья под углом 20–30°. Лопатки сведены, гантели опускаются к верхней части груди по дуге. Сводите гантели над грудью без стука, держите запястья нейтральными.',
+        partOfTheBody: [4, 2, 3]
+    },
+    {
+        id: 3,
+        name: 'Разводка гантелей лёжа',
+        difficulty: 'Лёгкий',
+        description: 'Слегка согните локти и фиксируйте угол. Разводите руки по широкой дуге до растяжения груди и сводите, как будто обнимаете бочку. Движение плавное, без рывков.',
+        partOfTheBody: [1]
+    },
+    {
+        id: 4,
+        name: 'Тяга штанги в наклоне',
+        difficulty: 'Средний',
+        description: 'Наклон корпуса 30–45°, спина нейтральна. Тяните штангу к нижней части живота, ведя локти назад и сводя лопатки. Опускайте с контролем, без рывков поясницей.',
+        partOfTheBody: [5, 6, 7, 8]
+    },
+    {
+        id: 5,
+        name: 'Тяга горизонтального блока',
+        difficulty: 'Лёгкий',
+        description: 'Сядьте ровно, грудь вперёд, лопатки сведены. Тяните рукоять к животу, локти идут вдоль корпуса. Возврат плавный, позволяйте лопаткам разъезжаться вперёд.',
+        partOfTheBody: [5, 6, 7, 8]
+    },
+    {
+        id: 6,
+        name: 'Подтягивания',
+        difficulty: 'Сложный',
+        description: 'Хват чуть шире плеч, плечи опущены, корпус стабилен. Подтягивайтесь грудью к перекладине, сводя лопатки, опускайтесь полностью без провисания. Избегайте раскачки и «киппинга» при силовой работе.',
+        partOfTheBody: [5, 6, 8, 9]
+    },
+    {
+        id: 7,
+        name: 'Приседания со штангой',
+        difficulty: 'Сложный',
+        description: 'Стопы на ширине плеч, колени следуют за носками. Опускайтесь до параллели или ниже при сохранении нейтральной спины и стабильных колен. Вставайте мощно, не отрывая пятки.',
+        partOfTheBody: [10, 11, 12, 13]
+    },
+    {
+        id: 8,
+        name: 'Жим ногами в тренажёре',
+        difficulty: 'Средний',
+        description: 'Спина прижата, таз стабилен. Опускайте платформу до комфортной глубины без отрыва таза и выжимайте, оставляя лёгкий согиб в коленях. Не сводите колени внутрь.',
+        partOfTheBody: [10, 11, 14]
+    },
+    {
+        id: 9,
+        name: 'Румынская тяга',
+        difficulty: 'Средний',
+        description: 'Таз уходит назад, штанга скользит вдоль ног. Колени слегка согнуты, спина ровная. Внизу ощущайте растяжение бицепса бедра, поднимайтесь, напрягая ягодицы.',
+        partOfTheBody: [15, 11, 16]
+    },
+    {
+        id: 10,
+        name: 'Жим штанги стоя (армейский)',
+        difficulty: 'Сложный',
+        description: 'Корпус напряжён, пресс и ягодицы включены. Выжимайте штангу вертикально вверх, проходя лицо небольшим отклонением головы, и возвращайте её над плечами. Не прогибайтесь в пояснице.',
+        partOfTheBody: [2, 17, 3, 18]
+    },
+    {
+        id: 11,
+        name: 'Подъём гантелей через стороны',
+        difficulty: 'Лёгкий',
+        description: 'Поднимайте руки в стороны до уровня плеч в умеренном темпе, большие пальцы чуть вверх. Избегайте рывков и раскачки корпуса, опускайте с контролем.',
+        partOfTheBody: [17, 2]
+    },
+    {
+        id: 12,
+        name: 'Подъём штанги на бицепс',
+        difficulty: 'Лёгкий',
+        description: 'Локти прижаты к корпусу, поднимайте штангу без «читинга». Вверху пауза, вниз — медленно. Кисти нейтральны, не подавайте локти вперёд.',
+        partOfTheBody: [8, 9]
+    },
+    {
+        id: 13,
+        name: 'Беговая дорожка (интервалы)',
+        difficulty: 'Средний',
+        description: 'Разминка 5–10 минут. Интервалы 1–3 минуты темпа выше среднего, чередуйте с 1–2 минутами лёгкой ходьбы. Корпус слегка наклонён вперёд, шаг мягкий, приземление на середину стопы.',
+        partOfTheBody: [19, 20, 10, 11, 13]
+    },
+    {
+        id: 14,
+        name: 'Ходьба в гору на дорожке',
+        difficulty: 'Лёгкий',
+        description: 'Установите уклон 6–12%. Держите корпус устойчивым, не наваливайтесь на поручни. Шаг ровный, толкайте платформу ягодицами и задней поверхностью бедра.',
+        partOfTheBody: [19, 11, 12, 20]
+    },
+    {
+        id: 15,
+        name: 'Эллипсоид',
+        difficulty: 'Лёгкий',
+        description: 'Двигайтесь плавно, удерживая пятки на платформах, корпус вертикален. Работайте руками синхронно с ногами, сопротивление подберите для равномерного пульса.',
+        partOfTheBody: [19, 10, 11, 12]
+    },
+    {
+        id: 16,
+        name: 'Велотренажёр (каденс)',
+        difficulty: 'Средний',
+        description: 'Держите каденс 80–100 об/мин, сопротивление на уровне, позволяющем сохранять технику. Колени движутся по линиям стоп, корпус стабилен.',
+        partOfTheBody: [19, 10, 20, 11]
+    },
+    {
+        id: 17,
+        name: 'Гребной тренажёр',
+        difficulty: 'Средний',
+        description: 'Последовательность: ноги — корпус — руки; возврат: руки — корпус — ноги. Толчок ногами, затем дозавод корпуса и добор руками к нижним рёбрам. Спина нейтральна, тяга ровная.',
+        partOfTheBody: [19, 5, 10, 11, 13]
+    },
+    {
+        id: 18,
+        name: 'Скакалка',
+        difficulty: 'Средний',
+        description: 'Прыжки низкой амплитуды на середину стопы, локти близко к корпусу, вращение кистями. Держите ритм, приземляйтесь мягко.',
+        partOfTheBody: [19, 20, 21, 9, 13]
+    },
+    {
+        id: 19,
+        name: 'Берпи',
+        difficulty: 'Сложный',
+        description: 'Присед — упор лёжа — отжимание — прыжок вверх. Держите корпус напряжённым, приземляйтесь мягко, сохраняйте темп без провалов техники.',
+        partOfTheBody: [19, 1, 21, 3, 10, 13]
+    },
+    {
+        id: 20,
+        name: 'Альпинист',
+        difficulty: 'Средний',
+        description: 'Планка на прямых руках, колени поочерёдно тяните к груди. Таз не задирать, корпус в одной линии, темп ровный.',
+        partOfTheBody: [19, 22, 21, 1, 18]
+    },
+    {
+        id: 21,
+        name: 'Баттл-роуп (канаты)',
+        difficulty: 'Средний',
+        description: 'Полуприсед, корпус стабилен, создавайте волны руками попеременно или вместе. Дышите ритмично, не «вешайтесь» на поясницу.',
+        partOfTheBody: [19, 21, 26, 9, 13]
+    },
+    {
+        id: 22,
+        name: 'Прыжки на ящик',
+        difficulty: 'Средний',
+        description: 'Мягкий замах руками, взрывной прыжок на ящик с мягким приземлением на всю стопу. Спрыгивайте шагом, сохраняйте колени над носками.',
+        partOfTheBody: [10, 11, 20, 13]
+    },
+    {
+        id: 23,
+        name: 'Русские скручивания (Russian twist)',
+        difficulty: 'Лёгкий',
+        description: 'Сядьте, корпус немного отклоните назад, спина ровная. Поворачивайте плечевой пояс в стороны, ведя руки/снаряд дугой, тазобедренные не «гуляют».',
+        partOfTheBody: [23, 24, 18]
+    },
+    {
+        id: 24,
+        name: 'Подъёмы ног в висе',
+        difficulty: 'Средний',
+        description: 'Вис на перекладине, таз подкрутите. Поднимайте колени к груди или прямые ноги, избегая рывков. Контролируйте опускание.',
+        partOfTheBody: [25, 27, 9, 28]
+    },
+    {
+        id: 25,
+        name: 'Боковая планка',
+        difficulty: 'Лёгкий',
+        description: 'Опора на предплечье и наружный край стопы, корпус — прямая линия. Таз не провисает, шея нейтральна, дыхание ровное.',
+        partOfTheBody: [23, 29, 30]
+    },
+    {
+        id: 26,
+        name: 'Колесо для пресса (рол-аут)',
+        difficulty: 'Сложный',
+        description: 'С колен или стоя раскатывайте колесо вперёд, сохраняя нейтральную спину и подтянутый живот. Возвращайтесь силой кора, не провисая в пояснице.',
+        partOfTheBody: [31, 24, 5, 21]
+    },
+    {
+        id: 27,
+        name: 'Подъёмы на носки стоя',
+        difficulty: 'Лёгкий',
+        description: 'Полная амплитуда: опуститесь до растяжения икр и поднимитесь на носки с паузой вверху. Колени мягкие, корпус стабилен.',
+        partOfTheBody: [20, 32]
+    },
+    {
+        id: 28,
+        name: 'Сгибания молотком (гантели)',
+        difficulty: 'Лёгкий',
+        description: 'Хват нейтральный (ладони друг к другу), локти у корпуса. Поднимайте без раскачки, контролируйте опускание.',
+        partOfTheBody: [33, 8, 9]
+    },
+    {
+        id: 29,
+        name: 'Отжимания',
+        difficulty: 'Лёгкий',
+        description: 'Ладони под плечами, корпус — прямая линия. Опускайтесь до касания грудью, выжимайтесь, не проваливаясь в пояснице.',
+        partOfTheBody: [1, 2, 3, 13]
+    },
+    {
+        id: 30,
+        name: 'Становая тяга сумо от пола',
+        difficulty: 'Сложный',
+        description: 'Широкая стойка, носки наружу, спина нейтральна. Отталкивайтесь ногами, ведите штангу близко к телу, фиксируйте таз и колени вверху без переразгибания.',
+        partOfTheBody: [11, 14, 10, 16, 26]
+    }
+];
+
+export async function seedExercises(): Promise<void> {
+    console.log('Seeding body_parts, exercises and exercise_body_parts...');
+
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        // Сидим таблицу body_parts (id + part_name)
+        for (const part of partOfBodySeed) {
+            await client.query(
+                `
+                    INSERT INTO body_parts (id, part_name)
+                    VALUES ($1, $2)
+                    ON CONFLICT (id) DO UPDATE
+                        SET part_name = EXCLUDED.part_name
+                `,
+                [part.id, part.partName]
+            );
+        }
+
+        // Сдвигаем sequence для body_parts
+        await client.query(`
+            SELECT setval(
+                pg_get_serial_sequence('body_parts', 'id'),
+                (SELECT COALESCE(MAX(id), 0) FROM body_parts)
+            )
+        `);
+
+        // Сидим таблицу exercises (id + exercise_name + description + difficulty)
+        for (const ex of exercisesSeed) {
+            await client.query(
+                `
+                    INSERT INTO exercises (id, exercise_name, description, difficulty)
+                    VALUES ($1, $2, $3, $4)
+                    ON CONFLICT (id) DO UPDATE
+                        SET exercise_name = EXCLUDED.exercise_name,
+                            description   = EXCLUDED.description,
+                            difficulty    = EXCLUDED.difficulty
+                `,
+                [ex.id, ex.name, ex.description, ex.difficulty]
+            );
+        }
+
+        // Сдвигаем sequence для exercises
+        await client.query(`
+            SELECT setval(
+                pg_get_serial_sequence('exercises', 'id'),
+                (SELECT COALESCE(MAX(id), 0) FROM exercises)
+            )
+        `);
+
+        // Сидим связующую таблицу exercise_body_parts
+        for (const ex of exercisesSeed) {
+            const exerciseId = ex.id;
+
+            // Очищаем старые связи, чтобы сид приводил к актуальному состоянию
+            await client.query(
+                'DELETE FROM exercise_body_parts WHERE exercise_id = $1',
+                [exerciseId]
+            );
+
+            for (const bodyPartId of ex.partOfTheBody) {
+                await client.query(
+                    `
+                        INSERT INTO exercise_body_parts (exercise_id, body_part_id)
+                        VALUES ($1, $2)
+                        ON CONFLICT (exercise_id, body_part_id) DO NOTHING
+                    `,
+                    [exerciseId, bodyPartId]
+                );
+            }
+        }
+
+        await client.query('COMMIT');
+
+        console.log(
+            `Seeding finished. body_parts: ${partOfBodySeed.length}, exercises: ${exercisesSeed.length}`
+        );
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error while seeding exercises/body parts:', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+// Позволяем запускать файл напрямую: `ts-node src/database/seedExercises.ts` или через скомпилированный JS
+if (require.main === module) {
+    seedExercises()
+        .then(() => {
+            console.log('Seed script completed successfully');
+            process.exit(0);
+        })
+        .catch((err) => {
+            console.error('Error while seeding exercises:', err);
+            process.exit(1);
+        });
+}

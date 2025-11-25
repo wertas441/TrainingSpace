@@ -1,0 +1,69 @@
+'use client'
+
+import MainPagination from "@/components/UI/MainPagination";
+import {usePagination} from "@/lib/hooks/usePagination";
+import {useMemo, useState} from "react";
+import GoalsHeader from "@/components/UI/headers/GoalsHeader";
+import {GoalsStructure} from "@/types/goalTypes";
+import GoalItem from "@/components/elements/GoalRow";
+
+export default function Goals({clientGoals}:{clientGoals: GoalsStructure[]}) {
+
+    const [searchName, setSearchName] = useState<string>('');
+    const itemsPerPage:number = 10;
+
+    const filteredList = useMemo(() => {
+        const q = searchName.toLowerCase().trim();
+        return clientGoals.filter(e => {
+            return q.length === 0 || e.name.toLowerCase().includes(q) ;
+        });
+    }, [searchName, clientGoals]);
+
+    const {
+        currentPage,
+        setCurrentPage,
+        listTopRef,
+        totalItems,
+        totalPages,
+        paginatedList,
+    } = usePagination(filteredList, itemsPerPage)
+
+    return (
+        <div className="nutrition">
+            <GoalsHeader
+                searchName={searchName}
+                setSearchName={setSearchName}
+                ref={listTopRef}
+            />
+
+            <div className="grid mt-6 grid-cols-1 gap-3">
+                {filteredList.length > 0 ? (
+                    paginatedList.map(item => (
+                            <GoalItem
+                                key={item.id}
+                                id={item.id}
+                                name={item.name}
+                                description={item.description}
+                                priority={item.priority}
+                            />
+                        )
+                    )
+                ) : (
+                    <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
+                        Добавленных целей не найдено, попробуйте изменить фильтр и проверить подключение к сети.
+                    </div>
+                )}
+            </div>
+
+            {totalItems > itemsPerPage && (
+                <MainPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={totalItems}
+                    setCurrentPage={setCurrentPage}
+                    itemsPerPage={itemsPerPage}
+                />
+            )}
+        </div>
+    )
+}

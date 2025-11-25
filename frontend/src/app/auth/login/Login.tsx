@@ -4,13 +4,14 @@ import {useInputField} from "@/lib/hooks/useInputField";
 import {FormEvent, useMemo, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
-import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
-import {MainInput} from "@/components/inputs/MainInput";
-import AuthContext from "@/components/UI/AuthContext";
+import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators";
+import MainInput from "@/components/inputs/MainInput";
+import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {baseUrlForBackend} from "@/lib";
 import {AtSymbolIcon, LockClosedIcon} from "@heroicons/react/24/outline";
+import type {BackendApiResponse} from "@/types/indexTypes";
 
 export default function Login(){
 
@@ -21,7 +22,7 @@ export default function Login(){
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
     const validateForm = () => {
-        const emailError = validateUserName(email.inputState.value);
+        const emailError = validateUserEmail(email.inputState.value);
         email.setError(emailError);
 
         const passwordError = validateUserPassword(password.inputState.value);
@@ -41,16 +42,16 @@ export default function Login(){
         setIsSubmitting(true);
 
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/user/authorize`, {
+            const result = await fetch(`${baseUrlForBackend}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    login: email.inputState.value,
+                    email: email.inputState.value,
                     password: password.inputState.value,
-                    remember_me: rememberMe,
+                    rememberMe: rememberMe,
                 }),
             });
 
@@ -59,20 +60,18 @@ export default function Login(){
                 return;
             }
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setServerError(result.message || "Ошибка авторизации. Проверьте правильность введенных данных.");
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка авторизации. Проверьте правильность введенных данных.");
+            setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
             console.error("Login error:", error);
-            setIsSubmitting(false);
-        } finally {
             setIsSubmitting(false);
         }
     }
 
     return (
-        <AuthContext>
+        <BlockPageContext>
             <div className="space-y-6">
                 <div>
                     <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
@@ -85,7 +84,7 @@ export default function Login(){
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-5" onSubmit={handleSubmit}>
 
                     <MainInput
                         id={'email'}
@@ -93,7 +92,7 @@ export default function Login(){
                         value={email.inputState.value}
                         onChange={email.setValue}
                         icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
-                        placeholder={'Email'}
+                        label={'Email'}
                         error={email.inputState.error || undefined}
                     />
 
@@ -103,7 +102,7 @@ export default function Login(){
                         value={password.inputState.value}
                         onChange={password.setValue}
                         icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
-                        placeholder={'Пароль'}
+                        label={'Пароль'}
                         error={password.inputState.error || undefined}
                     />
 
@@ -139,6 +138,6 @@ export default function Login(){
                     Нет аккаунта? <Link href="/auth/registration" className={`font-medium textLinks`}>Зарегистрироваться</Link>
                 </div>
             </div>
-        </AuthContext>
+        </BlockPageContext>
     );
 }

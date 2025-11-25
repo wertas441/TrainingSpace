@@ -1,9 +1,9 @@
 'use client'
 
-import {ReactElement, ReactNode, useCallback, useState} from "react";
+import {ReactElement, ReactNode, useCallback, useMemo, useState} from "react";
 import {usePathname} from "next/navigation";
 import MainHeader from "@/components/UI/headers/MainHeader";
-import SideBar from "@/components/UI/SideBar";
+import MainSideBar from "@/components/UI/sidebars/MainSideBar";
 
 export default function LayoutWrapper({children}: {children: ReactNode}):ReactElement {
 
@@ -11,12 +11,16 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 	const isAuthPage: boolean = pathname.startsWith('/auth');
 	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
+	const activeContext: string = useMemo(() => {
+		const segments = pathname.split('/').filter(Boolean);
+		if (segments.length === 0) {
+			return '/';
+		}
+		return segments[0];
+	}, [pathname]);
+
 	const toggleSidebar = useCallback(() => {
 		setIsSidebarOpen(prev => !prev);
-	}, []);
-
-	const closeSidebar = useCallback(() => {
-		setIsSidebarOpen(false);
 	}, []);
 
 	return (
@@ -28,13 +32,13 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 
 				<div className="flex flex-1 relative overflow-x-hidden">
 					{!isAuthPage && (
-						<SideBar
-                            activePage={pathname}
+						<MainSideBar
+                            activePage={activeContext}
                             isOpen={isSidebarOpen}
-                            onClose={closeSidebar}
+                            onClose={toggleSidebar}
                         />
 					)}
-					<main className="flex-1 relative overflow-x-hidden">
+					<main className="flex-1 p-4 relative overflow-x-hidden">
 						{children}
 					</main>
 				</div>

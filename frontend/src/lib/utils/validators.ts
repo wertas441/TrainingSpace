@@ -1,5 +1,7 @@
 /// USER VALIDATOR
 
+import {GoalPriority} from "@/types/goalTypes";
+
 export const validateUserName = (userName: string): string | null => {
     if(!userName.trim()){
         return ('Пожалуйста, введите имя для вашего аккаунта')
@@ -60,3 +62,207 @@ export const validateConfirmPassword = (password:string, confirmPassword:string)
 
     return null;
 }
+
+export const validateTwoPassword = (currentPassword:string, newPassword:string):string | null => {
+    if (currentPassword === newPassword){
+        return ('Ваш новый пароль такой же как и нынешний')
+    }
+
+    return null;
+}
+
+
+/// Nutrition Validators
+
+export const validateDayName = (dayName: string): string | null => {
+    if(!dayName.trim()){
+        return ('Пожалуйста, введите имя для дня')
+    }
+
+    if(dayName.length < 3){
+        return (`Имя дня должно содержать минимум 3 символов (сейчас ${dayName.length})`)
+    }
+
+    if(dayName.length > 15){
+        return (`Имя дня может содержать максимум 15 символов (сейчас ${dayName.length})`)
+    }
+
+    // Разрешаем латиницу, кириллицу, цифры, пробел и часть спецсимволов
+    const dayNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
+    if(!dayNameRegex.test(dayName)) {
+        return ('Имя дня может содержать буквы (лат/кир), цифры, пробелы и некоторые спец.символы')
+    }
+
+
+    return null;
+}
+
+export const validateDayDate = (dayDate: string): string | null => {
+    if (!dayDate.trim()) {
+        return ('Пожалуйста, выберите дату');
+    }
+
+    // Парсим YYYY-MM-DD как локальную дату (без смещения часового пояса)
+    const parts = dayDate.split('-');
+    if (parts.length !== 3) {
+        return ('Некорректная дата');
+    }
+    const year = Number(parts[0]);
+    const month = Number(parts[1]) - 1; // 0-11
+    const day = Number(parts[2]);
+
+    const parsed = new Date(year, month, day);
+    if (isNaN(parsed.getTime()) || parsed.getFullYear() !== year || parsed.getMonth() !== month || parsed.getDate() !== day) {
+        return ('Некорректная дата');
+    }
+
+    const todayLocal = new Date();
+    const todayStart = new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate());
+
+    if (parsed.getTime() > todayStart.getTime()) {
+        return ('Дата не может быть в будущем');
+    }
+
+    return null;
+}
+
+const validateNumberInRange = (value: string, min: number, max: number, fieldLabel: string): string | null => {
+    if (!value.trim()) {
+        return (`Пожалуйста, введите значение для поля "${fieldLabel}"`);
+    }
+
+    if (!/^\d+$/.test(value.trim())) {
+        return (`Поле "${fieldLabel}" должно быть целым числом`);
+    }
+
+    const num = parseInt(value.trim(), 10);
+    if (num < min) {
+        return (`${fieldLabel} не может быть меньше ${min}`);
+    }
+    if (num > max) {
+        return (`${fieldLabel} не может быть больше ${max}`);
+    }
+    return null;
+}
+
+export const validateCalories = (calories: string): string | null => {
+    return validateNumberInRange(calories, 0, 100000, 'Калории');
+}
+
+export const validateProteinGrams = (protein: string): string | null => {
+    return validateNumberInRange(protein, 0, 1000, 'Белки (г)');
+}
+
+export const validateFatGrams = (fat: string): string | null => {
+    return validateNumberInRange(fat, 0, 1000, 'Жиры (г)');
+}
+
+export const validateCarbGrams = (carb: string): string | null => {
+    return validateNumberInRange(carb, 0, 1000, 'Углеводы (г)');
+}
+
+export const validateDayDescription = (description: string): string | null => {
+    // Поле необязательное: если пусто — ок
+    if (!description.trim()) {
+        return null;
+    }
+
+    const maxLength = 500;
+    if (description.length > maxLength) {
+        return (`Описание не должно превышать ${maxLength} символов (сейчас ${description.length})`);
+    }
+
+    return null;
+}
+
+/// Training Validators
+export const validateTrainingName = (trainingName: string): string | null => {
+    if (!trainingName.trim()) {
+        return ('Пожалуйста, введите имя тренировки');
+    }
+
+    if (trainingName.length < 3) {
+        return (`Имя тренировки должно содержать минимум 3 символа (сейчас ${trainingName.length})`);
+    }
+
+    if (trainingName.length > 30) {
+        return (`Имя тренировки может содержать максимум 30 символов (сейчас ${trainingName.length})`);
+    }
+
+    // Разрешаем латиницу, цифры и базовые спецсимволы как в остальных валидаторах
+    const trainingNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
+    if (!trainingNameRegex.test(trainingName)) {
+        return ('Имя тренировки может содержать буквы (лат/кир), цифры, пробелы и некоторые спец.символы')
+    }
+
+    return null;
+}
+
+export const validateTrainingDescription = (description: string): string | null => {
+    // Необязательное поле
+    if (!description.trim()) {
+        return null;
+    }
+    const maxLength = 500;
+    if (description.length > maxLength) {
+        return (`Описание не должно превышать ${maxLength} символов (сейчас ${description.length})`);
+    }
+    return null;
+}
+
+export const validateTrainingExercises = (exerciseIds: number[]): string | null => {
+    if (!Array.isArray(exerciseIds) || exerciseIds.length === 0) {
+        return ('Добавьте хотя бы одно упражнение в тренировку');
+    }
+    // Проверка на уникальность id
+    const unique = new Set(exerciseIds);
+    if (unique.size !== exerciseIds.length) {
+        return ('Список упражнений содержит дубликаты');
+    }
+    return null;
+}
+
+
+/// Goal Validators
+
+export const validateGoalName = (goalName: string): string | null => {
+    if (!goalName.trim()) {
+        return ('Пожалуйста, введите название цели');
+    }
+
+    if (goalName.length < 3) {
+        return (`Название цели должно содержать минимум 3 символа (сейчас ${goalName.length})`);
+    }
+
+    if (goalName.length > 30) {
+        return (`Название цели может содержать максимум 30 символов (сейчас ${goalName.length})`);
+    }
+
+    const goalNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
+    if (!goalNameRegex.test(goalName)) {
+        return ('Название цели может содержать буквы (лат/кир), цифры, пробелы и некоторые спец.символы')
+    }
+
+    return null;
+}
+
+export const validateGoalDescription = (description: string): string | null => {
+    if (!description.trim()) {
+        return null;
+    }
+
+    if (description.length > 500) {
+        return (`Описание не должно превышать 500 символов (сейчас ${description.length})`);
+    }
+
+    return null;
+}
+
+export const validateGoalPriority = (priority: GoalPriority): boolean => {
+    if(!priority.trim()){
+        return true;
+    }
+
+    return false;
+}
+
