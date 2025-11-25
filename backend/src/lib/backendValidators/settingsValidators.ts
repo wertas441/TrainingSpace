@@ -38,3 +38,12 @@ export const validateTwoPassword = (currentPassword:string, newPassword:string):
 
     return true;
 }
+
+
+export const validateUserEmail = (email: string): boolean => {
+    if (!email.trim()){
+        return false;
+    }
+
+    return true;
+};

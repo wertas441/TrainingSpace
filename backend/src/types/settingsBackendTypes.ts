@@ -5,17 +5,16 @@ export interface ChangePasswordFrontendStructure {
     confirmPassword: string;
 }
 
-export interface ChangePasswordBackendRequest {
+export interface ChangePasswordBackendRequest extends ChangePasswordFrontendStructure {
     userId: number;
-    currentPassword: string;
-    newPassword: string;
-    confirmPassword: string;
 }
 
 export interface ChangeEmailFrontendStructure {
-    currentEmail: string;
     newEmail: string;
     currentPassword: string;
 }
 
+export interface ChangeEmailBackendRequest extends ChangeEmailFrontendStructure {
+    userId: number;
+}
 

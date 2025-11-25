@@ -6,6 +6,7 @@ import {
     EnvelopeIcon,
     UserCircleIcon
 } from "@heroicons/react/24/outline";
+import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 
 
 export default function Profile({ userData }: { userData: UserProfileRequest | null}){
@@ -43,7 +44,7 @@ export default function Profile({ userData }: { userData: UserProfileRequest | n
         .slice(0, 2);
 
     return (
-        <div className="bg-white border border-emerald-100 rounded-2xl shadow-sm overflow-hidden">
+        <SettingsPageContext>
             <div className="border-b border-emerald-50 px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900">
                     Профиль
@@ -115,6 +116,6 @@ export default function Profile({ userData }: { userData: UserProfileRequest | n
                     Данные профиля синхронизируются с вашим аккаунтом в TrainingSpace.
                 </div>
             </div>
-        </div>
+        </SettingsPageContext>
     )
 }

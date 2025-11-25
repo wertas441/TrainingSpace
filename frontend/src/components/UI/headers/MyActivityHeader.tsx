@@ -10,7 +10,6 @@ import {
     ActivityTypeStructure
 } from "@/types/activityTypes";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
-import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 
 export default function MyActivityHeader(
@@ -29,7 +28,7 @@ export default function MyActivityHeader(
     }: ActivityHeaderProps){
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
-    const difficultOptions: ActivityDifficultyFilter[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []);
+    const difficultOptions: ActivityDifficultyStructure[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []);
     const typeOptions: ActivityTypeStructure[] = useMemo(() => ['Силовая', 'Кардио', 'Комбинированный'], []);
 
     const handleReset = useCallback(() => {

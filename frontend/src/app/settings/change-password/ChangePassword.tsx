@@ -10,6 +10,7 @@ import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainInput from "@/components/inputs/MainInput";
 import {LockClosedIcon, CheckIcon} from "@heroicons/react/24/outline";
+import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 
 export default function ChangePassword(){
 
@@ -60,11 +61,7 @@ export default function ChangePassword(){
             });
 
             if (result.ok) {
-                // При успешной смене пароля можно редиректнуть пользователя
-                // и/или показать уведомление. Сбрасываем флаг отправки,
-                // чтобы не залипало состояние кнопки, если остаёмся на этой же странице.
-                setIsSubmitting(false);
-                router.push("/settings");
+                router.push("/settings/profile");
                 return;
             }
 
@@ -79,7 +76,7 @@ export default function ChangePassword(){
     }
 
     return (
-        <div className="bg-white border border-emerald-100 rounded-2xl shadow-sm overflow-hidden">
+        <SettingsPageContext>
             <div className="border-b border-emerald-50 px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40 flex items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900">
@@ -135,6 +132,6 @@ export default function ChangePassword(){
                     </div>
                 </form>
             </div>
-        </div>
+        </SettingsPageContext>
     )
 }

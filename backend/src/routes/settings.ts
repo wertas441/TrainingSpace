@@ -5,7 +5,7 @@ import {ChangeEmailFrontendStructure, ChangePasswordFrontendStructure} from "../
 import { config } from '../config';
 import {
     validateConfirmPassword,
-    validateTwoPassword,
+    validateTwoPassword, validateUserEmail,
     validateUserPassword
 } from "../lib/backendValidators/settingsValidators";
 import {SettingModel} from "../models/Setting";
@@ -13,9 +13,74 @@ import {SettingModel} from "../models/Setting";
 const router = Router();
 
 router.post('/change-email', authGuard, async (req, res) => {
-    const {currentEmail, newEmail, currentPassword}: ChangeEmailFrontendStructure = req.body;
+    try {
+        const {newEmail, currentPassword}: ChangeEmailFrontendStructure = req.body;
+        const userId = (req as any).userId as number;
 
+        const newEmailError:boolean = validateUserEmail(newEmail);
+        const currentPasswordError:boolean = validateUserPassword(currentPassword);
 
+        if (!newEmailError || !currentPasswordError) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Ошибка смены почты, пожалуйста проверьте введенные вами данные.'
+            };
+            return res.status(400).json(response);
+        }
+
+        await SettingModel.changeEmail({userId, newEmail, currentPassword});
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'email was changed successfully',
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+        const err: any = error;
+
+        if (err?.code === 'INVALID_CURRENT_PASSWORD') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Текущий пароль указан неверно.'
+            };
+            return res.status(400).json(response);
+        }
+
+        if (err?.code === 'USER_NOT_FOUND') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Пользователь не найден.'
+            };
+            return res.status(404).json(response);
+        }
+
+        if (err?.code === 'EMAIL_ALREADY_IN_USE') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Указанная почта уже используется другим аккаунтом.'
+            };
+            return res.status(400).json(response);
+        }
+
+        if (err?.code === 'EMAIL_SAME_AS_CURRENT') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Новый email совпадает с текущим.'
+            };
+            return res.status(400).json(response);
+        }
+
+        console.error('Ошибка смены почты', error);
+
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при смене почты ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
 });
 
 router.post('/change-password', authGuard, async (req, res) => {
@@ -48,7 +113,6 @@ router.post('/change-password', authGuard, async (req, res) => {
     } catch (error){
         const err: any = error;
 
-        // Специальная обработка ошибок смены пароля
         if (err?.code === 'INVALID_CURRENT_PASSWORD') {
             const response: ApiResponse = {
                 success: false,
@@ -75,10 +139,6 @@ router.post('/change-password', authGuard, async (req, res) => {
 
         res.status(500).json(response);
     }
-});
-
-router.get('/my-profile-data', authGuard, async (req, res) => {
-
 });
 
 router.delete('/delete-my-account', authGuard, async (req, res) => {

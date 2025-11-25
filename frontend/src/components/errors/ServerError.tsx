@@ -8,7 +8,7 @@ export default function ServerError({ message }: {message: string | null}) {
 
     return (
         <div
-            className={`p-3 text-sm text-red-700 bg-red-100 rounded-lg`}
+            className={`p-3 my-2 text-sm text-red-700 bg-red-100 rounded-lg`}
             role="alert"
         >
             <p>{message}</p>

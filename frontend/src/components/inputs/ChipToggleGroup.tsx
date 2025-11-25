@@ -3,25 +3,11 @@ import {memo} from "react";
 interface ChipToggleGroupProps<T extends string> {
     id?: string;
     label?: string;
-    /**
-     * Массив значений, как раньше: ['Силовая', 'Кардио', ...]
-     */
     choices: readonly T[];
-    /**
-     * Текущее значение; может быть null, если выбор не обязателен
-     */
     value: T | null;
     onChange: (v: T | null) => void;
     className?: string;
-    /**
-     * Если true — всегда должен быть выбран один вариант,
-     * повторный клик по активному варианту ничего не делает.
-     * Если false — повторный клик по активному варианту снимает выбор (value -> null).
-     */
     alwaysSelected?: boolean;
-    /**
-     * Кастомный рендер текста на чипе (например, маппинг 'light' -> 'Легкий')
-     */
     getLabel?: (value: T) => string;
 }
 

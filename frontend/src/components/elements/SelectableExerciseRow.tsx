@@ -1,8 +1,8 @@
 import {useMemo} from "react";
 import {PlusCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {DifficultOptionsStructure} from "@/types/indexTypes";
 
-type difficultOptions = | 'light' | 'middle' | 'hard';
 
 interface SelectableExerciseRowProps {
     exercise: ExerciseTechniqueItem;
@@ -10,13 +10,13 @@ interface SelectableExerciseRowProps {
     onToggle: (id: number) => void;
 }
 
-function getDifficultyStyles(difficulty: difficultOptions) {
+function getDifficultyStyles(difficulty: DifficultOptionsStructure) {
     switch (difficulty) {
-        case "light":
+        case "Лёгкий":
             return "border-emerald-200 bg-emerald-50 text-emerald-700";
-        case "middle":
+        case "Средний":
             return "border-amber-200 bg-amber-50 text-amber-700";
-        case "hard":
+        case "Сложный":
             return "border-rose-200 bg-rose-50 text-rose-700";
         default:
             return "border-gray-200 bg-gray-50 text-gray-700";
@@ -33,7 +33,7 @@ export default function SelectableExerciseRow({exercise, selected, onToggle}: Se
                     <div className="flex items-center gap-2">
                         <h3 className="text-lg font-semibold text-gray-800">{exercise.name}</h3>
                         <span className={badgeClasses}>
-                            {exercise.difficulty === 'light' ? 'Лёгкий' : exercise.difficulty === 'middle' ? 'Средний' : 'Сложный'}
+                            {exercise.difficulty === 'Лёгкий' ? 'Лёгкий' : exercise.difficulty === 'Средний' ? 'Средний' : 'Сложный'}
                         </span>
                     </div>
                     <div className="mt-2 md:mt-3 flex flex-wrap gap-2">
