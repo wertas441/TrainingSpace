@@ -1,11 +1,11 @@
 'use client'
 
 import {ActivityDataStructure, ActivityDifficultyFilter, ActivityTypeFilter} from "@/types/activityTypes";
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
-import MyActivityItem from "@/components/elements/MyActivityRow";
+import MyActivityRow from "@/components/elements/MyActivityRow";
 
 export default function MyActivity({clientActivity}:{clientActivity: ActivityDataStructure[]; }) {
 
@@ -24,10 +24,23 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
-        return clientActivity.filter(e => {
-            return q.length === 0 || e.name.toLowerCase().includes(q) ;
+
+        return clientActivity.filter((activity) => {
+            const matchesName =
+                q.length === 0 || activity.name.toLowerCase().includes(q);
+
+            const matchesDate =
+                !searchDate || activity.activityDate.startsWith(searchDate);
+
+            const matchesDifficulty =
+                difficultFilter === null || activity.difficulty === difficultFilter;
+
+            const matchesType =
+                typeFilter === null || activity.type === typeFilter;
+
+            return matchesName && matchesDate && matchesDifficulty && matchesType;
         });
-    }, [searchName, clientActivity]);
+    }, [searchName, searchDate, difficultFilter, typeFilter, clientActivity]);
 
     const {
         currentPage,
@@ -37,6 +50,10 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
         totalPages,
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchName, searchDate, difficultFilter, typeFilter, setCurrentPage]);
 
 
     return (
@@ -57,19 +74,12 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
 
             <div className="grid mt-6 grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
-                    paginatedList.map((item) => {
-
-                        return (
-                            <MyActivityItem
-                                key={item.id}
-                                name={item.name}
-                                date={item.activityDate}
-                                description={item.description}
-                                type={item.type}
-                                difficulty={item.difficulty}
-                            />
-                        )
-                    })
+                    paginatedList.map((item) => (
+                        <MyActivityRow
+                            key={item.id}
+                            activity={item}
+                        />
+                    ))
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
                         Такой активности не найдено. Попробуйте изменить запрос.

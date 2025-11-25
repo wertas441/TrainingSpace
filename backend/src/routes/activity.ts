@@ -7,8 +7,9 @@ import {
     validateActivityName, validateActivityPerformedAt, validateActivityTrainingId,
     validateActivityType
 } from "../lib/backendValidators/activityValidators";
-import {AddActivityFrontendRequest} from "../types/activityBackendTypes";
+import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activityBackendTypes";
 import {ActivityModel} from "../models/Activity";
+import {GoalModel} from "../models/Goal";
 
 const router = Router();
 
@@ -73,7 +74,6 @@ router.post('/add-new-activity', authGuard, async (req, res) => {
 
 router.get('/my-activity-list', authGuard, async (req, res) => {
     try {
-
         const userId = (req as any).userId as number;
 
         const activity = await ActivityModel.getList(userId);
@@ -98,13 +98,155 @@ router.get('/my-activity-list', authGuard, async (req, res) => {
     }
 });
 
+router.get('/about-my-activity', authGuard, async (req, res) => {
+    try {
+        const userId = (req as any).userId as number;
 
-router.delete('/delete-my-activity', authGuard, async (req, res) => {
+        const activityIdRow = req.query.activityId;
 
+        const activityId = Number(activityIdRow);
+
+        if (!activityIdRow || Number.isNaN(activityId) || activityId <= 0) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный идентификатор активности.',
+            };
+            return res.status(400).json(response);
+        }
+
+        const activityInfo = await ActivityModel.information(userId, activityId);
+
+        if (!activityInfo) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Активность не найдена или у вас нет к ней доступа.',
+            };
+            return res.status(404).json(response);
+        }
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'success of getting activity information',
+            data: { activity: activityInfo }
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+
+        console.error('Ошибка получения информации об активности', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при получении информации об активности ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
 });
 
-router.put('/change-my-activity', authGuard, async (req, res) => {
 
+router.delete('/delete-my-activity', authGuard, async (req, res) => {
+    try {
+        const { activityId } = req.body as { activityId?: number };
+        const userId = (req as any).userId as number;
+
+        if (!activityId || Number.isNaN(activityId) || activityId <= 0) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный идентификатор активности.',
+            };
+            return res.status(400).json(response);
+        }
+
+        const isDeleted = await ActivityModel.delete(userId, activityId);
+
+        if (!isDeleted) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Активность не найдена или у вас нет доступа для ее удаления.',
+            };
+            return res.status(404).json(response);
+        }
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'activity delete successfully',
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+        console.error('Ошибка удаления активности', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при удалении активности ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+});
+
+router.put('/update-my-activity', authGuard, async (req, res) => {
+    try {
+        const {
+            id,
+            name,
+            description,
+            type,
+            difficulty,
+            trainingId,
+            activityDate,
+            exercises,
+        }: ActivityListFrontendStructure = req.body;
+
+        const activityNameError:boolean = validateActivityName(name);
+        const activityDescriptionError:boolean = validateActivityDescription(description);
+        const activityTypeError:boolean = validateActivityType(type);
+        const activityDifficultError:boolean = validateActivityDifficult(difficulty);
+        const activityTrainingIdError:boolean = validateActivityTrainingId(trainingId);
+        const activityPerformedError:boolean = validateActivityPerformedAt(activityDate);
+
+        const userId = (req as any).userId as number;
+
+        if (!activityNameError || !activityDescriptionError || !activityTypeError || !activityDifficultError || !activityTrainingIdError || !activityPerformedError) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Ошибка изменения активности, пожалуйста проверьте введенные вами данные.'
+            };
+            return res.status(400).json(response);
+        }
+
+        await ActivityModel.update({
+            id,
+            userId,
+            name,
+            description,
+            type,
+            difficulty,
+            trainingId,
+            activityDate,
+            exercises,
+        });
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'activity changed successfully',
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Ошибка изменения активности ', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при изменении активности ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
 });
 
 
