@@ -3,16 +3,17 @@
 import ExercisesTechniquesHeader from "@/components/UI/headers/ExercisesTechniquesHeader";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import ExerciseRow from "@/components/elements/ExerciseRow";
-import {DifficultOptionsStructure} from "@/types/indexTypes";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseDifficultFilter} from "@/types/indexTypes";
 
 export default function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
     const [searchName, setSearchName] = useState<string>('');
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
-    const [difficultFilter, setDifficultFilter] = useState<DifficultOptionsStructure>(null);
+    // null = показывать упражнения любого уровня сложности
+    const [difficultFilter, setDifficultFilter] = useState<ExerciseDifficultFilter>(null);
     const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
     const itemsPerPage:number = 10;
 

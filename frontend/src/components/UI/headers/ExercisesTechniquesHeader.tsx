@@ -7,6 +7,7 @@ import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniquesTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
+import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 
 function ExercisesTechniquesHeader(
     {
@@ -22,12 +23,7 @@ function ExercisesTechniquesHeader(
         ref,
     }: ExercisesTechniquesHeaderProps){
 
-    const difficultOptions = useMemo(() => [
-        { key: 'light', label: 'Лёгкий' },
-        { key: 'middle', label: 'Средний' },
-        { key: 'hard', label: 'Сложный' }
-    ], []);
-
+    const difficultOptions: DifficultOptionsStructure[] = useMemo(() => ['Лёгкий', 'Средний', 'Сложный'], []);
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
 
     // Опции для react-select из данных упражнений
@@ -43,10 +39,6 @@ function ExercisesTechniquesHeader(
         () => muscleOptions.filter(o => partOfBodyFilter.includes(o.value)),
         [partOfBodyFilter, muscleOptions]
     );
-
-    const handleToggleDifficulty = (value: Exclude<DifficultOptionsStructure, null>) => {
-        setDifficultFilter(difficultFilter === value ? null : value);
-    };
 
     const handleMusclesChange = (vals: readonly { value: string; label: string }[]) => {
         setPartOfBodyFilter(vals.map(v => v.value));
@@ -93,35 +85,20 @@ function ExercisesTechniquesHeader(
                             </button>
                         </div>
                         <div className="px-5 py-4 space-y-6">
-                            <div>
-                                <div className="flex gap-1 mb-3">
-                                    <h1 className={`text-sm font-medium text-emerald-900`}>Уровень сложности</h1>
-                                </div>
-                                <div className="flex flex-wrap gap-3">
-                                    {difficultOptions.map(opt => {
-                                        const active = difficultFilter === (opt.key as Exclude<DifficultOptionsStructure, null>);
-                                        return (
-                                            <button
-                                                key={opt.key}
-                                                type="button"
-                                                onClick={() => handleToggleDifficulty(opt.key as Exclude<DifficultOptionsStructure, null>)}
-                                                className={`px-3 py-2 cursor-pointer rounded-lg text-sm border transition 
-                                                    ${active 
-                                                        ? `border-emerald-300 bg-emerald-50 text-emerald-800` 
-                                                        : `border-gray-200 bg-gray-50 text-gray-700`}`}
-                                            >
-                                                <span className={`mr-2 inline-block h-3 w-3 rounded-full border ${active ? 'bg-emerald-500 border-emerald-500' : 'border-gray-200 bg-white text-gray-700'}`} />
-                                                {opt.label}
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            </div>
+
+                            <ChipToggleGroup<DifficultOptionsStructure>
+                                id="exeercises-difficulty"
+                                label="Уровень сложности"
+                                choices={difficultOptions}
+                                value={difficultFilter}
+                                onChange={setDifficultFilter}
+                                alwaysSelected={false}
+                            />
 
                             <div>
-                                <div className="text-sm font-medium text-emerald-900 mb-3">Группы мышц</div>
                                 <MainMultiSelect
                                     id="muscle-groups"
+                                    label={'Группы мышц'}
                                     options={muscleOptions}
                                     value={selectedMuscles}
                                     onChange={(vals) => handleMusclesChange(vals as { value: string; label: string }[])}

@@ -32,7 +32,11 @@ export interface BasicIconButtonProps {
     className?: string;
 }
 
-export type DifficultOptionsStructure = null | 'light' | 'middle' | 'hard';
+export type DifficultOptionsStructure = 'Лёгкий' | 'Средний' | 'Сложный';
+
+// Фильтр по сложности: null = показывать все уровни
+export type ExerciseDifficultFilter = DifficultOptionsStructure | null;
+
 
 export interface SettingsMenuItemsStructure{
     id: string;
