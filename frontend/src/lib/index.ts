@@ -18,53 +18,7 @@ export const mainInputClasses:string = `w-full py-3 border border-gray-400 round
 
 
 
-export const mainSideBarItems = [
-    {
-        label: 'Главная',
-        link: '/',
-        icon: HomeIcon,
-    },
-    {
-        label: 'Моя активность',
-        link: '/my-activity',
-        icon: Squares2X2Icon,
-    },
-    {
-        label: 'Добавить активность',
-        link: '/add-activity',
-        icon: SquaresPlusIcon,
-    },
-    {
-        label: 'Мои тренировки',
-        link: '/my-training',
-        icon: RectangleGroupIcon,
-    },
-    {
-        label: 'Статистика',
-        link: '/stats',
-        icon: ChartBarIcon,
-    },
-    {
-        label: 'Питание',
-        link: '/nutrition',
-        icon: CakeIcon,
-    },
-    {
-        label: 'Цели',
-        link: '/goals',
-        icon: SparklesIcon,
-    },
-    {
-        label: 'Техника упражнений',
-        link: '/exercises-techniques',
-        icon: PuzzlePieceIcon,
-    },
-    {
-        label: 'Настройки',
-        link: '/settings/profile',
-        icon: WrenchScrewdriverIcon,
-    },
-]
+
 
 export async function getExercisesList(tokenValue: string | undefined):Promise<ExerciseTechniqueItem[]>{
     try {

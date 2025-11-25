@@ -1,6 +1,14 @@
 import SideBarElement from "@/components/elements/SideBarElement";
-import {mainSideBarItems} from "@/lib";
-import {XMarkIcon} from "@heroicons/react/24/outline";
+import {
+    CakeIcon,
+    ChartBarIcon,
+    HomeIcon, PuzzlePieceIcon,
+    RectangleGroupIcon, SparklesIcon,
+    Squares2X2Icon,
+    SquaresPlusIcon, WrenchScrewdriverIcon,
+    XMarkIcon
+} from "@heroicons/react/24/outline";
+import {useMemo} from "react";
 
 interface SideBarProps {
 	activePage: string;
@@ -10,9 +18,65 @@ interface SideBarProps {
 
 export default function MainSideBar({ activePage, isOpen = false, onClose }: SideBarProps) {
 
+    const mainSideBarItems = useMemo(() => [
+        {
+            label: 'Главная',
+            link: '/',
+            context: '/',
+            icon: HomeIcon,
+        },
+        {
+            label: 'Моя активность',
+            link: '/my-activity',
+            context: 'my-activity',
+            icon: Squares2X2Icon,
+        },
+        {
+            label: 'Добавить активность',
+            link: '/add-activity',
+            context: 'add-activity',
+            icon: SquaresPlusIcon,
+        },
+        {
+            label: 'Мои тренировки',
+            link: '/my-training',
+            context: 'my-training',
+            icon: RectangleGroupIcon,
+        },
+        {
+            label: 'Статистика',
+            link: '/stats',
+            context: 'stats',
+            icon: ChartBarIcon,
+        },
+        {
+            label: 'Питание',
+            link: '/nutrition',
+            context: 'nutrition',
+            icon: CakeIcon,
+        },
+        {
+            label: 'Цели',
+            link: '/goals',
+            context: 'goals',
+            icon: SparklesIcon,
+        },
+        {
+            label: 'Техника упражнений',
+            link: '/exercises-techniques',
+            context: 'exercises-techniques',
+            icon: PuzzlePieceIcon,
+        },
+        {
+            label: 'Настройки',
+            link: '/settings/profile',
+            context: 'settings',
+            icon: WrenchScrewdriverIcon,
+        },
+    ], []);
+
 	return (
 		<>
-			{/* Мобильный оверлей */}
 			{isOpen && (
 				<div
 					className="fixed inset-0 bg-black/30 backdrop-blur-[1px] lg:hidden z-40"
@@ -44,7 +108,7 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: Sid
 							label={item.label}
 							link={item.link}
 							icon={item.icon}
-							active={activePage === item.link}
+							active={activePage === item.context}
                             onClick={onClose}
 						/>
 					))}

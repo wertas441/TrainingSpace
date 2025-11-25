@@ -1,6 +1,5 @@
 import {ReactNode} from "react";
 
-
 export default function SettingsPageContext({children}: { children: ReactNode }) {
 
     return (

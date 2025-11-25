@@ -4,7 +4,6 @@ import {CalendarIcon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {
-    ActivityDifficultyFilter,
     ActivityDifficultyStructure,
     ActivityHeaderProps,
     ActivityTypeStructure
@@ -108,18 +107,6 @@ export default function MyActivityHeader(
                             onChange={setTypeFilter}
                             alwaysSelected={false}
                         />
-
-                        {/*<div>*/}
-                        {/*    <MainMultiSelect*/}
-                        {/*        id="muscle-groups"*/}
-                        {/*        label={'Группы мышц'}*/}
-                        {/*        options={muscleOptions}*/}
-                        {/*        value={selectedMuscles}*/}
-                        {/*        onChange={(vals) => handleMusclesChange(vals as { value: string; label: string }[])}*/}
-                        {/*        placeholder="Выберите группы..."*/}
-                        {/*    />*/}
-                        {/*    <div className="mt-1.5 text-xs text-gray-500">По умолчанию показываются все группы</div>*/}
-                        {/*</div>*/}
                     </div>
                     <div className="px-5 py-4 border-t border-emerald-100">
                         <LightGreenGlassBtn
