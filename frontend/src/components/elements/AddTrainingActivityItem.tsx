@@ -23,8 +23,8 @@ export default function AddTrainingActivityItem(
         trainingExercises,
 	}:AddTrainingActivityItemProps): JSX.Element{
 
-    const TrashIconComponent = useMemo(() => <TrashIcon className="w-5 h-5" />, [])
-    const PlusIconComponent = useMemo(() => <PlusIcon className="w-5 h-5" />, [])
+    const TrashIconComponent = useMemo(() => <TrashIcon className="w-5 h-5 w-full" />, [])
+    const PlusIconComponent = useMemo(() => <PlusIcon className="w-5 h-5 w-full" />, [])
 
     return (
         <div className="space-y-6">
@@ -39,7 +39,7 @@ export default function AddTrainingActivityItem(
                             <div className="text-gray-900 font-medium">{ex ? ex.name : `Упражнение #${exId}`}</div>
                             <button
                                 type="button"
-                                className="text-sm p-2  mr-0.5 border rounded-md cursor-pointer border-emerald-200 bg-white text-emerald-600 hover:text-emerald-700"
+                                className="text-sm p-2 w-full md:w-auto  mr-0.5 border rounded-md cursor-pointer border-emerald-200 bg-white text-emerald-600 hover:text-emerald-700"
                                 onClick={() => addSet(exId)}
                             >
                                 {PlusIconComponent}

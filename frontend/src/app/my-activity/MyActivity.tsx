@@ -57,7 +57,7 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
 
 
     return (
-        <div className="activity">
+        <div className="space-y-4" ref={listTopRef} >
             <MyActivityHeader
                 searchName={searchName}
                 setSearchName={setSearchName}

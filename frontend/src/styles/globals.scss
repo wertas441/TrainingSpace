@@ -9,6 +9,10 @@ html, body {
     #ffffff;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 /* Утилита для ссылок с зелёным акцентом */
 .textLinks {
   @apply text-emerald-600 hover:text-emerald-700 transition-colors duration-200;
@@ -16,7 +20,7 @@ html, body {
 
 
 .textDescriptionArea{
-  min-height: 70px;
-  max-height: 350px;
+  min-height: 160px;
+  max-height: 280px;
 }
 
