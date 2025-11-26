@@ -1,4 +1,4 @@
-import {ElementType, Ref} from "react";
+import {ElementType} from "react";
 
 export interface InputsStructure<T extends string | number> {
     id: string;
@@ -33,9 +33,7 @@ export interface BasicIconButtonProps {
 
 export type DifficultOptionsStructure = 'Лёгкий' | 'Средний' | 'Сложный';
 
-// Фильтр по сложности: null = показывать все уровни
 export type ExerciseDifficultFilter = DifficultOptionsStructure | null;
-
 
 export interface SettingsMenuItemsStructure{
     id: string;
@@ -44,7 +42,7 @@ export interface SettingsMenuItemsStructure{
     icon: ElementType ;
 }
 
-// Тип ответа backend (совпадает с ApiResponse на сервере)
+// Тип ответа backend
 export interface BackendApiResponse<T = any> {
     success: boolean;
     data?: T;

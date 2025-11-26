@@ -11,16 +11,17 @@ interface ChipToggleGroupProps<T extends string> {
     getLabel?: (value: T) => string;
 }
 
-function ChipToggleGroup<T extends string>({
-    id,
-    label,
-    choices,
-    value,
-    onChange,
-    className = "",
-    alwaysSelected = false,
-    getLabel,
-}: ChipToggleGroupProps<T>) {
+function ChipToggleGroup<T extends string>(
+    {
+        id,
+        label,
+        choices,
+        value,
+        onChange,
+        className = "",
+        alwaysSelected = false,
+        getLabel,
+    }: ChipToggleGroupProps<T>) {
 
     return (
         <div className="space-y-2">

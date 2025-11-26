@@ -23,7 +23,6 @@ export default function MyActivityHeader(
         setDifficultFilter,
         typeFilter,
         setTypeFilter,
-        ref
     }: ActivityHeaderProps){
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
@@ -38,13 +37,13 @@ export default function MyActivityHeader(
     }, [setDifficultFilter, setSearchDate, setSearchName, setTypeFilter]) ;
 
     return (
-        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm" ref={ref}>
+        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
                     <h1 className="text-3xl font-semibold text-emerald-800">Моя активность</h1>
                 </div>
 
-                <div className="flex items-center gap-5 " ref={ref}>
+                <div className="flex items-center gap-5 ">
                     <div className="flex items-center gap-5">
                         <div className="w-full md:w-65">
                             <FilterInput

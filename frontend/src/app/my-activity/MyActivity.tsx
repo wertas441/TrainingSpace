@@ -69,7 +69,6 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
                 setDifficultFilter={setDifficultFilter}
                 typeFilter={typeFilter}
                 setTypeFilter={setTypeFilter}
-                ref={listTopRef}
             />
 
             <div className="grid mt-6 grid-cols-1 gap-3">

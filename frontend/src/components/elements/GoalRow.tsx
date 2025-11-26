@@ -1,25 +1,13 @@
-import {GoalPriority, GoalsStructure} from "@/types/goalTypes";
+import {GoalsStructure} from "@/types/goalTypes";
 import {memo, useCallback} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import CheckButton from "@/components/buttons/other/CheckButton";
-
-function getDifficultyStyles(priority: GoalPriority) {
-    switch (priority) {
-        case "Низкий":
-            return "border-emerald-200 bg-emerald-50 text-emerald-700";
-        case "Средний":
-            return "border-amber-200 bg-amber-50 text-amber-700";
-        case "Высокий":
-            return "border-rose-200 bg-rose-50 text-rose-700";
-        default:
-            return "border-gray-200 bg-gray-50 text-gray-700";
-    }
-}
+import {getColorStyles} from "@/lib";
 
 function GoalRow({id, name, description, priority}: GoalsStructure ) {
 
-    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getDifficultyStyles(priority)}`;
+    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(priority)}`;
     const router = useRouter();
 
     return (

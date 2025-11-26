@@ -6,7 +6,17 @@ interface MainTextareaProps extends InputsStructure<string> {
     rows?: number;
 }
 
-function MainTextarea({label, id, required = false, placeholder, value, onChange, error, rows = 4}: MainTextareaProps) {
+function MainTextarea(
+    {
+        label,
+        id,
+        required = false,
+        placeholder,
+        value,
+        onChange,
+        error,
+        rows = 4
+    }: MainTextareaProps) {
 
     return (
         <div>

@@ -7,8 +7,18 @@ interface MainInputProps extends InputsStructure<string>  {
     icon?: ReactNode;
 }
 
-function MainInput({label, id, type = 'text', icon, required = false, placeholder,
-                              value, onChange, error}: MainInputProps) {
+function MainInput(
+    {
+        label,
+        id,
+        type = 'text',
+        icon,
+        required = false,
+        placeholder,
+        value,
+        onChange,
+        error,
+    }: MainInputProps) {
 
     return (
         <div>

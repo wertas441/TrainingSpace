@@ -7,8 +7,17 @@ interface MainHideInputProps extends InputsStructure<string> {
     icon?: ReactNode;
 }
 
-function MainHideInput({label, id, icon, required = false, placeholder,
-                                          value, onChange, error}:MainHideInputProps){
+function MainHideInput(
+    {
+        label,
+        id,
+        icon,
+        required = false,
+        placeholder,
+        value,
+        onChange,
+        error
+    }:MainHideInputProps){
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
 

@@ -6,7 +6,18 @@ interface FilterInputProps extends InputsStructure<string | number> {
     icon?: ReactNode;
 }
 
-function FilterInput({label, id, type = 'text', icon, required = false, placeholder, value, onChange, error}: FilterInputProps) {
+function FilterInput(
+    {
+        label,
+        id,
+        type = 'text',
+        icon,
+        required = false,
+        placeholder,
+        value,
+        onChange,
+        error
+    }: FilterInputProps) {
 
     return (
         <div>

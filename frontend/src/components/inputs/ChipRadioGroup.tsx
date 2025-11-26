@@ -10,7 +10,16 @@ interface ChipRadioGroupProps<T extends string> {
     className?: string;
 }
 
-function ChipRadioGroup<T extends string>({ id, name, label, choices, value, onChange, className = "" }: ChipRadioGroupProps<T>) {
+function ChipRadioGroup<T extends string>(
+    {
+        id,
+        name,
+        label,
+        choices,
+        value,
+        onChange,
+        className = "",
+    }: ChipRadioGroupProps<T>) {
 
     return (
         <div className="space-y-2">

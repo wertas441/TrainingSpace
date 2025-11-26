@@ -16,18 +16,19 @@ interface MainMultiSelectProps {
     icon?: ReactNode;
 }
 
-function MainMultiSelect({
-                                            id,
-                                            label,
-                                            value,
-                                            options,
-                                            icon,
-                                            onChange,
-                                            placeholder = "Выберите...",
-                                            error,
-                                            noOptionsMessage = () => 'Нет опций',
-                                            isMulti = true,
-                                        }: MainMultiSelectProps) {
+function MainMultiSelect(
+    {
+        id,
+        label,
+        value,
+        options,
+        icon,
+        onChange,
+        placeholder = "Выберите...",
+        error,
+        noOptionsMessage = () => 'Нет опций',
+        isMulti = true,
+    }: MainMultiSelectProps) {
 
     return (
         <div>
