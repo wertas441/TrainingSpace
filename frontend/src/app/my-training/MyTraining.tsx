@@ -35,11 +35,10 @@ export default function MyTraining({trainingList, exercises}: MyTrainingProps) {
     } = usePagination(filteredList, itemsPerPage)
 
     return (
-        <div className="training">
+        <div className="space-y-4" ref={listTopRef} >
             <MyTrainingHeader
                 searchName={searchName}
                 setSearchName={setSearchName}
-                ref={listTopRef}
             />
 
             <div className="grid mt-6 grid-cols-1 gap-3">

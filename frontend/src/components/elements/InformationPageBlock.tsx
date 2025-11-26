@@ -19,7 +19,7 @@ export default function InformationPageBlock({label, text, icon}: InformationPag
                 <h2 className="text-sm font-semibold text-gray-900">
                     {label}
                 </h2>
-                <p className="mt-1 text-xs sm:text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-600">
                     {text}
                 </p>
             </div>

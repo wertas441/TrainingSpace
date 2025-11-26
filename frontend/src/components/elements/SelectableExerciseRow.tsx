@@ -1,8 +1,7 @@
 import {useMemo} from "react";
 import {PlusCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import {DifficultOptionsStructure} from "@/types/indexTypes";
-
+import {getColorStyles} from "@/lib";
 
 interface SelectableExerciseRowProps {
     exercise: ExerciseTechniqueItem;
@@ -10,21 +9,9 @@ interface SelectableExerciseRowProps {
     onToggle: (id: number) => void;
 }
 
-function getDifficultyStyles(difficulty: DifficultOptionsStructure) {
-    switch (difficulty) {
-        case "Лёгкий":
-            return "border-emerald-200 bg-emerald-50 text-emerald-700";
-        case "Средний":
-            return "border-amber-200 bg-amber-50 text-amber-700";
-        case "Сложный":
-            return "border-rose-200 bg-rose-50 text-rose-700";
-        default:
-            return "border-gray-200 bg-gray-50 text-gray-700";
-    }
-}
-
 export default function SelectableExerciseRow({exercise, selected, onToggle}: SelectableExerciseRowProps) {
-    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getDifficultyStyles(exercise.difficulty)}`;
+
+    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`;
 
     return (
         <div className={`w-full rounded-lg border ${selected ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-emerald-100'} bg-white p-4 shadow-sm hover:shadow-md transition-shadow`}>
@@ -67,6 +54,7 @@ export default function SelectableExerciseRow({exercise, selected, onToggle}: Se
         </div>
     );
 }
+
 
 
 

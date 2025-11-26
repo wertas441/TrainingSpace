@@ -23,7 +23,6 @@ export default function MyActivityHeader(
         setDifficultFilter,
         typeFilter,
         setTypeFilter,
-        ref
     }: ActivityHeaderProps){
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
@@ -38,47 +37,49 @@ export default function MyActivityHeader(
     }, [setDifficultFilter, setSearchDate, setSearchName, setTypeFilter]) ;
 
     return (
-        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm" ref={ref}>
+        <div className="relative w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
                     <h1 className="text-3xl font-semibold text-emerald-800">Моя активность</h1>
                 </div>
 
-                <div className="flex items-center gap-5 " ref={ref}>
-                    <div className="flex items-center gap-5">
-                        <div className="w-full md:w-65">
-                            <FilterInput
-                                id="training-search-name"
-                                placeholder="Поиск по названию активности..."
-                                value={searchName}
-                                onChange={(v) => setSearchName(String(v))}
-                                icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />, [])}
-                            />
-                        </div>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 w-full md:w-auto">
+                    <div className="w-full sm:flex-1 md:w-65">
+                        <FilterInput
+                            id="training-search-name"
+                            placeholder="Поиск по названию активности..."
+                            value={searchName}
+                            onChange={(v) => setSearchName(String(v))}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />, [])}
+                        />
+                    </div>
 
-                        <div className="w-full md:w-65">
-                            <FilterInput
-                                id="nutrition-search-date"
-                                type="date"
-                                placeholder="Дата"
-                                value={searchDate}
-                                onChange={(v) => setSearchDate(String(v))}
-                                icon={<CalendarIcon className="h-5 w-5 text-gray-400" />}
-                            />
-                        </div>
+                    <div className="w-full sm:flex-1 md:w-65">
+                        <FilterInput
+                            id="nutrition-search-date"
+                            type="date"
+                            placeholder="Дата"
+                            value={searchDate}
+                            onChange={(v) => setSearchDate(String(v))}
+                            icon={<CalendarIcon className="h-5 w-5 text-gray-400" />}
+                        />
+                    </div>
 
-                        <div className="flew-row md:flex gap-2 ">
-                            <BarsButton
-                                onClick={toggleFilterWindow}
-                                ref={toggleBtnRef}
-                            />
-                        </div>
+                    <div className="w-full sm:w-auto">
+                        <BarsButton
+                            onClick={toggleFilterWindow}
+                            ref={toggleBtnRef}
+                            className={`w-full sm:w-auto`}
+                        />
                     </div>
                 </div>
             </div>
 
             {isFilterWindowOpen && (
-                <div ref={modalWindowRef} className="absolute right-1 z-20 w-full md:w-[520px] rounded-xl bg-white shadow-lg border border-emerald-100">
+                <div
+                    ref={modalWindowRef}
+                    className="absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl bg-white shadow-lg border border-emerald-100"
+                >
                     <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100">
                         <h2 className="text-lg font-semibold text-emerald-800">Фильтры</h2>
                         <button

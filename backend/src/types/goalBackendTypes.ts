@@ -16,6 +16,11 @@ export interface GoalListFrontendResponse extends AddNewGoalFrontendStructure {
     id: number;
 }
 
+export interface GoalShortyFrontendResponse {
+    id: number;
+    name: string;
+}
+
 export interface GoalUpdateFrontendResponse extends AddNewGoalFrontendStructure {
     userId: number;
     goalId: number;

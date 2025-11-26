@@ -1,6 +1,5 @@
 import {DifficultOptionsStructure, ExerciseDifficultFilter, HeaderMinimumProps} from "@/types/indexTypes";
 
-// Элемент списка упражнений на фронтенде (совпадает по форме с ответом backend)
 export interface ExerciseTechniqueItem {
     id: number;
     name: string;
@@ -16,6 +15,5 @@ export interface ExercisesTechniquesHeaderProps extends HeaderMinimumProps{
     setDifficultFilter: (value: ExerciseDifficultFilter) => void;
     partOfBodyFilter: string[];
     setPartOfBodyFilter: (value: string[]) => void;
-    // полный список упражнений для построения фильтров по группам мышц
     exercises: ExerciseTechniqueItem[];
 }

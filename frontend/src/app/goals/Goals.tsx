@@ -29,14 +29,13 @@ export default function Goals({clientGoals}:{clientGoals: GoalsStructure[]}) {
     } = usePagination(filteredList, itemsPerPage)
 
     return (
-        <div className="nutrition">
+        <div className="space-y-4" ref={listTopRef} >
             <GoalsHeader
                 searchName={searchName}
                 setSearchName={setSearchName}
-                ref={listTopRef}
             />
 
-            <div className="grid mt-6 grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
                             <GoalItem

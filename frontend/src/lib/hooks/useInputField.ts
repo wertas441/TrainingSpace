@@ -28,7 +28,7 @@ export function useInputField(initialValue: string = ''):UseInputFieldReturn {
         setInputState(prev => ({
             ...prev,
             value,
-            error: null, // Сбрасываем ошибку при изменении значения
+            error: null,
         }));
     }, []);
 

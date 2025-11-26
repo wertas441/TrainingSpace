@@ -83,8 +83,8 @@ function MyActivityRow({activity}: MyActivityRowProps){
                 </div>
 
                 <div className="md:col-span-2">
-                    <div className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-end md:gap-7">
-                        <div className="flex flex-wrap gap-2 sm:gap-3">
+                    <div className="flex flex-col items-center gap-3 md:flex-row md:justify-end md:gap-7">
+                        <div className="flex flex-wrap my-3 gap-2 sm:gap-3">
                             <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs sm:text-sm lg:text-base font-medium text-emerald-800 border border-emerald-100">
                                 {activityHeader.type}
                             </span>
@@ -93,10 +93,13 @@ function MyActivityRow({activity}: MyActivityRowProps){
                             </span>
                         </div>
                         <div
-                            className="flex items-center md:justify-end w-full md:w-auto"
+                            className="w-full md:w-auto "
                             onClick={(event) => event.stopPropagation()}
                         >
-                            <ChangeButton onClick={handleEditClick} />
+                            <ChangeButton
+                                onClick={handleEditClick}
+                                className={`w-full`}
+                            />
                         </div>
                     </div>
                 </div>

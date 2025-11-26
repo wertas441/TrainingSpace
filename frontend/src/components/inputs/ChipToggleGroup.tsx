@@ -11,25 +11,26 @@ interface ChipToggleGroupProps<T extends string> {
     getLabel?: (value: T) => string;
 }
 
-function ChipToggleGroup<T extends string>({
-    id,
-    label,
-    choices,
-    value,
-    onChange,
-    className = "",
-    alwaysSelected = false,
-    getLabel,
-}: ChipToggleGroupProps<T>) {
+function ChipToggleGroup<T extends string>(
+    {
+        id,
+        label,
+        choices,
+        value,
+        onChange,
+        className = "",
+        alwaysSelected = false,
+        getLabel,
+    }: ChipToggleGroupProps<T>) {
 
     return (
         <div className="space-y-2">
             {label && (
-                <div className="block mb-2 text-sm font-medium text-emerald-900">
+                <div className="block mb-3 text-sm font-medium text-gray-500">
                     {label}
                 </div>
             )}
-            <div id={id} className={`flex flex-wrap gap-2 ${className}`}>
+            <div id={id} className={`flex flex-wrap gap-1 md:gap-2 ${className}`}>
                 {choices.map((choice) => {
                     const active = value === choice;
                     const labelText = getLabel ? getLabel(choice) : choice;

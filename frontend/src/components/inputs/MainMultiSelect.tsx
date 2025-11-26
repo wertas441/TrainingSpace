@@ -16,23 +16,24 @@ interface MainMultiSelectProps {
     icon?: ReactNode;
 }
 
-function MainMultiSelect({
-                                            id,
-                                            label,
-                                            value,
-                                            options,
-                                            icon,
-                                            onChange,
-                                            placeholder = "Выберите...",
-                                            error,
-                                            noOptionsMessage = () => 'Нет опций',
-                                            isMulti = true,
-                                        }: MainMultiSelectProps) {
+function MainMultiSelect(
+    {
+        id,
+        label,
+        value,
+        options,
+        icon,
+        onChange,
+        placeholder = "Выберите...",
+        error,
+        noOptionsMessage = () => 'Нет опций',
+        isMulti = true,
+    }: MainMultiSelectProps) {
 
     return (
         <div>
             {label && (
-                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-400">
+                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-500">
                     {label}
                 </label>
             )}
@@ -144,6 +145,7 @@ function MainMultiSelect({
 }
 
 export default memo(MainMultiSelect)
+
 
 
 

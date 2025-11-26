@@ -12,7 +12,6 @@ import {baseUrlForBackend} from "@/lib";
 import {BackendApiResponse} from "@/types/indexTypes";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import {TagIcon} from "@heroicons/react/24/outline";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
 import MainPagination from "@/components/UI/MainPagination";
@@ -164,19 +163,18 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                                 Изменение тренировки
                             </h2>
                             <p className="text-center text-gray-600">
-                                Измените данные своей тренировки и сохраните изменения для вступления их в силу
+                                Измените данные своей тренировки и сохраните изменения
                             </p>
                         </div>
 
                         <ServerError message={serverError} />
 
-                        <form className="space-y-6"  onSubmit={handleSubmit}>
+                        <form className="space-y-5"  onSubmit={handleSubmit}>
 
                             <MainInput
                                 id={'trainingName'}
                                 value={trainingName.inputState.value}
                                 onChange={trainingName.setValue}
-                                icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                                 label={`Название тренировки`}
                                 placeholder={'Силовая тренировка на грудь'}
                                 error={trainingName.inputState.error || undefined}
@@ -192,21 +190,20 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                                 rows={4}
                             />
 
-                            <div className="w-full" ref={listTopRef}>
-                                <MainInput
-                                    id="exercise-search"
-                                    value={searchName}
-                                    onChange={(v) => setSearchName(String(v))}
-                                    placeholder="Поиск упражнения по имени..."
-                                />
-                            </div>
+                            <MainInput
+                                id="exercise-search"
+                                value={searchName}
+                                onChange={(v) => setSearchName(String(v))}
+                                label="Поиск упражнения по имени"
+                            />
 
                             <MainMultiSelect
                                 id="muscle-groups"
                                 options={muscleOptions}
                                 value={selectedMuscles}
+                                label="Поиск упражнения по группе мышц"
                                 onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
-                                placeholder="Поиск упражнения по группе мышц..."
+                                placeholder={'Выберите группу мышц...'}
                             />
 
                             <div className="grid grid-cols-1 gap-3">

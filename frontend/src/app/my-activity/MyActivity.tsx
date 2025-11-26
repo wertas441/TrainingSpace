@@ -57,7 +57,7 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
 
 
     return (
-        <div className="activity">
+        <div className="space-y-4" ref={listTopRef} >
             <MyActivityHeader
                 searchName={searchName}
                 setSearchName={setSearchName}
@@ -69,7 +69,6 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
                 setDifficultFilter={setDifficultFilter}
                 typeFilter={typeFilter}
                 setTypeFilter={setTypeFilter}
-                ref={listTopRef}
             />
 
             <div className="grid mt-6 grid-cols-1 gap-3">

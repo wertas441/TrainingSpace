@@ -1,7 +1,7 @@
 'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useMemo, useState} from "react";
+import {FormEvent, useState} from "react";
 import {GoalPriority} from "@/types/goalTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -12,7 +12,6 @@ import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import {baseUrlForBackend} from "@/lib";
 import {validateGoalDescription, validateGoalName, validateGoalPriority} from "@/lib/utils/validators";
-import {TagIcon} from "@heroicons/react/24/outline";
 import type {BackendApiResponse} from "@/types/indexTypes";
 
 export default function AddGoal() {
@@ -97,8 +96,7 @@ export default function AddGoal() {
                         value={goalName.inputState.value}
                         onChange={goalName.setValue}
                         label={'Название цели'}
-                        placeholder={'Например: Пожать 100кг'}
-                        icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
+                        placeholder={'Пожать 100кг'}
                         error={goalName.inputState.error || undefined}
                     />
 
@@ -124,7 +122,7 @@ export default function AddGoal() {
                     <LightGreenSubmitBtn
                         label={!isSubmitting ? 'Добавить' : 'Добавляем...'}
                         disabled={isSubmitting}
-                        className={'mt-10'}
+                        className={'mt-8'}
                     />
                 </form>
             </div>

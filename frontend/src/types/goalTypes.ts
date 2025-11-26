@@ -7,3 +7,9 @@ export interface GoalsStructure {
     description: string;
     priority: GoalPriority;
 }
+
+
+export interface GoalShortyStructure {
+    id: number;
+    name: string;
+}

@@ -1,4 +1,3 @@
-import {Ref} from "react";
 
 export interface NutritionDay {
     id: number;
@@ -33,7 +32,6 @@ export interface NutritionHeaderProps {
     carbMax: number;
     onCarbMaxChange: (newValue: number) => void;
     isFilterWindowOpen: boolean;
-    ref: Ref<HTMLDivElement>;
     toggleFilterWindow: () => void;
     onResetFilters: () => void;
 }

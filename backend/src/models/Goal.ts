@@ -1,7 +1,7 @@
 import { pool } from '../config/database';
 import {
     CreateGoalFrontendStructure,
-    GoalListFrontendResponse, GoalUpdateFrontendResponse,
+    GoalListFrontendResponse, GoalShortyFrontendResponse, GoalUpdateFrontendResponse,
 } from "../types/goalBackendTypes";
 
 export class GoalModel {
@@ -35,6 +35,20 @@ export class GoalModel {
         const { rows } = await pool.query(query, [userId]);
 
         return rows as GoalListFrontendResponse[];
+    }
+
+    static async getShortyList(userId: number): Promise<GoalShortyFrontendResponse[]> {
+        const query = `
+            SELECT id, name
+            FROM goal
+            WHERE user_id = $1
+            ORDER BY created_at DESC, id DESC
+            LIMIT 10
+        `;
+
+        const { rows } = await pool.query(query, [userId]);
+
+        return rows as GoalShortyFrontendResponse[];
     }
 
     // Информация по конкретной цели пользователя

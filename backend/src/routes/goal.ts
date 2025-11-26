@@ -80,6 +80,34 @@ router.get('/my-goals-list', authGuard, async (req, res) => {
     }
 });
 
+router.get('/my-shorty-list', authGuard, async (req, res) => {
+    try {
+
+        const userId = (req as any).userId as number;
+        const goals = await GoalModel.getShortyList(userId);
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'success of getting shorty list of goals',
+            data: { goals }
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+
+        console.error('Ошибка показа короткого списка целей', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при показе короткого списка целей ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+});
+
+
 router.delete('/delete-my-goal', authGuard, async (req, res) => {
     try {
         const { goalId: goalIdRaw } = req.body;

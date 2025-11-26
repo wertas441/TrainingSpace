@@ -1,22 +1,11 @@
 import {memo} from "react";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {getColorStyles} from "@/lib";
 
-function getDifficultyStyles(difficulty: ExerciseTechniqueItem["difficulty"]) {
-    switch (difficulty) {
-        case "Лёгкий":
-            return "border-emerald-200 bg-emerald-50 text-emerald-700";
-        case "Средний":
-            return "border-amber-200 bg-amber-50 text-amber-700";
-        case "Сложный":
-            return "border-rose-200 bg-rose-50 text-rose-700";
-        default:
-            return "border-gray-200 bg-gray-50 text-gray-700";
-    }
-}
 
 function ExerciseRow({exercise}:{exercise: ExerciseTechniqueItem}) {
 
-    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getDifficultyStyles(exercise.difficulty)}`;
+    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`;
 
     return (
         <div className="w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">

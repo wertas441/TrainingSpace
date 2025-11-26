@@ -3,7 +3,6 @@
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import {FormEvent, useCallback, useMemo, useState} from "react";
-import {CalendarIcon, TagIcon} from "@heroicons/react/24/outline";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import {ActivityDataStructure, ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
@@ -233,9 +232,8 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
 
                         <MainInput
                             id="activityName"
-                            icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                             label="Название активности"
-                            placeholder={`Например: Тренировка груди`}
+                            placeholder={`Тренировка в бассейне`}
                             value={activityName.inputState.value}
                             onChange={activityName.setValue}
                             error={activityName.inputState.error || undefined}
@@ -244,7 +242,6 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                         <MainInput
                             id={'activityDate'}
                             type={'date'}
-                            icon={useMemo(() => <CalendarIcon className="h-5 w-5 text-gray-500" />, [])}
                             label="Дата активности"
                             value={activityDate.inputState.value}
                             onChange={activityDate.setValue}
