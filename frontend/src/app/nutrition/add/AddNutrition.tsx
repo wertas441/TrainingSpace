@@ -3,15 +3,7 @@
 import {useInputField} from "@/lib/hooks/useInputField";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
-import {FormEvent, useMemo} from "react";
-import {
-    BeakerIcon,
-    CalendarIcon,
-    FireIcon,
-    RocketLaunchIcon,
-    ScaleIcon,
-    TagIcon
-} from "@heroicons/react/24/outline";
+import {FormEvent} from "react";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {baseUrlForBackend} from "@/lib";
@@ -126,13 +118,12 @@ export default function AddNutrition(){
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-3" onSubmit={handleSubmit}>
+                <form className="space-y-4" onSubmit={handleSubmit}>
 
                     <MainInput
                         id={'dayName'}
                         value={dayName.inputState.value}
                         onChange={dayName.setValue}
-                        icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                         label={'Имя дня'}
                         error={dayName.inputState.error || undefined}
                     />
@@ -141,7 +132,6 @@ export default function AddNutrition(){
                         id={'calories'}
                         value={calories.inputState.value}
                         onChange={calories.setValue}
-                        icon={useMemo(() => <FireIcon className="h-5 w-5 text-gray-500" />, [])}
                         label={'Калории (ккал)'}
                         error={calories.inputState.error || undefined}
                     />
@@ -150,7 +140,6 @@ export default function AddNutrition(){
                         id={'protein'}
                         value={protein.inputState.value}
                         onChange={protein.setValue}
-                        icon={useMemo(() => <BeakerIcon className="h-5 w-5 text-gray-500" />, [])}
                         label={'Белки (г)'}
                         error={protein.inputState.error || undefined}
                     />
@@ -159,7 +148,6 @@ export default function AddNutrition(){
                         id={'fat'}
                         value={fat.inputState.value}
                         onChange={fat.setValue}
-                        icon={useMemo(() => <ScaleIcon className="h-5 w-5 text-gray-500" />, [])}
                         label={'Жиры (г)'}
                         error={fat.inputState.error || undefined}
                     />
@@ -168,7 +156,6 @@ export default function AddNutrition(){
                         id={'carb'}
                         value={carb.inputState.value}
                         onChange={carb.setValue}
-                        icon={useMemo(() => <RocketLaunchIcon className="h-5 w-5 text-gray-500" />, [])}
                         label={'Углеводы (г)'}
                         error={carb.inputState.error || undefined}
                     />
@@ -178,7 +165,6 @@ export default function AddNutrition(){
                         type={'date'}
                         value={dayDate.inputState.value}
                         onChange={dayDate.setValue}
-                        icon={useMemo(() => <CalendarIcon className="h-5 w-5 text-gray-500" />, [])}
                         label={'Дата'}
                         error={dayDate.inputState.error || undefined}
                     />

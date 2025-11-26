@@ -17,7 +17,6 @@ import {
     validateTrainingName
 } from "@/lib/utils/validators";
 import MainPagination from "@/components/UI/MainPagination";
-import {TagIcon} from "@heroicons/react/24/outline";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 
@@ -148,13 +147,12 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
 
                     <ServerError message={serverError} />
 
-                    <form className="space-y-6"  onSubmit={handleSubmit}>
+                    <form className="space-y-5"  onSubmit={handleSubmit}>
 
                         <MainInput
                             id={'trainingName'}
                             value={trainingName.inputState.value}
                             onChange={trainingName.setValue}
-                            icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                             label={`Название тренировки`}
                             placeholder={'Силовая тренировка на грудь'}
                             error={trainingName.inputState.error || undefined}
@@ -170,21 +168,20 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             rows={4}
                         />
 
-                        <div className="w-full" ref={listTopRef}>
-                            <MainInput
-                                id="exercise-search"
-                                value={searchName}
-                                onChange={(v) => setSearchName(String(v))}
-                                placeholder="Поиск упражнения по имени..."
-                            />
-                        </div>
+                        <MainInput
+                            id="exercise-search"
+                            value={searchName}
+                            onChange={(v) => setSearchName(String(v))}
+                            label="Поиск упражнения по имени"
+                        />
 
                         <MainMultiSelect
                             id="muscle-groups"
                             options={muscleOptions}
                             value={selectedMuscles}
                             onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
-                            placeholder="Поиск упражнения по группе мышц..."
+                            label="Поиск упражнения по группе мышц"
+                            placeholder={'Выберите группу мышц...'}
                         />
 
                         <div className="grid grid-cols-1 gap-3">

@@ -10,7 +10,6 @@ import type {BackendApiResponse} from "@/types/indexTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import {TagIcon} from "@heroicons/react/24/outline";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -123,7 +122,6 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
                             onChange={goalName.setValue}
                             label={'Название цели'}
                             placeholder={'Например: Пожать 100кг'}
-                            icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                             error={goalName.inputState.error || undefined}
                         />
 
@@ -146,7 +144,7 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
                             onChange={setGoalPriority}
                         />
 
-                        <div className="mt-10 flex items-center gap-x-8">
+                        <div className="mt-8 flex items-center gap-x-8">
                             <LightGreenSubmitBtn
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                 disabled={isSubmitting}

@@ -14,7 +14,7 @@ function ChipRadioGroup<T extends string>({ id, name, label, choices, value, onC
 
     return (
         <div className="space-y-2">
-            <div className="block mb-2 text-sm font-medium text-gray-400">{label}</div>
+            <div className="block mb-3 text-sm font-medium text-gray-500">{label}</div>
             <div id={id} className={`flex flex-wrap gap-3 ${className}`}>
                 {choices.map((choice) => {
                     const checked = value === choice;

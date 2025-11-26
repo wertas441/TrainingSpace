@@ -9,13 +9,12 @@ import {
     validateFatGrams,
     validateProteinGrams
 } from "@/lib/utils/validators";
-import {FormEvent, useCallback, useMemo} from "react";
+import {FormEvent, useCallback} from "react";
 import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import {BeakerIcon, CalendarIcon, FireIcon, RocketLaunchIcon, ScaleIcon, TagIcon} from "@heroicons/react/24/outline";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {NutritionDay} from "@/types/nutritionTypes";
@@ -139,13 +138,12 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
 
                     <ServerError message={serverError} />
 
-                    <form className="space-y-3" onSubmit={handleSubmit}>
+                    <form className="space-y-4" onSubmit={handleSubmit}>
 
                         <MainInput
                             id={'dayName'}
                             value={dayName.inputState.value}
                             onChange={dayName.setValue}
-                            icon={useMemo(() => <TagIcon className="h-5 w-5 text-gray-500" />, [])}
                             label={'Имя дня'}
                             error={dayName.inputState.error || undefined}
                         />
@@ -154,7 +152,6 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                             id={'calories'}
                             value={calories.inputState.value}
                             onChange={calories.setValue}
-                            icon={useMemo(() => <FireIcon className="h-5 w-5 text-gray-500" />, [])}
                             label={'Калории (ккал)'}
                             error={calories.inputState.error || undefined}
                         />
@@ -163,7 +160,6 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                             id={'protein'}
                             value={protein.inputState.value}
                             onChange={protein.setValue}
-                            icon={useMemo(() => <BeakerIcon className="h-5 w-5 text-gray-500" />, [])}
                             label={'Белки (г)'}
                             error={protein.inputState.error || undefined}
                         />
@@ -172,7 +168,6 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                             id={'fat'}
                             value={fat.inputState.value}
                             onChange={fat.setValue}
-                            icon={useMemo(() => <ScaleIcon className="h-5 w-5 text-gray-500" />, [])}
                             label={'Жиры (г)'}
                             error={fat.inputState.error || undefined}
                         />
@@ -181,7 +176,6 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                             id={'carb'}
                             value={carb.inputState.value}
                             onChange={carb.setValue}
-                            icon={useMemo(() => <RocketLaunchIcon className="h-5 w-5 text-gray-500" />, [])}
                             label={'Углеводы (г)'}
                             error={carb.inputState.error || undefined}
                         />
@@ -191,7 +185,6 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                             type={'date'}
                             value={dayDate.inputState.value}
                             onChange={dayDate.setValue}
-                            icon={useMemo(() => <CalendarIcon className="h-5 w-5 text-gray-500" />, [])}
                             label={'Дата'}
                             error={dayDate.inputState.error || undefined}
                         />
@@ -206,7 +199,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                             rows={4}
                         />
 
-                        <div className="mt-10 flex items-center gap-x-8">
+                        <div className="mt-8 flex items-center gap-x-8">
                             <LightGreenSubmitBtn
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                 disabled={isSubmitting}

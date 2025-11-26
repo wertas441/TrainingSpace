@@ -25,7 +25,7 @@ function ChipToggleGroup<T extends string>({
     return (
         <div className="space-y-2">
             {label && (
-                <div className="block mb-2 text-sm font-medium text-emerald-900">
+                <div className="block mb-3 text-sm font-medium text-gray-500">
                     {label}
                 </div>
             )}
