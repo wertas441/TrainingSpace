@@ -1,6 +1,6 @@
 import { baseUrlForBackend } from "@/lib";
 import type { BackendApiResponse } from "@/types/indexTypes";
-import type { GoalsStructure } from "@/types/goalTypes";
+import {GoalShortyStructure, GoalsStructure} from "@/types/goalTypes";
 
 export async function getGoalList(tokenValue: string | undefined):Promise<GoalsStructure[]> {
     try {
@@ -42,6 +42,48 @@ export async function getGoalList(tokenValue: string | undefined):Promise<GoalsS
         return [];
     }
 }
+
+export async function getGoalShortyList(tokenValue: string | undefined):Promise<GoalShortyStructure[]> {
+    try {
+        const response = await fetch(`${baseUrlForBackend}/api/goal/my-shorty-list`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Cookie': `token=${tokenValue}`
+            },
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            let errorMessage = "Ошибка получения короткого списка целей.";
+            try {
+                const data = await response.json() as BackendApiResponse<{ goals: GoalShortyStructure[] }>;
+                if (data.error || data.message) {
+                    errorMessage = (data.error || data.message) as string;
+                }
+            } catch {
+                // игнорируем, оставляем дефолтное сообщение
+            }
+            console.error(errorMessage);
+
+            return [];
+        }
+
+        const data = await response.json() as BackendApiResponse<{ goals: GoalShortyStructure[] }>;
+
+        if (!data.success || !data.data?.goals) {
+            return [];
+        }
+
+        return data.data.goals;
+    } catch (error) {
+        console.error("Ошибка запроса короткого списка целей:", error);
+
+        return [];
+    }
+}
+
 
 export async function getGoalInformation(tokenValue: string | undefined, goalId: number):Promise<GoalsStructure | null> {
     try {
