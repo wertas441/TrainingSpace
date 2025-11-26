@@ -9,6 +9,10 @@ export function usePagination<T>(filteredList: T[], itemsPerPage: number){
 
     // Автоскролл к началу списка при смене страницы
     useEffect(() => {
+        if (typeof window !== 'undefined' && window.scrollY === 0) {
+            return;
+        }
+
         if (listTopRef.current && typeof listTopRef.current.scrollIntoView === 'function') {
             listTopRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }

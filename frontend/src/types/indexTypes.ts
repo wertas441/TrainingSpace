@@ -22,7 +22,6 @@ export interface TrainingDataStructure {
 }
 
 export interface HeaderMinimumProps {
-    ref: Ref<HTMLDivElement>;
     searchName: string;
     setSearchName: (newValue: string) => void;
 }

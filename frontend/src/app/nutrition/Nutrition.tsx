@@ -100,9 +100,8 @@ export default function Nutrition({userDays = []}: {userDays?: NutritionDay[]}) 
 
 
     return (
-        <div className="nutrition">
+        <div className="space-y-4" ref={listTopRef} >
             <NutritionHeader
-                ref={listTopRef}
                 searchName={searchName}
                 onSearchNameChange={setSearchName}
                 searchDate={searchDate}

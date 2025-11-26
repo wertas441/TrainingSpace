@@ -5,7 +5,7 @@ import {HeaderMinimumProps} from "@/types/indexTypes";
 import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
 
-function GoalsHeader({ref, searchName, setSearchName}:HeaderMinimumProps){
+function GoalsHeader({searchName, setSearchName}:HeaderMinimumProps){
 
     const router = useRouter();
     
@@ -16,7 +16,7 @@ function GoalsHeader({ref, searchName, setSearchName}:HeaderMinimumProps){
                     <h1 className="text-3xl font-semibold text-emerald-800">Цели</h1>
                 </div>
 
-                <div className="flex items-center gap-5 justify-between " ref={ref}>
+                <div className="flex items-center gap-5 justify-between ">
                     <div className="w-full md:w-80">
                         <FilterInput
                             id="goals-search-name"

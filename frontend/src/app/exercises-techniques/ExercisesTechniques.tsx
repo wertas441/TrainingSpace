@@ -12,7 +12,6 @@ export default function ExercisesTechniques({exercises}:{exercises: ExerciseTech
 
     const [searchName, setSearchName] = useState<string>('');
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
-    // null = показывать упражнения любого уровня сложности
     const [difficultFilter, setDifficultFilter] = useState<ExerciseDifficultFilter>(null);
     const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
     const itemsPerPage:number = 10;
@@ -45,9 +44,8 @@ export default function ExercisesTechniques({exercises}:{exercises: ExerciseTech
     }, [searchName, difficultFilter, partOfBodyFilter, setCurrentPage]);
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4" ref={listTopRef} >
             <ExercisesTechniquesHeader
-                ref={listTopRef}
                 searchName={searchName}
                 setSearchName={setSearchName}
                 isFilterWindowOpen={isFilterWindowOpen}
@@ -70,7 +68,7 @@ export default function ExercisesTechniques({exercises}:{exercises: ExerciseTech
                     )
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Таких упражнений не найдено. Попробуйте изменить запрос.
+                        Таких упражнений не найдено. попробуйте изменить фильтры и проверить подключение к сети.
                     </div>
                 )}
             </div>

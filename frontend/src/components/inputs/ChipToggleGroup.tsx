@@ -29,7 +29,7 @@ function ChipToggleGroup<T extends string>({
                     {label}
                 </div>
             )}
-            <div id={id} className={`flex flex-wrap gap-2 ${className}`}>
+            <div id={id} className={`flex flex-wrap gap-1 md:gap-2 ${className}`}>
                 {choices.map((choice) => {
                     const active = value === choice;
                     const labelText = getLabel ? getLabel(choice) : choice;

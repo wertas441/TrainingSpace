@@ -1,7 +1,8 @@
 import {memo} from "react";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {DifficultOptionsStructure} from "@/types/indexTypes";
 
-function getDifficultyStyles(difficulty: ExerciseTechniqueItem["difficulty"]) {
+function getDifficultyStyles(difficulty: DifficultOptionsStructure) {
     switch (difficulty) {
         case "Лёгкий":
             return "border-emerald-200 bg-emerald-50 text-emerald-700";

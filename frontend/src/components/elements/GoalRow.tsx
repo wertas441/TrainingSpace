@@ -2,6 +2,7 @@ import {GoalPriority, GoalsStructure} from "@/types/goalTypes";
 import {memo, useCallback} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
+import CheckButton from "@/components/buttons/other/CheckButton";
 
 function getDifficultyStyles(priority: GoalPriority) {
     switch (priority) {
@@ -23,7 +24,7 @@ function GoalRow({id, name, description, priority}: GoalsStructure ) {
 
     return (
         <div className="w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
                     <div className="flex items-center gap-2 ">
                         <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
@@ -35,9 +36,15 @@ function GoalRow({id, name, description, priority}: GoalsStructure ) {
                         {description}
                     </p>
                 </div>
-                <div className="flex items-center ">
+                <div className="flex items-center mt-3 md:mt-0 gap-3">
+                    <CheckButton
+                        onClick={useCallback(() => router.push(`/goals/${id}`), [id, router])}
+                        className={'w-full'}
+                    />
                     <ChangeButton
                         onClick={useCallback(() => router.push(`/goals/${id}`), [id, router])}
+                        className={'w-full'}
+
                     />
                 </div>
             </div>

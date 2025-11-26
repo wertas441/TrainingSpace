@@ -20,7 +20,6 @@ function ExercisesTechniquesHeader(
         partOfBodyFilter,
         setPartOfBodyFilter,
         exercises,
-        ref,
     }: ExercisesTechniquesHeaderProps){
 
     const difficultOptions: DifficultOptionsStructure[] = useMemo(() => ['Лёгкий', 'Средний', 'Сложный'], []);
@@ -50,7 +49,7 @@ function ExercisesTechniquesHeader(
     }, [setDifficultFilter, setPartOfBodyFilter]) ;
 
     return (
-        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm relative" ref={ref}>
+        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm relative" >
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
                     <h1 className="text-3xl font-semibold text-emerald-800">Техника выполнения упражнений</h1>
