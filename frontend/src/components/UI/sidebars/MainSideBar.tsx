@@ -45,8 +45,8 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: Sid
         },
         {
             label: 'Статистика',
-            link: '/stats',
-            context: 'stats',
+            link: '/statistics',
+            context: 'statistics',
             icon: ChartBarIcon,
         },
         {

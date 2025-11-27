@@ -16,5 +16,5 @@ export default async function GoalsPage(){
 
     const goalsList = await getGoalList(tokenValue);
 
-    return <Goals clientGoals = {goalsList} />
+    return <Goals clientGoals={goalsList} token={tokenValue} />
 }

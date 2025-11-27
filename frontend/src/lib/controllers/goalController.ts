@@ -84,7 +84,6 @@ export async function getGoalShortyList(tokenValue: string | undefined):Promise<
     }
 }
 
-
 export async function getGoalInformation(tokenValue: string | undefined, goalId: number):Promise<GoalsStructure | null> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/about-my-goal?goalId=${encodeURIComponent(String(goalId))}`, {
@@ -162,3 +161,46 @@ export async function deleteGoal(tokenValue: string | undefined, goalId: number)
         return;
     }
 }
+
+export async function completeGoal(tokenValue: string | undefined, goalId: number):Promise<void> {
+    try {
+        const response = await fetch(`${baseUrlForBackend}/api/goal/complete-my-goal`, {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Cookie': `token=${tokenValue}`
+            },
+            body: JSON.stringify({goalId: goalId}),
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            let errorMessage = "Ошибка выполнения цели.";
+            try {
+                const data = await response.json() as BackendApiResponse;
+                if (data.error || data.message) {
+                    errorMessage = (data.error || data.message) as string;
+                }
+            } catch {
+                // игнорируем, оставляем дефолтное сообщение
+            }
+
+            console.error(errorMessage);
+            return;
+        }
+
+        const data = await response.json() as BackendApiResponse;
+
+        if (!data.success) {
+            console.error(data.error || data.message || "Ошибка выполнения цели.");
+        }
+
+        return;
+    } catch (error) {
+        console.error("Ошибка запроса выполнения цели:", error);
+        return;
+    }
+}
+

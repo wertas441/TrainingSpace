@@ -29,6 +29,7 @@ export interface HeaderMinimumProps {
 export interface BasicIconButtonProps {
     onClick: () => void;
     className?: string;
+    disabled?: boolean;
 }
 
 export type DifficultOptionsStructure = 'Лёгкий' | 'Средний' | 'Сложный';

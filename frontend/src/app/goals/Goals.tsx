@@ -7,7 +7,12 @@ import GoalsHeader from "@/components/UI/headers/GoalsHeader";
 import {GoalsStructure} from "@/types/goalTypes";
 import GoalItem from "@/components/elements/GoalRow";
 
-export default function Goals({clientGoals}:{clientGoals: GoalsStructure[]}) {
+interface GoalsProps {
+    clientGoals: GoalsStructure[],
+    token: string | undefined;
+}
+
+export default function Goals({clientGoals, token}: GoalsProps) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
@@ -44,6 +49,7 @@ export default function Goals({clientGoals}:{clientGoals: GoalsStructure[]}) {
                                 name={item.name}
                                 description={item.description}
                                 priority={item.priority}
+                                token={token}
                             />
                         )
                     )

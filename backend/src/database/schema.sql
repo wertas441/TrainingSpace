@@ -128,6 +128,7 @@ CREATE TABLE IF NOT EXISTS goal (
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     name VARCHAR(50) NOT NULL,
     description TEXT,
+    status INT DEFAULT NULL,
     priority VARCHAR(20) NOT NULL CHECK (priority IN ('Низкий', 'Средний', 'Высокий')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
