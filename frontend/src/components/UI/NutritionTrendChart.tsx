@@ -70,9 +70,9 @@ function NutritionTrendChart({days, metric}: NutritionTrendChartProps) {
 
     const metricConfig: Record<NutritionMetric, { key: keyof typeof chartData[number]; name: string; color: string }> = {
         calories: {key: "calories", name: "Калории", color: "#059669"},
-        protein: {key: "protein", name: "Белки", color: "#2563EB"},
-        fat: {key: "fat", name: "Жиры", color: "#F97316"},
-        carb: {key: "carb", name: "Углеводы", color: "#A855F7"},
+        protein: {key: "protein", name: "Белки", color: "#059669"},
+        fat: {key: "fat", name: "Жиры", color: "#059669"},
+        carb: {key: "carb", name: "Углеводы", color: "#059669"},
     };
 
     const {key, name, color} = metricConfig[metric];
