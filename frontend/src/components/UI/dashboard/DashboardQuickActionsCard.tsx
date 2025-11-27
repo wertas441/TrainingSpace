@@ -1,10 +1,10 @@
 import Link from "next/link";
 import {
     PlusIcon,
-    BoltIcon,
-    ClipboardDocumentCheckIcon,
     CalendarDaysIcon,
-    FlagIcon,
+    SparklesIcon,
+    SquaresPlusIcon,
+    Squares2X2Icon,
 } from "@heroicons/react/24/outline";
 import {memo} from "react";
 
@@ -12,12 +12,12 @@ const actions = [
     {
         href: "/add-activity",
         label: "Добавить активность",
-        icon: BoltIcon,
+        icon: SquaresPlusIcon,
     },
     {
         href: "/my-activity",
         label: "Моя активность",
-        icon: ClipboardDocumentCheckIcon,
+        icon: Squares2X2Icon,
     },
     {
         href: "/training",
@@ -27,7 +27,7 @@ const actions = [
     {
         href: "/goals",
         label: "Добавить цель",
-        icon: FlagIcon,
+        icon: SparklesIcon,
     },
 ] as const;
 

@@ -14,3 +14,5 @@ export interface ExerciseListFrontendStructure {
     partOfTheBody: string[];
 }
 
+
+

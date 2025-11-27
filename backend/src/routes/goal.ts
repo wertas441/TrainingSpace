@@ -107,7 +107,6 @@ router.get('/my-shorty-list', authGuard, async (req, res) => {
     }
 });
 
-
 router.delete('/delete-my-goal', authGuard, async (req, res) => {
     try {
         const { goalId: goalIdRaw } = req.body;
@@ -245,5 +244,42 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
         res.status(500).json(response);
     }
 });
+
+router.put('/complete-my-goal', authGuard, async (req, res) => {
+    try {
+        const { goalId: goalIdRaw } = req.body;
+        const goalId = Number(goalIdRaw);
+        const userId = (req as any).userId as number;
+
+
+        if (!goalIdRaw || Number.isNaN(goalId) || goalId <= 0) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Некорректный идентификатор цели.',
+            };
+            return res.status(400).json(response);
+        }
+
+        await GoalModel.complete(userId, goalId);
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'goal complete successfully',
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Ошибка выполнения цели', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при выполннеии цели ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+});
+
 
 export default router;

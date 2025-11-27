@@ -1,38 +1,69 @@
 import {GoalsStructure} from "@/types/goalTypes";
-import {memo, useCallback} from "react";
+import {memo, useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import CheckButton from "@/components/buttons/other/CheckButton";
 import {getColorStyles} from "@/lib";
+import {completeGoal} from "@/lib/controllers/goalController";
 
-function GoalRow({id, name, description, priority}: GoalsStructure ) {
+interface GoalRowProps extends GoalsStructure{
+    token: string | undefined;
+}
 
-    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(priority)}`;
+function GoalRow({id, name, description, priority, token}: GoalRowProps ) {
+
+    const [isCompleting, setIsCompleting] = useState<boolean>(false);
+    const [isHidden, setIsHidden] = useState<boolean>(false);
+
     const router = useRouter();
 
+    const handleCompleteClick = useCallback(() => {
+        if (isCompleting) return;
+
+        setIsCompleting(true);
+
+        completeGoal(token, id)
+            .then(() => {
+                // Даем анимации выполниться перед скрытием и обновлением списка
+                setTimeout(() => {
+                    setIsHidden(true);
+                    router.refresh();
+                }, 300);
+            })
+            .catch((error) => {
+                console.error('Ошибка при выполнении цели', error);
+                setIsCompleting(false);
+            });
+    }, [token, id, router, isCompleting]);
+
+    if (isHidden) {
+        return null;
+    }
+
     return (
-        <div className="w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+        <div className={`w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm transition-all duration-300 ease-out 
+            ${isCompleting ? 'opacity-0 translate-y-1 scale-95' : 'opacity-100 hover:shadow-md'}`}>
             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
                     <div className="flex items-center gap-2 ">
-                        <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
-                        <span className={badgeClasses}>
+                        <h3 className={`text-lg font-semibold ${isCompleting ? 'text-gray-400 line-through' : 'text-gray-800'}`}>{name}</h3>
+                        <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(priority)}`}>
                             {priority === 'Низкий' ? 'Низкий' : priority === 'Средний' ? 'Средний' : 'Высокий'}
                         </span>
                     </div>
-                    <p className="mt-1 text-sm text-gray-600">
+                    <p className={`mt-1 text-sm ${isCompleting ? 'text-gray-300 line-through' : 'text-gray-600'}`}>
                         {description}
                     </p>
                 </div>
                 <div className="flex items-center mt-3 md:mt-0 gap-3">
                     <CheckButton
-                        onClick={useCallback(() => router.push(`/goals/${id}`), [id, router])}
+                        onClick={handleCompleteClick}
                         className={'w-full'}
+                        disabled={isCompleting}
                     />
                     <ChangeButton
                         onClick={useCallback(() => router.push(`/goals/${id}`), [id, router])}
                         className={'w-full'}
-
                     />
                 </div>
             </div>

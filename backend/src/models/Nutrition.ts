@@ -9,6 +9,24 @@ export class NutritionModel {
 
     static async create(nutritionData: AddDayModelRequestStructure) {
 
+        // Проверяем, есть ли уже запись с такой датой для этого пользователя
+        const checkQuery = `
+            SELECT id
+            FROM nutrition
+            WHERE user_id = $1
+              AND day_date = $2::date
+            LIMIT 1
+        `;
+
+        const { rows: existingRows } = await pool.query(checkQuery, [
+            nutritionData.user_id,
+            nutritionData.date,
+        ]);
+
+        if (existingRows.length > 0) {
+            throw new Error('Запись с такой датой уже существует');
+        }
+
         const query = `
             INSERT INTO nutrition 
                 (

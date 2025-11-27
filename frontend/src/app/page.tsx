@@ -2,6 +2,7 @@ import Dashboard from "@/app/Dashboard";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
 import {getGoalShortyList} from "@/lib/controllers/goalController";
+import {getNutritionGraphicInfo} from "@/lib/controllers/statisticsController";
 
 export const metadata: Metadata = {
     title: "Главная | TrainingSpace",
@@ -14,6 +15,7 @@ export default async function Home() {
     const tokenValue = authTokenCookie?.value;
 
     const goalsShortyList = await getGoalShortyList(tokenValue);
+    const nutritionGraphicData = await getNutritionGraphicInfo(tokenValue);
 
-    return <Dashboard goalsShortyList={goalsShortyList}  />
+    return <Dashboard goalsShortyList={goalsShortyList}  nutritionGraphicData={nutritionGraphicData} />
 }

@@ -1,7 +1,8 @@
 import {memo} from "react";
 import Link from "next/link";
-import {ChevronRightIcon, FlagIcon} from "@heroicons/react/24/outline";
+import {ChevronRightIcon, SparklesIcon} from "@heroicons/react/24/outline";
 import {GoalShortyStructure} from "@/types/goalTypes";
+import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
 
 interface DashboardGoalsCardProps {
     goalsShortyList: GoalShortyStructure[];
@@ -10,8 +11,8 @@ interface DashboardGoalsCardProps {
 function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
 
     const hasGoals = goalsShortyList && goalsShortyList.length > 0;
-    const visibleGoals = hasGoals ? goalsShortyList.slice(0, 5) : [];
-    const hasMore = hasGoals && goalsShortyList.length > 5;
+    const visibleGoals = hasGoals ? goalsShortyList.slice(0, 6) : [];
+    const hasMore = hasGoals && goalsShortyList.length > 6;
 
     return (
         <div className="flex flex-col h-full rounded-2xl bg-white border border-emerald-100 shadow-sm p-5 gap-4">
@@ -25,7 +26,7 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
                     </h2>
                 </div>
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
-                    <FlagIcon className="h-5 w-5" />
+                    <SparklesIcon className="h-5 w-5" />
                 </span>
             </div>
 
@@ -47,8 +48,11 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
                         ))}
                     </ul>
                 ) : (
-                    <div className="mt-3 rounded-xl border border-dashed border-emerald-100 bg-emerald-50/30 px-4 py-3 text-xs text-gray-500">
-                        Чтобы добавить цель, перейдите в раздел &laquo;Цели&raquo;.
+                    <div className="container items-center ">
+                        <LightGreenLinkBtn
+                            label={`Добавить новую цель`}
+                            href={`/goals/add`}
+                        />
                     </div>
                 )}
             </div>

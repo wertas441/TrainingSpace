@@ -50,7 +50,7 @@ function DashboardCalendarCard() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-1 text-xs text-center mt-1">
+            <div className="grid grid-cols-7 gap-3 text-xs text-center mt-1">
                 {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((label) => (
                     <div key={label} className="text-[11px] font-medium text-gray-500 py-1">
                         {label}
