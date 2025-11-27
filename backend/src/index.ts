@@ -13,6 +13,8 @@ import nutritionRoutes from './routes/nutrition';
 import exercisesRoutes from './routes/exercises';
 import activityRoutes from './routes/activity';
 import settingsRoutes from './routes/settings';
+import statisticsRoutes from './routes/statistics';
+
 import { config } from './config';
 import { testConnection, closePool } from './config/database';
 import { initDatabase } from './database/init';
@@ -51,7 +53,7 @@ app.use('/api/training', trainingRoutes);
 app.use('/api/exercises', exercisesRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/settings', settingsRoutes);
-
+app.use('/api/statistics', statisticsRoutes);
 
 app.use((req, res) => {
     res.status(404).json({

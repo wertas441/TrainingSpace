@@ -2,6 +2,7 @@ import {memo} from "react";
 import Link from "next/link";
 import {ChevronRightIcon, FlagIcon} from "@heroicons/react/24/outline";
 import {GoalShortyStructure} from "@/types/goalTypes";
+import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
 
 interface DashboardGoalsCardProps {
     goalsShortyList: GoalShortyStructure[];
@@ -47,8 +48,11 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
                         ))}
                     </ul>
                 ) : (
-                    <div className="mt-3 rounded-xl border border-dashed border-emerald-100 bg-emerald-50/30 px-4 py-3 text-xs text-gray-500">
-                        Чтобы добавить цель, перейдите в раздел &laquo;Цели&raquo;.
+                    <div className="container items-center ">
+                        <LightGreenLinkBtn
+                            label={`Добавить новую цель`}
+                            href={`/goals/add`}
+                        />
                     </div>
                 )}
             </div>

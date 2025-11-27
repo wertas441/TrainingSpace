@@ -14,3 +14,18 @@ export interface ExerciseListFrontendStructure {
     partOfTheBody: string[];
 }
 
+export interface MainStatisticsBackendResponse {
+    totalDays: number;
+    totalTraining: number;
+    totalGoalComplete: number;
+    totalActivity: number;
+}
+
+export interface NutritionStatisticsBackendResponse {
+    averageCalories: number;
+    averageProtein: number;
+    averageFat: number;
+    averageCarb: number;
+}
+
+
