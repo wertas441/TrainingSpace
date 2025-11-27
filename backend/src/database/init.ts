@@ -1,6 +1,7 @@
 import { pool } from '../config/database';
 import fs from 'fs';
 import path from 'path';
+import { seedExercises } from './seedExercises';
 
 export const initDatabase = async (): Promise<void> => {
     try {
@@ -13,7 +14,10 @@ export const initDatabase = async (): Promise<void> => {
         // Выполняем SQL скрипт
         await pool.query(schema);
 
-        console.log('База данных успешно инициализирована');
+        // После инициализации схемы наполняем справочники упражнений
+        await seedExercises();
+
+        console.log('База данных успешно инициализирована и заполнена упражнениями');
     } catch (error) {
         console.error('Ошибка при инициализации базы данных:', error);
         throw error;

@@ -38,10 +38,10 @@ export class StatisticsModel {
 
         const query = `
             SELECT
-                COALESCE(AVG(calories), 0)::float8 AS "averageCalories",
-                COALESCE(AVG(protein), 0)::float8  AS "averageProtein",
-                COALESCE(AVG(fat), 0)::float8      AS "averageFat",
-                COALESCE(AVG(carb), 0)::float8     AS "averageCarb"
+                COALESCE(ROUND(AVG(calories)::numeric, 1), 0)::float8 AS "averageCalories",
+                COALESCE(ROUND(AVG(protein)::numeric, 1), 0)::float8  AS "averageProtein",
+                COALESCE(ROUND(AVG(fat)::numeric, 1), 0)::float8      AS "averageFat",
+                COALESCE(ROUND(AVG(carb)::numeric, 1), 0)::float8     AS "averageCarb"
             FROM nutrition
             WHERE user_id = $1
         `;
