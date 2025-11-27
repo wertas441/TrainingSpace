@@ -1,5 +1,9 @@
 import {pool} from '../config/database'
-import {MainStatisticsBackendResponse, NutritionStatisticsBackendResponse} from "../types";
+import {
+    MainStatisticsBackendResponse,
+    NutritionGraphicBackendResponse,
+    NutritionStatisticsBackendResponse
+} from "../types/statisticsBackendTypes";
 
 export class StatisticsModel {
 
@@ -55,6 +59,25 @@ export class StatisticsModel {
             averageFat: Number(row.averageFat) || 0,
             averageCarb: Number(row.averageCarb) || 0,
         };
+    }
+
+    static async getNutritionGraphicInformation(userId: number): Promise<NutritionGraphicBackendResponse[]> {
+        const query = `
+            SELECT
+                to_char(day_date::date, 'YYYY-MM-DD') AS date,
+                SUM(calories) AS calories,
+                SUM(protein)  AS protein,
+                SUM(fat)      AS fat,
+                SUM(carb)     AS carb
+            FROM nutrition
+            WHERE user_id = $1
+            GROUP BY day_date
+            ORDER BY day_date ASC
+        `;
+
+        const {rows} = await pool.query(query, [userId]);
+
+        return rows as NutritionGraphicBackendResponse[];
     }
 
 

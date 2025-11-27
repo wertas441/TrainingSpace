@@ -1,8 +1,14 @@
 'use client'
 
+import {useState} from "react";
 import StatisticsHeader from "@/components/UI/headers/StatisticsHeader";
 import StatisticsMainCard from "@/components/UI/StatisticsMainCard";
-import {MainStatisticsCardResponse, NutritionStatisticsCardResponse} from "@/types/statisticsTypes";
+import NutritionTrendChart from "@/components/UI/NutritionTrendChart";
+import {
+    MainStatisticsCardResponse, MetricOptionStructure, NutritionMetric,
+    NutritionStatisticsCardResponse,
+    NutritionStatisticsGraphicResponse
+} from "@/types/statisticsTypes";
 import {
     CalendarDaysIcon,
     FlagIcon,
@@ -16,10 +22,13 @@ import {ChartBarIcon} from "@heroicons/react/24/solid";
 
 interface StatisticsProps {
     mainCardData: MainStatisticsCardResponse | undefined;
-    nutritionCardData: NutritionStatisticsCardResponse | undefined,
+    nutritionCardData: NutritionStatisticsCardResponse | undefined;
+    nutritionGraphicData?: NutritionStatisticsGraphicResponse[];
 }
 
-export default function Statistics({mainCardData, nutritionCardData}: StatisticsProps) {
+export default function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: StatisticsProps) {
+
+    const [selectedMetric, setSelectedMetric] = useState<NutritionMetric>('calories');
 
     const mainCardInfo = [
         {
@@ -83,6 +92,13 @@ export default function Statistics({mainCardData, nutritionCardData}: Statistics
         },
     ];
 
+    const metricOptions: MetricOptionStructure[] = [
+        {id: 'calories', label: 'Калории'},
+        {id: 'protein', label: 'Белки'},
+        {id: 'fat', label: 'Жиры'},
+        {id: 'carb', label: 'Углеводы'},
+    ];
+
     return (
         <main className="w-full space-y-6">
             <StatisticsHeader />
@@ -113,6 +129,47 @@ export default function Statistics({mainCardData, nutritionCardData}: Statistics
                         icon={card.icon}
                     />
                 ))}
+            </section>
+
+            <section className="grid grid-cols-1 pt-3">
+                <div className="rounded-2xl bg-white border border-emerald-100 shadow-sm p-5">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h2 className="text-lg font-semibold text-emerald-900">
+                                Динамика калорий и БЖУ
+                            </h2>
+                            <p className="text-xs text-gray-500">
+                                Как меняется ваше потребление калорий, белков, жиров и углеводов по дням.
+                            </p>
+                        </div>
+
+                        <div className="inline-flex gap-3 items-center my-4 md:my-0 rounded-full bg-emerald-50 p-1 text-xs border border-emerald-100">
+                            {metricOptions.map((option) => {
+                                const isActive = selectedMetric === option.id;
+                                return (
+                                    <button
+                                        key={option.id}
+                                        type="button"
+                                        onClick={() => setSelectedMetric(option.id)}
+                                        className={`px-2.5 cursor-pointer py-1  rounded-full font-medium transition 
+                                        ${isActive
+                                            ? 'bg-white text-emerald-900 shadow-sm'
+                                            : 'text-emerald-700/70 hover:text-emerald-900'}`}
+                                    >
+                                        {option.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="mt-4 h-72 sm:h-80">
+                        <NutritionTrendChart
+                            days={nutritionGraphicData ?? []}
+                            metric={selectedMetric}
+                        />
+                    </div>
+                </div>
             </section>
         </main>
     )

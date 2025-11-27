@@ -1,8 +1,13 @@
 import {Router} from 'express';
 import {authGuard} from '../middleware/authMiddleware';
-import {ApiResponse, MainStatisticsBackendResponse, NutritionStatisticsBackendResponse} from "../types";
 import {config} from '../config';
 import {StatisticsModel} from "../models/Statistics";
+import {
+    MainStatisticsBackendResponse,
+    NutritionGraphicBackendResponse,
+    NutritionStatisticsBackendResponse
+} from "../types/statisticsBackendTypes";
+import {ApiResponse} from "../types";
 
 const router = Router();
 
@@ -59,5 +64,32 @@ router.get('/nutrition-information', authGuard, async (req, res) => {
         res.status(500).json(response);
     }
 });
+
+router.get('/nutrition-graphic-info', authGuard, async (req, res) => {
+    try {
+        const userId = (req as any).userId as number;
+
+        const nutritionGraphicData = await StatisticsModel.getNutritionGraphicInformation(userId);
+
+        const response: ApiResponse<{ graphicData: NutritionGraphicBackendResponse[] }> = {
+            success: true,
+            message: 'nutrition graphic information was get successfully',
+            data: { graphicData: nutritionGraphicData }
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Ошибка получение информации для графика питания', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при получении информации для графика питания ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+});
+
 
 export default router;

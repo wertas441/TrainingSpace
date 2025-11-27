@@ -1,6 +1,10 @@
 import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
-import {MainStatisticsCardResponse, NutritionStatisticsCardResponse} from "@/types/statisticsTypes";
+import {
+    MainStatisticsCardResponse,
+    NutritionStatisticsCardResponse,
+    NutritionStatisticsGraphicResponse
+} from "@/types/statisticsTypes";
 
 export async function getMainStatisticsCardInfo(tokenValue: string | undefined):Promise<MainStatisticsCardResponse | undefined> {
     try {
@@ -83,5 +87,46 @@ export async function getNutritionStatisticsCardInfo(tokenValue: string | undefi
         console.error("Ошибка запроса информации для карточек питания:", error);
 
         return;
+    }
+}
+
+export async function getNutritionGraphicInfo(tokenValue: string | undefined):Promise<NutritionStatisticsGraphicResponse[]> {
+    try {
+        const response = await fetch(`${baseUrlForBackend}/api/statistics/nutrition-graphic-info`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Cookie': `token=${tokenValue}`
+            },
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            let errorMessage = "Ошибка получения данных для графика питания.";
+            try {
+                const data = await response.json() as BackendApiResponse<{ graphicData: NutritionStatisticsGraphicResponse[] }>;
+                if (data.error || data.message) {
+                    errorMessage = (data.error || data.message) as string;
+                }
+            } catch {
+
+            }
+            console.error(errorMessage);
+
+            return [];
+        }
+
+        const data = await response.json() as BackendApiResponse<{ graphicData: NutritionStatisticsGraphicResponse[] }>;
+
+        if (!data.success || !data.data?.graphicData) {
+            return [];
+        }
+
+        return data.data.graphicData;
+    } catch (error) {
+        console.error("Ошибка запроса для графика питания:", error);
+
+        return [];
     }
 }

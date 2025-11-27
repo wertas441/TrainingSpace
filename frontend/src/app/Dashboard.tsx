@@ -1,10 +1,10 @@
 'use client'
 
-import DashboardStopwatchCard from "@/components/UI/DashboardStopwatchCard";
-import DashboardCalendarCard from "@/components/UI/DashboardCalendarCard";
-import DashboardQuickActionsCard from "@/components/UI/DashboardQuickActionsCard";
-import DashboardChartCard from "@/components/UI/DashboardChartCard";
-import DashboardGoalsCard from "@/components/UI/DashboardGoalsCard";
+import DashboardStopwatchCard from "@/components/UI/dashboard/DashboardStopwatchCard";
+import DashboardCalendarCard from "@/components/UI/dashboard/DashboardCalendarCard";
+import DashboardQuickActionsCard from "@/components/UI/dashboard/DashboardQuickActionsCard";
+import DashboardChartCard from "@/components/UI/dashboard/DashboardChartCard";
+import DashboardGoalsCard from "@/components/UI/dashboard/DashboardGoalsCard";
 import {GoalShortyStructure} from "@/types/goalTypes";
 
 interface DashboardProps {

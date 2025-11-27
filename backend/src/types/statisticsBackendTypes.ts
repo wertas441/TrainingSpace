@@ -1,29 +1,23 @@
 
-export interface MainStatisticsCardResponse {
+
+export interface MainStatisticsBackendResponse {
     totalDays: number;
     totalTraining: number;
     totalGoalComplete: number;
     totalActivity: number;
 }
 
-export interface NutritionStatisticsCardResponse {
+export interface NutritionStatisticsBackendResponse {
     averageCalories: number;
     averageProtein: number;
     averageFat: number;
     averageCarb: number;
 }
 
-export interface NutritionStatisticsGraphicResponse {
+export interface NutritionGraphicBackendResponse {
     date: string;
     calories: number;
     protein: number;
     fat: number;
     carb: number;
-}
-
-export type NutritionMetric = 'calories' | 'protein' | 'fat' | 'carb';
-
-export interface MetricOptionStructure {
-    id: NutritionMetric;
-    label: string;
 }

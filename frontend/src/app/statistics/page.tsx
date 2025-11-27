@@ -1,7 +1,11 @@
 import Statistics from "@/app/statistics/Statistics";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getMainStatisticsCardInfo, getNutritionStatisticsCardInfo} from "@/lib/controllers/statisticsController";
+import {
+    getMainStatisticsCardInfo,
+    getNutritionGraphicInfo,
+    getNutritionStatisticsCardInfo
+} from "@/lib/controllers/statisticsController";
 
 export const metadata: Metadata = {
     title: "Ваша статистика | TrainingSpace",
@@ -16,7 +20,14 @@ export default async function StatisticsPage() {
 
     const mainCardData = await getMainStatisticsCardInfo(tokenValue);
     const nutritionCardData = await getNutritionStatisticsCardInfo(tokenValue);
+    const nutritionGraphicData = await getNutritionGraphicInfo(tokenValue);
 
-    return <Statistics mainCardData={mainCardData} nutritionCardData={nutritionCardData} />
+    return (
+        <Statistics
+            mainCardData={mainCardData}
+            nutritionCardData={nutritionCardData}
+            nutritionGraphicData={nutritionGraphicData}
+        />
+    );
 }
 
