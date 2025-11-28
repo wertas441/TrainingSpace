@@ -1,6 +1,6 @@
 'use client'
 
-import {useState} from "react";
+import {memo, useMemo, useState} from "react";
 import StatisticsHeader from "@/components/UI/headers/StatisticsHeader";
 import StatisticsMainCard from "@/components/UI/StatisticsMainCard";
 import NutritionTrendChart from "@/components/UI/NutritionTrendChart";
@@ -26,11 +26,11 @@ interface StatisticsProps {
     nutritionGraphicData?: NutritionStatisticsGraphicResponse[];
 }
 
-export default function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: StatisticsProps) {
+function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: StatisticsProps) {
 
     const [selectedMetric, setSelectedMetric] = useState<NutritionMetric>('calories');
 
-    const mainCardInfo = [
+    const mainCardInfo = useMemo(() => [
         {
             id: "totalDays",
             label: "Добавлено дней",
@@ -59,9 +59,9 @@ export default function Statistics({mainCardData, nutritionCardData, nutritionGr
             description: "Сколько активности вы уже добавили",
             icon: BoltIcon,
         },
-    ];
+    ], [mainCardData?.totalActivity, mainCardData?.totalDays, mainCardData?.totalGoalComplete, mainCardData?.totalTraining])
 
-    const nutritionCardInfo = [
+    const nutritionCardInfo = useMemo(() => [
         {
             id: "averageCalories",
             label: "Средний калораж",
@@ -90,14 +90,14 @@ export default function Statistics({mainCardData, nutritionCardData, nutritionGr
             description: "Среднее кол-во углеводов потребляемое в день",
             icon: RocketLaunchIcon,
         },
-    ];
+    ], [nutritionCardData?.averageCalories, nutritionCardData?.averageCarb, nutritionCardData?.averageFat, nutritionCardData?.averageProtein]);
 
-    const metricOptions: MetricOptionStructure[] = [
+    const metricOptions: MetricOptionStructure[] = useMemo(() =>[
         {id: 'calories', label: 'Калории'},
         {id: 'protein', label: 'Белки'},
         {id: 'fat', label: 'Жиры'},
         {id: 'carb', label: 'Углеводы'},
-    ];
+    ], []);
 
     return (
         <main className="w-full space-y-6">
@@ -174,3 +174,5 @@ export default function Statistics({mainCardData, nutritionCardData, nutritionGr
         </main>
     )
 }
+
+export default memo(Statistics);

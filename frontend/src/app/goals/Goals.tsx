@@ -2,7 +2,7 @@
 
 import MainPagination from "@/components/UI/MainPagination";
 import {usePagination} from "@/lib/hooks/usePagination";
-import {useMemo, useState} from "react";
+import {memo, useMemo, useState} from "react";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
 import {GoalsStructure} from "@/types/goalTypes";
 import GoalItem from "@/components/elements/GoalRow";
@@ -12,7 +12,7 @@ interface GoalsProps {
     token: string | undefined;
 }
 
-export default function Goals({clientGoals, token}: GoalsProps) {
+function Goals({clientGoals, token}: GoalsProps) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
@@ -72,3 +72,5 @@ export default function Goals({clientGoals, token}: GoalsProps) {
         </div>
     )
 }
+
+export default memo(Goals);

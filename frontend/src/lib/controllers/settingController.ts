@@ -1,6 +1,5 @@
 import {baseUrlForBackend} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
-import {UserProfileRequest} from "@/types/settingsTypes";
+import type {BackendApiResponse, UserProfileRequest} from "@/types/indexTypes";
 
 export async function logout() {
     try {

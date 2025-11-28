@@ -10,6 +10,7 @@ import {FormEvent, useMemo} from "react";
 import {baseUrlForBackend} from "@/lib";
 import {LockClosedIcon, AtSymbolIcon} from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
+import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 
 export default function ChangeEmail(){
 
@@ -68,19 +69,12 @@ export default function ChangeEmail(){
 
     return (
         <SettingsPageContext>
-            <div className="border-b border-emerald-50 px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40 flex items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900">
-                        Смена почты
-                    </h1>
-                    <p className="mt-1 text-sm text-emerald-900/70">
-                        Введите вашу новую почту, затем подтвердите изменение паролем.
-                    </p>
-                </div>
-                <div className="hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
-                    <AtSymbolIcon className="h-6 w-6 text-emerald-600" />
-                </div>
-            </div>
+
+            <SettingsHeader
+                label={`Смена почты`}
+                text={`Введите вашу новую почту, затем подтвердите изменение паролем`}
+                IconComponent={AtSymbolIcon}
+            />
 
             <div className="px-6 py-6 max-w-xl sm:px-8 sm:py-8">
                 <ServerError message={serverError} />

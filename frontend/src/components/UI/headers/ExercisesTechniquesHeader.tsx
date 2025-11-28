@@ -9,6 +9,11 @@ import BarsButton from "@/components/buttons/other/BarsButton";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 
+interface ValueOptions {
+    value: string;
+    label: string
+}
+
 function ExercisesTechniquesHeader(
     {
         searchName,
@@ -39,9 +44,9 @@ function ExercisesTechniquesHeader(
         [partOfBodyFilter, muscleOptions]
     );
 
-    const handleMusclesChange = (vals: readonly { value: string; label: string }[]) => {
+    const handleMusclesChange = useCallback((vals: ValueOptions[]) => {
         setPartOfBodyFilter(vals.map(v => v.value));
-    };
+    }, [setPartOfBodyFilter]) ;
 
     const handleReset = useCallback(() => {
         setDifficultFilter(null);

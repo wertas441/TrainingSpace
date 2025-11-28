@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ChangeGoal from "@/app/goals/[goalId]/ChangeGoal";
+import {ChangeGoal} from "@/app/goals/[goalId]/ChangeGoal";
 import { cookies } from "next/headers";
 import { getGoalInformation } from "@/lib/controllers/goalController";
 import { notFound } from "next/navigation";

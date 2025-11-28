@@ -2,28 +2,25 @@ import {memo} from "react";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {getColorStyles} from "@/lib";
 
-
-function ExerciseRow({exercise}:{exercise: ExerciseTechniqueItem}) {
-
-    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`;
+function ExerciseRow({id, name, description, partOfTheBody, difficulty}: ExerciseTechniqueItem) {
 
     return (
-        <div className="w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+        <div id={`${id}`} className="w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-semibold text-gray-800">{exercise.name}</h3>
-                        <span className={badgeClasses}>
-                            {exercise.difficulty === 'Лёгкий' ? 'Лёгкий' : exercise.difficulty === 'Средний' ? 'Средний' : 'Сложный'}
+                        <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
+                        <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(difficulty)}`}>
+                            {difficulty === 'Лёгкий' ? 'Лёгкий' : difficulty === 'Средний' ? 'Средний' : 'Сложный'}
                         </span>
                     </div>
                     <p className="mt-1 text-sm text-gray-600">
-                        {exercise.description}
+                        {description}
                     </p>
                 </div>
 
                 <div className="mt-2 md:mt-0 md:ml-4 flex flex-wrap gap-2">
-                    {exercise.partOfTheBody.map((part) => (
+                    {partOfTheBody.map((part) => (
                         <span
                             key={part}
                             className="px-2 py-0.5 text-xs border rounded-full border-emerald-200 text-emerald-800 bg-emerald-50"
@@ -32,8 +29,6 @@ function ExerciseRow({exercise}:{exercise: ExerciseTechniqueItem}) {
                         </span>
                     ))}
                 </div>
-
-
             </div>
         </div>
     );

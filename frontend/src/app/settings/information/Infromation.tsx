@@ -6,11 +6,12 @@ import {
     CodeBracketIcon,
     HeartIcon,
     SparklesIcon,
-    GlobeAltIcon,
+    GlobeAltIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {useMemo} from "react";
 import InformationPageBlock from "@/components/elements/InformationPageBlock";
+import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 
 export default function Information() {
 
@@ -39,19 +40,12 @@ export default function Information() {
 
     return (
         <SettingsPageContext>
-            <div className="border-b border-emerald-50 px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40 flex items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900">
-                        О проекте TrainingSpace
-                    </h1>
-                    <p className="mt-1 text-sm text-emerald-900/70">
-                        Немного о том, что это за приложение, зачем оно нужно и как вы можете поучаствовать в его развитии.
-                    </p>
-                </div>
-                <div className="hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
-                    <InformationCircleIcon className="h-6 w-6 text-emerald-600" />
-                </div>
-            </div>
+
+            <SettingsHeader
+                label={`О проекте TrainingSpace`}
+                text={`Немного о том, что это за приложение, зачем оно нужно и как вы можете поучаствовать в его развитии`}
+                IconComponent={InformationCircleIcon}
+            />
 
             <div className="px-6 py-6 sm:px-8 sm:py-8 max-w-4xl">
                 <div className="bg-white border border-emerald-100 rounded-2xl shadow-sm p-5 sm:p-6 mb-6">

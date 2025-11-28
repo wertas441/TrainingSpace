@@ -1,4 +1,5 @@
 import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
+import {memo} from "react";
 
 interface MainPaginationProps{
     currentPage: number;
@@ -8,7 +9,7 @@ interface MainPaginationProps{
     itemsPerPage: number;
 }
 
-export default function MainPagination(
+function MainPagination(
     {
         currentPage,
         totalPages,
@@ -88,3 +89,5 @@ export default function MainPagination(
         </>
     )
 }
+
+export default memo(MainPagination);
