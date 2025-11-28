@@ -67,10 +67,10 @@ export class NutritionModel {
                 protein,
                 fat,
                 carb,
-                to_char(day_date::date, 'YYYY-MM-DD') AS date
+                to_char(day_date::date, 'DD-MM-YYYY') AS date
             FROM nutrition
             WHERE user_id = $1
-            ORDER BY created_at DESC, id DESC
+            ORDER BY day_date DESC, id DESC
         `;
 
         const { rows } = await pool.query(query, [userId]);

@@ -73,12 +73,5 @@ export const validateActivityPerformedAt = (performedAt: string): boolean => {
         return false;
     }
 
-    const todayLocal = new Date();
-    const todayStart = new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate());
-
-    if (parsed.getTime() > todayStart.getTime()) {
-        return false;
-    }
-
     return true;
 }
