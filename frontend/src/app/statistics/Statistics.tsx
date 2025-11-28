@@ -21,8 +21,8 @@ import {
 import {ChartBarIcon} from "@heroicons/react/24/solid";
 
 interface StatisticsProps {
-    mainCardData: MainStatisticsCardResponse | undefined;
-    nutritionCardData: NutritionStatisticsCardResponse | undefined;
+    mainCardData: MainStatisticsCardResponse;
+    nutritionCardData: NutritionStatisticsCardResponse;
     nutritionGraphicData?: NutritionStatisticsGraphicResponse[];
 }
 
@@ -34,63 +34,63 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
         {
             id: "totalDays",
             label: "Добавлено дней",
-            value: mainCardData?.totalDays ?? 0,
+            value: mainCardData.totalDays,
             description: "Сколько дней вы уже отслеживаете питание",
             icon: CalendarDaysIcon,
         },
         {
             id: "totalTraining",
             label: "Создано тренировок",
-            value: mainCardData?.totalTraining ?? 0,
+            value: mainCardData.totalTraining,
             description: "Сколько вами всего создано тренировок",
             icon: ChartBarIcon,
         },
         {
             id: "totalGoalComplete",
             label: "Целей достигнуто",
-            value: mainCardData?.totalGoalComplete ?? 0,
+            value: mainCardData.totalGoalComplete,
             description: "Количество успешно выполненных целей",
             icon: FlagIcon,
         },
         {
             id: "totalActivity",
             label: "Добавлено активностей",
-            value: mainCardData?.totalActivity ?? 0,
+            value: mainCardData.totalActivity,
             description: "Сколько активности вы уже добавили",
             icon: BoltIcon,
         },
-    ], [mainCardData?.totalActivity, mainCardData?.totalDays, mainCardData?.totalGoalComplete, mainCardData?.totalTraining])
+    ], [mainCardData.totalActivity, mainCardData.totalDays, mainCardData.totalGoalComplete, mainCardData.totalTraining])
 
     const nutritionCardInfo = useMemo(() => [
         {
             id: "averageCalories",
             label: "Средний калораж",
-            value: nutritionCardData?.averageCalories ?? 0,
+            value: nutritionCardData.averageCalories,
             description: "Среднее кол-во калорий потребляемое в день",
             icon: FireIcon,
         },
         {
             id: "averageProtein",
             label: "Средний белок",
-            value: nutritionCardData?.averageProtein ?? 0,
+            value: nutritionCardData.averageProtein,
             description: "Среднее кол-во белка потребляемое в день",
             icon: BeakerIcon,
         },
         {
             id: "averageFat",
             label: "Средний жир",
-            value: nutritionCardData?.averageFat ?? 0,
+            value: nutritionCardData.averageFat,
             description: "Среднее кол-во жира потребляемое в день",
             icon: ScaleIcon,
         },
         {
             id: "averageCarb",
             label: "Средние углеводы",
-            value: nutritionCardData?.averageCarb ?? 0,
+            value: nutritionCardData.averageCarb,
             description: "Среднее кол-во углеводов потребляемое в день",
             icon: RocketLaunchIcon,
         },
-    ], [nutritionCardData?.averageCalories, nutritionCardData?.averageCarb, nutritionCardData?.averageFat, nutritionCardData?.averageProtein]);
+    ], [nutritionCardData.averageCalories, nutritionCardData.averageCarb, nutritionCardData.averageFat, nutritionCardData.averageProtein]);
 
     const metricOptions: MetricOptionStructure[] = useMemo(() =>[
         {id: 'calories', label: 'Калории'},

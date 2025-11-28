@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
 import ChangeNutrition from "@/app/nutrition/[nutritionId]/ChangeNutrition";
 import {getDayInformation} from "@/lib/controllers/nutritionController";
+import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Изменение дня | TrainingSpace",
@@ -21,13 +21,26 @@ export default async function ChangeNutritionPage({ params }: ChangeNutritionPag
 
     const cookieStore = await cookies();
     const authTokenCookie = cookieStore.get('token');
-    const tokenValue = authTokenCookie?.value;
 
+    if (!authTokenCookie) {
+        return (
+            <ErrorState
+                title="Проблема с авторизацией"
+                description="Похоже, что ваша сессия истекла или отсутствует токен доступа. Попробуйте войти заново."
+            />
+        );
+    }
+
+    const tokenValue = authTokenCookie.value;
     const dayInfo = await getDayInformation(tokenValue, Number(nutritionId));
 
     if (!dayInfo) {
-        notFound();
+        return (
+            <ErrorState
+                title="Не удалось загрузить информацию о дне"
+                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
+            />
+        );
     }
-
     return <ChangeNutrition dayInfo={dayInfo} token={tokenValue} />
 }

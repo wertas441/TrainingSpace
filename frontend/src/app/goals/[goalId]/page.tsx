@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import {ChangeGoal} from "@/app/goals/[goalId]/ChangeGoal";
 import { cookies } from "next/headers";
 import { getGoalInformation } from "@/lib/controllers/goalController";
-import { notFound } from "next/navigation";
+import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Изменение цели | TrainingSpace",
@@ -21,12 +21,26 @@ export default async function ChangeGoalPage({ params }: ChangeGoalPageProps){
 
     const cookieStore = await cookies();
     const authTokenCookie = cookieStore.get('token');
-    const tokenValue = authTokenCookie?.value;
 
+    if (!authTokenCookie) {
+        return (
+            <ErrorState
+                title="Проблема с авторизацией"
+                description="Похоже, что ваша сессия истекла или отсутствует токен доступа. Попробуйте войти заново."
+            />
+        );
+    }
+
+    const tokenValue = authTokenCookie.value;
     const goalInfo = await getGoalInformation(tokenValue, Number(goalId));
 
     if (!goalInfo) {
-        notFound();
+        return (
+            <ErrorState
+                title="Не удалось загрузить информацию о цели"
+                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
+            />
+        );
     }
 
     return <ChangeGoal goalInfo={goalInfo} token={tokenValue} />

@@ -23,7 +23,7 @@ import {deleteTraining} from "@/lib/controllers/trainingController";
 
 interface ChangeTrainingProps {
     trainingInfo: TrainingListResponse,
-    token: string | undefined,
+    token: string,
     exercises: ExerciseTechniqueItem[],
 }
 

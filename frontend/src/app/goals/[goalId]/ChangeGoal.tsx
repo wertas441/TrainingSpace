@@ -20,7 +20,7 @@ import ModalWindow from "@/components/UI/ModalWindow";
 
 interface ChangeGoalProps {
     goalInfo: GoalsStructure;
-    token: string | undefined;
+    token: string;
 }
 
 export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {

@@ -2,7 +2,7 @@ import { baseUrlForBackend } from "@/lib";
 import type { BackendApiResponse } from "@/types/indexTypes";
 import {GoalShortyStructure, GoalsStructure} from "@/types/goalTypes";
 
-export async function getGoalList(tokenValue: string | undefined):Promise<GoalsStructure[]> {
+export async function getGoalList(tokenValue: string | undefined):Promise<GoalsStructure[] | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/my-goals-list`, {
             method: "GET",
@@ -26,24 +26,24 @@ export async function getGoalList(tokenValue: string | undefined):Promise<GoalsS
             }
             console.error(errorMessage);
 
-            return [];
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ goals: GoalsStructure[] }>;
 
         if (!data.success || !data.data?.goals) {
-            return [];
+            return undefined;
         }
 
         return data.data.goals;
     } catch (error) {
         console.error("Ошибка запроса списка целей:", error);
 
-        return [];
+        return undefined;
     }
 }
 
-export async function getGoalShortyList(tokenValue: string | undefined):Promise<GoalShortyStructure[]> {
+export async function getGoalShortyList(tokenValue: string):Promise<GoalShortyStructure[]> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/my-shorty-list`, {
             method: "GET",
@@ -84,7 +84,7 @@ export async function getGoalShortyList(tokenValue: string | undefined):Promise<
     }
 }
 
-export async function getGoalInformation(tokenValue: string | undefined, goalId: number):Promise<GoalsStructure | null> {
+export async function getGoalInformation(tokenValue: string, goalId: number):Promise<GoalsStructure | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/about-my-goal?goalId=${encodeURIComponent(String(goalId))}`, {
             method: "GET",
@@ -108,15 +108,15 @@ export async function getGoalInformation(tokenValue: string | undefined, goalId:
             }
 
             console.error(errorMessage);
-            return null;
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ goal: GoalsStructure }>;
 
-        return data.data?.goal ?? null;
+        return data.data?.goal ?? undefined;
     } catch (error) {
         console.error("Ошибка запроса списка целей:", error);
-        return null;
+        return undefined;
     }
 }
 

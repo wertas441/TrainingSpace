@@ -25,7 +25,7 @@ import {deleteDay} from "@/lib/controllers/nutritionController";
 
 interface ChangeNutritionProps {
     dayInfo: NutritionDay,
-    token: string | undefined,
+    token: string,
 }
 
 export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){

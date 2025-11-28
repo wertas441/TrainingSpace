@@ -3,7 +3,7 @@ import {cookies} from "next/headers";
 import {getTrainingInformation} from "@/lib/controllers/trainingController";
 import ChangeTraining from "@/app/my-training/[trainingId]/ChangeTraining";
 import {getExercisesList} from "@/lib";
-import {notFound} from "next/navigation";
+import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Изменение тренировки | TrainingSpace",
@@ -22,13 +22,27 @@ export default async function ChangeTrainingPage({params}: ChangeTrainingPagePro
 
     const cookieStore = await cookies();
     const authTokenCookie = cookieStore.get('token');
-    const tokenValue = authTokenCookie?.value;
 
+    if (!authTokenCookie) {
+        return (
+            <ErrorState
+                title="Проблема с авторизацией"
+                description="Похоже, что ваша сессия истекла или отсутствует токен доступа. Попробуйте войти заново."
+            />
+        );
+    }
+
+    const tokenValue = authTokenCookie.value;
     const trainingInfo = await getTrainingInformation(tokenValue, Number(trainingId));
     const exercises = await getExercisesList(tokenValue);
 
-    if (!trainingInfo) {
-        notFound();
+    if (!trainingInfo || !exercises) {
+        return (
+            <ErrorState
+                title="Не удалось загрузить информацию о тренировке"
+                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
+            />
+        );
     }
 
     return <ChangeTraining trainingInfo = {trainingInfo} token = {tokenValue} exercises = {exercises}  />

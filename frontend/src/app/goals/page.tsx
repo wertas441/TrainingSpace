@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Goals from "@/app/goals/Goals";
 import {getGoalList} from "@/lib/controllers/goalController";
 import {cookies} from "next/headers";
+import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Цели | TrainingPage",
@@ -12,9 +13,27 @@ export default async function GoalsPage(){
 
     const cookieStore = await cookies();
     const authTokenCookie = cookieStore.get('token');
-    const tokenValue = authTokenCookie?.value;
 
+    if (!authTokenCookie) {
+        return (
+            <ErrorState
+                title="Проблема с авторизацией"
+                description="Похоже, что ваша сессия истекла или отсутствует токен доступа. Попробуйте войти заново."
+            />
+        );
+    }
+
+    const tokenValue:string = authTokenCookie.value;
     const goalsList = await getGoalList(tokenValue);
+
+    if (!goalsList) {
+        return (
+            <ErrorState
+                title="Не удалось загрузить список целей"
+                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
+            />
+        );
+    }
 
     return <Goals clientGoals={goalsList} token={tokenValue} />
 }

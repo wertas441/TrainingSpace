@@ -7,7 +7,7 @@ import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 
-function Nutrition({userDays = []}: {userDays?: NutritionDay[]}) {
+function Nutrition({userDays}: {userDays: NutritionDay[]}) {
 
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
     const [searchName, setSearchName] = useState<string>('');

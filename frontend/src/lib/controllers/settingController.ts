@@ -17,7 +17,7 @@ export async function logout() {
     }
 }
 
-export async function getUserData(tokenValue: string | undefined):Promise<UserProfileRequest | null> {
+export async function getUserData(tokenValue: string | undefined):Promise<UserProfileRequest | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/auth/me`, {
             method: "GET",
@@ -41,15 +41,15 @@ export async function getUserData(tokenValue: string | undefined):Promise<UserPr
             }
 
             console.error(errorMessage);
-            return null;
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ userData: UserProfileRequest }>;
 
-        return data.data?.userData ?? null;
+        return data.data?.userData ?? undefined;
     } catch (error) {
         console.error("Ошибка запроса получения данных пользователя:", error);
-        return null;
+        return undefined;
     }
 }
 

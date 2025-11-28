@@ -22,7 +22,7 @@ import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 interface ChangeActivityProps {
     activityInfo: ActivityDataStructure,
     myTrainings: TrainingDataStructure[];
-    token: string | undefined;
+    token: string;
 }
 
 export default function ChangeActivity({activityInfo, myTrainings, token}: ChangeActivityProps){

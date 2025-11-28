@@ -6,6 +6,7 @@ import {
     getNutritionGraphicInfo,
     getNutritionStatisticsCardInfo
 } from "@/lib/controllers/statisticsController";
+import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Ваша статистика | TrainingSpace",
@@ -16,11 +17,29 @@ export default async function StatisticsPage() {
 
     const cookieStore = await cookies();
     const authTokenCookie = cookieStore.get('token');
-    const tokenValue = authTokenCookie?.value;
 
+    if (!authTokenCookie) {
+        return (
+            <ErrorState
+                title="Проблема с авторизацией"
+                description="Похоже, что ваша сессия истекла или отсутствует токен доступа. Попробуйте войти заново."
+            />
+        );
+    }
+
+    const tokenValue = authTokenCookie.value;
     const mainCardData = await getMainStatisticsCardInfo(tokenValue);
     const nutritionCardData = await getNutritionStatisticsCardInfo(tokenValue);
     const nutritionGraphicData = await getNutritionGraphicInfo(tokenValue);
+
+    if (!mainCardData || !nutritionGraphicData || !nutritionCardData) {
+        return (
+            <ErrorState
+                title="Не удалось загрузить данные для статистики"
+                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
+            />
+        );
+    }
 
     return (
         <Statistics

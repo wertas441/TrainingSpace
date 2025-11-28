@@ -1,5 +1,4 @@
-
-export default function ServerError({ message }: {message: string | null}) {
+export default function ServerError({ message }: { message: string | null }) {
 
     if (!message) {
         return null;
