@@ -15,6 +15,13 @@ import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityIt
 import MainInput from "@/components/inputs/MainInput";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {getTrainingExercises} from "@/lib/controllers/activityController";
+import {
+    validateActivityDate,
+    validateActivityDescription,
+    validateActivityName,
+    validateActivitySets,
+    validateActivityTrainingId
+} from "@/lib/utils/validators";
 
 export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStructure[]; }) {
 
@@ -113,25 +120,24 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
     };
 
     const validateForm = (): boolean => {
-        if (!activityName.inputState.value.trim()) {
-            activityName.setError('Введите название активности');
-            return false;
+        const nameError = validateActivityName(activityName.inputState.value);
+        activityName.setError(nameError);
+
+        const dateError = validateActivityDate(activityDate.inputState.value);
+        activityDate.setError(dateError);
+
+        const descriptionError = validateActivityDescription(activityDescription.inputState.value);
+        activityDescription.setError(descriptionError);
+
+        const trainingError = validateActivityTrainingId(trainingId.inputState.value);
+        trainingId.setError(trainingError);
+
+        const setsError = validateActivitySets(exerciseSets);
+        if (setsError) {
+            setServerError(setsError);
         }
-        if (!trainingId.inputState.value) {
-            trainingId.setError('Выберите тренировку-шаблон');
-            return false;
-        }
-        // Простая проверка подходов
-        for (const exIdStr of Object.keys(exerciseSets)) {
-            const exId = Number(exIdStr);
-            for (const s of exerciseSets[exId] || []) {
-                if (s.weight < 0 || s.quantity <= 0) {
-                    setServerError('Проверьте поля подходов: вес не может быть отрицательным, повторения > 0');
-                    return false;
-                }
-            }
-        }
-        return true;
+
+        return !(nameError || dateError || descriptionError || trainingError || setsError);
     };
 
     const handleSubmit = async (event: FormEvent): Promise<void> => {

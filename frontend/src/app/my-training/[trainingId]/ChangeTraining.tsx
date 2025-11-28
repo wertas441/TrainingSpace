@@ -185,6 +185,8 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                                 rows={4}
                             />
 
+                            <div ref={listTopRef} className=""></div>
+
                             <MainInput
                                 id="exercise-search"
                                 value={searchName}

@@ -83,8 +83,8 @@ export const validateDayName = (dayName: string): string | null => {
         return (`Имя дня должно содержать минимум 3 символов (сейчас ${dayName.length})`)
     }
 
-    if(dayName.length > 15){
-        return (`Имя дня может содержать максимум 15 символов (сейчас ${dayName.length})`)
+    if(dayName.length > 30){
+        return (`Имя дня может содержать максимум 30 символов (сейчас ${dayName.length})`)
     }
 
     // Разрешаем латиницу, кириллицу, цифры, пробел и часть спецсимволов
@@ -146,19 +146,19 @@ const validateNumberInRange = (value: string, min: number, max: number, fieldLab
 }
 
 export const validateCalories = (calories: string): string | null => {
-    return validateNumberInRange(calories, 0, 100000, 'Калории');
+    return validateNumberInRange(calories, 1, 100000, 'Калории');
 }
 
 export const validateProteinGrams = (protein: string): string | null => {
-    return validateNumberInRange(protein, 0, 1000, 'Белки (г)');
+    return validateNumberInRange(protein, 1, 1000, 'Белки (г)');
 }
 
 export const validateFatGrams = (fat: string): string | null => {
-    return validateNumberInRange(fat, 0, 1000, 'Жиры (г)');
+    return validateNumberInRange(fat, 1, 1000, 'Жиры (г)');
 }
 
 export const validateCarbGrams = (carb: string): string | null => {
-    return validateNumberInRange(carb, 0, 1000, 'Углеводы (г)');
+    return validateNumberInRange(carb, 1, 1000, 'Углеводы (г)');
 }
 
 export const validateDayDescription = (description: string): string | null => {
@@ -219,6 +219,11 @@ export const validateTrainingExercises = (exerciseIds: number[]): string | null 
     if (unique.size !== exerciseIds.length) {
         return ('Список упражнений содержит дубликаты');
     }
+
+    if (exerciseIds.length > 20) {
+        return ('Тренировка не может содержать 20 упражнений');
+    }
+
     return null;
 }
 
@@ -265,4 +270,117 @@ export const validateGoalPriority = (priority: GoalPriority): boolean => {
 
     return false;
 }
+
+
+/// Activity Validators
+
+export const validateActivityName = (activityName: string): string | null => {
+    if (!activityName.trim()) {
+        return ('Пожалуйста, введите название активности');
+    }
+
+    if (activityName.length < 3) {
+        return (`Название активности должно содержать минимум 3 символа (сейчас ${activityName.length})`);
+    }
+
+    if (activityName.length > 15) {
+        return (`Название активности может содержать максимум 15 символов (сейчас ${activityName.length})`);
+    }
+
+    // Разрешаем латиницу, кириллицу, цифры, пробел и часть спецсимволов
+    const activityNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
+    if (!activityNameRegex.test(activityName)) {
+        return ('Название активности может содержать буквы (лат/кир), цифры, пробелы и некоторые спец.символы');
+    }
+
+    return null;
+}
+
+export const validateActivityDescription = (description: string): string | null => {
+    // Поле опциональное
+    if (!description.trim()) {
+        return null;
+    }
+
+    const maxLength = 500;
+    if (description.length > maxLength) {
+        return (`Описание не должно превышать ${maxLength} символов (сейчас ${description.length})`);
+    }
+
+    return null;
+}
+
+export const validateActivityDate = (activityDate: string): string | null => {
+    if (!activityDate.trim()) {
+        return ('Пожалуйста, выберите дату активности');
+    }
+
+    const parts = activityDate.split('-');
+    if (parts.length !== 3) {
+        return ('Некорректная дата активности');
+    }
+
+    const year = Number(parts[0]);
+    const month = Number(parts[1]) - 1; // 0-11
+    const day = Number(parts[2]);
+
+    const parsed = new Date(year, month, day);
+    if (isNaN(parsed.getTime()) || parsed.getFullYear() !== year || parsed.getMonth() !== month || parsed.getDate() !== day) {
+        return ('Некорректная дата активности');
+    }
+
+    // Дополнительно не даём ставить дату в будущем — как для питания
+    const todayLocal = new Date();
+    const todayStart = new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate());
+    if (parsed.getTime() > todayStart.getTime()) {
+        return ('Дата активности не может быть в будущем');
+    }
+
+    return null;
+}
+
+export const validateActivityTrainingId = (trainingId: string): string | null => {
+    if (!trainingId.trim()) {
+        return ('Пожалуйста, выберите тренировку‑шаблон');
+    }
+
+    if (!/^\d+$/.test(trainingId.trim())) {
+        return ('Некорректный идентификатор тренировки');
+    }
+
+    const num = parseInt(trainingId.trim(), 10);
+    if (num <= 0) {
+        return ('Некорректный идентификатор тренировки');
+    }
+
+    return null;
+}
+
+export const validateActivitySets = (
+    exerciseSets: Record<number, { id: number; weight: number; quantity: number; }[]>
+): string | null => {
+    const exerciseIds = Object.keys(exerciseSets);
+    if (exerciseIds.length === 0) {
+        return ('Добавьте хотя бы одно упражнение и подход для активности');
+    }
+
+    for (const exIdStr of exerciseIds) {
+        const sets = exerciseSets[Number(exIdStr)] || [];
+        if (sets.length === 0) {
+            return ('Для каждого упражнения должен быть хотя бы один подход');
+        }
+
+        for (const s of sets) {
+            if (!Number.isFinite(s.weight) || s.weight < 0) {
+                return ('Вес в подходах не может быть отрицательным');
+            }
+            if (!Number.isFinite(s.quantity) || s.quantity <= 0) {
+                return ('Количество повторений в подходах должно быть больше 0');
+            }
+        }
+    }
+
+    return null;
+}
+
 

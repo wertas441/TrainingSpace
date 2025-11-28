@@ -18,6 +18,13 @@ import {baseUrlForBackend} from "@/lib";
 import ModalWindow from "@/components/UI/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
+import {
+    validateActivityDate,
+    validateActivityDescription,
+    validateActivityName,
+    validateActivitySets,
+    validateActivityTrainingId
+} from "@/lib/utils/validators";
 
 interface ChangeActivityProps {
     activityInfo: ActivityDataStructure,
@@ -134,25 +141,24 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
     };
 
     const validateForm = (): boolean => {
-        if (!activityName.inputState.value.trim()) {
-            activityName.setError('Введите название активности');
-            return false;
+        const nameError = validateActivityName(activityName.inputState.value);
+        activityName.setError(nameError);
+
+        const dateError = validateActivityDate(activityDate.inputState.value);
+        activityDate.setError(dateError);
+
+        const descriptionError = validateActivityDescription(activityDescription.inputState.value);
+        activityDescription.setError(descriptionError);
+
+        const trainingError = validateActivityTrainingId(trainingId.inputState.value);
+        trainingId.setError(trainingError);
+
+        const setsError = validateActivitySets(exerciseSets);
+        if (setsError) {
+            setServerError(setsError);
         }
-        if (!trainingId.inputState.value) {
-            trainingId.setError('Выберите тренировку-шаблон');
-            return false;
-        }
-        // Простая проверка подходов
-        for (const exIdStr of Object.keys(exerciseSets)) {
-            const exId = Number(exIdStr);
-            for (const s of exerciseSets[exId] || []) {
-                if (s.weight < 0 || s.quantity <= 0) {
-                    setServerError('Проверьте поля подходов: вес не может быть отрицательным, повторения > 0');
-                    return false;
-                }
-            }
-        }
-        return true;
+
+        return !(nameError || dateError || descriptionError || trainingError || setsError);
     };
 
     const handleSubmit = async (event: FormEvent): Promise<void> => {

@@ -38,6 +38,10 @@ export const validateTrainingExercises = (exerciseIds: number[]): boolean => {
         return false;
     }
 
+    if (exerciseIds.length > 20) {
+        return false;
+    }
+
     // Проверка на уникальность id
     const unique = new Set(exerciseIds);
     if (unique.size !== exerciseIds.length) {
