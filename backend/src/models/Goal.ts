@@ -1,5 +1,6 @@
 import { pool } from '../config/database';
 import {
+    CompleteGoalListFrontendResponse,
     CreateGoalFrontendStructure,
     GoalListFrontendResponse, GoalShortyFrontendResponse, GoalUpdateFrontendResponse,
 } from "../types/goalBackendTypes";
@@ -102,11 +103,11 @@ export class GoalModel {
         return !!rowCount;
     }
 
-
     static async complete(userId: number, goalId: number): Promise<boolean> {
         const query = `
             UPDATE goal
-            SET status = 1
+            SET status = 1,
+                achieve_at = NOW()
             WHERE id = $1 AND user_id = $2
             RETURNING id
         `;
@@ -114,5 +115,19 @@ export class GoalModel {
         const { rowCount } = await pool.query(query, [goalId, userId]);
 
         return !!rowCount;
+    }
+
+    static async getCompleteList(userId: number): Promise<CompleteGoalListFrontendResponse[]> {
+        const query = `
+            SELECT id, name, description, achieve_at
+            FROM goal
+            WHERE user_id = $1
+              AND status IS NOT NULL
+            ORDER BY achieve_at DESC, id DESC
+        `;
+
+        const { rows } = await pool.query(query, [userId]);
+
+        return rows as CompleteGoalListFrontendResponse[];
     }
 }

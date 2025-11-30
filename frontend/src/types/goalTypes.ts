@@ -8,6 +8,13 @@ export interface GoalsStructure {
     priority: GoalPriority;
 }
 
+export interface CompleteGoalsStructure {
+    id: number;
+    name: string;
+    description: string;
+    achieve_at: string;
+}
+
 
 export interface GoalShortyStructure {
     id: number;

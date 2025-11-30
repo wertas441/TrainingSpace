@@ -129,6 +129,7 @@ CREATE TABLE IF NOT EXISTS goal (
     name VARCHAR(50) NOT NULL,
     description TEXT,
     status INT DEFAULT NULL,
+    achieve_at TIMESTAMP WITH TIME ZONE NULL,
     priority VARCHAR(20) NOT NULL CHECK (priority IN ('Низкий', 'Средний', 'Высокий')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

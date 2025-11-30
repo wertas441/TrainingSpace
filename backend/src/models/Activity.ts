@@ -264,16 +264,13 @@ export class ActivityModel {
         }
     }
 
-    /**
-     * Обновление активности пользователя (шапка + упражнения и подходы)
-     */
+
     static async update(data: ActivityListFrontendStructure & { userId: number }): Promise<void> {
         const client = await pool.connect();
 
         try {
             await client.query('BEGIN');
 
-            // Проверяем, что активность принадлежит пользователю
             const { rows: checkRows } = await client.query(
                 'SELECT id FROM activity WHERE id = $1 AND user_id = $2',
                 [data.id, data.userId]

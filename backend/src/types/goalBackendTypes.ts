@@ -16,6 +16,10 @@ export interface GoalListFrontendResponse extends AddNewGoalFrontendStructure {
     id: number;
 }
 
+export interface CompleteGoalListFrontendResponse extends GoalListFrontendResponse {
+    achieve_at: string;
+}
+
 export interface GoalShortyFrontendResponse {
     id: number;
     name: string;

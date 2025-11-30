@@ -2,10 +2,10 @@ import { Pool } from 'pg';
 
 // Создаем пул соединений с PostgreSQL
 export const pool = new Pool({
-    user: process.env.DB_USER || 'postgres',
-    host: process.env.DB_HOST || 'localhost',
-    database: process.env.DB_NAME || 'training_space',
-    password: process.env.DB_PASSWORD || 'password',
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
     port: parseInt(process.env.DB_PORT || '5436'),
     max: 20, // максимальное количество соединений в пуле
     idleTimeoutMillis: 30000, // время ожидания перед закрытием неактивного соединения

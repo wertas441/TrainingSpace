@@ -281,5 +281,32 @@ router.put('/complete-my-goal', authGuard, async (req, res) => {
     }
 });
 
+router.get('/my-complete-list', authGuard, async (req, res) => {
+    try {
+
+        const userId = (req as any).userId as number;
+
+        const goals = await GoalModel.getCompleteList(userId);
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'success of getting complete list of goals',
+            data: { goals }
+        };
+
+        res.status(200).json(response);
+    } catch (error){
+
+        console.error('Ошибка показа списка завершенных целей', error);
+        const err: any = error;
+        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
+        const response: ApiResponse = {
+            success: false,
+            error: `Ошибка при показе списка завершенных целей ${devSuffix}`
+        };
+
+        res.status(500).json(response);
+    }
+});
 
 export default router;

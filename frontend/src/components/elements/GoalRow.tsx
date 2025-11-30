@@ -1,5 +1,5 @@
 import {GoalsStructure} from "@/types/goalTypes";
-import {memo, useCallback, useMemo, useState} from "react";
+import {memo, useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import CheckButton from "@/components/buttons/other/CheckButton";

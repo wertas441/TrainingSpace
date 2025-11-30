@@ -1,28 +1,23 @@
 'use client'
 
-import MainPagination from "@/components/UI/MainPagination";
+import {useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
-import {memo, useMemo, useState} from "react";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
-import {GoalsStructure} from "@/types/goalTypes";
-import GoalItem from "@/components/elements/GoalRow";
+import MainPagination from "@/components/UI/MainPagination";
+import CompleteGoalRow from "@/components/elements/CompleteGoalRow";
+import {CompleteGoalsStructure} from "@/types/goalTypes";
 
-interface GoalsProps {
-    clientGoals: GoalsStructure[],
-    token: string;
-}
-
-function Goals({clientGoals, token}: GoalsProps) {
+export default function CompletedGoals({completeList}: {completeList: CompleteGoalsStructure[]}){
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
-        return clientGoals.filter(e => {
+        return completeList.filter(e => {
             return q.length === 0 || e.name.toLowerCase().includes(q) ;
         });
-    }, [searchName, clientGoals]);
+    }, [searchName, completeList]);
 
     const {
         currentPage,
@@ -36,7 +31,7 @@ function Goals({clientGoals, token}: GoalsProps) {
     return (
         <div className="space-y-4" ref={listTopRef} >
             <GoalsHeader
-                label={'Цели'}
+                label={'Выполненные цели'}
                 searchName={searchName}
                 setSearchName={setSearchName}
             />
@@ -44,20 +39,18 @@ function Goals({clientGoals, token}: GoalsProps) {
             <div className="grid grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
-                        <GoalItem
+                        <CompleteGoalRow
                             key={item.id}
-                            id={item.id}
                             name={item.name}
                             description={item.description}
-                            priority={item.priority}
-                            token={token}
+                            achieve_at={item.achieve_at}
                         />
                     ))
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        {clientGoals.length === 0
-                            ? "У вас пока нет активных целей. Нажмите «Добавить цель», чтобы создать первую."
-                            : "По заданным параметрам поиска цели не найдены. Попробуйте изменить фильтр."
+                        {completeList.length === 0
+                            ? "У вас пока нет выполненных целей. Нажмите «Завершить цель», чтобы завершить первую."
+                            : "По заданным параметрам поиска выполненные цели не найдены. Попробуйте изменить фильтр."
                         }
                     </div>
                 )}
@@ -75,5 +68,3 @@ function Goals({clientGoals, token}: GoalsProps) {
         </div>
     )
 }
-
-export default memo(Goals);
