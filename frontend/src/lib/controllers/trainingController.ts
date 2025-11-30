@@ -2,7 +2,7 @@ import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {TrainingListResponse} from "@/types/trainingTypes";
 
-export async function getTrainingList(tokenValue: string):Promise<TrainingListResponse[]> {
+export async function getTrainingList(tokenValue: string):Promise<TrainingListResponse[] | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/training/my-training-list`, {
             method: "GET",
@@ -27,20 +27,20 @@ export async function getTrainingList(tokenValue: string):Promise<TrainingListRe
             }
             console.error(errorMessage);
 
-            return [];
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ trainings: TrainingListResponse[] }>;
 
         if (!data.success || !data.data?.trainings) {
-            return [];
+            return undefined;
         }
 
         return data.data.trainings;
     } catch (error) {
         console.error("Ошибка запроса списка тренировок:", error);
 
-        return [];
+        return undefined;
     }
 }
 
