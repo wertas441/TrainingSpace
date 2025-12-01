@@ -64,7 +64,7 @@ export class StatisticsModel {
     static async getNutritionGraphicInformation(userId: number): Promise<NutritionGraphicBackendResponse[]> {
         const query = `
             SELECT
-                to_char(day_date::date, 'YYYY-MM-DD') AS date,
+                to_char(day_date::date, 'DD-MM-YYYY') AS date,
                 SUM(calories) AS calories,
                 SUM(protein)  AS protein,
                 SUM(fat)      AS fat,

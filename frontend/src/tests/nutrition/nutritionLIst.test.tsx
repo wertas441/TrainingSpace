@@ -49,9 +49,9 @@ describe('Список дней во вкладке "Питание"', () => {
         expect(await screen.findByText(testDate)).toBeInTheDocument();
         expect(await screen.findByText(testDescription)).toBeInTheDocument();
         expect(await screen.findByText(testCalories)).toBeInTheDocument();
-        expect(await screen.findByText(`${testProtein} г`)).toBeInTheDocument();
-        expect(await screen.findByText(`${testFat} г`)).toBeInTheDocument();
-        expect(await screen.findByText(`${testCarb} г`)).toBeInTheDocument();
+        expect(await screen.findByText(`${testProtein}`)).toBeInTheDocument();
+        expect(await screen.findByText(`${testFat}`)).toBeInTheDocument();
+        expect(await screen.findByText(`${testCarb}`)).toBeInTheDocument();
     });
 
     it('Отсутствие данных в списке из-за сетевой ошибки или пользователь еще не добавлял день', async () => {

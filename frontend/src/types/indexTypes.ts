@@ -32,6 +32,13 @@ export interface BasicIconButtonProps {
     disabled?: boolean;
 }
 
+export interface BasicLinkBtnProps {
+    label: string;
+    href?: string;
+    className?: string;
+}
+
+
 export type DifficultOptionsStructure = 'Лёгкий' | 'Средний' | 'Сложный';
 
 export type ExerciseDifficultFilter = DifficultOptionsStructure | null;
@@ -57,4 +64,11 @@ export interface SimpleButtonProps {
     className?: string;
     disabled?: boolean;
     type?: "button" | "submit" | "reset";
+}
+
+export interface UserProfileRequest {
+    id: string;
+    email: string;
+    userName: string;
+    createdAt: string | Date;
 }

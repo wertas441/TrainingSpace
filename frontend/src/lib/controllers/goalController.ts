@@ -1,8 +1,8 @@
 import { baseUrlForBackend } from "@/lib";
 import type { BackendApiResponse } from "@/types/indexTypes";
-import {GoalShortyStructure, GoalsStructure} from "@/types/goalTypes";
+import {CompleteGoalsStructure, GoalShortyStructure, GoalsStructure} from "@/types/goalTypes";
 
-export async function getGoalList(tokenValue: string | undefined):Promise<GoalsStructure[]> {
+export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/my-goals-list`, {
             method: "GET",
@@ -26,24 +26,66 @@ export async function getGoalList(tokenValue: string | undefined):Promise<GoalsS
             }
             console.error(errorMessage);
 
-            return [];
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ goals: GoalsStructure[] }>;
 
         if (!data.success || !data.data?.goals) {
-            return [];
+            return undefined;
         }
 
         return data.data.goals;
     } catch (error) {
         console.error("Ошибка запроса списка целей:", error);
 
-        return [];
+        return undefined;
     }
 }
 
-export async function getGoalShortyList(tokenValue: string | undefined):Promise<GoalShortyStructure[]> {
+export async function getCompleteGoalList(tokenValue: string):Promise<CompleteGoalsStructure[] | undefined> {
+    try {
+        const response = await fetch(`${baseUrlForBackend}/api/goal/my-complete-list`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Cookie': `token=${tokenValue}`
+            },
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            let errorMessage = "Ошибка получения списка выполненных целей.";
+            try {
+                const data = await response.json() as BackendApiResponse<{ goals: CompleteGoalsStructure[] }>;
+                if (data.error || data.message) {
+                    errorMessage = (data.error || data.message) as string;
+                }
+            } catch {
+                // игнорируем, оставляем дефолтное сообщение
+            }
+            console.error(errorMessage);
+
+            return undefined;
+        }
+
+        const data = await response.json() as BackendApiResponse<{ goals: CompleteGoalsStructure[] }>;
+
+        if (!data.success || !data.data?.goals) {
+            return undefined;
+        }
+
+        return data.data.goals;
+    } catch (error) {
+        console.error("Ошибка запроса списка выполненных целей:", error);
+
+        return undefined;
+    }
+}
+
+
+export async function getGoalShortyList(tokenValue: string):Promise<GoalShortyStructure[]> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/my-shorty-list`, {
             method: "GET",
@@ -84,9 +126,9 @@ export async function getGoalShortyList(tokenValue: string | undefined):Promise<
     }
 }
 
-export async function getGoalInformation(tokenValue: string | undefined, goalId: number):Promise<GoalsStructure | null> {
+export async function getGoalInformation(tokenValue: string, goalId: string):Promise<GoalsStructure | undefined> {
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/goal/about-my-goal?goalId=${encodeURIComponent(String(goalId))}`, {
+        const response = await fetch(`${baseUrlForBackend}/api/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`, {
             method: "GET",
             credentials: "include",
             headers: {
@@ -108,19 +150,19 @@ export async function getGoalInformation(tokenValue: string | undefined, goalId:
             }
 
             console.error(errorMessage);
-            return null;
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ goal: GoalsStructure }>;
 
-        return data.data?.goal ?? null;
+        return data.data?.goal ?? undefined;
     } catch (error) {
         console.error("Ошибка запроса списка целей:", error);
-        return null;
+        return undefined;
     }
 }
 
-export async function deleteGoal(tokenValue: string | undefined, goalId: number):Promise<void> {
+export async function deleteGoal(tokenValue: string, goalId: string):Promise<void> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/delete-my-goal`, {
             method: "DELETE",
@@ -130,7 +172,7 @@ export async function deleteGoal(tokenValue: string | undefined, goalId: number)
                 'Content-Type': 'application/json',
                 'Cookie': `token=${tokenValue}`
             },
-            body: JSON.stringify({goalId: goalId}),
+            body: JSON.stringify({goalId}),
             cache: 'no-store',
         });
 
@@ -162,7 +204,7 @@ export async function deleteGoal(tokenValue: string | undefined, goalId: number)
     }
 }
 
-export async function completeGoal(tokenValue: string | undefined, goalId: number):Promise<void> {
+export async function completeGoal(tokenValue: string, goalId: string):Promise<void> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/complete-my-goal`, {
             method: "PUT",
@@ -172,7 +214,7 @@ export async function completeGoal(tokenValue: string | undefined, goalId: numbe
                 'Content-Type': 'application/json',
                 'Cookie': `token=${tokenValue}`
             },
-            body: JSON.stringify({goalId: goalId}),
+            body: JSON.stringify({goalId}),
             cache: 'no-store',
         });
 

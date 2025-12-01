@@ -2,7 +2,7 @@ import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {TrainingListResponse} from "@/types/trainingTypes";
 
-export async function getTrainingList(tokenValue: string | undefined):Promise<TrainingListResponse[]> {
+export async function getTrainingList(tokenValue: string):Promise<TrainingListResponse[] | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/training/my-training-list`, {
             method: "GET",
@@ -27,24 +27,24 @@ export async function getTrainingList(tokenValue: string | undefined):Promise<Tr
             }
             console.error(errorMessage);
 
-            return [];
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ trainings: TrainingListResponse[] }>;
 
         if (!data.success || !data.data?.trainings) {
-            return [];
+            return undefined;
         }
 
         return data.data.trainings;
     } catch (error) {
         console.error("Ошибка запроса списка тренировок:", error);
 
-        return [];
+        return undefined;
     }
 }
 
-export async function getTrainingInformation(tokenValue: string | undefined, trainingId: number):Promise<TrainingListResponse | null> {
+export async function getTrainingInformation(tokenValue: string, trainingId: number):Promise<TrainingListResponse | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/training/about-my-training?trainingId=${encodeURIComponent(String(trainingId))}`, {
             method: "GET",
@@ -68,15 +68,15 @@ export async function getTrainingInformation(tokenValue: string | undefined, tra
             }
 
             console.error(errorMessage);
-            return null;
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ training: TrainingListResponse }>;
 
-        return data.data?.training ?? null;
+        return data.data?.training ?? undefined;
     } catch (error) {
         console.error("Ошибка запроса информаации о тренировке:", error);
-        return null;
+        return undefined;
     }
 }
 

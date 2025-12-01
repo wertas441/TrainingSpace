@@ -97,7 +97,7 @@ export class ActivityModel {
                 a.id,
                 a.activity_name AS name,
                 COALESCE(a.description, '') AS description,
-                to_char(a.performed_at::date, 'YYYY-MM-DD') AS "activityDate",
+                to_char(a.performed_at::date, 'DD-MM-YYYY') AS "activityDate",
                 a.activity_type AS type,
                 a.activity_difficult AS difficulty,
                 a.training_id AS "trainingId",
@@ -264,16 +264,13 @@ export class ActivityModel {
         }
     }
 
-    /**
-     * Обновление активности пользователя (шапка + упражнения и подходы)
-     */
+
     static async update(data: ActivityListFrontendStructure & { userId: number }): Promise<void> {
         const client = await pool.connect();
 
         try {
             await client.query('BEGIN');
 
-            // Проверяем, что активность принадлежит пользователю
             const { rows: checkRows } = await client.query(
                 'SELECT id FROM activity WHERE id = $1 AND user_id = $2',
                 [data.id, data.userId]

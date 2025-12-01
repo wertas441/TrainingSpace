@@ -9,7 +9,7 @@ export const validateGoalName = (goalName: string): boolean => {
         return false;
     }
 
-    if(goalName.length > 15){
+    if(goalName.length > 30){
         return false;
     }
 

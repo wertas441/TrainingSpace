@@ -3,11 +3,11 @@
 import NutritionHeader from "@/components/UI/headers/NutritionHeader";
 import {NutritionDay} from "@/types/nutritionTypes";
 import NutritionDayItem from "@/components/elements/NutritionDayRow";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 
-export default function Nutrition({userDays = []}: {userDays?: NutritionDay[]}) {
+function Nutrition({userDays}: {userDays: NutritionDay[]}) {
 
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
     const [searchName, setSearchName] = useState<string>('');
@@ -74,9 +74,7 @@ export default function Nutrition({userDays = []}: {userDays?: NutritionDay[]}) 
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [
+    useEffect(() => {setCurrentPage(1);}, [
         searchName, searchDate,
         caloriesMin, caloriesMax,
         proteinMin, proteinMax,
@@ -126,13 +124,19 @@ export default function Nutrition({userDays = []}: {userDays?: NutritionDay[]}) 
                 toggleFilterWindow={toggleFilterWindow}
                 onResetFilters={handleResetFilters}
             />
-
             <div className="grid mt-6 grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
                         <NutritionDayItem
                             key={item.id}
-                            {...item}
+                            id={item.id}
+                            name={item.name}
+                            date={item.date}
+                            description={item.description}
+                            calories={item.calories}
+                            protein={item.protein}
+                            fat={item.fat}
+                            carb={item.carb}
                         />
                         )
                     )
@@ -155,3 +159,5 @@ export default function Nutrition({userDays = []}: {userDays?: NutritionDay[]}) 
         </div>
     )
 }
+
+export default memo(Nutrition);

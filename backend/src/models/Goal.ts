@@ -1,5 +1,6 @@
 import { pool } from '../config/database';
 import {
+    CompleteGoalListFrontendResponse,
     CreateGoalFrontendStructure,
     GoalListFrontendResponse, GoalShortyFrontendResponse, GoalUpdateFrontendResponse,
 } from "../types/goalBackendTypes";
@@ -26,7 +27,11 @@ export class GoalModel {
     // Список целей пользователя
     static async getList(userId: number): Promise<GoalListFrontendResponse[]> {
         const query = `
-            SELECT id, name, description, priority
+            SELECT id,
+                   public_id AS "publicId",
+                   name,
+                   description,
+                   priority
             FROM goal
             WHERE user_id = $1
               AND status IS NULL
@@ -40,7 +45,9 @@ export class GoalModel {
 
     static async getShortyList(userId: number): Promise<GoalShortyFrontendResponse[]> {
         const query = `
-            SELECT id, name
+            SELECT id,
+                   public_id AS "publicId",
+                   name
             FROM goal
             WHERE user_id = $1
               AND status IS NULL
@@ -54,14 +61,18 @@ export class GoalModel {
     }
 
     // Информация по конкретной цели пользователя
-    static async information(userId: number, goalId: number): Promise<GoalListFrontendResponse | null> {
+    static async information(userId: number, goalPublicId: string): Promise<GoalListFrontendResponse | null> {
         const query = `
-            SELECT id, name, description, priority
+            SELECT id,
+                   public_id AS "publicId",
+                   name,
+                   description,
+                   priority
             FROM goal
-            WHERE id = $1 AND user_id = $2
+            WHERE public_id = $1 AND user_id = $2
         `;
 
-        const { rows } = await pool.query(query, [goalId, userId]);
+        const { rows } = await pool.query(query, [goalPublicId, userId]);
 
         return rows[0] ?? null;
     }
@@ -71,7 +82,7 @@ export class GoalModel {
         const query = `
             UPDATE goal
             SET name = $1, description = $2, priority = $3
-            WHERE id = $4 AND user_id = $5
+            WHERE public_id = $4 AND user_id = $5
         `;
 
         const values = [
@@ -90,29 +101,47 @@ export class GoalModel {
     }
 
     // Удаление цели пользователя
-    static async delete(userId: number, goalId: number): Promise<boolean> {
+    static async delete(userId: number, goalPublicId: string): Promise<boolean> {
         const query = `
             DELETE FROM goal
-            WHERE id = $1 AND user_id = $2
+            WHERE public_id = $1 AND user_id = $2
             RETURNING id
         `;
 
-        const { rowCount } = await pool.query(query, [goalId, userId]);
+        const { rowCount } = await pool.query(query, [goalPublicId, userId]);
 
         return !!rowCount;
     }
 
-
-    static async complete(userId: number, goalId: number): Promise<boolean> {
+    static async complete(userId: number, goalPublicId: string): Promise<boolean> {
         const query = `
             UPDATE goal
-            SET status = 1
-            WHERE id = $1 AND user_id = $2
+            SET status = 1,
+                achieve_at = NOW()
+            WHERE public_id = $1 AND user_id = $2
             RETURNING id
         `;
 
-        const { rowCount } = await pool.query(query, [goalId, userId]);
+        const { rowCount } = await pool.query(query, [goalPublicId, userId]);
 
         return !!rowCount;
+    }
+
+    static async getCompleteList(userId: number): Promise<CompleteGoalListFrontendResponse[]> {
+        const query = `
+            SELECT id,
+                   public_id AS "publicId",
+                   name,
+                   description,
+                   achieve_at
+            FROM goal
+            WHERE user_id = $1
+              AND status IS NOT NULL
+            ORDER BY achieve_at DESC, id DESC
+        `;
+
+        const { rows } = await pool.query(query, [userId]);
+
+        return rows as CompleteGoalListFrontendResponse[];
     }
 }

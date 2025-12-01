@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
 import ChangeActivity from "@/app/my-activity/[activityId]/ChangeActivity";
 import {getActivityInformation} from "@/lib/controllers/activityController";
 import {getTrainingList} from "@/lib/controllers/trainingController";
+import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Изменение активности | TrainingSpace",
@@ -22,13 +22,27 @@ export default async function ChangeActivityPage({ params }: ChangeActivityProps
 
     const cookieStore = await cookies();
     const authTokenCookie = cookieStore.get('token');
-    const tokenValue = authTokenCookie?.value;
 
+    if (!authTokenCookie) {
+        return (
+            <ErrorState
+                title="Проблема с авторизацией"
+                description="Похоже, что ваша сессия истекла или отсутствует токен доступа. Попробуйте войти заново."
+            />
+        );
+    }
+
+    const tokenValue = authTokenCookie.value;
     const activityInfo = await getActivityInformation(tokenValue, Number(activityId));
     const trainings = await getTrainingList(tokenValue);
 
-    if (!activityInfo) {
-        notFound();
+    if (!activityInfo || !trainings) {
+        return (
+            <ErrorState
+                title="Не удалось загрузить информацию об активности"
+                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
+            />
+        );
     }
 
     return <ChangeActivity activityInfo={activityInfo} myTrainings={trainings} token={tokenValue} />

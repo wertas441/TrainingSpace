@@ -1,7 +1,7 @@
 'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useState} from "react";
+import {FormEvent, useMemo, useState} from "react";
 import {GoalPriority} from "@/types/goalTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -22,7 +22,7 @@ export default function AddGoal() {
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
 
-    const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'];
+    const goalPriorityOptions: GoalPriority[] = useMemo(() => ['Низкий', 'Средний', 'Высокий'], []) ;
 
     const validateForm = (): boolean => {
         const goalNameError = validateGoalName(goalName.inputState.value);

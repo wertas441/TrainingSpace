@@ -9,12 +9,19 @@ import ServerError from "@/components/errors/ServerError";
 import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
-import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
+import {ActivityDifficultyStructure, ActivityTypeStructure, ExerciseSetsByExerciseId} from "@/types/activityTypes";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {getTrainingExercises} from "@/lib/controllers/activityController";
+import {
+    validateActivityDate,
+    validateActivityDescription,
+    validateActivityName,
+    validateActivitySets,
+    validateActivityTrainingId
+} from "@/lib/utils/validators";
 
 export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStructure[]; }) {
 
@@ -30,12 +37,11 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
 
-    const [exerciseSets, setExerciseSets] = useState<Record<number, { id: number; weight: number; quantity: number; }[]>>({});
+    const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>({});
     const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[]>([]);
 
     const activityTypeChoices: ActivityTypeStructure[] = useMemo(() => ['Силовая', 'Кардио', 'Комбинированный'], []) ;
     const activityDifficultyChoices: ActivityDifficultyStructure[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []) ;
-
 
     const trainingOptions: OptionType[] = useMemo(
         () => myTrainings.map(t => ({ value: String(t.id), label: t.name })),
@@ -58,7 +64,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
             setExerciseSets({});
             return;
         }
-        const next: Record<number, { id: number; weight: number; quantity: number; }[]> = {};
+        const next: ExerciseSetsByExerciseId = {};
         training.exercises.forEach(exId => {
             next[exId] = [{ id: 1, weight: 0, quantity: 0 }];
         });
@@ -81,57 +87,25 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         }
     };
 
-    const addSet = (exerciseId: number) => {
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const nextId = current.length > 0 ? Math.max(...current.map(s => s.id)) + 1 : 1;
-            return {
-                ...prev,
-                [exerciseId]: [...current, { id: nextId, weight: 0, quantity: 0 }]
-            };
-        });
-    };
-
-    const removeSet = (exerciseId: number, setId: number) => {
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const filtered = current.filter(s => s.id !== setId);
-            return {
-                ...prev,
-                [exerciseId]: filtered.length > 0 ? filtered : [{ id: 1, weight: 0, quantity: 0 }]
-            };
-        });
-    };
-
-    const updateSet = (exerciseId: number, setId: number, field: 'weight' | 'quantity', value: string) => {
-        const num = Number(value);
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const updated = current.map(s => s.id === setId ? { ...s, [field]: isNaN(num) ? 0 : num } : s);
-            return { ...prev, [exerciseId]: updated };
-        });
-    };
-
     const validateForm = (): boolean => {
-        if (!activityName.inputState.value.trim()) {
-            activityName.setError('Введите название активности');
-            return false;
+        const nameError = validateActivityName(activityName.inputState.value);
+        activityName.setError(nameError);
+
+        const dateError = validateActivityDate(activityDate.inputState.value);
+        activityDate.setError(dateError);
+
+        const descriptionError = validateActivityDescription(activityDescription.inputState.value);
+        activityDescription.setError(descriptionError);
+
+        const trainingError = validateActivityTrainingId(trainingId.inputState.value);
+        trainingId.setError(trainingError);
+
+        const setsError = validateActivitySets(exerciseSets);
+        if (setsError) {
+            trainingId.setError(setsError);
         }
-        if (!trainingId.inputState.value) {
-            trainingId.setError('Выберите тренировку-шаблон');
-            return false;
-        }
-        // Простая проверка подходов
-        for (const exIdStr of Object.keys(exerciseSets)) {
-            const exId = Number(exIdStr);
-            for (const s of exerciseSets[exId] || []) {
-                if (s.weight < 0 || s.quantity <= 0) {
-                    setServerError('Проверьте поля подходов: вес не может быть отрицательным, повторения > 0');
-                    return false;
-                }
-            }
-        }
-        return true;
+
+        return !(nameError || dateError || descriptionError || trainingError || setsError);
     };
 
     const handleSubmit = async (event: FormEvent): Promise<void> => {
@@ -188,7 +162,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         <main className="flex items-center justify-center min-h-screen p-4">
             <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-xl border border-emerald-100">
                 <form className="space-y-6" onSubmit={handleSubmit}>
-                    <div className="space-y-2">
+                    <div className="space-y-2 text-center">
                         <h1 className="text-2xl font-semibold text-gray-800">Добавить активность</h1>
                         <p className="text-sm text-gray-500">Выберите тренировку и введите подходы по упражнениям</p>
                     </div>
@@ -254,17 +228,15 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                     />
 
                     {trainingId.inputState.error && (
-                        <p className="pt-2 pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
+                        <p className=" pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
                     )}
 
                     {selectedTraining && (
                         <AddTrainingActivityItem
                             selectedTraining={selectedTraining}
                             exerciseSets={exerciseSets}
-                            addSet={addSet}
-                            updateSet={updateSet}
-                            removeSet={removeSet}
                             trainingExercises={trainingExercises}
+                            setExerciseSets={setExerciseSets}
                         />
                     )}
 

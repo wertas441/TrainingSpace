@@ -23,18 +23,21 @@ describe('Список целей во вкладке "Цели"', () => {
     const clientGoalsFakeData: GoalsStructure[] = [
         {
             id: 3,
+            publicId: 'goal-public-id-3',
             name: 'Купить яйца',
             description: 'Надо пожать сотку и купить ящик',
             priority: 'Низкий',
         },
         {
             id: 6,
+            publicId: 'goal-public-id-6',
             name: 'Пожать 200 ногами',
             description: '',
             priority: 'Высокий',
         },
         {
             id: 7,
+            publicId: 'goal-public-id-7',
             name: 'Сделать 100 подтягиваний',
             description: 'сделать 100 подтягиваний широким хватом',
             priority: 'Средний',
@@ -42,7 +45,7 @@ describe('Список целей во вкладке "Цели"', () => {
     ]
 
     it('Проверка корректного вывода данных списка', async () => {
-        render(<Goals clientGoals={clientGoalsFakeData} />);
+        render(<Goals clientGoals={clientGoalsFakeData} token={'test-token'} />);
 
         expect(await screen.findByText('Купить яйца')).toBeInTheDocument();
         expect(await screen.findByText('Надо пожать сотку и купить ящик')).toBeInTheDocument();
@@ -53,21 +56,21 @@ describe('Список целей во вкладке "Цели"', () => {
         expect(await screen.findByText('Средний')).toBeInTheDocument();
     });
 
-    it('Отсутствие данных в списке из-за сетевой ошибки или пользователь еще не добавлял цель', async () => {
-        render(<Goals clientGoals={[]} />);
+    it('Отсутствие данных в списке, потому что пользователь еще не добавлял цель', async () => {
+        render(<Goals clientGoals={[]} token={'test-token'} />);
 
-        expect(await screen.findByText('Добавленных целей не найдено, попробуйте изменить фильтр и проверить подключение к сети.')).toBeInTheDocument();
+        expect(await screen.findByText('У вас пока нет активных целей. Нажмите «Добавить цель», чтобы создать первую.')).toBeInTheDocument();
     });
 
     it('Успешный переход к странице изменения цели', async () => {
-        render(<Goals clientGoals={clientGoalsFakeData} />);
+        render(<Goals clientGoals={clientGoalsFakeData} token={'test-token'} />);
 
         const buttons = await screen.findAllByRole('button');
         const changeButton = buttons[buttons.length - 1];
 
         await userEvent.click(changeButton);
 
-        expect(pushMock).toHaveBeenCalledWith(`/goals/${7}`);
+        expect(pushMock).toHaveBeenCalledWith(`/goals/goal-public-id-7`);
     });
 });
 

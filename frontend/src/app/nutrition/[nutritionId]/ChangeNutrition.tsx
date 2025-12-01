@@ -25,7 +25,7 @@ import {deleteDay} from "@/lib/controllers/nutritionController";
 
 interface ChangeNutritionProps {
     dayInfo: NutritionDay,
-    token: string | undefined,
+    token: string,
 }
 
 export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
@@ -127,14 +127,9 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
         <>
             <BlockPageContext>
                 <div className="space-y-6">
-                    <div>
-                        <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
-                            Изменение дня
-                        </h2>
-                        <p className="text-center text-gray-600">
-                            Измените данные своего дня и сохраните изменения для вступления их в силу
-                        </p>
-                    </div>
+                    <h2 className="text-2xl font-bold text-center text-gray-900">
+                        Изменение дня
+                    </h2>
 
                     <ServerError message={serverError} />
 

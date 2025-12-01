@@ -1,4 +1,9 @@
-import {ActivityDifficultyStructure, ActivityTypeStructure} from "../../types/activityBackendTypes";
+import {
+    ActivityDifficultyStructure,
+    ActivityTypeStructure,
+    ActivityExerciseRequest,
+    ActivityExerciseFrontend
+} from "../../types/activityBackendTypes";
 
 export const validateActivityName = (goalName: string): boolean => {
     if(!goalName.trim()){
@@ -73,11 +78,73 @@ export const validateActivityPerformedAt = (performedAt: string): boolean => {
         return false;
     }
 
-    const todayLocal = new Date();
-    const todayStart = new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate());
+    return true;
+}
 
-    if (parsed.getTime() > todayStart.getTime()) {
+// Валидация упражнений и подходов при создании активности (frontend -> backend)
+export const validateActivityExercisesCreate = (exercises: ActivityExerciseRequest[]): boolean => {
+    if (!Array.isArray(exercises) || exercises.length === 0) {
         return false;
+    }
+
+    for (const ex of exercises) {
+        if (!ex || typeof ex.id !== 'number' || ex.id <= 0) {
+            return false;
+        }
+
+        if (!Array.isArray(ex.try) || ex.try.length === 0) {
+            return false;
+        }
+
+        for (const s of ex.try) {
+            // Номер подхода должен быть положительным целым
+            if (typeof s.id !== 'number' || !Number.isFinite(s.id) || s.id <= 0) {
+                return false;
+            }
+
+            // Вес не может быть отрицательным
+            if (typeof s.weight !== 'number' || !Number.isFinite(s.weight) || s.weight < 0) {
+                return false;
+            }
+
+            // Повторения должны быть > 0
+            if (typeof s.quantity !== 'number' || !Number.isFinite(s.quantity) || s.quantity <= 0) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+// Валидация упражнений и подходов при обновлении активности
+export const validateActivityExercisesUpdate = (exercises: ActivityExerciseFrontend[]): boolean => {
+    if (!Array.isArray(exercises) || exercises.length === 0) {
+        return false;
+    }
+
+    for (const ex of exercises) {
+        if (!ex || typeof ex.exercisesId !== 'number' || ex.exercisesId <= 0) {
+            return false;
+        }
+
+        if (!Array.isArray(ex.try) || ex.try.length === 0) {
+            return false;
+        }
+
+        for (const s of ex.try) {
+            if (typeof s.id !== 'number' || !Number.isFinite(s.id) || s.id <= 0) {
+                return false;
+            }
+
+            if (typeof s.weight !== 'number' || !Number.isFinite(s.weight) || s.weight < 0) {
+                return false;
+            }
+
+            if (typeof s.quantity !== 'number' || !Number.isFinite(s.quantity) || s.quantity <= 0) {
+                return false;
+            }
+        }
     }
 
     return true;

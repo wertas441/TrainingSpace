@@ -5,7 +5,12 @@ import MainInput from "@/components/inputs/MainInput";
 import {FormEvent, useCallback, useMemo, useState} from "react";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
-import {ActivityDataStructure, ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
+import {
+    ActivityDataStructure,
+    ActivityDifficultyStructure,
+    ActivityTypeStructure,
+    ExerciseSetsByExerciseId
+} from "@/types/activityTypes";
 import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -18,11 +23,18 @@ import {baseUrlForBackend} from "@/lib";
 import ModalWindow from "@/components/UI/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
+import {
+    validateActivityDate,
+    validateActivityDescription,
+    validateActivityName,
+    validateActivitySets,
+    validateActivityTrainingId
+} from "@/lib/utils/validators";
 
 interface ChangeActivityProps {
     activityInfo: ActivityDataStructure,
     myTrainings: TrainingDataStructure[];
-    token: string | undefined;
+    token: string;
 }
 
 export default function ChangeActivity({activityInfo, myTrainings, token}: ChangeActivityProps){
@@ -38,9 +50,9 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
 
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
-    const [exerciseSets, setExerciseSets] = useState<Record<number, { id: number; weight: number; quantity: number; }[]>>(
+    const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(
         () => {
-            const initial: Record<number, { id: number; weight: number; quantity: number; }[]> = {};
+            const initial: ExerciseSetsByExerciseId = {};
 
             activityInfo.exercises.forEach((ex) => {
                 initial[ex.exercisesId] = ex.try.map((s) => ({
@@ -79,7 +91,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
             setExerciseSets({});
             return;
         }
-        const next: Record<number, { id: number; weight: number; quantity: number; }[]> = {};
+        const next: ExerciseSetsByExerciseId = {};
         training.exercises.forEach(exId => {
             next[exId] = [{ id: 1, weight: 0, quantity: 0 }];
         });
@@ -102,57 +114,25 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
         }
     };
 
-    const addSet = (exerciseId: number) => {
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const nextId = current.length > 0 ? Math.max(...current.map(s => s.id)) + 1 : 1;
-            return {
-                ...prev,
-                [exerciseId]: [...current, { id: nextId, weight: 0, quantity: 0 }]
-            };
-        });
-    };
-
-    const removeSet = (exerciseId: number, setId: number) => {
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const filtered = current.filter(s => s.id !== setId);
-            return {
-                ...prev,
-                [exerciseId]: filtered.length > 0 ? filtered : [{ id: 1, weight: 0, quantity: 0 }]
-            };
-        });
-    };
-
-    const updateSet = (exerciseId: number, setId: number, field: 'weight' | 'quantity', value: string) => {
-        const num = Number(value);
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const updated = current.map(s => s.id === setId ? { ...s, [field]: isNaN(num) ? 0 : num } : s);
-            return { ...prev, [exerciseId]: updated };
-        });
-    };
-
     const validateForm = (): boolean => {
-        if (!activityName.inputState.value.trim()) {
-            activityName.setError('Введите название активности');
-            return false;
+        const nameError = validateActivityName(activityName.inputState.value);
+        activityName.setError(nameError);
+
+        const dateError = validateActivityDate(activityDate.inputState.value);
+        activityDate.setError(dateError);
+
+        const descriptionError = validateActivityDescription(activityDescription.inputState.value);
+        activityDescription.setError(descriptionError);
+
+        const trainingError = validateActivityTrainingId(trainingId.inputState.value);
+        trainingId.setError(trainingError);
+
+        const setsError = validateActivitySets(exerciseSets);
+        if (setsError) {
+            trainingId.setError(setsError);
         }
-        if (!trainingId.inputState.value) {
-            trainingId.setError('Выберите тренировку-шаблон');
-            return false;
-        }
-        // Простая проверка подходов
-        for (const exIdStr of Object.keys(exerciseSets)) {
-            const exId = Number(exIdStr);
-            for (const s of exerciseSets[exId] || []) {
-                if (s.weight < 0 || s.quantity <= 0) {
-                    setServerError('Проверьте поля подходов: вес не может быть отрицательным, повторения > 0');
-                    return false;
-                }
-            }
-        }
-        return true;
+
+        return !(nameError || dateError || descriptionError || trainingError || setsError);
     };
 
     const handleSubmit = async (event: FormEvent): Promise<void> => {
@@ -289,17 +269,15 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                         />
 
                         {trainingId.inputState.error && (
-                            <p className="pt-2 pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
+                            <p className="pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
                         )}
 
                         {selectedTraining && (
                             <AddTrainingActivityItem
                                 selectedTraining={selectedTraining}
                                 exerciseSets={exerciseSets}
-                                addSet={addSet}
-                                updateSet={updateSet}
-                                removeSet={removeSet}
                                 trainingExercises={trainingExercises}
+                                setExerciseSets={setExerciseSets}
                             />
                         )}
 

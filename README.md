@@ -252,3 +252,4 @@ frontend/  # Frontend (Next.js + React + TypeScript)
 Буду рад любому вкладу в развитие **TrainingSpace**.
 
 
+

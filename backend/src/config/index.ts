@@ -3,16 +3,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const config = {
-    port: process.env.PORT || 3001,
-    nodeEnv: process.env.NODE_ENV || 'development',
-    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
-    jwtSecret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-here',
+    port: process.env.PORT,
+    nodeEnv: process.env.NODE_ENV,
+    frontendUrl: process.env.FRONTEND_URL,
+    jwtSecret: process.env.JWT_SECRET,
     database: {
-        host: process.env.DB_HOST || 'localhost',
+        host: process.env.DB_HOST,
         port: parseInt(process.env.DB_PORT || '5436'),
-        name: process.env.DB_NAME || 'training_space',
-        user: process.env.DB_USER || 'postgres',
-        password: process.env.DB_PASSWORD || 'password',
+        name: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
     },
 };
 

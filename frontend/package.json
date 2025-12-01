@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build 2>&1 | grep -v \"\\[baseline-browser-mapping]\"",
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
@@ -30,6 +30,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "baseline-browser-mapping": "^2.8.32",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "identity-obj-proxy": "^3.0.0",

@@ -8,11 +8,11 @@ export default function MainHeader({ onToggleSidebar }: {onToggleSidebar?: () =>
 				<div className="flex items-center gap-2">
 					<button
 						type="button"
-						className="lg:hidden inline-flex items-center justify-center h-9 w-9 rounded-md"
+						className="lg:hidden border border-emerald-200 inline-flex items-center justify-center p-2 rounded-md"
 						aria-label="Открыть меню"
 						onClick={onToggleSidebar}
 					>
-                        <Bars3Icon className="w-7 h-7" />
+                        <Bars3Icon className="w-7 h-7 text-emerald-600" />
                     </button>
 				</div>
 

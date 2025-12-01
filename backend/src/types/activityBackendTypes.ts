@@ -22,15 +22,13 @@ export interface AddActivityFrontendRequest {
     activity_type: ActivityTypeStructure;
     activity_difficult: ActivityDifficultyStructure;
     training_id: number;
-    performed_at: string; // строка даты YYYY-MM-DD
+    performed_at: string;
     exercises: ActivityExerciseRequest[];
 }
 
-// Структура для слоя модели (create)
 export interface AddActivityModelRequest extends AddActivityFrontendRequest {
     user_id: number;
 }
-
 
 export interface ActivityExerciseFrontend {
     exercisesId: number;

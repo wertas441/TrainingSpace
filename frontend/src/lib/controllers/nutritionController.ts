@@ -2,7 +2,7 @@ import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {NutritionDay} from "@/types/nutritionTypes";
 
-export async function getDayList(tokenValue: string | undefined):Promise<NutritionDay[]> {
+export async function getDayList(tokenValue: string):Promise<NutritionDay[] | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/nutrition/my-day-list`, {
             method: "GET",
@@ -26,24 +26,24 @@ export async function getDayList(tokenValue: string | undefined):Promise<Nutriti
             }
             console.error(errorMessage);
 
-            return [];
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ days: NutritionDay[] }>;
 
         if (!data.success || !data.data?.days) {
-            return [];
+            return undefined;
         }
 
         return data.data.days;
     } catch (error) {
         console.error("Ошибка запроса списка дней:", error);
 
-        return [];
+        return undefined;
     }
 }
 
-export async function getDayInformation(tokenValue: string | undefined, dayId: number):Promise<NutritionDay | null> {
+export async function getDayInformation(tokenValue: string, dayId: number):Promise<NutritionDay | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/nutrition/about-my-day?dayId=${encodeURIComponent(String(dayId))}`, {
             method: "GET",
@@ -65,17 +65,17 @@ export async function getDayInformation(tokenValue: string | undefined, dayId: n
             } catch {
                 // игнорируем, оставляем дефолтное сообщение
             }
-
             console.error(errorMessage);
-            return null;
+
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ day: NutritionDay }>;
 
-        return data.data?.day ?? null;
+        return data.data?.day ?? undefined;
     } catch (error) {
         console.error("Ошибка запроса списка целей:", error);
-        return null;
+        return undefined;
     }
 }
 

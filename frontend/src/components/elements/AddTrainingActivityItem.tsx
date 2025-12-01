@@ -2,29 +2,59 @@ import {PlusIcon} from "@heroicons/react/16/solid";
 import {TrashIcon} from "@heroicons/react/24/outline";
 import type {TrainingDataStructure} from "@/types/indexTypes";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import {JSX, useMemo} from "react";
+import type {ExerciseSetsByExerciseId} from "@/types/activityTypes";
+import {Dispatch, JSX, SetStateAction, useMemo} from "react";
 
 interface AddTrainingActivityItemProps {
-	selectedTraining: TrainingDataStructure;
-	exerciseSets: Record<number, { id: number; weight: number; quantity: number }[]>;
-	addSet: (exerciseId: number) => void;
-	updateSet: (exerciseId: number, setId: number, field: 'weight' | 'quantity', value: string) => void;
-	removeSet: (exerciseId: number, setId: number) => void;
+    selectedTraining: TrainingDataStructure;
+    exerciseSets: ExerciseSetsByExerciseId;
     trainingExercises: ExerciseTechniqueItem[];
+    setExerciseSets: Dispatch<SetStateAction<ExerciseSetsByExerciseId>>;
 }
 
 export default function AddTrainingActivityItem(
     {
         selectedTraining,
         exerciseSets,
-        addSet,
-        updateSet,
-        removeSet,
         trainingExercises,
+        setExerciseSets,
 	}:AddTrainingActivityItemProps): JSX.Element{
 
     const TrashIconComponent = useMemo(() => <TrashIcon className="w-5 h-5 w-full" />, [])
     const PlusIconComponent = useMemo(() => <PlusIcon className="w-5 h-5 w-full" />, [])
+
+    const addSet = (exerciseId: number) => {
+        setExerciseSets(prev => {
+            const current = prev[exerciseId] || [];
+            const nextId = current.length > 0 ? Math.max(...current.map(s => s.id)) + 1 : 1;
+            return {
+                ...prev,
+                [exerciseId]: [...current, { id: nextId, weight: 0, quantity: 0 }]
+            };
+        });
+    };
+
+    const removeSet = (exerciseId: number, setId: number) => {
+        setExerciseSets(prev => {
+            const current = prev[exerciseId] || [];
+            const filtered = current.filter(s => s.id !== setId);
+            return {
+                ...prev,
+                [exerciseId]: filtered.length > 0 ? filtered : [{ id: 1, weight: 0, quantity: 0 }]
+            };
+        });
+    };
+
+    const updateSet = (exerciseId: number, setId: number, field: 'weight' | 'quantity', value: string) => {
+        const num = Number(value);
+        setExerciseSets(prev => {
+            const current = prev[exerciseId] || [];
+            const updated = current.map(s => s.id === setId ? { ...s, [field]: isNaN(num) ? 0 : num } : s);
+            return { ...prev, [exerciseId]: updated };
+        });
+    };
+
+
 
     return (
         <div className="space-y-6">

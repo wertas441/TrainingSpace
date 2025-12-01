@@ -23,7 +23,7 @@ import {deleteTraining} from "@/lib/controllers/trainingController";
 
 interface ChangeTrainingProps {
     trainingInfo: TrainingListResponse,
-    token: string | undefined,
+    token: string,
     exercises: ExerciseTechniqueItem[],
 }
 
@@ -158,14 +158,9 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
             <main className="flex items-center justify-center min-h-screen p-4">
                 <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-xl border border-emerald-100">
                     <div className="space-y-6" >
-                        <div>
-                            <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
-                                Изменение тренировки
-                            </h2>
-                            <p className="text-center text-gray-600">
-                                Измените данные своей тренировки и сохраните изменения
-                            </p>
-                        </div>
+                        <h2 className="text-2xl font-bold text-center text-gray-900">
+                            Изменение тренировки
+                        </h2>
 
                         <ServerError message={serverError} />
 
@@ -189,6 +184,8 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                                 error={trainingDescription.inputState.error || undefined}
                                 rows={4}
                             />
+
+                            <div ref={listTopRef} className=""></div>
 
                             <MainInput
                                 id="exercise-search"
@@ -265,7 +262,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                                 )}
                             </div>
 
-                            <div className="mt-10 flex items-center gap-x-8">
+                            <div className="mt-10 flex-row md:flex space-y-4 md:space-y-0 items-center gap-x-8">
                                 <LightGreenSubmitBtn
                                     label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                     disabled={isSubmitting}
@@ -281,17 +278,17 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
             </main>
 
             <ModalWindow
-                isExiting = {isExiting}
-                modalRef = {windowModalRef}
-                windowLabel = {'Подтверждение удаления'}
-                windowText = {`Вы действительно хотите удалить тренировку "${trainingInfo.name}"? Это действие необратимо. `}
-                error = {serverError}
-                cancelButtonLabel = {'Отмена'}
-                cancelFunction = {toggleModalWindow}
-                confirmButtonLabel = {'Удалить'}
-                confirmFunction = {deleteTrainingBtn}
-                isProcess = {isProcess}
-                isRendered = {isRendered}
+                isExiting={isExiting}
+                modalRef={windowModalRef}
+                windowLabel={'Подтверждение удаления'}
+                windowText={`Вы действительно хотите удалить тренировку "${trainingInfo.name}"? Это действие необратимо. `}
+                error={serverError}
+                cancelButtonLabel={'Отмена'}
+                cancelFunction={toggleModalWindow}
+                confirmButtonLabel={'Удалить'}
+                confirmFunction={deleteTrainingBtn}
+                isProcess={isProcess}
+                isRendered={isRendered}
             />
         </>
     )

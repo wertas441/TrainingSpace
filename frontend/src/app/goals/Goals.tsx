@@ -2,17 +2,17 @@
 
 import MainPagination from "@/components/UI/MainPagination";
 import {usePagination} from "@/lib/hooks/usePagination";
-import {useMemo, useState} from "react";
+import {memo, useMemo, useState} from "react";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
 import {GoalsStructure} from "@/types/goalTypes";
 import GoalItem from "@/components/elements/GoalRow";
 
 interface GoalsProps {
     clientGoals: GoalsStructure[],
-    token: string | undefined;
+    token: string;
 }
 
-export default function Goals({clientGoals, token}: GoalsProps) {
+function Goals({clientGoals, token}: GoalsProps) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
@@ -36,6 +36,7 @@ export default function Goals({clientGoals, token}: GoalsProps) {
     return (
         <div className="space-y-4" ref={listTopRef} >
             <GoalsHeader
+                label={'Цели'}
                 searchName={searchName}
                 setSearchName={setSearchName}
             />
@@ -43,19 +44,22 @@ export default function Goals({clientGoals, token}: GoalsProps) {
             <div className="grid grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
-                            <GoalItem
-                                key={item.id}
-                                id={item.id}
-                                name={item.name}
-                                description={item.description}
-                                priority={item.priority}
-                                token={token}
-                            />
-                        )
-                    )
+                        <GoalItem
+                            key={item.publicId}
+                            id={item.id}
+                            publicId={item.publicId}
+                            name={item.name}
+                            description={item.description}
+                            priority={item.priority}
+                            token={token}
+                        />
+                    ))
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Добавленных целей не найдено, попробуйте изменить фильтр и проверить подключение к сети.
+                        {clientGoals.length === 0
+                            ? "У вас пока нет активных целей. Нажмите «Добавить цель», чтобы создать первую."
+                            : "По заданным параметрам поиска цели не найдены. Попробуйте изменить фильтр."
+                        }
                     </div>
                 )}
             </div>
@@ -72,3 +76,5 @@ export default function Goals({clientGoals, token}: GoalsProps) {
         </div>
     )
 }
+
+export default memo(Goals);

@@ -3,7 +3,7 @@ import type {BackendApiResponse} from "@/types/indexTypes";
 import {ActivityDataStructure} from "@/types/activityTypes";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 
-export async function getActivityList(tokenValue: string | undefined):Promise<ActivityDataStructure[]> {
+export async function getActivityList(tokenValue: string | undefined):Promise<ActivityDataStructure[] | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/activity/my-activity-list`, {
             method: "GET",
@@ -27,20 +27,20 @@ export async function getActivityList(tokenValue: string | undefined):Promise<Ac
             }
             console.error(errorMessage);
 
-            return [];
+            return undefined;
         }
 
         const data = await response.json() as BackendApiResponse<{ activity: ActivityDataStructure[] }>;
 
         if (!data.success || !data.data?.activity) {
-            return [];
+            return undefined;
         }
 
         return data.data.activity;
     } catch (error) {
         console.error("Ошибка запроса списка активностей:", error);
 
-        return [];
+        return undefined;
     }
 }
 

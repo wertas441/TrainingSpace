@@ -3,7 +3,6 @@ import { ApiResponse } from '../types';
 
 const router = Router();
 
-// Роут для проверки здоровья API
 router.get('/health', (req, res) => {
     const response: ApiResponse = {
         success: true,

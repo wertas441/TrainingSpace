@@ -1,28 +1,15 @@
 'use client'
 
-import {UserProfileRequest} from "@/types/settingsTypes";
 import {
     CalendarIcon,
     EnvelopeIcon,
     UserCircleIcon
 } from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
+import SettingsHeader from "@/components/UI/headers/SettingsHeader";
+import {UserProfileRequest} from "@/types/indexTypes";
 
-
-export default function Profile({ userData }: { userData: UserProfileRequest | null}){
-
-    if (!userData) {
-        return (
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="bg-white border border-emerald-100 rounded-xl p-6 sm:p-8 shadow-sm text-center">
-                    <h1 className="text-2xl font-semibold text-emerald-900 mb-2">Профиль</h1>
-                    <p className="text-sm text-gray-500">
-                        Не удалось загрузить данные профиля. Попробуйте обновить страницу или войти в систему ещё раз.
-                    </p>
-                </div>
-            </div>
-        )
-    }
+export default function Profile({ userData }: { userData: UserProfileRequest}) {
 
     const createdAtDate = userData.createdAt ? new Date(userData.createdAt) : null;
 
@@ -45,14 +32,11 @@ export default function Profile({ userData }: { userData: UserProfileRequest | n
 
     return (
         <SettingsPageContext>
-            <div className="border-b border-emerald-50 px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40">
-                <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900">
-                    Профиль
-                </h1>
-                <p className="mt-1 text-sm text-emerald-900/70">
-                    Основная информация о вашей учётной записи.
-                </p>
-            </div>
+
+            <SettingsHeader
+                label={`Профиль`}
+                text={`Основная информация о вашей учётной записи`}
+            />
 
             <div className="px-6 py-6 sm:px-8 sm:py-8">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-center">

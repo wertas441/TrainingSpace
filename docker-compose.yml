@@ -6,11 +6,12 @@ services:
     container_name: training_space_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: training_space
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      # Внутри контейнера Postgres слушает 5432, наружу пробрасываем на 5436 (как в конфиге backend по умолчанию)
+      # Внутри контейнера Postgres слушает 5432, наружу пробрасываем на 5436
+      # (под этот порт нужно выставить DB_PORT в .env backend)
       - "5436:5432"
     volumes:
       - training_space_db_data:/var/lib/postgresql/data

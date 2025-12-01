@@ -1,14 +1,14 @@
 'use client'
 
 import ExercisesTechniquesHeader from "@/components/UI/headers/ExercisesTechniquesHeader";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import ExerciseRow from "@/components/elements/ExerciseRow";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/MainPagination";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {ExerciseDifficultFilter} from "@/types/indexTypes";
 
-export default function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
+function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
     const [searchName, setSearchName] = useState<string>('');
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
@@ -56,13 +56,16 @@ export default function ExercisesTechniques({exercises}:{exercises: ExerciseTech
                 setPartOfBodyFilter={setPartOfBodyFilter}
                 exercises={exercises}
             />
-
             <div className="grid grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map(ex => (
                             <ExerciseRow
                                 key={ex.id}
-                                exercise={ex}
+                                id={ex.id}
+                                name={ex.name}
+                                difficulty={ex.difficulty}
+                                description={ex.description}
+                                partOfTheBody={ex.partOfTheBody}
                             />
                         )
                     )
@@ -85,3 +88,5 @@ export default function ExercisesTechniques({exercises}:{exercises: ExerciseTech
         </div>
     );
 }
+
+export default memo(ExercisesTechniques);

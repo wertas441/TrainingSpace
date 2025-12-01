@@ -7,7 +7,7 @@ export const validateDayName = (dayName: string): boolean => {
         return false;
     }
 
-    if(dayName.length > 15){
+    if(dayName.length > 30){
         return false;
     }
 
@@ -64,19 +64,19 @@ const validateNumberInRange = (value: number, min: number, max: number): boolean
 }
 
 export const validateCalories = (calories: number): boolean => {
-    return validateNumberInRange(calories, 0, 100000);
+    return validateNumberInRange(calories, 1, 100000);
 }
 
 export const validateProtein = (protein: number): boolean => {
-    return validateNumberInRange(protein, 0, 1000);
+    return validateNumberInRange(protein, 1, 1000);
 }
 
 export const validateFat = (fat: number): boolean => {
-    return validateNumberInRange(fat, 0, 1000);
+    return validateNumberInRange(fat, 1, 1000);
 }
 
 export const validateCarb = (carb: number): boolean => {
-    return validateNumberInRange(carb, 0, 1000);
+    return validateNumberInRange(carb, 1, 1000);
 }
 
 export const validateDayDescription = (description: string): boolean => {

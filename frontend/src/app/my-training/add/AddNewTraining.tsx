@@ -1,7 +1,7 @@
 'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useEffect, useMemo, useState} from "react";
+import {FormEvent, useCallback, useEffect, useMemo, useState} from "react";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
@@ -119,7 +119,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
         }
     }
 
-    const handleToggleExercise = (id: number) => {
+    const handleToggleExercise = useCallback((id: number) => {
         setSelectedExerciseIds(prev => {
             if (prev.includes(id)) {
                 const next = prev.filter(x => x !== id);
@@ -129,8 +129,8 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
             const next = [...prev, id];
             if (next.length > 0) setExercisesError(null);
             return next;
-        });
-    }
+        })
+    }, []);
 
     return (
         <main className="flex items-center justify-center min-h-screen p-4">
@@ -167,6 +167,8 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             error={trainingDescription.inputState.error || undefined}
                             rows={4}
                         />
+
+                        <div ref={listTopRef} className=""></div>
 
                         <MainInput
                             id="exercise-search"

@@ -20,10 +20,10 @@ import ModalWindow from "@/components/UI/ModalWindow";
 
 interface ChangeGoalProps {
     goalInfo: GoalsStructure;
-    token: string | undefined;
+    token: string;
 }
 
-export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
+export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
 
     const goalName = useInputField(goalInfo.name);
     const goalDescription = useInputField(goalInfo.description);
@@ -31,7 +31,7 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
 
-    const goalPriorityOptions: GoalPriority[] = useMemo(() => ['Низкий', 'Средний', 'Высокий'], []) ;
+    const goalPriorityOptions: GoalPriority[] = useMemo(() => ['Низкий', 'Средний', 'Высокий'], []);
 
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
@@ -47,7 +47,7 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
         return !(goalDescriptionError || goalNameError || goalPriorityError);
     }
 
-    const handleSubmit = async (event: FormEvent):Promise<void> => {
+    const handleSubmit = async (event: FormEvent): Promise<void> => {
         event.preventDefault();
         setServerError(null);
 
@@ -65,7 +65,7 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    goalId: goalInfo.id,
+                    goalId: goalInfo.publicId,
                     name: goalName.inputState.value,
                     description: goalDescription.inputState.value,
                     priority: goalPriority,
@@ -91,7 +91,7 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
         setServerError(null);
 
         try {
-            await deleteGoal(token, goalInfo.id);
+            await deleteGoal(token, goalInfo.publicId);
             router.replace("/goals");
         } catch (error) {
             console.error("delete goal error:", error);
@@ -103,16 +103,11 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
         <>
             <BlockPageContext>
                 <div className="space-y-6">
-                    <div>
-                        <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
-                            Изменение цели
-                        </h2>
-                        <p className="text-center text-gray-600">
-                            Измените данные своей цели и сохраните изменения для вступления их в силу
-                        </p>
-                    </div>
+                    <h2 className="text-2xl font-bold text-center text-gray-900">
+                        Изменение цели
+                    </h2>
 
-                    <ServerError message={serverError} />
+                    <ServerError message={serverError}/>
 
                     <form className="space-y-6" onSubmit={handleSubmit}>
 
@@ -144,14 +139,14 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
                             onChange={setGoalPriority}
                         />
 
-                        <div className="mt-8 flex items-center gap-x-8">
+                        <div className="mt-8 md:flex flex-row space-y-4 md:space-y-0  items-center gap-x-8">
                             <LightGreenSubmitBtn
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                 disabled={isSubmitting}
                             />
                             <RedGlassBtn
-                                label = {'Удалить цель'}
-                                onClick = {toggleModalWindow}
+                                label={'Удалить цель'}
+                                onClick={toggleModalWindow}
                             />
                         </div>
                     </form>
@@ -159,17 +154,17 @@ export default function ChangeGoal({goalInfo, token}: ChangeGoalProps){
             </BlockPageContext>
 
             <ModalWindow
-                isExiting = {isExiting}
-                modalRef = {windowModalRef}
-                windowLabel = {'Подтверждение удаления'}
-                windowText = {`Вы действительно хотите удалить цель ${goalInfo.name}? Это действие необратимо.`}
-                error = {serverError}
-                cancelButtonLabel = {'Отмена'}
-                cancelFunction = {toggleModalWindow}
-                confirmButtonLabel = {'Удалить'}
-                confirmFunction = {deleteGoalBtn}
-                isProcess = {isProcess}
-                isRendered = {isRendered}
+                isExiting={isExiting}
+                modalRef={windowModalRef}
+                windowLabel={'Подтверждение удаления'}
+                windowText={`Вы действительно хотите удалить цель ${goalInfo.name}? Это действие необратимо.`}
+                error={serverError}
+                cancelButtonLabel={'Отмена'}
+                cancelFunction={toggleModalWindow}
+                confirmButtonLabel={'Удалить'}
+                confirmFunction={deleteGoalBtn}
+                isProcess={isProcess}
+                isRendered={isRendered}
             />
         </>
     )
