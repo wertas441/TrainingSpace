@@ -34,9 +34,9 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
                 {hasGoals ? (
                     <ul className="mt-2 space-y-2 text-sm">
                         {visibleGoals.map((goal) => (
-                            <li key={goal.id}>
+                            <li key={goal.publicId}>
                                 <Link
-                                    href={`/goals/${goal.id}`}
+                                    href={`/goals/${goal.publicId}`}
                                     className="flex items-center justify-between rounded-lg border border-emerald-50 px-3 py-2 hover:bg-emerald-50 hover:border-emerald-200 transition"
                                 >
                                     <span className="truncate text-gray-800">

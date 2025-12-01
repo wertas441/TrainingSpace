@@ -10,7 +10,7 @@ interface GoalRowProps extends GoalsStructure{
     token: string;
 }
 
-function GoalRow({id, name, description, priority, token}: GoalRowProps ) {
+function GoalRow({id, publicId, name, description, priority, token}: GoalRowProps ) {
 
     const [isCompleting, setIsCompleting] = useState<boolean>(false);
     const [isHidden, setIsHidden] = useState<boolean>(false);
@@ -22,7 +22,7 @@ function GoalRow({id, name, description, priority, token}: GoalRowProps ) {
 
         setIsCompleting(true);
 
-        completeGoal(token, id)
+        completeGoal(token, publicId)
             .then(() => {
                 // Даем анимации выполниться перед скрытием и обновлением списка
                 setTimeout(() => {
@@ -34,7 +34,7 @@ function GoalRow({id, name, description, priority, token}: GoalRowProps ) {
                 console.error('Ошибка при выполнении цели', error);
                 setIsCompleting(false);
             });
-    }, [token, id, router, isCompleting]);
+    }, [token, publicId, router, isCompleting]);
 
     if (isHidden) {
         return null;
@@ -66,7 +66,7 @@ function GoalRow({id, name, description, priority, token}: GoalRowProps ) {
                         disabled={isCompleting}
                     />
                     <ChangeButton
-                        onClick={useCallback(() => router.push(`/goals/${id}`), [id, router])}
+                        onClick={useCallback(() => router.push(`/goals/${publicId}`), [publicId, router])}
                         className={'w-full'}
                     />
                 </div>

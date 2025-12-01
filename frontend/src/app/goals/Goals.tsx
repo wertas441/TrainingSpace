@@ -45,8 +45,9 @@ function Goals({clientGoals, token}: GoalsProps) {
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
                         <GoalItem
-                            key={item.id}
+                            key={item.publicId}
                             id={item.id}
+                            publicId={item.publicId}
                             name={item.name}
                             description={item.description}
                             priority={item.priority}

@@ -32,7 +32,7 @@ export default async function ChangeGoalPage({ params }: ChangeGoalPageProps){
     }
 
     const tokenValue = authTokenCookie.value;
-    const goalInfo = await getGoalInformation(tokenValue, Number(goalId));
+    const goalInfo = await getGoalInformation(tokenValue, goalId);
 
     if (!goalInfo) {
         return (

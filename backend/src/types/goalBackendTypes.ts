@@ -14,6 +14,7 @@ export interface CreateGoalFrontendStructure extends AddNewGoalFrontendStructure
 
 export interface GoalListFrontendResponse extends AddNewGoalFrontendStructure {
     id: number;
+    publicId: string;
 }
 
 export interface CompleteGoalListFrontendResponse extends GoalListFrontendResponse {
@@ -22,14 +23,15 @@ export interface CompleteGoalListFrontendResponse extends GoalListFrontendRespon
 
 export interface GoalShortyFrontendResponse {
     id: number;
+    publicId: string;
     name: string;
 }
 
 export interface GoalUpdateFrontendResponse extends AddNewGoalFrontendStructure {
     userId: number;
-    goalId: number;
+    goalId: string;
 }
 
 export interface GoalUpdateFrontendStructure extends AddNewGoalFrontendStructure {
-    goalId: number;
+    goalId: string;
 }

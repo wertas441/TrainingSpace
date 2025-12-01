@@ -126,9 +126,9 @@ export async function getGoalShortyList(tokenValue: string):Promise<GoalShortySt
     }
 }
 
-export async function getGoalInformation(tokenValue: string, goalId: number):Promise<GoalsStructure | undefined> {
+export async function getGoalInformation(tokenValue: string, goalId: string):Promise<GoalsStructure | undefined> {
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/goal/about-my-goal?goalId=${encodeURIComponent(String(goalId))}`, {
+        const response = await fetch(`${baseUrlForBackend}/api/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`, {
             method: "GET",
             credentials: "include",
             headers: {
@@ -162,7 +162,7 @@ export async function getGoalInformation(tokenValue: string, goalId: number):Pro
     }
 }
 
-export async function deleteGoal(tokenValue: string, goalId: number):Promise<void> {
+export async function deleteGoal(tokenValue: string, goalId: string):Promise<void> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/delete-my-goal`, {
             method: "DELETE",
@@ -172,7 +172,7 @@ export async function deleteGoal(tokenValue: string, goalId: number):Promise<voi
                 'Content-Type': 'application/json',
                 'Cookie': `token=${tokenValue}`
             },
-            body: JSON.stringify({goalId: goalId}),
+            body: JSON.stringify({goalId}),
             cache: 'no-store',
         });
 
@@ -204,7 +204,7 @@ export async function deleteGoal(tokenValue: string, goalId: number):Promise<voi
     }
 }
 
-export async function completeGoal(tokenValue: string, goalId: number):Promise<void> {
+export async function completeGoal(tokenValue: string, goalId: string):Promise<void> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/goal/complete-my-goal`, {
             method: "PUT",
@@ -214,7 +214,7 @@ export async function completeGoal(tokenValue: string, goalId: number):Promise<v
                 'Content-Type': 'application/json',
                 'Cookie': `token=${tokenValue}`
             },
-            body: JSON.stringify({goalId: goalId}),
+            body: JSON.stringify({goalId}),
             cache: 'no-store',
         });
 

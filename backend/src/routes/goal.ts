@@ -109,12 +109,12 @@ router.get('/my-shorty-list', authGuard, async (req, res) => {
 
 router.delete('/delete-my-goal', authGuard, async (req, res) => {
     try {
-        const { goalId: goalIdRaw } = req.body;
+        const { goalId: goalPublicIdRaw } = req.body;
         const userId = (req as any).userId as number;
 
-        const goalId = Number(goalIdRaw);
+        const goalPublicId = String(goalPublicIdRaw || '').trim();
 
-        if (!goalIdRaw || Number.isNaN(goalId) || goalId <= 0) {
+        if (!goalPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор цели.',
@@ -122,7 +122,7 @@ router.delete('/delete-my-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const isDeleted = await GoalModel.delete(userId, goalId);
+        const isDeleted = await GoalModel.delete(userId, goalPublicId);
 
         if (!isDeleted) {
             const response: ApiResponse = {
@@ -155,11 +155,10 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
 
-        const goalIdRaw = req.query.goalId;
+        const goalPublicIdRaw = req.query.goalId;
+        const goalPublicId = String(goalPublicIdRaw || '').trim();
 
-        const goalId = Number(goalIdRaw);
-
-        if (!goalIdRaw || Number.isNaN(goalId) || goalId <= 0) {
+        if (!goalPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор цели.',
@@ -167,7 +166,7 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const goalInfo = await GoalModel.information(userId, goalId);
+        const goalInfo = await GoalModel.information(userId, goalPublicId);
 
         if (!goalInfo) {
             const response: ApiResponse = {
@@ -204,7 +203,9 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
         const userId = (req as any).userId as number;
 
 
-        if (!goalId || Number.isNaN(goalId) || goalId <= 0) {
+        const goalPublicId = String(goalId || '').trim();
+
+        if (!goalPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор цели.',
@@ -224,7 +225,7 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await GoalModel.update({name, description, priority, goalId, userId} as GoalUpdateFrontendResponse);
+        await GoalModel.update({name, description, priority, goalId: goalPublicId, userId} as GoalUpdateFrontendResponse);
 
         const response: ApiResponse = {
             success: true,
@@ -247,12 +248,12 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
 
 router.put('/complete-my-goal', authGuard, async (req, res) => {
     try {
-        const { goalId: goalIdRaw } = req.body;
-        const goalId = Number(goalIdRaw);
+        const { goalId: goalPublicIdRaw } = req.body;
+        const goalPublicId = String(goalPublicIdRaw || '').trim();
         const userId = (req as any).userId as number;
 
 
-        if (!goalIdRaw || Number.isNaN(goalId) || goalId <= 0) {
+        if (!goalPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор цели.',
@@ -260,7 +261,7 @@ router.put('/complete-my-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await GoalModel.complete(userId, goalId);
+        await GoalModel.complete(userId, goalPublicId);
 
         const response: ApiResponse = {
             success: true,

@@ -65,7 +65,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    goalId: goalInfo.id,
+                    goalId: goalInfo.publicId,
                     name: goalName.inputState.value,
                     description: goalDescription.inputState.value,
                     priority: goalPriority,
@@ -91,7 +91,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
         setServerError(null);
 
         try {
-            await deleteGoal(token, goalInfo.id);
+            await deleteGoal(token, goalInfo.publicId);
             router.replace("/goals");
         } catch (error) {
             console.error("delete goal error:", error);
