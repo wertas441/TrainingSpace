@@ -5,7 +5,12 @@ import MainInput from "@/components/inputs/MainInput";
 import {FormEvent, useCallback, useMemo, useState} from "react";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
-import {ActivityDataStructure, ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
+import {
+    ActivityDataStructure,
+    ActivityDifficultyStructure,
+    ActivityTypeStructure,
+    ExerciseSetsByExerciseId
+} from "@/types/activityTypes";
 import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -45,9 +50,9 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
 
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
-    const [exerciseSets, setExerciseSets] = useState<Record<number, { id: number; weight: number; quantity: number; }[]>>(
+    const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(
         () => {
-            const initial: Record<number, { id: number; weight: number; quantity: number; }[]> = {};
+            const initial: ExerciseSetsByExerciseId = {};
 
             activityInfo.exercises.forEach((ex) => {
                 initial[ex.exercisesId] = ex.try.map((s) => ({
@@ -86,7 +91,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
             setExerciseSets({});
             return;
         }
-        const next: Record<number, { id: number; weight: number; quantity: number; }[]> = {};
+        const next: ExerciseSetsByExerciseId = {};
         training.exercises.forEach(exId => {
             next[exId] = [{ id: 1, weight: 0, quantity: 0 }];
         });
@@ -155,7 +160,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
 
         const setsError = validateActivitySets(exerciseSets);
         if (setsError) {
-            setServerError(setsError);
+            trainingId.setError(setsError);
         }
 
         return !(nameError || dateError || descriptionError || trainingError || setsError);
@@ -295,7 +300,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                         />
 
                         {trainingId.inputState.error && (
-                            <p className="pt-2 pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
+                            <p className="pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
                         )}
 
                         {selectedTraining && (

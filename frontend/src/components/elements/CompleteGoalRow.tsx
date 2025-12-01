@@ -18,7 +18,7 @@ function CompleteGoalRow({name, description, achieve_at}: CompleteGoalRowProps){
                     <p className={`mt-1 text-sm break-words whitespace-pre-wrap text-gray-600`}>
                         {description}
                     </p>
-                    <span className={`inline-flex text-gray-600 items-center py-2 text-xs font-medium rounded-full`}>
+                    <span className={`inline-flex text-gray-600 items-center pt-3 text-xs font-medium rounded-full`}>
                             Цель достигнута: {new Date(achieve_at).toLocaleDateString('ru-RU', {
                         year: 'numeric',
                         month: 'long',

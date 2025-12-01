@@ -32,6 +32,13 @@ export interface BasicIconButtonProps {
     disabled?: boolean;
 }
 
+export interface BasicLinkBtnProps {
+    label: string;
+    href?: string;
+    className?: string;
+}
+
+
 export type DifficultOptionsStructure = 'Лёгкий' | 'Средний' | 'Сложный';
 
 export type ExerciseDifficultFilter = DifficultOptionsStructure | null;

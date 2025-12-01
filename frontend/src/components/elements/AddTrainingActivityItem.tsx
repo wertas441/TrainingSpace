@@ -26,6 +26,10 @@ export default function AddTrainingActivityItem(
     const TrashIconComponent = useMemo(() => <TrashIcon className="w-5 h-5 w-full" />, [])
     const PlusIconComponent = useMemo(() => <PlusIcon className="w-5 h-5 w-full" />, [])
 
+
+
+
+
     return (
         <div className="space-y-6">
             <h2 className="text-lg font-semibold text-gray-800">Упражнения из тренировки</h2>

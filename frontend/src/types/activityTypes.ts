@@ -36,3 +36,12 @@ export interface ActivityHeaderProps extends HeaderMinimumProps {
     typeFilter: ActivityTypeFilter,
     setTypeFilter: (newValue: ActivityTypeFilter) => void;
 }
+
+
+interface ExerciseSetsStructure {
+    id: number;
+    weight: number;
+    quantity: number;
+}
+
+export type ExerciseSetsByExerciseId = Record<number, ExerciseSetsStructure[]>;

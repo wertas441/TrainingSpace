@@ -9,7 +9,7 @@ import ServerError from "@/components/errors/ServerError";
 import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
-import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
+import {ActivityDifficultyStructure, ActivityTypeStructure, ExerciseSetsByExerciseId} from "@/types/activityTypes";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
@@ -37,12 +37,11 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
 
-    const [exerciseSets, setExerciseSets] = useState<Record<number, { id: number; weight: number; quantity: number; }[]>>({});
+    const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>({});
     const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[]>([]);
 
     const activityTypeChoices: ActivityTypeStructure[] = useMemo(() => ['Силовая', 'Кардио', 'Комбинированный'], []) ;
     const activityDifficultyChoices: ActivityDifficultyStructure[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []) ;
-
 
     const trainingOptions: OptionType[] = useMemo(
         () => myTrainings.map(t => ({ value: String(t.id), label: t.name })),
@@ -65,7 +64,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
             setExerciseSets({});
             return;
         }
-        const next: Record<number, { id: number; weight: number; quantity: number; }[]> = {};
+        const next: ExerciseSetsByExerciseId = {};
         training.exercises.forEach(exId => {
             next[exId] = [{ id: 1, weight: 0, quantity: 0 }];
         });
@@ -134,7 +133,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
         const setsError = validateActivitySets(exerciseSets);
         if (setsError) {
-            setServerError(setsError);
+            trainingId.setError(setsError);
         }
 
         return !(nameError || dateError || descriptionError || trainingError || setsError);
@@ -260,7 +259,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                     />
 
                     {trainingId.inputState.error && (
-                        <p className="pt-2 pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
+                        <p className=" pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
                     )}
 
                     {selectedTraining && (

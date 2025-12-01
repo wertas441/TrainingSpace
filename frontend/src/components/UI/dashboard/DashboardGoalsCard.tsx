@@ -30,7 +30,7 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
                 </span>
             </div>
 
-            <div className="flex-1">
+            <div className="flex-row">
                 {hasGoals ? (
                     <ul className="mt-2 space-y-2 text-sm">
                         {visibleGoals.map((goal) => (
@@ -48,9 +48,9 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
                         ))}
                     </ul>
                 ) : (
-                    <div className="container items-center ">
+                    <div className="flex text-center px-10 items-center mt-5 md:mt-30 ">
                         <LightGreenLinkBtn
-                            label={`Добавить новую цель`}
+                            label={`Добавить первую цель`}
                             href={`/goals/add`}
                         />
                     </div>

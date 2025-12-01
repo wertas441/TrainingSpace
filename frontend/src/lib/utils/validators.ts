@@ -1,6 +1,7 @@
 /// USER VALIDATOR
 
 import {GoalPriority} from "@/types/goalTypes";
+import {ExerciseSetsByExerciseId} from "@/types/activityTypes";
 
 export const validateUserName = (userName: string): string | null => {
     if(!userName.trim()){
@@ -221,7 +222,7 @@ export const validateTrainingExercises = (exerciseIds: number[]): string | null 
     }
 
     if (exerciseIds.length > 20) {
-        return ('Тренировка не может содержать 20 упражнений');
+        return ('Тренировка не может содержать больше 20 упражнений');
     }
 
     return null;
@@ -356,9 +357,8 @@ export const validateActivityTrainingId = (trainingId: string): string | null =>
     return null;
 }
 
-export const validateActivitySets = (
-    exerciseSets: Record<number, { id: number; weight: number; quantity: number; }[]>
-): string | null => {
+export const validateActivitySets = (exerciseSets: ExerciseSetsByExerciseId): string | null => {
+
     const exerciseIds = Object.keys(exerciseSets);
     if (exerciseIds.length === 0) {
         return ('Добавьте хотя бы одно упражнение и подход для активности');
@@ -371,8 +371,8 @@ export const validateActivitySets = (
         }
 
         for (const s of sets) {
-            if (!Number.isFinite(s.weight) || s.weight < 0) {
-                return ('Вес в подходах не может быть отрицательным');
+            if (!Number.isFinite(s.weight) || s.weight <= 0) {
+                return ('Вес в подходах не может быть отрицательным или равным 0');
             }
             if (!Number.isFinite(s.quantity) || s.quantity <= 0) {
                 return ('Количество повторений в подходах должно быть больше 0');

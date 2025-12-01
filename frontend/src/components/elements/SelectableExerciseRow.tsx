@@ -56,3 +56,4 @@ function SelectableExerciseRow({exercise, selected, onToggle}: SelectableExercis
 }
 
 export default memo(SelectableExerciseRow);
+
