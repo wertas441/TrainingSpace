@@ -7,7 +7,7 @@ import {getColorStyles} from "@/lib";
 import {completeGoal} from "@/lib/controllers/goalController";
 
 interface GoalRowProps extends GoalsStructure{
-    token: string | undefined;
+    token: string;
 }
 
 function GoalRow({id, name, description, priority, token}: GoalRowProps ) {

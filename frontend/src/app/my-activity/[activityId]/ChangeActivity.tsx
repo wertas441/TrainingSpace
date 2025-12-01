@@ -114,37 +114,6 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
         }
     };
 
-    const addSet = (exerciseId: number) => {
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const nextId = current.length > 0 ? Math.max(...current.map(s => s.id)) + 1 : 1;
-            return {
-                ...prev,
-                [exerciseId]: [...current, { id: nextId, weight: 0, quantity: 0 }]
-            };
-        });
-    };
-
-    const removeSet = (exerciseId: number, setId: number) => {
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const filtered = current.filter(s => s.id !== setId);
-            return {
-                ...prev,
-                [exerciseId]: filtered.length > 0 ? filtered : [{ id: 1, weight: 0, quantity: 0 }]
-            };
-        });
-    };
-
-    const updateSet = (exerciseId: number, setId: number, field: 'weight' | 'quantity', value: string) => {
-        const num = Number(value);
-        setExerciseSets(prev => {
-            const current = prev[exerciseId] || [];
-            const updated = current.map(s => s.id === setId ? { ...s, [field]: isNaN(num) ? 0 : num } : s);
-            return { ...prev, [exerciseId]: updated };
-        });
-    };
-
     const validateForm = (): boolean => {
         const nameError = validateActivityName(activityName.inputState.value);
         activityName.setError(nameError);
@@ -307,10 +276,8 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             <AddTrainingActivityItem
                                 selectedTraining={selectedTraining}
                                 exerciseSets={exerciseSets}
-                                addSet={addSet}
-                                updateSet={updateSet}
-                                removeSet={removeSet}
                                 trainingExercises={trainingExercises}
+                                setExerciseSets={setExerciseSets}
                             />
                         )}
 
