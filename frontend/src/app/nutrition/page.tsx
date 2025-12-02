@@ -11,10 +11,9 @@ export const metadata: Metadata = {
 
 export default async function NutritionPage(){
 
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
+    const tokenValue = (await cookies()).get('token')?.value;
 
-    if (!authTokenCookie) {
+    if (!tokenValue) {
         return (
             <ErrorState
                 title="Проблема с авторизацией"
@@ -23,7 +22,6 @@ export default async function NutritionPage(){
         );
     }
 
-    const tokenValue = authTokenCookie.value;
     const daysList = await getDayList(tokenValue);
 
     if (!daysList) {

@@ -19,10 +19,9 @@ export default async function ChangeGoalPage({ params }: ChangeGoalPageProps){
 
     const { goalId } = await params;
 
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
+    const tokenValue = (await cookies()).get('token')?.value;
 
-    if (!authTokenCookie) {
+    if (!tokenValue) {
         return (
             <ErrorState
                 title="Проблема с авторизацией"
@@ -31,7 +30,6 @@ export default async function ChangeGoalPage({ params }: ChangeGoalPageProps){
         );
     }
 
-    const tokenValue = authTokenCookie.value;
     const goalInfo = await getGoalInformation(tokenValue, goalId);
 
     if (!goalInfo) {

@@ -12,10 +12,9 @@ export const metadata: Metadata = {
 
 export default async function MyTrainingPage() {
 
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
+    const tokenValue = (await cookies()).get('token')?.value;
 
-    if (!authTokenCookie) {
+    if (!tokenValue) {
         return (
             <ErrorState
                 title="Проблема с авторизацией"
@@ -24,7 +23,6 @@ export default async function MyTrainingPage() {
         );
     }
 
-    const tokenValue = authTokenCookie.value;
     const clientTrainings = await getTrainingList(tokenValue)
     const exercises = await getExercisesList(tokenValue);
 

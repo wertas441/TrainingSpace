@@ -20,10 +20,9 @@ export default async function ChangeActivityPage({ params }: ChangeActivityProps
 
     const { activityId } = await params;
 
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
+    const tokenValue = (await cookies()).get('token')?.value;
 
-    if (!authTokenCookie) {
+    if (!tokenValue) {
         return (
             <ErrorState
                 title="Проблема с авторизацией"
@@ -32,7 +31,6 @@ export default async function ChangeActivityPage({ params }: ChangeActivityProps
         );
     }
 
-    const tokenValue = authTokenCookie.value;
     const activityInfo = await getActivityInformation(tokenValue, Number(activityId));
     const trainings = await getTrainingList(tokenValue);
 
