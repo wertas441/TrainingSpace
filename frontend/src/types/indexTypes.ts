@@ -67,7 +67,7 @@ export interface SimpleButtonProps {
 }
 
 export interface UserProfileRequest {
-    id: string;
+    publicId: string;
     email: string;
     userName: string;
     createdAt: string | Date;

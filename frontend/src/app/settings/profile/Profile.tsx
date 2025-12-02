@@ -81,8 +81,8 @@ export default function Profile({ userData }: { userData: UserProfileRequest}) {
                         <div className="text-xs font-medium uppercase tracking-wide text-gray-400">
                             ID пользователя
                         </div>
-                        <div className="mt-1 text-sm font-mono text-gray-900 break-all">
-                            {userData.id}
+                        <div className="mt-1 text-xs md:text-sm font-mono text-gray-900 break-all">
+                            {userData.publicId}
                         </div>
                     </div>
 

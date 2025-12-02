@@ -81,7 +81,10 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
                     ))
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Такой активности не найдено. Попробуйте изменить запрос.
+                        {clientActivity.length === 0
+                            ? "У вас пока нет добавленной активности. Нажмите «Добавить активность», чтобы добавить первую."
+                            : "По заданным параметрам поиска активности не найдены. Попробуйте изменить фильтр."
+                        }
                     </div>
                 )}
             </div>
