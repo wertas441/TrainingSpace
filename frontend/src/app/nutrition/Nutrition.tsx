@@ -128,8 +128,9 @@ function Nutrition({userDays}: {userDays: NutritionDay[]}) {
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
                         <NutritionDayItem
-                            key={item.id}
+                            key={item.publicId}
                             id={item.id}
+                            publicId={item.publicId}
                             name={item.name}
                             date={item.date}
                             description={item.description}

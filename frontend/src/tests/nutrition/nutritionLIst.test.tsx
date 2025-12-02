@@ -21,6 +21,7 @@ describe('Список дней во вкладке "Питание"', () => {
     });
 
     const testId = 1;
+    const testPublicId = 'nutrition-public-id-1';
     const testName = 'Крутой день';
     const testDate = '27.02.2025';
     const testDescription = 'fqfwefwefwewegewgwegwegweg'
@@ -32,6 +33,7 @@ describe('Список дней во вкладке "Питание"', () => {
     const testData: NutritionDay[] = [
         {
             id: testId,
+            publicId: testPublicId,
             name: testName,
             date: testDate,
             description: testDescription,
@@ -68,7 +70,7 @@ describe('Список дней во вкладке "Питание"', () => {
 
         await userEvent.click(changeButton);
 
-        expect(pushMock).toHaveBeenCalledWith(`/nutrition/${testId}`);
+        expect(pushMock).toHaveBeenCalledWith(`/nutrition/${testPublicId}`);
     });
 });
 

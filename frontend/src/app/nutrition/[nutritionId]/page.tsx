@@ -29,7 +29,7 @@ export default async function ChangeNutritionPage({ params }: ChangeNutritionPag
         );
     }
 
-    const dayInfo = await getDayInformation(tokenValue, Number(nutritionId));
+    const dayInfo = await getDayInformation(tokenValue, nutritionId);
 
     if (!dayInfo) {
         return (
