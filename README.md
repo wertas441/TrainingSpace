@@ -109,16 +109,15 @@ DB_AUTO_INIT=true
 DB_AUTO_SEED=false
 
 JWT_SECRET=your-jwt-secret
+```
 
 ### 3. Инициализация БД
 
 В `backend/src/database` есть файлы для инициализации схемы и базовых данных:
-
 - `schema.sql` — структура таблиц
 - `init.ts`, `seedExercises.ts` — скрипты инициализации (если вы их используете)
 
 Варианты:
-
 - Выполнить `schema.sql` напрямую через клиент PostgreSQL
 - Или написать/дополнить скрипт запуска инициализации по своему вкусу
 
@@ -140,7 +139,6 @@ npm start
 ```
 
 ---
-
 ## Frontend
 
 Код frontend находится в папке `frontend/`.
