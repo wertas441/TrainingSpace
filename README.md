@@ -71,7 +71,7 @@
 
 Рекомендуемая структура запуска:
 
-1. Настроить и запустить **PostgreSQL** (или использовать `docker-compose.yml`)
+1. Настроить и запустить `docker-compose.yml` файл через команду docker-compose up -d
 2. Запустить **backend**
 3. Запустить **frontend**
 
@@ -96,22 +96,19 @@ npm install
 Пример (подкорректируйте под свою БД и домены):
 
 ```env
-PORT=3001
+PORT=3002
 NODE_ENV=development
-
-# Настройки PostgreSQL
-PGHOST=localhost
-PGPORT=5432
-PGDATABASE=training_space
-PGUSER=postgres
-PGPASSWORD=your-password
-
-# CORS / frontend origin
 FRONTEND_URL=http://localhost:3000
 
-# JWT
-JWT_SECRET=your-super-secret-jwt-key-here
-```
+DB_HOST=localhost
+DB_PORT=5436
+DB_NAME=training_space
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_AUTO_INIT=true
+DB_AUTO_SEED=false
+
+JWT_SECRET=your-jwt-secret
 
 ### 3. Инициализация БД
 
@@ -132,7 +129,7 @@ cd backend
 npm run dev
 ```
 
-Backend по умолчанию будет слушать порт `3001` (или тот, что указан в `PORT`).
+Backend по умолчанию будет слушать порт `3002` (или тот, что указан в `PORT`).
 
 ### 5. Сборка и продакшн‑запуск
 
@@ -194,26 +191,6 @@ yarn test
 
 ---
 
-## Запуск через Docker (опционально)
-
-В корне проекта есть `docker-compose.yml`.  
-Он может быть использован для поднятия PostgreSQL и/или сервисов приложения.
-
-Типичный сценарий:
-
-```bash
-docker-compose up -d
-```
-
-После этого:
-
-- Backend доступен по `http://localhost:3001`
-- Frontend — по `http://localhost:3000`
-
-(проверьте порты в своём `docker-compose.yml` и `.env`).
-
----
-
 ## Структура репозитория
 
 ```text
@@ -233,12 +210,11 @@ frontend/  # Frontend (Next.js + React + TypeScript)
 ## Как использовать приложение
 
 1. Зарегистрируйтесь или войдите в аккаунт.
-2. Настройте профиль и при необходимости смените email/пароль в разделе **Настройки**.
-3. Создавайте:
+2. Создавайте:
    - тренировки и активности,
    - дни питания,
    - цели.
-4. Используйте страницы обзора и статистики, чтобы отслеживать прогресс.
+3. Используйте страницы обзора и статистики, чтобы отслеживать прогресс.
 
 ---
 
