@@ -79,6 +79,7 @@ export class TrainingModel {
         const query = `
             SELECT
                 t.id,
+                t.public_id AS "publicId",
                 t.training_name AS name,
                 COALESCE(t.description, '') AS description,
                 COALESCE(
@@ -98,10 +99,11 @@ export class TrainingModel {
         return rows as TrainingListFrontendStructure[];
     }
 
-    static async information(userId: number, trainingId: number): Promise<TrainingListFrontendStructure | null> {
+    static async information(userId: number, trainingPublicId: string): Promise<TrainingListFrontendStructure | null> {
         const query = `
             SELECT
                 t.id,
+                t.public_id AS "publicId",
                 t.training_name AS name,
                 COALESCE(t.description, '') AS description,
                 COALESCE(
@@ -111,20 +113,32 @@ export class TrainingModel {
                 ) AS exercises
             FROM training t
                      LEFT JOIN training_exercises te ON te.training_id = t.id
-            WHERE t.id = $1 AND t.user_id = $2
+            WHERE t.public_id = $1 AND t.user_id = $2
             GROUP BY t.id, t.training_name, t.description
         `;
 
-        const { rows } = await pool.query(query, [trainingId, userId]);
+        const { rows } = await pool.query(query, [trainingPublicId, userId]);
 
         return rows[0] ?? null;
     }
 
-    static async update(userId: number, trainingId: number, data: AddTrainingFrontendStructure): Promise<void> {
+    static async update(userId: number, trainingPublicId: string, data: AddTrainingFrontendStructure): Promise<void> {
         const client = await pool.connect();
 
         try {
             await client.query('BEGIN');
+
+            // Получаем внутренний id по public_id
+            const { rows: trainingRows } = await client.query(
+                'SELECT id FROM training WHERE public_id = $1 AND user_id = $2',
+                [trainingPublicId, userId]
+            );
+
+            if (trainingRows.length === 0) {
+                throw new Error('Training not found or access denied');
+            }
+
+            const trainingId: number = trainingRows[0].id;
 
             const updateTrainingQuery = `
                 UPDATE training
@@ -186,11 +200,24 @@ export class TrainingModel {
         }
     }
 
-    static async delete(userId: number, trainingId: number): Promise<boolean> {
+    static async delete(userId: number, trainingPublicId: string): Promise<boolean> {
         const client = await pool.connect();
 
         try {
             await client.query('BEGIN');
+
+            // Получаем внутренний id по public_id
+            const { rows: trainingRows } = await client.query(
+                'SELECT id FROM training WHERE public_id = $1 AND user_id = $2',
+                [trainingPublicId, userId]
+            );
+
+            if (trainingRows.length === 0) {
+                await client.query('ROLLBACK');
+                return false;
+            }
+
+            const trainingId: number = trainingRows[0].id;
 
             // сначала удаляем связи упражнений
             await client.query('DELETE FROM training_exercises WHERE training_id = $1', [trainingId]);

@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 }
 
 interface ChangeTrainingPageProps {
-    params: {
+    params: Promise<{
         trainingId: string;
-    };
+    }>
 }
 
 export default async function ChangeTrainingPage({params}: ChangeTrainingPageProps){
@@ -30,7 +30,7 @@ export default async function ChangeTrainingPage({params}: ChangeTrainingPagePro
         );
     }
 
-    const trainingInfo = await getTrainingInformation(tokenValue, Number(trainingId));
+    const trainingInfo = await getTrainingInformation(tokenValue, trainingId);
     const exercises = await getExercisesList(tokenValue);
 
     if (!trainingInfo || !exercises) {

@@ -97,7 +97,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
             console.error("delete goal error:", error);
             setServerError("Не удалось удалить цель. Попробуйте ещё раз позже.");
         }
-    }, [goalInfo.id, router, setServerError, token])
+    }, [goalInfo.publicId, router, setServerError, token])
 
     return (
         <>

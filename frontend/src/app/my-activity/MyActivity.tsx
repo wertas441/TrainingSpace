@@ -75,7 +75,7 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
                 {filteredList.length > 0 ? (
                     paginatedList.map((item) => (
                         <MyActivityRow
-                            key={item.id}
+                            key={item.publicId}
                             activity={item}
                         />
                     ))

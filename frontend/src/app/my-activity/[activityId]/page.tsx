@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 }
 
 interface ChangeActivityProps {
-    params: {
+    params: Promise<{
         activityId: string;
-    };
+    }>
 }
 
 export default async function ChangeActivityPage({ params }: ChangeActivityProps){
@@ -31,7 +31,7 @@ export default async function ChangeActivityPage({ params }: ChangeActivityProps
         );
     }
 
-    const activityInfo = await getActivityInformation(tokenValue, Number(activityId));
+    const activityInfo = await getActivityInformation(tokenValue, activityId);
     const trainings = await getTrainingList(tokenValue);
 
     if (!activityInfo || !trainings) {

@@ -95,6 +95,7 @@ export class ActivityModel {
         const query = `
             SELECT
                 a.id,
+                a.public_id AS "publicId",
                 a.activity_name AS name,
                 COALESCE(a.description, '') AS description,
                 to_char(a.performed_at::date, 'DD-MM-YYYY') AS "activityDate",
@@ -136,6 +137,7 @@ export class ActivityModel {
 
         return rows.map((row: any) => ({
             id: row.id as number,
+            publicId: row.publicId as string,
             name: row.name as string,
             description: row.description as string,
             activityDate: row.activityDate as string,
@@ -149,10 +151,11 @@ export class ActivityModel {
     /**
      * Информация по одной активности пользователя
      */
-    static async information(userId: number, activityId: number): Promise<ActivityListFrontendStructure | null> {
+    static async information(userId: number, activityPublicId: string): Promise<ActivityListFrontendStructure | null> {
         const query = `
             SELECT
                 a.id,
+                a.public_id AS "publicId",
                 a.activity_name AS name,
                 COALESCE(a.description, '') AS description,
                 to_char(a.performed_at::date, 'YYYY-MM-DD') AS "activityDate",
@@ -185,12 +188,12 @@ export class ActivityModel {
                 ) AS exercises
             FROM activity a
                      LEFT JOIN activity_exercises ae ON ae.activity_id = a.id
-            WHERE a.user_id = $1 AND a.id = $2
+            WHERE a.user_id = $1 AND a.public_id = $2
             GROUP BY a.id, a.activity_name, a.description, a.performed_at, a.activity_type, a.activity_difficult, a.training_id
             LIMIT 1
         `;
 
-        const { rows } = await pool.query(query, [userId, activityId]);
+        const { rows } = await pool.query(query, [userId, activityPublicId]);
 
         if (rows.length === 0) {
             return null;
@@ -200,6 +203,7 @@ export class ActivityModel {
 
         return {
             id: row.id as number,
+            publicId: row.publicId as string,
             name: row.name as string,
             description: row.description as string,
             activityDate: row.activityDate as string,
@@ -213,22 +217,24 @@ export class ActivityModel {
     /**
      * Удаление активности пользователя
      */
-    static async delete(userId: number, activityId: number): Promise<boolean> {
+    static async delete(userId: number, activityPublicId: string): Promise<boolean> {
         const client = await pool.connect();
 
         try {
             await client.query('BEGIN');
 
-            // Проверяем, что активность принадлежит пользователю
+            // Получаем внутренний id по public_id и user_id
             const { rows: checkRows } = await client.query(
-                'SELECT id FROM activity WHERE id = $1 AND user_id = $2',
-                [activityId, userId]
+                'SELECT id FROM activity WHERE public_id = $1 AND user_id = $2',
+                [activityPublicId, userId]
             );
 
             if (checkRows.length === 0) {
                 await client.query('ROLLBACK');
                 return false;
             }
+
+            const activityId: number = checkRows[0].id;
 
             // Удаляем подходы
             await client.query(
@@ -272,13 +278,15 @@ export class ActivityModel {
             await client.query('BEGIN');
 
             const { rows: checkRows } = await client.query(
-                'SELECT id FROM activity WHERE id = $1 AND user_id = $2',
-                [data.id, data.userId]
+                'SELECT id FROM activity WHERE public_id = $1 AND user_id = $2',
+                [data.publicId, data.userId]
             );
 
             if (checkRows.length === 0) {
                 throw new Error('Activity not found or access denied');
             }
+
+            const activityId: number = checkRows[0].id;
 
             // Обновляем основную запись активности
             await client.query(
@@ -299,7 +307,7 @@ export class ActivityModel {
                     data.type,
                     data.difficulty,
                     data.activityDate,
-                    data.id,
+                    activityId,
                     data.userId,
                 ]
             );
@@ -312,12 +320,12 @@ export class ActivityModel {
                         SELECT id FROM activity_exercises WHERE activity_id = $1
                     )
                 `,
-                [data.id]
+                [activityId]
             );
 
             await client.query(
                 'DELETE FROM activity_exercises WHERE activity_id = $1',
-                [data.id]
+                [activityId]
             );
 
             // Добавляем новые упражнения и подходы
@@ -330,7 +338,7 @@ export class ActivityModel {
                         VALUES ($1, $2, $3)
                         RETURNING id
                     `,
-                    [data.id, ex.exercisesId, i + 1]
+                    [activityId, ex.exercisesId, i + 1]
                 );
 
                 const activityExerciseId: number = aeRows[0]?.id;

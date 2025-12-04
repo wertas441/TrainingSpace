@@ -10,6 +10,7 @@ export type ActivityTypeFilter = ActivityTypeStructure | null;
 
 export interface ActivityDataStructure {
     id: number;
+    publicId: string;
     name: string;
     description: string;
     activityDate: string;

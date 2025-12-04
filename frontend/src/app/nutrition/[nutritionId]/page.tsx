@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 }
 
 interface ChangeNutritionPageProps {
-    params: {
+    params: Promise<{
         nutritionId: string;
-    };
+    }>
 }
 
 export default async function ChangeNutritionPage({ params }: ChangeNutritionPageProps){

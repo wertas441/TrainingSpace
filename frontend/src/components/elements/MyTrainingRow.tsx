@@ -4,12 +4,13 @@ import {useRouter} from "next/navigation";
 
 interface MyTrainingRowProps {
     id: number;
+    publicId: string;
     name: string;
     description: string;
     exercises: string[];
 }
 
-function MyTrainingRow({id, name, description, exercises}: MyTrainingRowProps ){
+function MyTrainingRow({id, publicId, name, description, exercises}: MyTrainingRowProps ){
 
     const router = useRouter();
 
@@ -53,7 +54,7 @@ function MyTrainingRow({id, name, description, exercises}: MyTrainingRowProps ){
                     </div>
                     <div className="mt-5 md:mt-0">
                         <ChangeButton
-                            onClick={useCallback(() => router.push(`/my-training/${id}`), [id, router])}
+                            onClick={useCallback(() => router.push(`/my-training/${publicId}`), [publicId, router])}
                             className={`w-full`}
                         />
                     </div>

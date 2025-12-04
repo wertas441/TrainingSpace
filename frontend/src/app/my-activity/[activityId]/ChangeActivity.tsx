@@ -145,8 +145,10 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
 
         setIsSubmitting(true);
 
-        const payload: ActivityDataStructure = {
+        const payload = {
             id: activityInfo.id,
+            publicId: activityInfo.publicId,
+            activityId: activityInfo.publicId,
             name: activityName.inputState.value.trim(),
             description: activityDescription.inputState.value.trim(),
             activityDate: activityDate.inputState.value,
@@ -190,13 +192,13 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
         setServerError(null);
 
         try {
-            await deleteActivity(token, activityInfo.id);
+            await deleteActivity(token, activityInfo.publicId);
             router.replace("/my-activity");
         } catch (error) {
             console.error("delete activity error:", error);
             setServerError("Не удалось удалить активность. Попробуйте ещё раз позже.");
         }
-    }, [activityInfo.id, router, setServerError, token])
+    }, [activityInfo.publicId, router, setServerError, token])
 
     return (
         <>

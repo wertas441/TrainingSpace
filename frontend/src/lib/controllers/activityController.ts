@@ -82,9 +82,9 @@ export async function getTrainingExercises(trainingId: number): Promise<Exercise
     }
 }
 
-export async function getActivityInformation(tokenValue: string | undefined, activityId: number):Promise<ActivityDataStructure | null> {
+export async function getActivityInformation(tokenValue: string | undefined, activityId: string):Promise<ActivityDataStructure | null> {
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/activity/about-my-activity?activityId=${encodeURIComponent(String(activityId))}`, {
+        const response = await fetch(`${baseUrlForBackend}/api/activity/about-my-activity?activityId=${encodeURIComponent(activityId)}`, {
             method: "GET",
             credentials: "include",
             headers: {
@@ -118,7 +118,7 @@ export async function getActivityInformation(tokenValue: string | undefined, act
     }
 }
 
-export async function deleteActivity(tokenValue: string | undefined, activityId: number):Promise<void> {
+export async function deleteActivity(tokenValue: string | undefined, activityId: string):Promise<void> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/activity/delete-my-activity`, {
             method: "DELETE",
@@ -128,7 +128,7 @@ export async function deleteActivity(tokenValue: string | undefined, activityId:
                 'Content-Type': 'application/json',
                 'Cookie': `token=${tokenValue}`
             },
-            body: JSON.stringify({activityId: activityId}),
+            body: JSON.stringify({activityId}),
             cache: 'no-store',
         });
 

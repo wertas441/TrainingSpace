@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {AddTrainingFrontendStructure, TrainingListFrontendStructure} from "../types/trainingBackendTypes";
+import {AddTrainingFrontendStructure, TrainingListFrontendStructure, TrainingUpdateFrontendStructure} from "../types/trainingBackendTypes";
 import { config } from '../config';
 import {
     validateTrainingDescription,
@@ -108,11 +108,10 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
 router.get('/about-my-training', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-        const trainingIdRaw = req.query.trainingId;
+        const trainingPublicIdRaw = req.query.trainingId;
+        const trainingPublicId = String(trainingPublicIdRaw || '').trim();
 
-        const trainingId = Number(trainingIdRaw);
-
-        if (!trainingIdRaw || Number.isNaN(trainingId) || trainingId <= 0) {
+        if (!trainingPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор тренировки.',
@@ -120,7 +119,7 @@ router.get('/about-my-training', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const trainingInfo = await TrainingModel.information(userId, trainingId);
+        const trainingInfo = await TrainingModel.information(userId, trainingPublicId);
 
         if (!trainingInfo) {
             const response: ApiResponse = {
@@ -153,12 +152,12 @@ router.get('/about-my-training', authGuard, async (req, res) => {
 
 router.delete('/delete-my-training', authGuard, async (req, res) => {
     try {
-        const { trainingId: trainingIdRaw } = req.body;
+        const { trainingId: trainingPublicIdRaw } = req.body;
         const userId = (req as any).userId as number;
 
-        const trainingId = Number(trainingIdRaw);
+        const trainingPublicId = String(trainingPublicIdRaw || '').trim();
 
-        if (!trainingIdRaw || Number.isNaN(trainingId) || trainingId <= 0) {
+        if (!trainingPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор тренировки.',
@@ -166,7 +165,7 @@ router.delete('/delete-my-training', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const isDeleted = await TrainingModel.delete(userId, trainingId);
+        const isDeleted = await TrainingModel.delete(userId, trainingPublicId);
 
         if (!isDeleted) {
             const response: ApiResponse = {
@@ -198,10 +197,12 @@ router.delete('/delete-my-training', authGuard, async (req, res) => {
 
 router.put('/update-my-training', authGuard, async (req, res) => {
     try {
-        const {id, name, description, exercises}: TrainingListFrontendStructure = req.body;
+        const {trainingId, name, description, exercises}: TrainingUpdateFrontendStructure = req.body;
         const userId = (req as any).userId as number;
 
-        if (!id || Number.isNaN(id) || id <= 0) {
+        const trainingPublicId = String(trainingId || '').trim();
+
+        if (!trainingPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор тренировки.',
@@ -221,7 +222,7 @@ router.put('/update-my-training', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await TrainingModel.update(userId, id, {name, description, exercises});
+        await TrainingModel.update(userId, trainingPublicId, {name, description, exercises});
 
         const response: ApiResponse = {
             success: true,

@@ -44,9 +44,9 @@ export async function getTrainingList(tokenValue: string):Promise<TrainingListRe
     }
 }
 
-export async function getTrainingInformation(tokenValue: string, trainingId: number):Promise<TrainingListResponse | undefined> {
+export async function getTrainingInformation(tokenValue: string, trainingId: string):Promise<TrainingListResponse | undefined> {
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/training/about-my-training?trainingId=${encodeURIComponent(String(trainingId))}`, {
+        const response = await fetch(`${baseUrlForBackend}/api/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`, {
             method: "GET",
             credentials: "include",
             headers: {
@@ -80,7 +80,7 @@ export async function getTrainingInformation(tokenValue: string, trainingId: num
     }
 }
 
-export async function deleteTraining(tokenValue: string | undefined, trainingId: number):Promise<void> {
+export async function deleteTraining(tokenValue: string | undefined, trainingId: string):Promise<void> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/training/delete-my-training`, {
             method: "DELETE",
