@@ -11,14 +11,18 @@ export interface AddNewDayFrontendStructure {
 
 export interface DayListFrontendStructure extends AddNewDayFrontendStructure {
     id: number;
+    publicId: string;
 }
-
-export interface DayUpgradeRequestStructure extends AddNewDayFrontendStructure {
-    id: number;
-    user_id: number;
-}
-
 
 export interface AddDayModelRequestStructure extends AddNewDayFrontendStructure {
     user_id: number;
+}
+
+export interface DayUpgradeRequestStructure extends AddNewDayFrontendStructure {
+    publicId: string;
+    user_id: number;
+}
+
+export interface DayUpdateFrontendStructure extends AddNewDayFrontendStructure {
+    dayId: string;
 }

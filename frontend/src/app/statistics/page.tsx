@@ -15,10 +15,9 @@ export const metadata: Metadata = {
 
 export default async function StatisticsPage() {
 
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
+    const tokenValue = (await cookies()).get('token')?.value;
 
-    if (!authTokenCookie) {
+    if (!tokenValue) {
         return (
             <ErrorState
                 title="Проблема с авторизацией"
@@ -27,7 +26,6 @@ export default async function StatisticsPage() {
         );
     }
 
-    const tokenValue = authTokenCookie.value;
     const mainCardData = await getMainStatisticsCardInfo(tokenValue);
     const nutritionCardData = await getNutritionStatisticsCardInfo(tokenValue);
     const nutritionGraphicData = await getNutritionGraphicInfo(tokenValue);

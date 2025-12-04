@@ -192,7 +192,6 @@ router.get('/me', authGuard, async (req, res) => {
             data: { userData: userData }
         };
 
-
         res.json(response);
     } catch (error) {
         console.error('Ошибка получения текущего пользователя:', error);

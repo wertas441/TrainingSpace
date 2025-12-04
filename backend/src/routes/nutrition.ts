@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {AddNewDayFrontendStructure, DayListFrontendStructure} from "../types/nutritionBackendTypes";
+import {AddNewDayFrontendStructure, DayListFrontendStructure, DayUpdateFrontendStructure} from "../types/nutritionBackendTypes";
 import {
     validateCalories, validateCarb,
     validateDayDescription,
@@ -87,12 +87,12 @@ router.get('/my-day-list', authGuard, async (req, res) => {
 
 router.delete('/delete-my-day', authGuard, async (req, res) => {
     try {
-        const { dayId: dayIdRow } = req.body;
+        const { dayId: dayPublicIdRaw } = req.body;
         const userId = (req as any).userId as number;
 
-        const dayId = Number(dayIdRow);
+        const dayPublicId = String(dayPublicIdRaw || '').trim();
 
-        if (!dayIdRow || Number.isNaN(dayId) || dayId <= 0) {
+        if (!dayPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор дня.',
@@ -100,7 +100,7 @@ router.delete('/delete-my-day', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const isDeleted = await NutritionModel.delete(userId, dayId);
+        const isDeleted = await NutritionModel.delete(userId, dayPublicId);
 
         if (!isDeleted) {
             const response: ApiResponse = {
@@ -132,11 +132,11 @@ router.delete('/delete-my-day', authGuard, async (req, res) => {
 router.get('/about-my-day', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-        const dayIdRow = req.query.dayId;
 
-        const dayId = Number(dayIdRow);
+        const dayPublicIdRaw = req.query.dayId;
+        const dayPublicId = String(dayPublicIdRaw || '').trim();
 
-        if (!dayIdRow || Number.isNaN(dayId) || dayId <= 0) {
+        if (!dayPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор дня.',
@@ -144,7 +144,7 @@ router.get('/about-my-day', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const dayInfo = await NutritionModel.information(userId, dayId);
+        const dayInfo = await NutritionModel.information(userId, dayPublicId);
 
         if (!dayInfo) {
             const response: ApiResponse = {
@@ -177,10 +177,12 @@ router.get('/about-my-day', authGuard, async (req, res) => {
 
 router.put('/update-my-day', authGuard, async (req, res) => {
     try {
-        const {id, name, description, calories, protein, fat, carb, date}: DayListFrontendStructure = req.body;
+        const {dayId, name, description, calories, protein, fat, carb, date}: DayUpdateFrontendStructure = req.body;
         const userId = (req as any).userId as number;
 
-        if (!id || Number.isNaN(id) || id <= 0) {
+        const dayPublicId = String(dayId || '').trim();
+
+        if (!dayPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор дня.',
@@ -205,7 +207,17 @@ router.put('/update-my-day', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await NutritionModel.update({name, description, calories, protein, fat, carb, date, id, user_id: userId,});
+        await NutritionModel.update({
+            name,
+            description,
+            calories,
+            protein,
+            fat,
+            carb,
+            date,
+            publicId: dayPublicId,
+            user_id: userId,
+        });
 
         const response: ApiResponse = {
             success: true,

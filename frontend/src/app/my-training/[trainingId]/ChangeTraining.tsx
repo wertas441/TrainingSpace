@@ -106,7 +106,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    id: trainingInfo.id,
+                    trainingId: trainingInfo.publicId,
                     name: trainingName.inputState.value,
                     description: trainingDescription.inputState.value,
                     exercises: selectedExerciseIds,
@@ -145,7 +145,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
         setServerError(null);
 
         try {
-            await deleteTraining(token, trainingInfo.id);
+            await deleteTraining(token, trainingInfo.publicId);
             router.replace("/my-training");
         } catch (error) {
             console.error("delete training error:", error);

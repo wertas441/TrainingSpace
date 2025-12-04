@@ -47,7 +47,7 @@ export class UserModel {
 
     // Поиск пользователя по ID
     static async findById(id: number): Promise<UserProfileResponse | null> {
-        const query = 'SELECT id, email, username, created_at FROM users WHERE id = $1';
+        const query = 'SELECT public_id, email, username, created_at FROM users WHERE id = $1';
 
         const result = await pool.query(query, [id]);
 
@@ -56,7 +56,7 @@ export class UserModel {
         if (!row) return null;
 
         return {
-            id: row.id,
+            publicId: row.public_id,
             email: row.email,
             userName: row.username,
             createdAt: row.created_at,

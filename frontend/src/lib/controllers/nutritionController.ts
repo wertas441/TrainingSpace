@@ -43,9 +43,9 @@ export async function getDayList(tokenValue: string):Promise<NutritionDay[] | un
     }
 }
 
-export async function getDayInformation(tokenValue: string, dayId: number):Promise<NutritionDay | undefined> {
+export async function getDayInformation(tokenValue: string, dayId: string):Promise<NutritionDay | undefined> {
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/nutrition/about-my-day?dayId=${encodeURIComponent(String(dayId))}`, {
+        const response = await fetch(`${baseUrlForBackend}/api/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`, {
             method: "GET",
             credentials: "include",
             headers: {
@@ -79,7 +79,7 @@ export async function getDayInformation(tokenValue: string, dayId: number):Promi
     }
 }
 
-export async function deleteDay(tokenValue: string | undefined, dayId: number):Promise<void> {
+export async function deleteDay(tokenValue: string | undefined, dayId: string):Promise<void> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/nutrition/delete-my-day`, {
             method: "DELETE",
@@ -89,7 +89,7 @@ export async function deleteDay(tokenValue: string | undefined, dayId: number):P
                 'Content-Type': 'application/json',
                 'Cookie': `token=${tokenValue}`
             },
-            body: JSON.stringify({dayId: dayId}),
+            body: JSON.stringify({dayId}),
             cache: 'no-store',
         });
 

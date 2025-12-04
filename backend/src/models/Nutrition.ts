@@ -61,6 +61,7 @@ export class NutritionModel {
         const query = `
             SELECT 
                 id,
+                public_id AS "publicId",
                 name,
                 description,
                 calories,
@@ -78,10 +79,11 @@ export class NutritionModel {
         return rows as DayListFrontendStructure[];
     }
 
-    static async information(userId: number, dayId: number): Promise<DayListFrontendStructure | null> {
+    static async information(userId: number, dayPublicId: string): Promise<DayListFrontendStructure | null> {
         const query = `
             SELECT 
-                id, 
+                id,
+                public_id AS "publicId",
                 name, 
                 description, 
                 calories, 
@@ -90,10 +92,10 @@ export class NutritionModel {
                 carb, 
                 to_char(day_date::date, 'YYYY-MM-DD') AS date
             FROM nutrition
-            WHERE id = $1 AND user_id = $2
+            WHERE public_id = $1 AND user_id = $2
         `;
 
-        const { rows } = await pool.query(query, [dayId, userId]);
+        const { rows } = await pool.query(query, [dayPublicId, userId]);
 
         return rows[0] ?? null;
     }
@@ -108,7 +110,7 @@ export class NutritionModel {
                 fat = $5 , 
                 carb = $6, 
                 day_date = $7
-            WHERE id = $8 AND user_id = $9
+            WHERE public_id = $8 AND user_id = $9
         `;
 
         const values = [
@@ -119,7 +121,7 @@ export class NutritionModel {
             updateData.fat,
             updateData.carb,
             updateData.date,
-            updateData.id,
+            updateData.publicId,
             updateData.user_id
         ];
 
@@ -130,14 +132,14 @@ export class NutritionModel {
         }
     }
 
-    static async delete(userId: number, dayId: number): Promise<boolean> {
+    static async delete(userId: number, dayPublicId: string): Promise<boolean> {
         const query = `
             DELETE FROM nutrition
-            WHERE id = $1 AND user_id = $2
+            WHERE public_id = $1 AND user_id = $2
             RETURNING id
         `;
 
-        const { rowCount } = await pool.query(query, [dayId, userId]);
+        const { rowCount } = await pool.query(query, [dayPublicId, userId]);
 
         return !!rowCount;
     }

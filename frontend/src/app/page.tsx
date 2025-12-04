@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
 
-    if (!authTokenCookie) {
+    const tokenValue = (await cookies()).get('token')?.value;
+
+    if (!tokenValue) {
         return (
             <ErrorState
                 title="Проблема с авторизацией"
@@ -23,7 +23,6 @@ export default async function Home() {
         );
     }
 
-    const tokenValue = authTokenCookie.value;
     const goalsShortyList = await getGoalShortyList(tokenValue);
     const nutritionGraphicData = await getNutritionGraphicInfo(tokenValue);
 

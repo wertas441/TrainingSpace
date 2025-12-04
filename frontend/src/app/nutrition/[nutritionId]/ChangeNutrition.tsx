@@ -85,7 +85,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    id: dayInfo.id,
+                    dayId: dayInfo.publicId,
                     name: dayName.inputState.value,
                     description: dayDescription.inputState.value,
                     date: dayDate.inputState.value,
@@ -115,7 +115,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
         setServerError(null);
 
         try {
-            await deleteDay(token, dayInfo.id);
+            await deleteDay(token, dayInfo.publicId);
             router.replace("/nutrition");
         } catch (error) {
             console.error("delete day error:", error);

@@ -65,8 +65,9 @@ export default function MyTraining({trainingList, exercises}: MyTrainingProps) {
 
                         return (
                             <MyTrainingRow
-                                key={item.id}
+                                key={item.publicId}
                                 id={item.id}
+                                publicId={item.publicId}
                                 name={item.name}
                                 description={item.description}
                                 exercises={exerciseNames}
@@ -75,7 +76,10 @@ export default function MyTraining({trainingList, exercises}: MyTrainingProps) {
                     })
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Такой тренировки не найдено. Попробуйте изменить запрос.
+                        {trainingList.length === 0
+                            ? "У вас пока нет созданных тренировок. Нажмите «Создать тренировку», чтобы создать первую."
+                            : "По заданным параметрам поиска тренировки не найдены. Попробуйте изменить фильтр."
+                        }
                     </div>
                 )}
             </div>

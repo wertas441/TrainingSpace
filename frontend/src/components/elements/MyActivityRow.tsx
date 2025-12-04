@@ -48,8 +48,8 @@ function MyActivityRow({activity}: MyActivityRowProps){
     }, [activity.name, activity.activityDate, activity.description, activity.type, activity.difficulty]);
 
     const handleEditClick = useCallback(() => {
-        router.push(`/my-activity/${activity.id}`);
-    }, [router, activity.id]);
+        router.push(`/my-activity/${activity.publicId}`);
+    }, [router, activity.publicId]);
 
     return (
         <div

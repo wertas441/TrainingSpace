@@ -17,7 +17,7 @@ export async function logout() {
     }
 }
 
-export async function getUserData(tokenValue: string | undefined):Promise<UserProfileRequest | undefined> {
+export async function getUserData(tokenValue: string):Promise<UserProfileRequest | undefined> {
     try {
         const response = await fetch(`${baseUrlForBackend}/api/auth/me`, {
             method: "GET",

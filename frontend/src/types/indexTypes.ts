@@ -16,6 +16,7 @@ export interface InputsStructure<T extends string | number> {
 
 export interface TrainingDataStructure {
     id: number;
+    publicId: string;
     name: string;
     description: string;
     exercises: number[];
@@ -67,7 +68,7 @@ export interface SimpleButtonProps {
 }
 
 export interface UserProfileRequest {
-    id: string;
+    publicId: string;
     email: string;
     userName: string;
     createdAt: string | Date;

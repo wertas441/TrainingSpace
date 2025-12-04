@@ -1,6 +1,7 @@
 
 export interface NutritionDay {
     id: number;
+    publicId: string;
     name: string;
     date: string;
     description?: string;

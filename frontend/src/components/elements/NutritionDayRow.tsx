@@ -6,7 +6,7 @@ import {useRouter} from "next/navigation";
 import NutritionInfo from "@/components/elements/NutritionInfo";
 
 
-function NutritionDayRow({ id, name, date, description, calories, protein, fat, carb }: NutritionDay) {
+function NutritionDayRow({ id, publicId, name, date, description, calories, protein, fat, carb }: NutritionDay) {
 
     const router = useRouter();
     const informationElements = useMemo(() =>[
@@ -63,7 +63,7 @@ function NutritionDayRow({ id, name, date, description, calories, protein, fat, 
 					</div>
                     <div className="flex items-center mt-5 md:mt-0 ">
                         <ChangeButton
-                            onClick={useCallback(() => router.push(`/nutrition/${id}`), [id, router])}
+                            onClick={useCallback(() => router.push(`/nutrition/${publicId}`), [publicId, router])}
                             className={`w-full`}
                         />
                     </div>

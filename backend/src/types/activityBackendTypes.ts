@@ -37,6 +37,18 @@ export interface ActivityExerciseFrontend {
 
 export interface ActivityListFrontendStructure {
     id: number;
+    publicId: string;
+    name: string;
+    description: string;
+    activityDate: string;
+    type: ActivityTypeStructure;
+    difficulty: ActivityDifficultyStructure;
+    trainingId: number;
+    exercises: ActivityExerciseFrontend[];
+}
+
+export interface ActivityUpdateFrontendStructure {
+    activityId: string;
     name: string;
     description: string;
     activityDate: string;

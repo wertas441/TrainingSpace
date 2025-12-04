@@ -1,37 +1,36 @@
 import Link from "next/link";
 import {
-    PlusIcon,
     CalendarDaysIcon,
     SparklesIcon,
     SquaresPlusIcon,
     Squares2X2Icon,
 } from "@heroicons/react/24/outline";
-import {memo} from "react";
-
-const actions = [
-    {
-        href: "/add-activity",
-        label: "Добавить активность",
-        icon: SquaresPlusIcon,
-    },
-    {
-        href: "/my-activity",
-        label: "Моя активность",
-        icon: Squares2X2Icon,
-    },
-    {
-        href: "/training",
-        label: "Добавить день",
-        icon: CalendarDaysIcon,
-    },
-    {
-        href: "/goals",
-        label: "Добавить цель",
-        icon: SparklesIcon,
-    },
-] as const;
+import {memo, useMemo} from "react";
 
 function DashboardQuickActionsCard() {
+
+    const actions = useMemo(() => [
+        {
+            href: "/add-activity",
+            label: "Добавить активность",
+            icon: SquaresPlusIcon,
+        },
+        {
+            href: "/my-activity",
+            label: "Моя активность",
+            icon: Squares2X2Icon,
+        },
+        {
+            href: "/nutrition/add",
+            label: "Добавить день",
+            icon: CalendarDaysIcon,
+        },
+        {
+            href: "/goals/add",
+            label: "Добавить цель",
+            icon: SparklesIcon,
+        },
+    ], []);
 
     return (
         <div className="flex  flex-col h-full rounded-2xl bg-white border border-emerald-100 shadow-sm p-5 gap-4">
@@ -45,23 +44,25 @@ function DashboardQuickActionsCard() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1 auto-rows-fr">
-                {actions.map((action) => (
-                    <Link
-                        key={action.href}
-                        href={action.href}
-                        className="group flex h-full w-full flex-col items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50/40 px-4 py-4 hover:bg-emerald-50 hover:border-emerald-200 transition text-center"
-                    >
-                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm group-hover:bg-emerald-600 transition">
-                            {(() => {
-                                const Icon = action.icon ?? PlusIcon;
-                                return <Icon className="h-5 w-5" />;
-                            })()}
+                {actions.map((action) => {
+                    const IconComponent = action.icon;
+                    return (
+                        <Link
+                            key={action.href}
+                            href={action.href}
+                            className="group flex h-full w-full flex-col items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50/40 px-4 py-4 hover:bg-emerald-50 hover:border-emerald-200 transition text-center"
+                        >
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-white
+                        shadow-sm group-hover:bg-emerald-600 transition"
+                        >
+                            <IconComponent className="h-5 w-5"/>
                         </span>
-                        <p className="mt-2 text-sm font-semibold text-emerald-900">
-                            {action.label}
-                        </p>
-                    </Link>
-                ))}
+                            <p className="mt-2 text-sm font-semibold text-emerald-900">
+                                {action.label}
+                            </p>
+                        </Link>
+                    )
+                })}
             </div>
         </div>
     );

@@ -10,19 +10,17 @@ export const metadata: Metadata = {
 }
 
 interface ChangeNutritionPageProps {
-    params: {
+    params: Promise<{
         nutritionId: string;
-    };
+    }>
 }
 
 export default async function ChangeNutritionPage({ params }: ChangeNutritionPageProps){
 
     const { nutritionId } = await params;
+    const tokenValue = (await cookies()).get('token')?.value;
 
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
-
-    if (!authTokenCookie) {
+    if (!tokenValue) {
         return (
             <ErrorState
                 title="Проблема с авторизацией"
@@ -31,8 +29,7 @@ export default async function ChangeNutritionPage({ params }: ChangeNutritionPag
         );
     }
 
-    const tokenValue = authTokenCookie.value;
-    const dayInfo = await getDayInformation(tokenValue, Number(nutritionId));
+    const dayInfo = await getDayInformation(tokenValue, nutritionId);
 
     if (!dayInfo) {
         return (
@@ -42,5 +39,6 @@ export default async function ChangeNutritionPage({ params }: ChangeNutritionPag
             />
         );
     }
+
     return <ChangeNutrition dayInfo={dayInfo} token={tokenValue} />
 }

@@ -11,19 +11,17 @@ export const metadata: Metadata = {
 }
 
 interface ChangeTrainingPageProps {
-    params: {
+    params: Promise<{
         trainingId: string;
-    };
+    }>
 }
 
 export default async function ChangeTrainingPage({params}: ChangeTrainingPageProps){
 
     const { trainingId } = await params;
+    const tokenValue = (await cookies()).get('token')?.value;
 
-    const cookieStore = await cookies();
-    const authTokenCookie = cookieStore.get('token');
-
-    if (!authTokenCookie) {
+    if (!tokenValue) {
         return (
             <ErrorState
                 title="Проблема с авторизацией"
@@ -32,8 +30,7 @@ export default async function ChangeTrainingPage({params}: ChangeTrainingPagePro
         );
     }
 
-    const tokenValue = authTokenCookie.value;
-    const trainingInfo = await getTrainingInformation(tokenValue, Number(trainingId));
+    const trainingInfo = await getTrainingInformation(tokenValue, trainingId);
     const exercises = await getExercisesList(tokenValue);
 
     if (!trainingInfo || !exercises) {

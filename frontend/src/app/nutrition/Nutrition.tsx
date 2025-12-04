@@ -128,8 +128,9 @@ function Nutrition({userDays}: {userDays: NutritionDay[]}) {
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
                         <NutritionDayItem
-                            key={item.id}
+                            key={item.publicId}
                             id={item.id}
+                            publicId={item.publicId}
                             name={item.name}
                             date={item.date}
                             description={item.description}
@@ -142,7 +143,10 @@ function Nutrition({userDays}: {userDays: NutritionDay[]}) {
                     )
                 ) : (
                     <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Добавленных дней не найдено, попробуйте изменить фильтры и проверить подключение к сети.
+                        {userDays.length === 0
+                            ? "У вас пока нет добавленных дней. Нажмите «Добавить день», чтобы добавить первый."
+                            : "По заданным параметрам поиска дни не найдены. Попробуйте изменить фильтр."
+                        }
                     </div>
                 )}
             </div>
