@@ -5,32 +5,32 @@ import {
     SquaresPlusIcon,
     Squares2X2Icon,
 } from "@heroicons/react/24/outline";
-import {memo, useMemo} from "react";
+import {memo} from "react";
+
+const actions = [
+    {
+        href: "/add-activity",
+        label: "Добавить активность",
+        icon: SquaresPlusIcon,
+    },
+    {
+        href: "/my-activity",
+        label: "Моя активность",
+        icon: Squares2X2Icon,
+    },
+    {
+        href: "/nutrition/add",
+        label: "Добавить день",
+        icon: CalendarDaysIcon,
+    },
+    {
+        href: "/goals/add",
+        label: "Добавить цель",
+        icon: SparklesIcon,
+    },
+] as const;
 
 function DashboardQuickActionsCard() {
-
-    const actions = useMemo(() => [
-        {
-            href: "/add-activity",
-            label: "Добавить активность",
-            icon: SquaresPlusIcon,
-        },
-        {
-            href: "/my-activity",
-            label: "Моя активность",
-            icon: Squares2X2Icon,
-        },
-        {
-            href: "/nutrition/add",
-            label: "Добавить день",
-            icon: CalendarDaysIcon,
-        },
-        {
-            href: "/goals/add",
-            label: "Добавить цель",
-            icon: SparklesIcon,
-        },
-    ], []);
 
     return (
         <div className="flex  flex-col h-full rounded-2xl bg-white border border-emerald-100 shadow-sm p-5 gap-4">

@@ -121,7 +121,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
             console.error("delete day error:", error);
             setServerError("Не удалось удалить день. Попробуйте ещё раз позже.");
         }
-    }, [dayInfo.id, router, setServerError, token])
+    }, [dayInfo.publicId, router, setServerError, token])
 
     return (
         <>
@@ -209,17 +209,17 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
             </BlockPageContext>
 
             <ModalWindow
-                isExiting = {isExiting}
-                modalRef = {windowModalRef}
-                windowLabel = {'Подтверждение удаления'}
-                windowText = {`Вы действительно хотите удалить день ${dayInfo.name}? Это действие необратимо.`}
-                error = {serverError}
-                cancelButtonLabel = {'Отмена'}
-                cancelFunction = {toggleModalWindow}
-                confirmButtonLabel = {'Удалить'}
-                confirmFunction = {deleteDayBtn}
-                isProcess = {isProcess}
-                isRendered = {isRendered}
+                isExiting={isExiting}
+                modalRef={windowModalRef}
+                windowLabel={'Подтверждение удаления'}
+                windowText={`Вы действительно хотите удалить день ${dayInfo.name}? Это действие необратимо.`}
+                error={serverError}
+                cancelButtonLabel={'Отмена'}
+                cancelFunction={toggleModalWindow}
+                confirmButtonLabel={'Удалить'}
+                confirmFunction={deleteDayBtn}
+                isProcess={isProcess}
+                isRendered={isRendered}
             />
         </>
     )

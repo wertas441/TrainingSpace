@@ -35,7 +35,7 @@ router.post('/registration', async (req, res) => {
             return res.status(409).json(response);
         }
 
-        const existingByUserName = await UserModel.findByuserName(userName);
+        const existingByUserName = await UserModel.findByUserName(userName);
         if (existingByUserName) {
             const response: ApiResponse = {
                 success: false,
@@ -76,11 +76,11 @@ router.post('/registration', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        const { email, password, rememberMe }: LoginRequest = req.body;
-        const emailValidation = userEmailValidator(email)
+        const { userName, password, rememberMe }: LoginRequest = req.body;
+        const userNameValidation = userNameValidator(userName)
         const passwordValidation = userPasswordValidator(password);
 
-        if (!emailValidation || !passwordValidation) {
+        if (!userNameValidation || !passwordValidation) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Ошибка авторизации пользователя, пожалуйста проверьте введенные вами данные.'
@@ -89,11 +89,11 @@ router.post('/login', async (req, res) => {
         }
 
         // Проверка пользователя в базе данных
-        const existingUser = await UserModel.findByEmail(email);
+        const existingUser = await UserModel.findByUserName(userName);
         if (!existingUser) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Неверный email или пароль.'
+                error: 'Неверное имя пользователя или пароль.'
             };
             return res.status(401).json(response);
         }
@@ -103,7 +103,7 @@ router.post('/login', async (req, res) => {
         if (!isPasswordValid) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Неверный email или пароль.'
+                error: 'Неверное имя пользователя или пароль.'
             };
             return res.status(401).json(response);
         }

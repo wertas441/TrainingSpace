@@ -9,34 +9,33 @@ import {
     GlobeAltIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import {useMemo} from "react";
 import InformationPageBlock from "@/components/elements/InformationPageBlock";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 
-export default function Information() {
+const informationBlock = [
+    {
+        label: "Тренировки и активность",
+        text: 'Планируйте и отслеживайте тренировки, комбинируйте упражнения, следите за прогрессом и делайте тренировки более осознанными.',
+        icon: HeartIcon,
+    },
+    {
+        label: "Цели и мотивация",
+        text: 'Создавайте цели, отслеживайте выполнение и держите фокус на том, что для вас действительно важно в тренировочном процессе.',
+        icon: SparklesIcon,
+    },
+    {
+        label: "Открытый код",
+        text: 'Проект разрабатывается как Open Source — вы можете изучать код, форкать репозиторий, предлагать идеи и контрибьютить.',
+        icon: GlobeAltIcon,
+    },
+    {
+        label: "Обратная связь",
+        text: 'Если у вас есть идеи, замечания или вы нашли баг — создайте issue на GitHub или напишите мне. Обратная связь помогает делать TrainingSpace лучше.',
+        icon: InformationCircleIcon,
+    },
+] as const;
 
-    const informationBlock = useMemo(() =>[
-        {
-            label: "Тренировки и активность",
-            text: 'Планируйте и отслеживайте тренировки, комбинируйте упражнения, следите за прогрессом и делайте тренировки более осознанными.',
-            icon: HeartIcon,
-        },
-        {
-            label: "Цели и мотивация",
-            text: 'Создавайте цели, отслеживайте выполнение и держите фокус на том, что для вас действительно важно в тренировочном процессе.',
-            icon: SparklesIcon,
-        },
-        {
-            label: "Открытый код",
-            text: 'Проект разрабатывается как Open Source — вы можете изучать код, форкать репозиторий, предлагать идеи и контрибьютить.',
-            icon: GlobeAltIcon,
-        },
-        {
-            label: "Обратная связь",
-            text: 'Если у вас есть идеи, замечания или вы нашли баг — создайте issue на GitHub или напишите мне. Обратная связь помогает делать TrainingSpace лучше.',
-            icon: InformationCircleIcon,
-        },
-    ], [])
+export default function Information() {
 
     return (
         <SettingsPageContext>

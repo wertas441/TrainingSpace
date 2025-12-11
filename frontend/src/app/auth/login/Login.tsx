@@ -4,31 +4,31 @@ import {useInputField} from "@/lib/hooks/useInputField";
 import {FormEvent, useMemo, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
-import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators";
+import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
 import MainInput from "@/components/inputs/MainInput";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {baseUrlForBackend} from "@/lib";
-import {AtSymbolIcon, LockClosedIcon} from "@heroicons/react/24/outline";
+import {LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
 import type {BackendApiResponse} from "@/types/indexTypes";
 
 export default function Login(){
 
-    const email = useInputField('');
+    const userName = useInputField('');
     const password = useInputField('');
     const [rememberMe, setRememberMe] = useState<boolean>(false);
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
     const validateForm = () => {
-        const emailError = validateUserEmail(email.inputState.value);
-        email.setError(emailError);
+        const userNameError = validateUserName(userName.inputState.value);
+        userName.setError(userNameError);
 
         const passwordError = validateUserPassword(password.inputState.value);
         password.setError(passwordError);
 
-        return !(emailError || passwordError);
+        return !(userNameError || passwordError);
     }
 
     const handleSubmit = async (event: FormEvent):Promise<void> => {
@@ -49,7 +49,7 @@ export default function Login(){
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    email: email.inputState.value,
+                    userName: userName.inputState.value,
                     password: password.inputState.value,
                     rememberMe: rememberMe,
                 }),
@@ -87,13 +87,12 @@ export default function Login(){
                 <form className="space-y-5" onSubmit={handleSubmit}>
 
                     <MainInput
-                        id={'email'}
-                        type="email"
-                        value={email.inputState.value}
-                        onChange={email.setValue}
-                        icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
-                        label={'Email'}
-                        error={email.inputState.error || undefined}
+                        id={'userName'}
+                        value={userName.inputState.value}
+                        onChange={userName.setValue}
+                        icon={useMemo(() => <UserIcon className="h-5 w-5 text-gray-500" />, [])}
+                        label={'Имя пользователя'}
+                        error={userName.inputState.error || undefined}
                     />
 
                     <MainInput

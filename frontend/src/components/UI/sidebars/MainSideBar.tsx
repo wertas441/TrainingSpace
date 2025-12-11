@@ -8,7 +8,6 @@ import {
     SquaresPlusIcon, WrenchScrewdriverIcon,
     XMarkIcon
 } from "@heroicons/react/24/outline";
-import {useMemo} from "react";
 import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";
 
 interface SideBarProps {
@@ -17,64 +16,64 @@ interface SideBarProps {
 	onClose: () => void;
 }
 
-export default function MainSideBar({ activePage, isOpen = false, onClose }: SideBarProps) {
+const mainSideBarItems = [
+    {
+        label: 'Главная',
+        link: '/',
+        context: '/',
+        icon: HomeIcon,
+    },
+    {
+        label: 'Моя активность',
+        link: '/my-activity',
+        context: 'my-activity',
+        icon: Squares2X2Icon,
+    },
+    {
+        label: 'Добавить активность',
+        link: '/add-activity',
+        context: 'add-activity',
+        icon: SquaresPlusIcon,
+    },
+    {
+        label: 'Мои тренировки',
+        link: '/my-training',
+        context: 'my-training',
+        icon: RectangleGroupIcon,
+    },
+    {
+        label: 'Статистика',
+        link: '/statistics',
+        context: 'statistics',
+        icon: ChartBarIcon,
+    },
+    {
+        label: 'Питание',
+        link: '/nutrition',
+        context: 'nutrition',
+        icon: CakeIcon,
+    },
+    {
+        label: 'Цели',
+        link: '/goals',
+        context: 'goals',
+        icon: SparklesIcon,
+    },
+    {
+        label: 'Техника упражнений',
+        link: '/exercises-techniques',
+        context: 'exercises-techniques',
+        icon: PuzzlePieceIcon,
+    },
+    {
+        label: 'Настройки',
+        link: '/settings/profile',
+        context: 'settings',
+        icon: WrenchScrewdriverIcon,
+    },
+] as const;
 
-    const mainSideBarItems = useMemo(() => [
-        {
-            label: 'Главная',
-            link: '/',
-            context: '/',
-            icon: HomeIcon,
-        },
-        {
-            label: 'Моя активность',
-            link: '/my-activity',
-            context: 'my-activity',
-            icon: Squares2X2Icon,
-        },
-        {
-            label: 'Добавить активность',
-            link: '/add-activity',
-            context: 'add-activity',
-            icon: SquaresPlusIcon,
-        },
-        {
-            label: 'Мои тренировки',
-            link: '/my-training',
-            context: 'my-training',
-            icon: RectangleGroupIcon,
-        },
-        {
-            label: 'Статистика',
-            link: '/statistics',
-            context: 'statistics',
-            icon: ChartBarIcon,
-        },
-        {
-            label: 'Питание',
-            link: '/nutrition',
-            context: 'nutrition',
-            icon: CakeIcon,
-        },
-        {
-            label: 'Цели',
-            link: '/goals',
-            context: 'goals',
-            icon: SparklesIcon,
-        },
-        {
-            label: 'Техника упражнений',
-            link: '/exercises-techniques',
-            context: 'exercises-techniques',
-            icon: PuzzlePieceIcon,
-        },
-        {
-            label: 'Настройки',
-            link: '/settings/profile',
-            context: 'settings',
-            icon: WrenchScrewdriverIcon,
-        },
-    ], []);
+export default function MainSideBar({ activePage, isOpen = false, onClose }: SideBarProps) {
 
 	return (
 		<>

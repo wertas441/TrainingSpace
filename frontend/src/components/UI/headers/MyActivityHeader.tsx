@@ -11,6 +11,9 @@ import {
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 
+const difficultOptions: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
+const typeOptions: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
+
 export default function MyActivityHeader(
     {
         searchName,
@@ -26,8 +29,6 @@ export default function MyActivityHeader(
     }: ActivityHeaderProps){
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
-    const difficultOptions: ActivityDifficultyStructure[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []);
-    const typeOptions: ActivityTypeStructure[] = useMemo(() => ['Силовая', 'Кардио', 'Комбинированный'], []);
 
     const handleReset = useCallback(() => {
         setDifficultFilter(null);

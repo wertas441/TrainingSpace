@@ -37,6 +37,9 @@ interface ChangeActivityProps {
     token: string;
 }
 
+const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
+const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
+
 export default function ChangeActivity({activityInfo, myTrainings, token}: ChangeActivityProps){
 
     const activityName = useInputField(activityInfo.name);
@@ -67,8 +70,6 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
     );
 
     const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[]>([]);
-    const activityTypeChoices: ActivityTypeStructure[] = useMemo(() => ['Силовая', 'Кардио', 'Комбинированный'], []) ;
-    const activityDifficultyChoices: ActivityDifficultyStructure[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []) ;
 
     const trainingOptions: OptionType[] = useMemo(
         () => myTrainings.map(t => ({ value: String(t.id), label: t.name })),

@@ -23,6 +23,9 @@ import {
     validateActivityTrainingId
 } from "@/lib/utils/validators";
 
+const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
+const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
+
 export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStructure[]; }) {
 
     const today = new Date();
@@ -39,9 +42,6 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>({});
     const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[]>([]);
-
-    const activityTypeChoices: ActivityTypeStructure[] = useMemo(() => ['Силовая', 'Кардио', 'Комбинированный'], []) ;
-    const activityDifficultyChoices: ActivityDifficultyStructure[] = useMemo(() => ['Лёгкая', 'Средняя', 'Тяжелая'], []) ;
 
     const trainingOptions: OptionType[] = useMemo(
         () => myTrainings.map(t => ({ value: String(t.id), label: t.name })),
