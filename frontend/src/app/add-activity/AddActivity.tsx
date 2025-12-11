@@ -223,27 +223,26 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         onChange={(vals) => handleChangeTraining(vals[0]?.value ?? '')}
                         placeholder="Выберите тренировку"
                         isMulti={false}
-                        noOptionsMessage={() => 'Нет тренировок'}
-
+                        noOptionsMessage={() => 'У вас пока не создано ни одной тренировки или вы неправильно ввели название'}
                     />
-
-                    {trainingId.inputState.error && (
-                        <p className=" pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
-                    )}
 
                     {selectedTraining && (
-                        <AddTrainingActivityItem
-                            selectedTraining={selectedTraining}
-                            exerciseSets={exerciseSets}
-                            trainingExercises={trainingExercises}
-                            setExerciseSets={setExerciseSets}
-                        />
-                    )}
+                        <div className="space-y-10">
+                            <AddTrainingActivityItem
+                                selectedTraining={selectedTraining}
+                                exerciseSets={exerciseSets}
+                                trainingExercises={trainingExercises}
+                                setExerciseSets={setExerciseSets}
+                            />
 
-                    <LightGreenSubmitBtn
-                        label={!isSubmitting ? "Сохранить активность" : 'Сохранение...' }
-                        disabled={isSubmitting}
-                    />
+                            <p className=" pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
+
+                            <LightGreenSubmitBtn
+                                label={!isSubmitting ? "Сохранить активность" : 'Сохранение...' }
+                                disabled={isSubmitting}
+                            />
+                        </div>
+                    )}
                 </form>
             </div>
         </main>
