@@ -4,7 +4,8 @@ import {GoalPriority} from "@/types/goalTypes";
 
 type ColorStylesChoices = DifficultOptionsStructure | GoalPriority;
 
-export const baseUrlForBackend: string = process.env.BACKEND_URL ?? 'http://localhost:3002';
+export const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002';
+
 
 export const mainInputClasses:string = `w-full py-2.5 border border-gray-400 rounded-lg bg-white text-gray-900 placeholder-gray-400 
     focus:outline-none focus:ring-2 focus:ring-emerald-500 hover:border-emerald-400 ease-in-out duration-300 transition-shadow `;
