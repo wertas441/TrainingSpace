@@ -29,8 +29,6 @@ export class UserModel {
 
     // Поиск пользователя по email
     static async findByEmail(email: string): Promise<User | null> {
-        // Храним хеш в колонке password_hash, но в объекте пользователя
-        // возвращаем его в свойстве password (для последующей проверки при логине)
         const query = 'SELECT id, email, username, password_hash AS password, created_at, updated_at FROM users WHERE email = $1';
         const result = await pool.query(query, [email]);
         const row = result.rows[0];
@@ -64,8 +62,8 @@ export class UserModel {
     }
 
     // Поиск пользователя по userName
-    static async findByuserName(userName: string): Promise<User | null> {
-        const query = 'SELECT id, email, username, created_at, updated_at FROM users WHERE username = $1';
+    static async findByUserName(userName: string): Promise<User | null> {
+        const query = 'SELECT id, email, username, password_hash AS password, created_at, updated_at FROM users WHERE username = $1';
         const result = await pool.query(query, [userName]);
         const row = result.rows[0];
         if (!row) return null;
@@ -73,6 +71,7 @@ export class UserModel {
             id: row.id,
             email: row.email,
             userName: row.username,
+            password: row.password,
             createdAt: row.created_at,
             updatedAt: row.updated_at,
         } as unknown as User;

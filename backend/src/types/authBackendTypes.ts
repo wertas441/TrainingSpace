@@ -15,7 +15,7 @@ export interface UserProfileResponse {
 }
 
 export interface LoginRequest {
-    email: string;
+    userName: string;
     password: string;
     rememberMe: boolean;
 }

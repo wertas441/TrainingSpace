@@ -3,7 +3,7 @@ import {ComponentType, memo, SVGProps} from "react";
 
 interface SideBarElementProps {
 	label: string;
-	icon?: ComponentType<SVGProps<SVGSVGElement>>;
+	icon: ComponentType<SVGProps<SVGSVGElement>>;
 	link: string;
 	className?: string;
 	active: boolean;
