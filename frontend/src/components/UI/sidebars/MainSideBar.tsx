@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import SideBarElement from "@/components/elements/SideBarElement";
 import {
     CakeIcon,
@@ -74,6 +75,24 @@ const mainSideBarItems = [
 ] as const;
 
 export default function MainSideBar({ activePage, isOpen = false, onClose }: SideBarProps) {
+
+    // Блокируем прокрутку страницы при открытом сайдбаре на мобильных устройствах
+    useEffect(() => {
+        if (!isOpen) return;
+        if (typeof window === "undefined") return;
+
+        const isMobile = window.innerWidth < 1024; // соответствует breakpoint lg
+        if (!isMobile) return;
+
+        const body = document.body;
+        const previousOverflow = body.style.overflow;
+        body.style.overflow = "hidden";
+
+        // При закрытии сайдбара или размонтировании возвращаем предыдущее значение
+        return () => {
+            body.style.overflow = previousOverflow;
+        };
+    }, [isOpen]);
 
 	return (
 		<>

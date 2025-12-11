@@ -299,17 +299,17 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
             </main>
 
             <ModalWindow
-                isExiting = {isExiting}
-                modalRef = {windowModalRef}
-                windowLabel = {'Подтверждение удаления'}
-                windowText = {`Вы действительно хотите удалить активность ${activityInfo.name}? Это действие необратимо.`}
-                error = {serverError}
-                cancelButtonLabel = {'Отмена'}
-                cancelFunction = {toggleModalWindow}
-                confirmButtonLabel = {'Удалить'}
-                confirmFunction = {deleteActivityBtn}
-                isProcess = {isProcess}
-                isRendered = {isRendered}
+                isExiting={isExiting}
+                modalRef={windowModalRef}
+                windowLabel={'Подтверждение удаления'}
+                windowText={`Вы действительно хотите удалить активность ${activityInfo.name}? Это действие необратимо.`}
+                error={serverError}
+                cancelButtonLabel={'Отмена'}
+                cancelFunction={toggleModalWindow}
+                confirmButtonLabel={'Удалить'}
+                confirmFunction={deleteActivityBtn}
+                isProcess={isProcess}
+                isRendered={isRendered}
             />
         </>
     )
