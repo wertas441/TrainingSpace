@@ -2,15 +2,16 @@ import {memo, useState} from "react";
 import NutritionTrendChart from "@/components/UI/NutritionTrendChart";
 import {MetricOptionStructure, NutritionMetric, NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
 
+const metricOptions: MetricOptionStructure[] = [
+    {id: 'calories', label: 'Калории'},
+    {id: 'protein', label: 'Белки'},
+    {id: 'fat', label: 'Жиры'},
+    {id: 'carb', label: 'Углеводы'},
+] as const;
+
 function DashboardChartCard({nutritionGraphicData}: {nutritionGraphicData: NutritionStatisticsGraphicResponse[]}) {
 
     const [selectedMetric, setSelectedMetric] = useState<NutritionMetric>('calories');
-    const metricOptions: MetricOptionStructure[] = [
-        {id: 'calories', label: 'Калории'},
-        {id: 'protein', label: 'Белки'},
-        {id: 'fat', label: 'Жиры'},
-        {id: 'carb', label: 'Углеводы'},
-    ];
 
     return (
         <section className="grid grid-cols-1">

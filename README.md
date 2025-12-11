@@ -3,9 +3,12 @@
 **TrainingSpace** — это Open Source‑приложение для отслеживания тренировок, питания, активности и целей.  
 Оно помогает вести более осознанный образ жизни: планировать тренировки, фиксировать прогресс и работать с целями в одном месте.
 
-Репозиторий: `https://github.com/wertas441/TrainingSpace`
 
-На данный момент приложение **находиться** в стадии активного развития MVP
+На данный момент приложение находиться в стадии активного тестирования.
+
+URL: `https://your-training.space`
+
+Репозиторий: `https://github.com/wertas441/TrainingSpace`
 
 ---
 
@@ -28,7 +31,6 @@
 
 - **Прочее**
   - Docker / docker-compose для локального окружения
-
 ---
 
 ## Основной функционал
@@ -67,7 +69,7 @@
 
 - Node.js (актуальная LTS‑версия)
 - npm и yarn
-- PostgreSQL (если вы не используете docker-compose)
+- Docker
 
 Рекомендуемая структура запуска:
 
@@ -115,11 +117,8 @@ JWT_SECRET=your-jwt-secret
 
 В `backend/src/database` есть файлы для инициализации схемы и базовых данных:
 - `schema.sql` — структура таблиц
-- `init.ts`, `seedExercises.ts` — скрипты инициализации (если вы их используете)
+- `init.ts`, `seedExercises.ts` — скрипты инициализации
 
-Варианты:
-- Выполнить `schema.sql` напрямую через клиент PostgreSQL
-- Или написать/дополнить скрипт запуска инициализации по своему вкусу
 
 ### 4. Запуск в режиме разработки
 
@@ -152,16 +151,19 @@ cd frontend
 yarn install
 ```
 
-### 2. Переменные окружения (при необходимости)
+### 2. Переменные окружения 
 
-Если вы хотите вынести базовый URL backend в `.env.local`, вы можете использовать, например:
+Сейчас frontend обращается к backend вот по такой структуре:
 
 ```env
-NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
+export const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002';
 ```
 
-и в коде ссылаться на `process.env.NEXT_PUBLIC_BACKEND_URL`.  
-Сейчас в проекте используется собственный `baseUrlForBackend` из `frontend/src/lib`, который можно при желании привязать к этой переменной.
+Если вы хотите использовать свой домен, вы можете создать .env файл в корне frontend и использовать примерно такую структуру:
+
+```env
+NEXT_PUBLIC_BACKEND_URL=https://your-training.space
+```
 
 ### 3. Запуск в режиме разработки
 
@@ -224,6 +226,7 @@ frontend/  # Frontend (Next.js + React + TypeScript)
 - отправляйте **Pull Request** с улучшениями кода, дизайна или документации.
 
 Буду рад любому вкладу в развитие **TrainingSpace**.
+
 
 
 
