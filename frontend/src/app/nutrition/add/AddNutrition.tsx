@@ -124,7 +124,7 @@ export default function AddNutrition(){
                         id={'dayName'}
                         value={dayName.inputState.value}
                         onChange={dayName.setValue}
-                        label={'Имя дня'}
+                        label={'Наименование дня'}
                         error={dayName.inputState.error || undefined}
                     />
 

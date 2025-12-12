@@ -246,7 +246,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                         </div>
 
                         <LightGreenSubmitBtn
-                            label={!isSubmitting ? 'Добавить' : 'Добавление...'}
+                            label={!isSubmitting ? 'Добавить тренировку' : 'Добавление...'}
                             disabled={isSubmitting}
                         />
                     </form>
