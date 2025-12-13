@@ -77,7 +77,7 @@ export const validateTwoPassword = (currentPassword:string, newPassword:string):
 
 export const validateDayName = (dayName: string): string | null => {
     if(!dayName.trim()){
-        return ('Пожалуйста, введите имя для дня')
+        return ('Пожалуйста, введите наименование для дня')
     }
 
     if(dayName.length < 3){

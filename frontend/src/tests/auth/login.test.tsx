@@ -26,7 +26,7 @@ describe('Логин', () => {
 		const submitButton = screen.getByRole('button', { name: 'Войти' });
 		await userEvent.click(submitButton);
 
-		expect(await screen.findByText('Пожалуйста, введите ваш email')).toBeInTheDocument();
+		expect(await screen.findByText('Пожалуйста, введите имя для вашего аккаунта')).toBeInTheDocument();
 		expect(await screen.findByText('Пожалуйста, введите ваш пароль')).toBeInTheDocument();
 	});
 
@@ -35,7 +35,7 @@ describe('Логин', () => {
 
         render(<Login />);
 
-        await userEvent.type(screen.getByLabelText('Email'), 'awfw@b12.com');
+        await userEvent.type(screen.getByLabelText('Имя пользователя'), 'testuser123');
         await userEvent.type(screen.getByLabelText('Пароль'), '12345678');
 
         const submitButton = screen.getByRole('button', { name: 'Войти' });
@@ -57,7 +57,7 @@ describe('Логин', () => {
 
 		render(<Login />);
 
-		await userEvent.type(screen.getByLabelText('Email'), 'awfw@b12.com');
+        await userEvent.type(screen.getByLabelText('Имя пользователя'), 'testuser123');
 		await userEvent.type(screen.getByLabelText('Пароль'), '12345678');
 
 		const submitButton = screen.getByRole('button', { name: 'Войти' });

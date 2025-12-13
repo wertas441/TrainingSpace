@@ -139,7 +139,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                             id={'dayName'}
                             value={dayName.inputState.value}
                             onChange={dayName.setValue}
-                            label={'Имя дня'}
+                            label={'Наименование дня'}
                             error={dayName.inputState.error || undefined}
                         />
 
