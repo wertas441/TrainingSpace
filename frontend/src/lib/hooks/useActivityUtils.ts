@@ -11,7 +11,7 @@ interface UseTrainingListProps {
     trainingId: UseInputFieldReturn;
 }
 
-export function useTrainingList({myTrainings, trainingId}: UseTrainingListProps){
+export function useActivityUtils({myTrainings, trainingId}: UseTrainingListProps){
 
     const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>({});
     const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[]>([]);

@@ -20,7 +20,7 @@ import {
     validateActivitySets,
     validateActivityTrainingId
 } from "@/lib/utils/validators";
-import {useTrainingList} from "@/lib/hooks/useTrainingList";
+import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
@@ -46,7 +46,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         selectedTrainingOption,
         selectedTraining,
         handleChangeTraining
-    } = useTrainingList({myTrainings, trainingId});
+    } = useActivityUtils({myTrainings, trainingId});
 
     const validateForm = (): boolean => {
         const nameError = validateActivityName(activityName.inputState.value);

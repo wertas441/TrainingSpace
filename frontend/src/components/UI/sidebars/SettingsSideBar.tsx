@@ -9,7 +9,7 @@ import {
 import {SettingsMenuItemsStructure} from "@/types/indexTypes";
 import {logout} from "@/lib/controllers/settingController";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import ModalWindow from "@/components/UI/ModalWindow";
+import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 
 const settingsMenuItems: SettingsMenuItemsStructure[] = [

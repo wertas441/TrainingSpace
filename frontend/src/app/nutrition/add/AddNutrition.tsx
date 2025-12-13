@@ -108,7 +108,7 @@ export default function AddNutrition(){
         <BlockPageContext>
             <div className="space-y-6">
                 <div>
-                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
+                    <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900">
                         Добавить день питания
                     </h2>
                     <p className="text-center text-gray-600">

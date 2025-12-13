@@ -3,9 +3,9 @@
 import {TrainingListResponse} from "@/types/trainingTypes";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useCallback, useEffect, useMemo, useState} from "react";
+import {FormEvent, useCallback, useEffect, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
+import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators";
 import {baseUrlForBackend} from "@/lib";
@@ -14,12 +14,14 @@ import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
-import MainPagination from "@/components/UI/MainPagination";
+import MainPagination from "@/components/UI/other/MainPagination";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
-import ModalWindow from "@/components/UI/ModalWindow";
+import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import {deleteTraining} from "@/lib/controllers/trainingController";
+import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
+import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 
 interface ChangeTrainingProps {
     trainingInfo: TrainingListResponse,
@@ -29,38 +31,25 @@ interface ChangeTrainingProps {
 
 export default function ChangeTraining({ trainingInfo, token, exercises }: ChangeTrainingProps) {
 
-    const trainingName = useInputField(trainingInfo?.name ?? "");
-    const trainingDescription = useInputField(trainingInfo?.description ?? "");
-    const [selectedExerciseIds, setSelectedExerciseIds] = useState<number[]>(trainingInfo?.exercises ?? []);
+    const trainingName = useInputField(trainingInfo.name);
+    const trainingDescription = useInputField(trainingInfo.description);
     const [exercisesError, setExercisesError] = useState<string | null>(null);
-    const [searchName, setSearchName] = useState<string>('');
-    const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
     const itemsPerPage:number = 8;
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow();
 
-    const muscleOptions = useMemo(() => {
-        const set = new Set<string>();
-        exercises.forEach(e => e.partOfTheBody.forEach(p => set.add(p)));
-        return Array.from(set)
-            .sort((a, b) => a.localeCompare(b, 'ru'))
-            .map(v => ({ value: v, label: v }));
-    }, [exercises]);
-
-    const selectedMuscles: OptionType[] = useMemo(
-        () => muscleOptions.filter(o => partOfBodyFilter.includes(o.value)),
-        [partOfBodyFilter, muscleOptions]
-    );
-
-    const filteredList = useMemo(() => {
-        const q = searchName.toLowerCase().trim();
-        return exercises.filter(e => {
-            const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
-            const matchesPart = partOfBodyFilter.length === 0 || e.partOfTheBody.some(p => partOfBodyFilter.includes(p));
-            return matchesName && matchesPart;
-        });
-    }, [searchName, exercises, partOfBodyFilter]);
+    const {
+        partOfBodyFilter,
+        setPartOfBodyFilter,
+        searchName,
+        setSearchName,
+        muscleOptions,
+        selectedMuscles,
+        filteredList,
+        handleToggleExercise,
+        selectedExerciseIds
+    } = useTrainingUtils({exercises, setExercisesError})
 
     const {
         currentPage,
@@ -128,19 +117,6 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
         }
     }
 
-    const handleToggleExercise = (id: number) => {
-        setSelectedExerciseIds(prev => {
-            if (prev.includes(id)) {
-                const next = prev.filter(x => x !== id);
-                if (next.length > 0) setExercisesError(null);
-                return next;
-            }
-            const next = [...prev, id];
-            if (next.length > 0) setExercisesError(null);
-            return next;
-        });
-    }
-
     const deleteTrainingBtn = useCallback(async () => {
         setServerError(null);
 
@@ -158,7 +134,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
             <main className="flex items-center justify-center min-h-screen p-4">
                 <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-xl border border-emerald-100">
                     <div className="space-y-6" >
-                        <h2 className="text-2xl font-bold text-center text-gray-900">
+                        <h2 className="text-2xl font-semibold text-center text-gray-900">
                             Изменение тренировки
                         </h2>
 
@@ -230,37 +206,12 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                                 />
                             )}
 
-                            <div className="mt-2">
-                                <div className="text-sm font-medium text-emerald-900 mb-2">
-                                    Выбранные упражнения ({selectedExerciseIds.length})
-                                </div>
-                                {exercisesError && (
-                                    <div className="mb-2 text-sm text-rose-600">{exercisesError}</div>
-                                )}
-                                {selectedExerciseIds.length > 0 ? (
-                                    <div className="flex flex-wrap gap-2">
-                                        {selectedExerciseIds.map(id => {
-                                            const ex = exercises.find(e => e.id === id);
-                                            if (!ex) return null;
-                                            return (
-                                                <button
-                                                    key={id}
-                                                    type="button"
-                                                    onClick={() => handleToggleExercise(id)}
-                                                    className="inline-flex cursor-pointer items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs hover:bg-emerald-100"
-                                                >
-                                                    {ex.name}
-                                                    <span className=" rounded-full bg-white/60 px-1.5 py-1 text-xs border border-emerald-200">убрать</span>
-                                                </button>
-                                            )
-                                        })}
-                                    </div>
-                                ) : (
-                                    <div className="text-sm text-gray-500">
-                                        Пока ничего не выбрано — добавьте упражнения из списка выше
-                                    </div>
-                                )}
-                            </div>
+                            <SelectExerciseUi
+                                selectedExerciseIds={selectedExerciseIds}
+                                exercisesError={exercisesError}
+                                exercises={exercises}
+                                handleToggleExercise={handleToggleExercise}
+                            />
 
                             <div className="mt-10 flex-row md:flex space-y-4 md:space-y-0 items-center gap-x-8">
                                 <LightGreenSubmitBtn
