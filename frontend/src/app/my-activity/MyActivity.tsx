@@ -3,7 +3,7 @@
 import {ActivityDataStructure, ActivityDifficultyFilter, ActivityTypeFilter} from "@/types/activityTypes";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
-import MainPagination from "@/components/UI/MainPagination";
+import MainPagination from "@/components/UI/other/MainPagination";
 import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
 import MyActivityRow from "@/components/elements/MyActivityRow";
 

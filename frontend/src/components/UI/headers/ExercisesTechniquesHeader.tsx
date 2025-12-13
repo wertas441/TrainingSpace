@@ -14,6 +14,8 @@ interface ValueOptions {
     label: string
 }
 
+const difficultOptions: DifficultOptionsStructure[] =  ['Лёгкий', 'Средний', 'Сложный'] as const;
+
 function ExercisesTechniquesHeader(
     {
         searchName,
@@ -27,10 +29,8 @@ function ExercisesTechniquesHeader(
         exercises,
     }: ExercisesTechniquesHeaderProps){
 
-    const difficultOptions: DifficultOptionsStructure[] = useMemo(() => ['Лёгкий', 'Средний', 'Сложный'], []);
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
 
-    // Опции для react-select из данных упражнений
     const muscleOptions = useMemo(() => {
         const set = new Set<string>();
         exercises.forEach(e => e.partOfTheBody.forEach(p => set.add(p)));

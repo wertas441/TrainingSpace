@@ -57,10 +57,9 @@ export default function AddTrainingActivityItem(
     return (
         <div className="space-y-6">
             <h2 className="text-lg font-semibold text-gray-800">Упражнения из тренировки</h2>
-
             {selectedTraining.exercises.map((exId) => {
                 const ex = trainingExercises.find(e => e.id === exId);
-                const sets = exerciseSets[exId];
+                const sets = exerciseSets[exId] || [{ id: 1, weight: 0, quantity: 0 }];
                 return (
                     <div key={exId} className="rounded-lg border border-emerald-100 bg-white p-4">
                         <div className="flex-row sm:flex space-y-3 items-center justify-between">

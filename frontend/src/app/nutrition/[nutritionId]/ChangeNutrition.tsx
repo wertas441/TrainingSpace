@@ -19,7 +19,7 @@ import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {NutritionDay} from "@/types/nutritionTypes";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
-import ModalWindow from "@/components/UI/ModalWindow";
+import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import {deleteDay} from "@/lib/controllers/nutritionController";
 
@@ -127,7 +127,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
         <>
             <BlockPageContext>
                 <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-center text-gray-900">
+                    <h2 className="text-2xl font-semibold text-center text-gray-900">
                         Изменение дня
                     </h2>
 
@@ -139,7 +139,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
                             id={'dayName'}
                             value={dayName.inputState.value}
                             onChange={dayName.setValue}
-                            label={'Имя дня'}
+                            label={'Наименование дня'}
                             error={dayName.inputState.error || undefined}
                         />
 

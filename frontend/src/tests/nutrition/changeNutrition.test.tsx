@@ -6,27 +6,58 @@ import {
     resetUsePageUtilsOverrides,
     setServerErrorMock,
 } from '@/tests/utils/mockUsePageUtils';
-import {pushMock} from '@/tests/utils/mockNextNavigation';
-import AddNutrition from "@/app/nutrition/add/AddNutrition";
+import {replaceMock} from '@/tests/utils/mockNextNavigation';
+import ChangeNutrition from "@/app/nutrition/[nutritionId]/ChangeNutrition";
+import {NutritionDay} from "@/types/nutritionTypes";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     ...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));
 
-describe('Добавить новый день для отслеживания', () => {
+describe('Изменить день питания', () => {
     afterEach(() => {
         jest.clearAllMocks();
         resetUsePageUtilsOverrides();
     });
 
+    const dayData:NutritionDay = {
+		id: 1,
+		publicId: 'f0d730b6-360d-4123-ab53-31155cf09ea2',
+		name: 'чит мил день',
+		date: '2025-12-12',
+		description: 'кушаю что хочу',
+		calories: 3000,
+		protein: 140 ,
+		fat: 90,
+		carb: 400,
+	}
+
     it('Проверка работоспособности валидации', async () => {
-        render(<AddNutrition />);
+        render(<ChangeNutrition dayInfo={dayData} token={"test-token"}  />);
 
-        const dataInput = screen.getByLabelText('Дата')
-        await userEvent.clear(dataInput);
+        const nameInput = screen.getByLabelText('Наименование дня');
+        await userEvent.clear(nameInput);
 
-        const submitButton = screen.getByRole('button', { name: 'Добавить' });
+        const calInput = screen.getByLabelText('Калории (ккал)');
+        await userEvent.clear(calInput);
+
+        const proteinInput = screen.getByLabelText('Белки (г)');
+        await userEvent.clear(proteinInput);
+
+        const fatInput = screen.getByLabelText('Жиры (г)');
+        await userEvent.clear(fatInput);
+
+        const carbInput = screen.getByLabelText('Углеводы (г)');
+        await userEvent.clear(carbInput);
+
+        const dateInput = screen.getByLabelText('Дата');
+        await userEvent.clear(dateInput);
+
+        const descrInput = screen.getByLabelText('Описание');
+        await userEvent.clear(descrInput);
+
+        const submitButton = screen.getByRole('button', { name: 'Изменить' });
         await userEvent.click(submitButton);
 
         expect(await screen.findByText('Пожалуйста, введите наименование для дня')).toBeInTheDocument();
@@ -40,19 +71,9 @@ describe('Добавить новый день для отслеживания',
     it('Не успешная отправка формы из-за backend', async () => {
         global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
 
-        render(<AddNutrition />);
+        render(<ChangeNutrition dayInfo={dayData} token={"test-token"}  />);
 
-        await userEvent.type(screen.getByLabelText('Наименование дня'), 'хороший день');
-        await userEvent.type(screen.getByLabelText('Калории (ккал)'), '4200');
-        await userEvent.type(screen.getByLabelText('Белки (г)'), '150');
-        await userEvent.type(screen.getByLabelText('Жиры (г)'), '140');
-        await userEvent.type(screen.getByLabelText('Углеводы (г)'), '300');
-        
-        const dateInput = screen.getByLabelText('Дата');
-        await userEvent.clear(dateInput);
-        await userEvent.type(dateInput, '2025-08-27');
-
-        const submitButton = screen.getByRole('button', { name: 'Добавить' });
+        const submitButton = screen.getByRole('button', { name: 'Изменить' });
         await userEvent.click(submitButton);
 
         await waitFor(() => expect(global.fetch).toHaveBeenCalled());
@@ -66,27 +87,19 @@ describe('Добавить новый день для отслеживания',
 
 
     it('Успешная отправка формы', async () => {
-
         global.fetch = jest.fn().mockResolvedValue({ ok: true });
 
-        render(<AddNutrition />);
+        render(<ChangeNutrition dayInfo={dayData} token={"test-token"}  />);
 
-        await userEvent.type(screen.getByLabelText('Наименование дня'), 'хороший день');
-        await userEvent.type(screen.getByLabelText('Калории (ккал)'), '4200');
-        await userEvent.type(screen.getByLabelText('Белки (г)'), '150');
-        await userEvent.type(screen.getByLabelText('Жиры (г)'), '140');
-        await userEvent.type(screen.getByLabelText('Углеводы (г)'), '300');
-        
-        const dateInput = screen.getByLabelText('Дата');
-        await userEvent.clear(dateInput);
-        await userEvent.type(dateInput, '2025-08-27');
+        const nameInput = screen.getByLabelText('Наименование дня');
+        await userEvent.clear(nameInput);
+        await userEvent.type(nameInput, 'обычный день');
 
-        const submitButton = screen.getByRole('button', { name: 'Добавить' });
+        const submitButton = screen.getByRole('button', { name: 'Изменить' });
         await userEvent.click(submitButton);
 
         await waitFor(() => expect(global.fetch).toHaveBeenCalled());
-
-        await waitFor(() => expect(pushMock).toHaveBeenCalledWith('/nutrition'));
+        await waitFor(() => expect(replaceMock).toHaveBeenCalledWith('/nutrition'));
     });
 });
 

@@ -2,8 +2,8 @@
 
 import {memo, useMemo, useState} from "react";
 import StatisticsHeader from "@/components/UI/headers/StatisticsHeader";
-import StatisticsMainCard from "@/components/UI/StatisticsMainCard";
-import NutritionTrendChart from "@/components/UI/NutritionTrendChart";
+import StatisticsMainCard from "@/components/UI/other/StatisticsMainCard";
+import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
 import {
     MainStatisticsCardResponse, MetricOptionStructure, NutritionMetric,
     NutritionStatisticsCardResponse,

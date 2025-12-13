@@ -1,5 +1,5 @@
 import {memo, useState} from "react";
-import NutritionTrendChart from "@/components/UI/NutritionTrendChart";
+import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
 import {MetricOptionStructure, NutritionMetric, NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
 
 const metricOptions: MetricOptionStructure[] = [

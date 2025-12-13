@@ -2,7 +2,6 @@
 
 import {
     CalendarIcon,
-    EnvelopeIcon,
     UserCircleIcon
 } from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
@@ -60,12 +59,7 @@ export default function Profile({ userData }: { userData: UserProfileRequest}) {
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-3 mt-2 text-sm text-gray-600">
-                            <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 border border-emerald-100">
-                                <EnvelopeIcon className="h-4 w-4 text-emerald-500" />
-                                <span className="truncate">{userData.email}</span>
-                            </div>
-
+                        <div className="mt-2 text-sm text-gray-600">
                             {memberSince && (
                                 <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 border border-emerald-100">
                                     <CalendarIcon className="h-4 w-4 text-emerald-500" />
@@ -94,10 +88,6 @@ export default function Profile({ userData }: { userData: UserProfileRequest}) {
                             {userData.email}
                         </div>
                     </div>
-                </div>
-
-                <div className="mt-6 text-xs text-gray-400">
-                    Данные профиля синхронизируются с вашим аккаунтом в TrainingSpace.
                 </div>
             </div>
         </SettingsPageContext>

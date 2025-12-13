@@ -6,7 +6,7 @@ interface InputFieldState {
     touched: boolean;
 }
 
-interface UseInputFieldReturn {
+export interface UseInputFieldReturn {
     inputState: InputFieldState;
 
     setValue: (value: string) => void;

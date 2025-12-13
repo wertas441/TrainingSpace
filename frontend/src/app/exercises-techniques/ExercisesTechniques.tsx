@@ -4,7 +4,7 @@ import ExercisesTechniquesHeader from "@/components/UI/headers/ExercisesTechniqu
 import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import ExerciseRow from "@/components/elements/ExerciseRow";
 import {usePagination} from "@/lib/hooks/usePagination";
-import MainPagination from "@/components/UI/MainPagination";
+import MainPagination from "@/components/UI/other/MainPagination";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {ExerciseDifficultFilter} from "@/types/indexTypes";
 
