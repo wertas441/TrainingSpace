@@ -2,7 +2,7 @@
 
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import {FormEvent, useCallback, useMemo, useState} from "react";
+import {FormEvent, useCallback, useEffect, useState} from "react";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import {
@@ -11,16 +11,15 @@ import {
     ActivityTypeStructure,
     ExerciseSetsByExerciseId
 } from "@/types/activityTypes";
-import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
+import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {useInputField} from "@/lib/hooks/useInputField";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import {deleteActivity, getTrainingExercises} from "@/lib/controllers/activityController";
 import {baseUrlForBackend} from "@/lib";
-import ModalWindow from "@/components/UI/ModalWindow";
+import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import {
@@ -30,6 +29,7 @@ import {
     validateActivitySets,
     validateActivityTrainingId
 } from "@/lib/utils/validators";
+import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 
 interface ChangeActivityProps {
     activityInfo: ActivityDataStructure,
@@ -50,70 +50,68 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
     const trainingId = useInputField(String(activityInfo.trainingId));
 
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
-
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
-    const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(
-        () => {
-            const initial: ExerciseSetsByExerciseId = {};
+    const {
+        handleChangeTraining,
+        trainingExercises,
+        setTrainingExercises,
+        trainingOptions,
+        selectedTrainingOption,
+        selectedTraining
+    } = useActivityUtils({myTrainings, trainingId});
 
-            activityInfo.exercises.forEach((ex) => {
-                initial[ex.exercisesId] = ex.try.map((s) => ({
-                    id: s.id,
-                    weight: s.weight,
-                    quantity: s.quantity,
-                }));
+    const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(() => {
+        const initial: ExerciseSetsByExerciseId = {};
+
+        // Заполняем подходы, которые уже есть у активности
+        (activityInfo.exercises || []).forEach((ex) => {
+            initial[ex.exercisesId] = ex.try.map((s) => ({
+                id: s.id,
+                weight: s.weight,
+                quantity: s.quantity,
+            }));
+        });
+
+        // Добавляем "пустые" упражнения из тренировки, по которым ещё нет подходов
+        const relatedTraining = myTrainings.find(
+            (t) => t.id === activityInfo.trainingId
+        );
+
+        if (relatedTraining) {
+            relatedTraining.exercises.forEach((exId) => {
+                if (!initial[exId]) {
+                    initial[exId] = [{ id: 1, weight: 0, quantity: 0 }];
+                }
             });
-
-            return initial;
         }
-    );
 
-    const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[]>([]);
+        return initial;
+    });
 
-    const trainingOptions: OptionType[] = useMemo(
-        () => myTrainings.map(t => ({ value: String(t.id), label: t.name })),
-        [myTrainings]
-    );
+    // Подтягиваем названия упражнений для выбранной тренировки при первой загрузке/смене тренировки
+    useEffect(() => {
+        const currentTrainingIdNum = Number(trainingId.inputState.value);
 
-    const selectedTrainingOption: OptionType[] = useMemo(() => {
-        const found = trainingOptions.find(o => o.value === trainingId.inputState.value);
-        return found ? [found] : [];
-    }, [trainingOptions, trainingId.inputState.value]);
-
-    const selectedTraining = useMemo(
-        () => trainingId.inputState.value ? myTrainings.find(t => t.id === Number(trainingId.inputState.value)) : undefined,
-        [trainingId.inputState.value, myTrainings]
-    );
-
-    // Инициализировать подходы при выборе тренировки
-    const initSetsForTraining = (training?: TrainingDataStructure) => {
-        if (!training) {
-            setExerciseSets({});
+        if (!currentTrainingIdNum || Number.isNaN(currentTrainingIdNum)) {
+            setTrainingExercises([]);
             return;
         }
-        const next: ExerciseSetsByExerciseId = {};
-        training.exercises.forEach(exId => {
-            next[exId] = [{ id: 1, weight: 0, quantity: 0 }];
-        });
-        setExerciseSets(next);
-    };
 
-    const handleChangeTraining = (val: string) => {
-        trainingId.setValue(val);
-        const found = val ? myTrainings.find(t => t.id === Number(val)) : undefined;
-        initSetsForTraining(found);
-        if (found) {
-            getTrainingExercises(found.id)
-                .then(setTrainingExercises)
-                .catch((err) => {
-                    console.error('Ошибка загрузки упражнений тренировки:', err);
-                    setTrainingExercises([]);
-                });
-        } else {
+        const found = myTrainings.find(t => t.id === currentTrainingIdNum);
+
+        if (!found) {
             setTrainingExercises([]);
+            return;
         }
-    };
+
+        getTrainingExercises(found.id)
+            .then(setTrainingExercises)
+            .catch((err) => {
+                console.error('Ошибка загрузки упражнений тренировки при редактировании активности:', err);
+                setTrainingExercises([]);
+            });
+    }, [trainingId.inputState.value, myTrainings, setTrainingExercises]);
 
     const validateForm = (): boolean => {
         const nameError = validateActivityName(activityName.inputState.value);
@@ -146,6 +144,32 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
 
         setIsSubmitting(true);
 
+        // Оставляем только те упражнения и подходы, где вес и повторения > 0
+        const exercisesPayload = Object.entries(exerciseSets).reduce<
+            { exercisesId: number; try: { id: number; weight: number; quantity: number }[] }[]
+        >((acc, [exId, sets]) => {
+            const validSets = (sets || []).filter(
+                (s) =>
+                    Number.isFinite(s.weight) &&
+                    s.weight > 0 &&
+                    Number.isFinite(s.quantity) &&
+                    s.quantity > 0
+            );
+
+            if (validSets.length > 0) {
+                acc.push({
+                    exercisesId: Number(exId),
+                    try: validSets.map((s) => ({
+                        id: s.id,
+                        weight: s.weight,
+                        quantity: s.quantity,
+                    })),
+                });
+            }
+
+            return acc;
+        }, []);
+
         const payload = {
             id: activityInfo.id,
             publicId: activityInfo.publicId,
@@ -156,14 +180,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
             type: activityType,
             difficulty: activityDifficulty,
             trainingId: Number(trainingId.inputState.value),
-            exercises: Object.entries(exerciseSets).map(([exId, sets]) => ({
-                exercisesId: Number(exId),
-                try: sets.map(s => ({
-                    id: s.id,
-                    weight: s.weight,
-                    quantity: s.quantity,
-                }))
-            }))
+            exercises: exercisesPayload,
         };
 
         try {
@@ -206,10 +223,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
             <main className="flex items-center justify-center min-h-screen p-4">
                 <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-xl border border-emerald-100">
                     <form className="space-y-6" onSubmit={handleSubmit}>
-                        <div className="space-y-2">
-                            <h1 className="text-2xl font-semibold text-gray-800">Добавить активность</h1>
-                            <p className="text-sm text-gray-500">Выберите тренировку и введите подходы по упражнениям</p>
-                        </div>
+                        <h1 className="text-2xl text-center font-semibold text-gray-800">Изменение активности</h1>
 
                         <ServerError message={serverError} />
 

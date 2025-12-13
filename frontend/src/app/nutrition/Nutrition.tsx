@@ -5,7 +5,7 @@ import {NutritionDay} from "@/types/nutritionTypes";
 import NutritionDayItem from "@/components/elements/NutritionDayRow";
 import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
-import MainPagination from "@/components/UI/MainPagination";
+import MainPagination from "@/components/UI/other/MainPagination";
 
 function Nutrition({userDays}: {userDays: NutritionDay[]}) {
 

@@ -3,7 +3,7 @@
 import {useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
-import MainPagination from "@/components/UI/MainPagination";
+import MainPagination from "@/components/UI/other/MainPagination";
 import CompleteGoalRow from "@/components/elements/CompleteGoalRow";
 import {CompleteGoalsStructure} from "@/types/goalTypes";
 

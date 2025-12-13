@@ -1,6 +1,6 @@
 'use client'
 
-import MainPagination from "@/components/UI/MainPagination";
+import MainPagination from "@/components/UI/other/MainPagination";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {memo, useMemo, useState} from "react";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";

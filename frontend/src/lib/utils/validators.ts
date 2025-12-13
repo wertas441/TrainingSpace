@@ -77,7 +77,7 @@ export const validateTwoPassword = (currentPassword:string, newPassword:string):
 
 export const validateDayName = (dayName: string): string | null => {
     if(!dayName.trim()){
-        return ('Пожалуйста, введите имя для дня')
+        return ('Пожалуйста, введите наименование для дня')
     }
 
     if(dayName.length < 3){
@@ -358,17 +358,30 @@ export const validateActivityTrainingId = (trainingId: string): string | null =>
 }
 
 export const validateActivitySets = (exerciseSets: ExerciseSetsByExerciseId): string | null => {
+    // Игнорируем упражнения, в которых нет ни одного валидного подхода (вес/повторы > 0)
+    const filteredExerciseIds: string[] = [];
 
-    const exerciseIds = Object.keys(exerciseSets);
-    if (exerciseIds.length === 0) {
+    for (const [exIdStr, sets] of Object.entries(exerciseSets)) {
+        const validSets = (sets || []).filter(
+            (s) =>
+                Number.isFinite(s.weight) &&
+                s.weight > 0 &&
+                Number.isFinite(s.quantity) &&
+                s.quantity > 0
+        );
+
+        if (validSets.length > 0) {
+            filteredExerciseIds.push(exIdStr);
+        }
+    }
+
+    if (filteredExerciseIds.length === 0) {
         return ('Добавьте хотя бы одно упражнение и подход для активности');
     }
 
-    for (const exIdStr of exerciseIds) {
+    // Дополнительная проверка сохранённых сетов (на случай некорректных значений)
+    for (const exIdStr of filteredExerciseIds) {
         const sets = exerciseSets[Number(exIdStr)] || [];
-        if (sets.length === 0) {
-            return ('Для каждого упражнения должен быть хотя бы один подход');
-        }
 
         for (const s of sets) {
             if (!Number.isFinite(s.weight) || s.weight <= 0) {

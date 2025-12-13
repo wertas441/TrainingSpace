@@ -16,7 +16,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import {deleteGoal} from "@/lib/controllers/goalController";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import ModalWindow from "@/components/UI/ModalWindow";
+import ModalWindow from "@/components/UI/other/ModalWindow";
 
 interface ChangeGoalProps {
     goalInfo: GoalsStructure;
@@ -103,7 +103,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
         <>
             <BlockPageContext>
                 <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-center text-gray-900">
+                    <h2 className="text-2xl font-semibold text-center text-gray-900">
                         Изменение цели
                     </h2>
 
