@@ -1,20 +1,18 @@
 'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useMemo, useState} from "react";
+import {FormEvent, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
 import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
-import MainMultiSelect, {OptionType} from "@/components/inputs/MainMultiSelect";
-import {ActivityDifficultyStructure, ActivityTypeStructure, ExerciseSetsByExerciseId} from "@/types/activityTypes";
+import MainMultiSelect from "@/components/inputs/MainMultiSelect";
+import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import {getTrainingExercises} from "@/lib/controllers/activityController";
 import {
     validateActivityDate,
     validateActivityDescription,
@@ -22,6 +20,7 @@ import {
     validateActivitySets,
     validateActivityTrainingId
 } from "@/lib/utils/validators";
+import {useTrainingList} from "@/lib/hooks/useTrainingList";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
@@ -30,7 +29,6 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const today = new Date();
     const initialDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
     const activityName = useInputField('');
     const activityDescription = useInputField('');
     const activityDate = useInputField(initialDate);
@@ -40,52 +38,15 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
 
-    const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>({});
-    const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[]>([]);
-
-    const trainingOptions: OptionType[] = useMemo(
-        () => myTrainings.map(t => ({ value: String(t.id), label: t.name })),
-        [myTrainings]
-    );
-
-    const selectedTrainingOption: OptionType[] = useMemo(() => {
-        const found = trainingOptions.find(o => o.value === trainingId.inputState.value);
-        return found ? [found] : [];
-    }, [trainingOptions, trainingId.inputState.value]);
-
-    const selectedTraining = useMemo(
-        () => trainingId.inputState.value ? myTrainings.find(t => t.id === Number(trainingId.inputState.value)) : undefined,
-        [trainingId.inputState.value, myTrainings]
-    );
-
-    // Инициализировать подходы при выборе тренировки
-    const initSetsForTraining = (training?: TrainingDataStructure) => {
-        if (!training) {
-            setExerciseSets({});
-            return;
-        }
-        const next: ExerciseSetsByExerciseId = {};
-        training.exercises.forEach(exId => {
-            next[exId] = [{ id: 1, weight: 0, quantity: 0 }];
-        });
-        setExerciseSets(next);
-    };
-
-    const handleChangeTraining = (val: string) => {
-        trainingId.setValue(val);
-        const found = val ? myTrainings.find(t => t.id === Number(val)) : undefined;
-        initSetsForTraining(found);
-        if (found) {
-            getTrainingExercises(found.id)
-                .then(setTrainingExercises)
-                .catch((err) => {
-                    console.error('Ошибка загрузки упражнений тренировки:', err);
-                    setTrainingExercises([]);
-                });
-        } else {
-            setTrainingExercises([]);
-        }
-    };
+    const {
+        exerciseSets,
+        setExerciseSets,
+        trainingExercises,
+        trainingOptions,
+        selectedTrainingOption,
+        selectedTraining,
+        handleChangeTraining
+    } = useTrainingList({myTrainings, trainingId});
 
     const validateForm = (): boolean => {
         const nameError = validateActivityName(activityName.inputState.value);
@@ -118,6 +79,32 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
         setIsSubmitting(true);
 
+        // Оставляем только те упражнения и подходы, где вес и повторения > 0
+        const exercisesPayload = Object.entries(exerciseSets).reduce<
+            { id: number; try: { id: number; weight: number; quantity: number }[] }[]
+        >((acc, [exId, sets]) => {
+            const validSets = (sets || []).filter(
+                (s) =>
+                    Number.isFinite(s.weight) &&
+                    s.weight > 0 &&
+                    Number.isFinite(s.quantity) &&
+                    s.quantity > 0
+            );
+
+            if (validSets.length > 0) {
+                acc.push({
+                    id: Number(exId),
+                    try: validSets.map((s) => ({
+                        id: s.id,
+                        weight: s.weight,
+                        quantity: s.quantity,
+                    })),
+                });
+            }
+
+            return acc;
+        }, []);
+
         const payload = {
             activity_name: activityName.inputState.value.trim(),
             description: activityDescription.inputState.value.trim(),
@@ -125,14 +112,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
             activity_type: activityType,
             activity_difficult: activityDifficulty,
             training_id: Number(trainingId.inputState.value),
-            exercises: Object.entries(exerciseSets).map(([exId, sets]) => ({
-                id: Number(exId),
-                try: sets.map(s => ({
-                    id: s.id,
-                    weight: s.weight,
-                    quantity: s.quantity,
-                }))
-            }))
+            exercises: exercisesPayload,
         };
 
         try {
