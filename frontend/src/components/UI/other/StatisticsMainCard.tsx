@@ -1,4 +1,5 @@
 import {ElementType, memo, ReactNode} from "react";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
 
 interface StatisticsMainCardProps {
     label: string;
@@ -20,7 +21,7 @@ function StatisticsMainCard(
     }: StatisticsMainCardProps) {
 
     return (
-        <div className="flex flex-col h-full rounded-2xl bg-white border border-emerald-100 shadow-sm p-5 gap-4">
+        <div className={`${secondDarkColorTheme} flex flex-col h-full rounded-2xl border border-emerald-100 shadow-sm p-5 gap-4`}>
             <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1">
                     <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">
@@ -34,7 +35,7 @@ function StatisticsMainCard(
                 </div>
 
                 {Icon && (
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
+                    <span className={`flex h-9 w-9 items-center justify-center ${thirdDarkColorTheme} rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100`}>
                         <Icon className="h-5 w-5" />
                     </span>
                 )}

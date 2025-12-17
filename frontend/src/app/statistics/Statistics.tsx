@@ -5,7 +5,9 @@ import StatisticsHeader from "@/components/UI/headers/StatisticsHeader";
 import StatisticsMainCard from "@/components/UI/other/StatisticsMainCard";
 import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
 import {
-    MainStatisticsCardResponse, MetricOptionStructure, NutritionMetric,
+    MainStatisticsCardResponse,
+    MetricOptionStructure,
+    NutritionMetric,
     NutritionStatisticsCardResponse,
     NutritionStatisticsGraphicResponse
 } from "@/types/statisticsTypes";
@@ -19,12 +21,20 @@ import {
     ScaleIcon
 } from "@heroicons/react/24/outline";
 import {ChartBarIcon} from "@heroicons/react/24/solid";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
 
 interface StatisticsProps {
     mainCardData: MainStatisticsCardResponse;
     nutritionCardData: NutritionStatisticsCardResponse;
     nutritionGraphicData?: NutritionStatisticsGraphicResponse[];
 }
+
+const metricOptions: MetricOptionStructure[] = [
+    {id: 'calories', label: 'Калории'},
+    {id: 'protein', label: 'Белки'},
+    {id: 'fat', label: 'Жиры'},
+    {id: 'carb', label: 'Углеводы'},
+] as const;
 
 function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: StatisticsProps) {
 
@@ -92,13 +102,6 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
         },
     ], [nutritionCardData.averageCalories, nutritionCardData.averageCarb, nutritionCardData.averageFat, nutritionCardData.averageProtein]);
 
-    const metricOptions: MetricOptionStructure[] = useMemo(() =>[
-        {id: 'calories', label: 'Калории'},
-        {id: 'protein', label: 'Белки'},
-        {id: 'fat', label: 'Жиры'},
-        {id: 'carb', label: 'Углеводы'},
-    ], []);
-
     return (
         <main className="w-full space-y-6">
             <StatisticsHeader />
@@ -132,7 +135,7 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
             </section>
 
             <section className="grid grid-cols-1 pt-3">
-                <div className="rounded-2xl bg-white border border-emerald-100 shadow-sm p-5">
+                <div className={`${secondDarkColorTheme} rounded-2xl border border-emerald-100 shadow-sm p-5`}>
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <h2 className="text-lg font-semibold text-emerald-900">
@@ -143,7 +146,7 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
                             </p>
                         </div>
 
-                        <div className="inline-flex gap-3 items-center my-4 md:my-0 rounded-full bg-emerald-50 p-1 text-xs border border-emerald-100">
+                        <div className={`${thirdDarkColorTheme} inline-flex gap-3 items-center my-4 md:my-0 rounded-full bg-emerald-50 p-1 text-xs border border-emerald-100`}>
                             {metricOptions.map((option) => {
                                 const isActive = selectedMetric === option.id;
                                 return (
@@ -151,10 +154,10 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
                                         key={option.id}
                                         type="button"
                                         onClick={() => setSelectedMetric(option.id)}
-                                        className={`px-2.5 cursor-pointer py-1  rounded-full font-medium transition 
+                                        className={`px-2.5 text-white cursor-pointer py-1  rounded-full font-medium transition 
                                         ${isActive
-                                            ? 'bg-white text-emerald-900 shadow-sm'
-                                            : 'text-emerald-700/70 hover:text-emerald-900'}`}
+                                            ? 'bg-emerald-600  shadow-sm'
+                                            : 'hover:text-emerald-600'}`}
                                     >
                                         {option.label}
                                     </button>
@@ -163,7 +166,7 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
                         </div>
                     </div>
 
-                    <div className="mt-4 h-72 sm:h-80">
+                    <div className={`mt-4 h-72 sm:h-80`}>
                         <NutritionTrendChart
                             days={nutritionGraphicData ?? []}
                             metric={selectedMetric}

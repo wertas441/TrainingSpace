@@ -11,6 +11,7 @@ export const mainInputClasses:string = `w-full py-2.5 border border-gray-400 rou
 
 export const firstDarkColorTheme:string = 'bg-white dark:bg-neutral-800 dark:border-neutral-700';
 export const secondDarkColorTheme:string = 'bg-white dark:bg-neutral-900 dark:border-neutral-700';
+export const thirdDarkColorTheme:string = 'dark:bg-neutral-600 dark:border-neutral-500 dark:text-white';
 
 export async function getExercisesList(tokenValue: string | undefined):Promise<ExerciseTechniqueItem[] | undefined>{
     try {

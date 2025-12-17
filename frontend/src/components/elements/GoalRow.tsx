@@ -3,19 +3,20 @@ import {memo, useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import CheckButton from "@/components/buttons/other/CheckButton";
-import {getColorStyles} from "@/lib";
+import {getColorStyles, secondDarkColorTheme} from "@/lib";
 import {completeGoal} from "@/lib/controllers/goalController";
 
 interface GoalRowProps extends GoalsStructure{
     token: string;
 }
 
-function GoalRow({id, publicId, name, description, priority, token}: GoalRowProps ) {
+function GoalRow({publicId, name, description, priority, token}: GoalRowProps ) {
 
     const [isCompleting, setIsCompleting] = useState<boolean>(false);
     const [isHidden, setIsHidden] = useState<boolean>(false);
 
     const router = useRouter();
+    const changeGoalRoute = useCallback(() => router.push(`/goals/${publicId}`), [publicId, router])
 
     const handleCompleteClick = useCallback(() => {
         if (isCompleting) return;
@@ -41,7 +42,7 @@ function GoalRow({id, publicId, name, description, priority, token}: GoalRowProp
     }
 
     return (
-        <div className={`w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm transition-all duration-300 ease-out 
+        <div className={`${secondDarkColorTheme} w-full rounded-lg border border-emerald-100 p-4 shadow-sm transition-all duration-300 ease-out 
             ${isCompleting ? 'opacity-0 translate-y-1 scale-95' : 'opacity-100 hover:shadow-md'}`}>
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
@@ -66,7 +67,7 @@ function GoalRow({id, publicId, name, description, priority, token}: GoalRowProp
                         disabled={isCompleting}
                     />
                     <ChangeButton
-                        onClick={useCallback(() => router.push(`/goals/${publicId}`), [publicId, router])}
+                        onClick={changeGoalRoute}
                         className={'w-full'}
                     />
                 </div>
