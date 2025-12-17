@@ -1,9 +1,13 @@
-import {Bars3Icon} from "@heroicons/react/24/outline";
+import {Bars3Icon, MoonIcon, SunIcon} from "@heroicons/react/24/outline";
+import {useTheme} from "@/lib/utils/ThemeProvider";
+import {firstDarkColorTheme} from "@/lib";
 
 export default function MainHeader({ onToggleSidebar }: {onToggleSidebar?: () => void }) {
 
+    const {theme, toggleTheme} = useTheme();
+
 	return (
-		<header className="sticky top-0 z-40 bg-white border-b border-emerald-100">
+		<header className={`${firstDarkColorTheme} sticky top-0 z-40 border-b border-emerald-100`}>
 			<div className="h-15 px-4 flex items-center justify-between">
 				<div className="flex items-center gap-2">
 					<button
@@ -21,6 +25,13 @@ export default function MainHeader({ onToggleSidebar }: {onToggleSidebar?: () =>
                         <span className="lg:text-2xl md:text-2xl text-xl font-semibold text-emerald-800">
                             TrainingSpace
                         </span>
+                        <button onClick={toggleTheme} className={`cursor-pointer`}>
+                            {theme === 'dark' ? (
+                                <SunIcon className={`w-6 h-6 text-emerald-600`} />
+                            ) : (
+                                <MoonIcon className="w-6 h-6 text-emerald-600" />
+                            )}
+                        </button>
                     </div>
 				</div>
 			</div>

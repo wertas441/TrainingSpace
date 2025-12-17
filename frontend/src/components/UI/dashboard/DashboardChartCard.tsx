@@ -1,6 +1,7 @@
 import {memo, useState} from "react";
 import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
 import {MetricOptionStructure, NutritionMetric, NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
+import {secondDarkColorTheme} from "@/lib";
 
 const metricOptions: MetricOptionStructure[] = [
     {id: 'calories', label: 'Калории'},
@@ -15,7 +16,7 @@ function DashboardChartCard({nutritionGraphicData}: {nutritionGraphicData: Nutri
 
     return (
         <section className="grid grid-cols-1">
-            <div className="rounded-2xl bg-white border border-emerald-100 shadow-sm p-5">
+            <div className={`${secondDarkColorTheme} rounded-2xl border border-emerald-100 shadow-sm p-5`}>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="space-y-1">
                         <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">

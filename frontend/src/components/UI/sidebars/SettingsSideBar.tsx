@@ -26,7 +26,7 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
 
     const logOutButton = () => {
         logout();
-        router.replace("/login");
+        router.replace("/auth/login");
     }
 
     return (

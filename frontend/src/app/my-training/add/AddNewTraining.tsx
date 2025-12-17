@@ -1,4 +1,4 @@
-git 'use client'
+'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
 import {FormEvent, useEffect, useState} from "react";

@@ -1,6 +1,7 @@
 
 import {CalendarDaysIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
+import {secondDarkColorTheme} from "@/lib";
 
 function DashboardCalendarCard() {
     const today = new Date();
@@ -34,7 +35,7 @@ function DashboardCalendarCard() {
     const days = getMonthMatrix(year, month);
 
     return (
-        <div className="flex flex-col h-full rounded-2xl bg-white border border-emerald-100 shadow-sm p-5 gap-4">
+        <div className={`${secondDarkColorTheme} flex flex-col h-full rounded-2xl border border-emerald-100 shadow-sm p-5 gap-4`}>
             <div className="flex items-center justify-between gap-2">
                 <div>
                     <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">

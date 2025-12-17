@@ -9,6 +9,9 @@ export const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 
 export const mainInputClasses:string = `w-full py-2.5 border border-gray-400 rounded-lg bg-white text-gray-900 placeholder-gray-400 
     focus:outline-none focus:ring-2 focus:ring-emerald-500 hover:border-emerald-400 ease-in-out duration-300 transition-shadow `;
 
+export const firstDarkColorTheme:string = 'bg-white dark:bg-neutral-800 dark:border-neutral-700';
+export const secondDarkColorTheme:string = 'bg-white dark:bg-neutral-900 dark:border-neutral-700';
+
 export async function getExercisesList(tokenValue: string | undefined):Promise<ExerciseTechniqueItem[] | undefined>{
     try {
         const response = await fetch(`${baseUrlForBackend}/api/exercises/exercises-list`, {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import {ChevronRightIcon, SparklesIcon} from "@heroicons/react/24/outline";
 import {GoalShortyStructure} from "@/types/goalTypes";
 import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
+import {secondDarkColorTheme} from "@/lib";
 
 interface DashboardGoalsCardProps {
     goalsShortyList: GoalShortyStructure[];
@@ -15,7 +16,7 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
     const hasMore = hasGoals && goalsShortyList.length > 6;
 
     return (
-        <div className="flex flex-col h-full rounded-2xl bg-white border border-emerald-100 shadow-sm p-5 gap-4">
+        <div className={`${secondDarkColorTheme} flex flex-col h-full rounded-2xl border border-emerald-100 shadow-sm p-5 gap-4`}>
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">

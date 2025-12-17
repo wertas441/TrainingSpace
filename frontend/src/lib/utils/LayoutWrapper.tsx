@@ -4,6 +4,7 @@ import {ReactElement, ReactNode, useCallback, useMemo, useState} from "react";
 import {usePathname} from "next/navigation";
 import MainHeader from "@/components/UI/headers/MainHeader";
 import MainSideBar from "@/components/UI/sidebars/MainSideBar";
+import {firstDarkColorTheme} from "@/lib";
 
 export default function LayoutWrapper({children}: {children: ReactNode}):ReactElement {
 
@@ -24,7 +25,7 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 	}, []);
 
 	return (
-		<div className="min-h-screen flex overflow-x-hidden">
+		<div className={`${firstDarkColorTheme} min-h-screen flex overflow-x-hidden`}>
 			<div className="flex-1 flex flex-col overflow-x-hidden">
 				{!isAuthPage && (
 					<MainHeader onToggleSidebar={toggleSidebar} />

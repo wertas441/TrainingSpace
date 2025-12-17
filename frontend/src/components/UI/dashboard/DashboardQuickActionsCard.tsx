@@ -6,6 +6,7 @@ import {
     Squares2X2Icon,
 } from "@heroicons/react/24/outline";
 import {memo} from "react";
+import {secondDarkColorTheme} from "@/lib";
 
 const actions = [
     {
@@ -33,7 +34,7 @@ const actions = [
 function DashboardQuickActionsCard() {
 
     return (
-        <div className="flex  flex-col h-full rounded-2xl bg-white border border-emerald-100 shadow-sm p-5 gap-4">
+        <div className={`${secondDarkColorTheme} flex flex-col h-full rounded-2xl border border-emerald-100 shadow-sm p-5 gap-4`}>
             <div className="space-y-1">
                 <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">
                     Быстрые действия
