@@ -55,7 +55,7 @@ function MainPagination(
                     </button>
                 </div>
 
-                <div className="hidden md:flex text-xs text-gray-600">
+                <div className="hidden md:flex text-base text-gray-600 dark:text-white">
                     Показано {Math.min(currentPage * itemsPerPage, totalItems)} из {totalItems}
                 </div>
             </div>

@@ -6,6 +6,7 @@ import NutritionDayItem from "@/components/elements/NutritionDayRow";
 import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
+import NullElementsError from "@/components/errors/NullElementsError";
 
 function Nutrition({userDays}: {userDays: NutritionDay[]}) {
 
@@ -142,12 +143,11 @@ function Nutrition({userDays}: {userDays: NutritionDay[]}) {
                         )
                     )
                 ) : (
-                    <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        {userDays.length === 0
+                    <NullElementsError text={
+                        userDays.length === 0
                             ? "У вас пока нет добавленных дней. Нажмите «Добавить день», чтобы добавить первый."
                             : "По заданным параметрам поиска дни не найдены. Попробуйте изменить фильтр."
-                        }
-                    </div>
+                    } />
                 )}
             </div>
 

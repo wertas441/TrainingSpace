@@ -4,6 +4,7 @@ import type {TrainingDataStructure} from "@/types/indexTypes";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import type {ExerciseSetsByExerciseId} from "@/types/activityTypes";
 import {Dispatch, JSX, SetStateAction, useMemo} from "react";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
 
 interface AddTrainingActivityItemProps {
     selectedTraining: TrainingDataStructure;
@@ -56,14 +57,14 @@ export default function AddTrainingActivityItem(
 
     return (
         <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800">Упражнения из тренировки</h2>
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Упражнения из тренировки</h2>
             {selectedTraining.exercises.map((exId) => {
                 const ex = trainingExercises.find(e => e.id === exId);
                 const sets = exerciseSets[exId] || [{ id: 1, weight: 0, quantity: 0 }];
                 return (
-                    <div key={exId} className="rounded-lg border border-emerald-100 bg-white p-4">
+                    <div key={exId} className={`${thirdDarkColorTheme} rounded-lg border border-emerald-100 p-4`}>
                         <div className="flex-row sm:flex space-y-3 items-center justify-between">
-                            <div className="text-gray-900 font-medium">{ex ? ex.name : `Упражнение #${exId}`}</div>
+                            <div className="text-gray-900 font-medium dark:text-white">{ex ? ex.name : `Упражнение #${exId}`}</div>
                             <button
                                 type="button"
                                 className="text-sm p-2 w-full md:w-auto  mr-0.5 border rounded-md cursor-pointer border-emerald-200 bg-white text-emerald-600 hover:text-emerald-700"

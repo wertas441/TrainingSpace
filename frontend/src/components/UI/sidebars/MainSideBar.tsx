@@ -116,7 +116,7 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: Sid
 			>
 
                 <div className="lg:hidden flex justify-between items-center pb-5 ">
-                    <h1 className={`text-2xl pt-1 font-semibold text-emerald-800`}>TrainingSpace</h1>
+                    <h1 className={`text-2xl pt-1 font-semibold text-emerald-800 dark:text-white`}>TrainingSpace</h1>
                     <AnyStylesButton
                         onClick={onClose}
                         IconComponent={XMarkIcon}

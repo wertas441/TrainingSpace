@@ -1,5 +1,4 @@
 import {memo} from "react";
-import {thirdDarkColorTheme} from "@/lib";
 
 interface ChipRadioGroupProps<T extends string> {
     id: string;
@@ -32,7 +31,8 @@ function ChipRadioGroup<T extends string>(
                         <label
                             key={choice}
                             className={`cursor-pointer inline-flex dark:text-white  items-center gap-2 px-3 py-1.5 rounded-full border text-sm ${
-                                checked ? 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:bg-neutral-500' : 'border-gray-200 dark:border-neutral-500  bg-gray-50 text-gray-700 dark:bg-neutral-600'
+                                checked ? 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:bg-neutral-700' 
+                                        : 'border-gray-200 dark:border-neutral-700  bg-gray-50 text-gray-700 dark:bg-neutral-800'
                             }`}
                         >
                             <input

@@ -8,6 +8,7 @@ import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
+import {secondDarkColorTheme} from "@/lib";
 
 interface ValueOptions {
     value: string;
@@ -54,10 +55,10 @@ function ExercisesTechniquesHeader(
     }, [setDifficultFilter, setPartOfBodyFilter]) ;
 
     return (
-        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm relative" >
+        <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm relative`}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
-                    <h1 className="text-3xl font-semibold text-emerald-800">Техника выполнения упражнений</h1>
+                    <h1 className="text-3xl font-semibold text-emerald-800 dark:text-white">Техника выполнения упражнений</h1>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -78,7 +79,7 @@ function ExercisesTechniquesHeader(
                 </div>
 
                 {isFilterWindowOpen && (
-                    <div ref={modalWindowRef} className="absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl bg-white shadow-lg border border-emerald-100">
+                    <div ref={modalWindowRef} className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl shadow-lg border border-emerald-100`}>
                         <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100">
                             <h2 className="text-lg font-semibold text-emerald-800">Фильтры</h2>
                             <button

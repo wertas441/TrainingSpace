@@ -1,5 +1,6 @@
 import Select from "react-select";
-import {memo, ReactNode} from "react";
+import {memo} from "react";
+import InputError from "@/components/errors/InputError";
 
 export type OptionType = { value: string; label: string };
 
@@ -13,7 +14,6 @@ interface MainMultiSelectProps {
     error?: string;
     noOptionsMessage?: () => string;
     isMulti?: boolean;
-    icon?: ReactNode;
 }
 
 function MainMultiSelect(
@@ -22,7 +22,6 @@ function MainMultiSelect(
         label,
         value,
         options,
-        icon,
         onChange,
         placeholder = "Выберите...",
         error,
@@ -33,17 +32,11 @@ function MainMultiSelect(
     return (
         <div>
             {label && (
-                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-500">
+                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-300">
                     {label}
                 </label>
             )}
             <div className="relative">
-                {icon && (
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        {icon}
-                    </div>
-                )}
-
                 <Select
                     inputId={id}
                     classNamePrefix="rs"
@@ -137,9 +130,7 @@ function MainMultiSelect(
                 />
             </div>
 
-            {error && (
-                <p className="pt-2 pl-1 text-xs text-red-500">{error}</p>
-            )}
+            <InputError error={error} />
         </div>
     );
 }

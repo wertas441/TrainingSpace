@@ -6,6 +6,7 @@ import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
 import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
 import MyActivityRow from "@/components/elements/MyActivityRow";
+import NullElementsError from "@/components/errors/NullElementsError";
 
 export default function MyActivity({clientActivity}:{clientActivity: ActivityDataStructure[]; }) {
 
@@ -80,12 +81,11 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
                         />
                     ))
                 ) : (
-                    <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        {clientActivity.length === 0
+                    <NullElementsError text={
+                        clientActivity.length === 0
                             ? "У вас пока нет добавленной активности. Нажмите «Добавить активность», чтобы добавить первую."
                             : "По заданным параметрам поиска активности не найдены. Попробуйте изменить фильтр."
-                        }
-                    </div>
+                    } />
                 )}
             </div>
 

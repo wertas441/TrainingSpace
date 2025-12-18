@@ -7,6 +7,7 @@ import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
 import BarsButton from "@/components/buttons/other/BarsButton";
+import {secondDarkColorTheme} from "@/lib";
 
 function NutritionHeader(
     {
@@ -39,10 +40,10 @@ function NutritionHeader(
     const router = useRouter();
 
     return (
-        <div className="relative w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm">
+        <div className={`${secondDarkColorTheme} relative w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
-                    <h1 className="text-3xl font-semibold text-emerald-800">Питание</h1>
+                    <h1 className="text-3xl font-semibold text-emerald-800 dark:text-white">Питание</h1>
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5 w-full md:w-auto">
@@ -53,7 +54,7 @@ function NutritionHeader(
                                 placeholder="Поиск по названию дня..."
                                 value={searchName}
                                 onChange={(v) => onSearchNameChange(String(v))}
-                                icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
+                                icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-300" />}
                             />
                         </div>
 
@@ -64,7 +65,7 @@ function NutritionHeader(
                                 placeholder="Дата"
                                 value={searchDate}
                                 onChange={(v) => onSearchDateChange(String(v))}
-                                icon={<CalendarIcon className="h-5 w-5 text-gray-400" />}
+                                icon={<CalendarIcon className="h-5 w-5 text-gray-300" />}
                             />
                         </div>
                     </div>
@@ -85,7 +86,7 @@ function NutritionHeader(
                 {isFilterWindowOpen && (
                     <div
                         ref={modalWindowRef}
-                        className="absolute right-0 top-full mt-2 z-20 w-full md:w-[560px] rounded-xl bg-white shadow-lg border border-emerald-100"
+                        className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[560px] rounded-xl shadow-lg border border-emerald-100`}
                     >
                         <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100">
                             <h2 className="text-lg font-semibold text-emerald-800">Фильтры</h2>

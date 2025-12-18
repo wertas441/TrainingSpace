@@ -35,14 +35,14 @@ function StatisticsMainCard(
                 </div>
 
                 {Icon && (
-                    <span className={`flex h-9 w-9 items-center justify-center ${thirdDarkColorTheme} rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100`}>
+                    <span className={`flex h-9 w-9 items-center justify-center ${thirdDarkColorTheme} rounded-full bg-emerald-50 text-emerald-600 dark:text-emerald-400 border border-emerald-100`}>
                         <Icon className="h-5 w-5" />
                     </span>
                 )}
             </div>
 
             <div className="mt-1">
-                <p className="text-3xl font-semibold text-emerald-900">
+                <p className="text-3xl font-semibold text-emerald-900 dark:text-white">
                     {value}
                     {unit && (
                         <span className="ml-1 text-base font-normal text-gray-500">

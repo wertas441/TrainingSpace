@@ -119,7 +119,7 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
             </section>
 
             <div className="flex flex-col px-4 py-2  gap-4 md:flex-row md:items-center md:justify-between">
-                <h1 className="text-3xl font-semibold text-emerald-800">Питание</h1>
+                <h1 className={`text-3xl font-semibold text-emerald-800 dark:text-white`}>Питание</h1>
             </div>
 
             <section className="grid gap-4 md:gap-5 lg:gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
@@ -138,7 +138,7 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
                 <div className={`${secondDarkColorTheme} rounded-2xl border border-emerald-100 shadow-sm p-5`}>
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h2 className="text-lg font-semibold text-emerald-900">
+                            <h2 className="text-lg font-semibold text-emerald-500">
                                 Динамика калорий и БЖУ
                             </h2>
                             <p className="text-xs text-gray-500">
@@ -154,10 +154,10 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
                                         key={option.id}
                                         type="button"
                                         onClick={() => setSelectedMetric(option.id)}
-                                        className={`px-2.5 text-white cursor-pointer py-1  rounded-full font-medium transition 
+                                        className={`px-2.5 dark:text-white cursor-pointer py-1  rounded-full font-medium transition 
                                         ${isActive
-                                            ? 'bg-emerald-600  shadow-sm'
-                                            : 'hover:text-emerald-600'}`}
+                                            ? 'bg-emerald-600 text-white shadow-sm'
+                                            : 'hover:text-emerald-700 dark:hover:text-emerald-500 text-emerald-500'}`}
                                     >
                                         {option.label}
                                     </button>

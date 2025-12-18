@@ -1,4 +1,5 @@
 import {ComponentType, memo, SVGProps} from "react";
+import {thirdDarkColorTheme} from "@/lib";
 
 interface SettingsHeaderProps {
     label: string;
@@ -9,12 +10,13 @@ interface SettingsHeaderProps {
 function SettingsHeader({label, text, IconComponent}: SettingsHeaderProps){
 
     return (
-        <div className="border-b border-emerald-50 px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40 flex items-center justify-between gap-4">
+        <div className={`dark:bg-stone-900 dark:border-neutral-500 dark:text-white border-b border-emerald-50 
+        px-6 py-4 sm:px-8 sm:py-5 bg-emerald-50/40 flex items-center justify-between gap-4`}>
             <div>
-                <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900">
+                <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900 dark:text-white">
                     {label}
                 </h1>
-                <p className="mt-1 text-sm text-emerald-900/70">
+                <p className="mt-1 text-sm text-emerald-900/70 dark:text-emerald-600">
                     {text}
                 </p>
             </div>

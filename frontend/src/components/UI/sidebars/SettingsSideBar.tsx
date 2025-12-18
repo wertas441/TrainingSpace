@@ -11,6 +11,7 @@ import {logout} from "@/lib/controllers/settingController";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
+import {secondDarkColorTheme} from "@/lib";
 
 const settingsMenuItems: SettingsMenuItemsStructure[] = [
     { id: 'profile', link: '/settings/profile',  label: 'Профиль', icon: UserCircleIcon },
@@ -31,8 +32,8 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
 
     return (
         <>
-            <aside className="w-full lg:w-90">
-                <nav className="space-y-2 p-3 rounded-lg border border-emerald-100 bg-white shadow-sm">
+            <aside className={`w-full lg:w-90`}>
+                <nav className={`${secondDarkColorTheme} space-y-2 p-3 rounded-lg border border-emerald-100 shadow-sm`}>
                     {settingsMenuItems.map((item) => {
                         const IconComponent = item.icon;
                         return (
