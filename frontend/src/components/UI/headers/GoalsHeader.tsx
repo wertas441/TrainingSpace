@@ -21,7 +21,7 @@ function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
         <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
-                    <h1 className="text-3xl font-semibold text-emerald-800">{label}</h1>
+                    <h1 className="text-3xl font-semibold text-emerald-800 dark:text-white">{label}</h1>
                 </div>
 
                 <div className="flex-row space-y-3 md:space-y-0 md:flex items-center gap-5 justify-between ">

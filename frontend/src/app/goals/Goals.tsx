@@ -6,6 +6,7 @@ import {memo, useMemo, useState} from "react";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
 import {GoalsStructure} from "@/types/goalTypes";
 import GoalItem from "@/components/elements/GoalRow";
+import NullElementsError from "@/components/errors/NullElementsError";
 
 interface GoalsProps {
     clientGoals: GoalsStructure[],
@@ -55,12 +56,11 @@ function Goals({clientGoals, token}: GoalsProps) {
                         />
                     ))
                 ) : (
-                    <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        {clientGoals.length === 0
-                            ? "У вас пока нет активных целей. Нажмите «Добавить цель», чтобы создать первую."
-                            : "По заданным параметрам поиска цели не найдены. Попробуйте изменить фильтр."
-                        }
-                    </div>
+                    <NullElementsError text={
+                        clientGoals.length === 0
+                        ? "У вас пока нет активных целей. Нажмите «Добавить цель», чтобы создать первую."
+                        : "По заданным параметрам поиска цели не найдены. Попробуйте изменить фильтр."
+                    } />
                 )}
             </div>
 

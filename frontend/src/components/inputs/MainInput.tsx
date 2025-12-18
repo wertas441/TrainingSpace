@@ -1,6 +1,7 @@
 import {mainInputClasses} from "@/lib";
 import {memo, ReactNode} from "react";
 import {InputsStructure} from "@/types/indexTypes";
+import InputError from "@/components/errors/InputError";
 
 interface MainInputProps extends InputsStructure<string>  {
     type?: string;
@@ -23,7 +24,7 @@ function MainInput(
     return (
         <div>
             {label && (
-                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-500">
+                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-500 dark:text-gray-300">
                     {label}
                 </label>
             )}
@@ -47,9 +48,7 @@ function MainInput(
                 />
             </div>
 
-            {error && (
-                <p className="pt-2 pl-1 text-xs text-red-500">{error}</p>
-            )}
+            <InputError error={error} />
         </div>
     )
 }

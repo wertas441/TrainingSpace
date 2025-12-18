@@ -47,14 +47,14 @@ function GoalRow({publicId, name, description, priority, token}: GoalRowProps ) 
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
-                        <h3 className={`text-lg font-semibold ${isCompleting ? 'text-gray-400 line-through' : 'text-gray-800'}`}>{name}</h3>
+                        <h3 className={`text-lg font-semibold dark:text-white ${isCompleting ? 'text-gray-400 line-through' : 'text-gray-800'}`}>{name}</h3>
                         <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(priority)}`}>
                             {priority === 'Низкий' ? 'Низкий' : priority === 'Средний' ? 'Средний' : 'Высокий'}
                         </span>
                     </div>
                     <p
-                        className={`mt-1 text-sm break-words whitespace-pre-wrap ${
-                            isCompleting ? 'text-gray-300' : 'text-gray-600'
+                        className={`mt-1 text-sm break-words dark:text-emerald-500 whitespace-pre-wrap ${
+                            isCompleting ? 'text-gray-300' : 'text-gray-600 '
                         }`}
                     >
                         {description}

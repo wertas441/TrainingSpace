@@ -1,6 +1,7 @@
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {memo, Ref} from "react";
+import {secondDarkColorTheme} from "@/lib";
 
 interface ModalWindowProps {
     isExiting: boolean;
@@ -41,18 +42,17 @@ function ModalWindow(
             <div className="plx-modal-overlay absolute inset-0 bg-gray-900/85" />
             <div
                 ref={modalRef}
-                className="plx-modal-dialog relative z-10 bg-white rounded-lg border border-gray-300
-                shadow-xl p-6 w-full max-w-2xl"
+                className={`${secondDarkColorTheme} plx-modal-dialog relative z-10  rounded-lg border border-gray-300 shadow-xl p-6 w-full max-w-2xl`}
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="delete-modal-title"
                 aria-describedby="delete-modal-description"
             >
-                <h3 id="delete-modal-title" className="text-lg font-semibold leading-6 text-gray-900">
+                <h3 id="delete-modal-title" className="text-lg font-semibold leading-6 text-gray-900 dark:text-white">
                     {windowLabel}
                 </h3>
                 <div className="mt-3">
-                    <p id="delete-modal-description" className="text-sm text-gray-600">
+                    <p id="delete-modal-description" className="text-sm text-gray-600 dark:text-gray-400">
                         {windowText}
                     </p>
                 </div>

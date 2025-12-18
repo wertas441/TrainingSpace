@@ -1,5 +1,6 @@
 import {InputsStructure} from "@/types/indexTypes";
 import {memo, ReactNode} from "react";
+import {thirdDarkColorTheme} from "@/lib";
 
 interface FilterInputProps extends InputsStructure<string | number> {
     type?: string;
@@ -42,7 +43,7 @@ function FilterInput(
                     onChange={(e) => onChange(e.target.value)}
                     required={required}
                     placeholder={placeholder}
-                    className={`w-full h-10 text-sm border border-gray-300 rounded-md bg-white text-gray-900 placeholder-gray-400 
+                    className={`w-full ${thirdDarkColorTheme} h-10 text-sm border border-gray-300 rounded-md bg-white text-gray-900 placeholder-gray-400 
                     focus:outline-none focus:ring-2 focus:ring-emerald-500 hover:border-emerald-400 ease-in-out duration-300 transition-shadow 
                     ${icon ? 'pl-9 pr-3' : 'px-3'}`}
                 />
