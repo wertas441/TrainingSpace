@@ -5,6 +5,7 @@ import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {getTrainingExercises} from "@/lib/controllers/activityController";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
+import {secondDarkColorTheme} from "@/lib";
 
 interface MyActivityRowProps {
     activity: ActivityDataStructure;
@@ -52,8 +53,7 @@ function MyActivityRow({activity}: MyActivityRowProps){
     }, [router, activity.publicId]);
 
     return (
-        <div
-            className="w-full bg-white border border-emerald-100 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition cursor-pointer"
+        <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition cursor-pointer`}
             onClick={toggleExpanded}
         >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 items-start md:items-center">
@@ -68,14 +68,14 @@ function MyActivityRow({activity}: MyActivityRowProps){
 
                     <div className="">
                         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                            <h3 className="text-base sm:text-lg font-semibold text-gray-900">{activityHeader.name}</h3>
-                            <span className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-600">
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{activityHeader.name}</h3>
+                            <span className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-600 dark:text-white">
 							<CalendarDaysIcon className="w-4 h-4" />
                                 {activityHeader.date}
 						</span>
                         </div>
                         {activityHeader.description && (
-                            <p className="mt-2 text-sm sm:text-base text-gray-600">
+                            <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-emerald-500">
                                 {activityHeader.description}
                             </p>
                         )}

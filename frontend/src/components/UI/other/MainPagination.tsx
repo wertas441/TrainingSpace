@@ -1,5 +1,6 @@
 import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
+import {thirdDarkColorTheme} from "@/lib";
 
 interface MainPaginationProps{
     currentPage: number;
@@ -24,7 +25,10 @@ function MainPagination(
                 <div className="hidden md:flex items-center gap-2">
                     <button
                         type="button"
-                        className={`px-3 py-1.5 text-sm cursor-pointer rounded-md border ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 text-sm cursor-pointer rounded-md border
+                         ${currentPage === 1 ? 'text-gray-300 border-gray-200 cursor-not-allowed' 
+                                             : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50 dark:text-emerald-500 dark:hover:bg-neutral-700'}
+                         ${thirdDarkColorTheme}`}
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
                     >
@@ -36,7 +40,10 @@ function MainPagination(
                                 type="button"
                                 key={p}
                                 onClick={() => setCurrentPage(p)}
-                                className={`h-8 min-w-8 px-4 rounded-md cursor-pointer text-sm border ${p === currentPage ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                                className={`h-8 min-w-8 px-4 rounded-md cursor-pointer text-sm border 
+                                ${p === currentPage ? 'bg-emerald-600 text-white border-emerald-600' 
+                                                    : 'bg-white text-emerald-700 dark:text-emerald-500 border-emerald-200 hover:bg-emerald-50 dark:hover:bg-neutral-700'}
+                                ${thirdDarkColorTheme}`}
                             >
                                 {p}
                             </button>
@@ -47,7 +54,10 @@ function MainPagination(
                     </div>
                     <button
                         type="button"
-                        className={`px-3 py-1.5 text-sm  cursor-pointer rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}
+                        className={`px-3 py-1.5 text-sm  cursor-pointer rounded-md border 
+                        ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' 
+                                                     : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50 dark:text-emerald-500 dark:hover:bg-neutral-700'}
+                        ${thirdDarkColorTheme}`}
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         disabled={currentPage === totalPages}
                     >

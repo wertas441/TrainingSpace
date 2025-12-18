@@ -28,7 +28,7 @@ function StatisticsMainCard(
                         {label}
                     </p>
                     {description && (
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                             {description}
                         </p>
                     )}

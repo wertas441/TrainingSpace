@@ -11,6 +11,7 @@ import {
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {secondDarkColorTheme} from "@/lib";
+import XMarkButton from "@/components/buttons/other/XMarkButton";
 
 const difficultOptions: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
 const typeOptions: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
@@ -82,14 +83,9 @@ export default function MyActivityHeader(
                     ref={modalWindowRef}
                     className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl shadow-lg border border-emerald-100`}
                 >
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100 dark:border-emerald-900">
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-100 dark:border-neutral-700">
                         <h2 className="text-lg font-semibold text-emerald-800 dark:text-white">Фильтры</h2>
-                        <button
-                            onClick={toggleFilterWindow}
-                            className="rounded-md px-2 py-1 text-emerald-700 hover:bg-emerald-50"
-                        >
-                            <XMarkIcon className="h-6 w-6 text-emerald-600" />
-                        </button>
+                        <XMarkButton onClick={toggleFilterWindow} />
                     </div>
                     <div className="px-5 py-4 space-y-6">
 
@@ -111,7 +107,7 @@ export default function MyActivityHeader(
                             alwaysSelected={false}
                         />
                     </div>
-                    <div className="px-5 py-4 border-t border-emerald-100 dark:border-emerald-900">
+                    <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
                         <LightGreenGlassBtn
                             label={`Сбросить`}
                             onClick={handleReset}

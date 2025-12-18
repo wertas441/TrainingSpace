@@ -42,13 +42,15 @@ function MyTrainingRow({publicId, name, description, exercises}: MyTrainingRowPr
                             {visibleExercises.map((exName, idx) => (
                                 <span
                                     key={`${exName}-${idx}`}
-                                    className="px-2 py-0.5 text-xs border rounded-full border-emerald-200 text-emerald-800 bg-emerald-50"
+                                    className="px-2 py-0.5 text-xs border rounded-full border-emerald-200
+                                    text-emerald-800 dark:bg-emerald-800 dark:border-emerald-700  bg-emerald-50 dark:text-white"
                                 >
                                     {exName}
                                 </span>
                             ))}
                             {remainingCount > 0 && (
-                                <span className="px-2 py-0.5 text-xs border rounded-full border-emerald-200 text-emerald-700 bg-emerald-50">
+                                <span className="px-2 py-0.5 text-xs border rounded-full border-emerald-200
+                                    text-emerald-800 dark:bg-emerald-800 dark:border-emerald-700  bg-emerald-50 dark:text-white">
                                     и ещё {remainingCount}
                                 </span>
                             )}
