@@ -88,10 +88,10 @@ export default function Registration(){
         <BlockPageContext>
             <div className="space-y-6">
                 <div>
-                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
+                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900 dark:text-white">
                         TrainingSpace
                     </h2>
-                    <p className="text-center text-gray-600">
+                    <p className="text-center text-gray-600 dark:text-gray-400">
                         Введите данные для регистрации нового аккаунта
                     </p>
                 </div>
@@ -144,7 +144,7 @@ export default function Registration(){
                     />
                 </form>
 
-                <div className="mt-4 text-sm text-gray-700 text-center">
+                <div className="mt-4 text-sm text-gray-700 dark:text-gray-400 text-center">
                     Уже есть аккаунт? <Link href="/auth/login" className={`font-medium textLinks`}>Авторизуетесь</Link>
                 </div>
             </div>

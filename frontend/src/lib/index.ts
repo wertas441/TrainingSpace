@@ -9,7 +9,7 @@ export const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 
 export const firstDarkColorTheme:string = 'bg-white dark:bg-neutral-800 dark:border-neutral-700';
 export const secondDarkColorTheme:string = 'bg-white dark:bg-neutral-900 dark:border-neutral-700';
 export const thirdDarkColorTheme:string = 'dark:bg-neutral-800 dark:border-neutral-700';
-export const iconDarkColorTheme:string = `${thirdDarkColorTheme} text-emerald-600 dark:text-emerald-400 `;
+export const iconDarkColorTheme:string = `${thirdDarkColorTheme} text-emerald-600 dark:text-emerald-400 dark:hover:bg-neutral-700`;
 
 
 export const mainInputClasses:string = `${thirdDarkColorTheme} w-full dark:text-white py-2.5 border border-gray-400 rounded-lg text-gray-900 placeholder-gray-400 

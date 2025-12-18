@@ -1,7 +1,7 @@
 import {memo, useState} from "react";
 import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
 import {MetricOptionStructure, NutritionMetric, NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
 
 const metricOptions: MetricOptionStructure[] = [
     {id: 'calories', label: 'Калории'},
@@ -22,12 +22,12 @@ function DashboardChartCard({nutritionGraphicData}: {nutritionGraphicData: Nutri
                         <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">
                             Быстрая статистика
                         </p>
-                        <h2 className="text-lg font-semibold text-emerald-900">
+                        <h2 className="text-lg font-semibold dark:text-white text-emerald-900">
                             График вашего КБЖУ
                         </h2>
                     </div>
 
-                    <div className="inline-flex gap-2 items-center my-4 md:my-0 rounded-full bg-emerald-50 p-1 text-xs border border-emerald-100">
+                    <div className={`${thirdDarkColorTheme} inline-flex gap-2 items-center my-4 md:my-0 rounded-full bg-emerald-50 p-1 text-xs border border-emerald-100`}>
                         {metricOptions.map((option) => {
                             const isActive = selectedMetric === option.id;
                             return (
@@ -35,10 +35,10 @@ function DashboardChartCard({nutritionGraphicData}: {nutritionGraphicData: Nutri
                                     key={option.id}
                                     type="button"
                                     onClick={() => setSelectedMetric(option.id)}
-                                    className={`px-2.5 cursor-pointer py-1  rounded-full font-medium transition 
+                                    className={`px-2.5 dark:text-white cursor-pointer py-1  rounded-full font-medium transition 
                                         ${isActive
-                                        ? 'bg-white text-emerald-900 shadow-sm'
-                                        : 'text-emerald-700/70 hover:text-emerald-900'}`}
+                                        ? 'bg-emerald-600 text-white shadow-sm'
+                                        : 'hover:text-emerald-700 dark:hover:text-emerald-500 text-emerald-500'}`}
                                 >
                                     {option.label}
                                 </button>

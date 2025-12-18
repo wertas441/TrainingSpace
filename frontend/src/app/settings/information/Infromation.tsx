@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import InformationPageBlock from "@/components/elements/InformationPageBlock";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
+import {thirdDarkColorTheme} from "@/lib";
 
 const informationBlock = [
     {
@@ -47,15 +48,15 @@ export default function Information() {
             />
 
             <div className="px-6 py-6 sm:px-8 sm:py-8 max-w-4xl">
-                <div className="bg-white border border-emerald-100 rounded-2xl shadow-sm p-5 sm:p-6 mb-6">
-                    <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                        <span className="font-semibold text-emerald-900">TrainingSpace</span> — это
+                <div className={`${thirdDarkColorTheme} border border-emerald-100 rounded-2xl shadow-sm p-5 sm:p-6 mb-6`}>
+                    <p className="text-sm sm:text-base text-gray-700 leading-relaxed dark:text-white">
+                        <span className="font-semibold text-emerald-900 dark:text-emerald-600">TrainingSpace</span> — это
                         открытое (Open Source) приложение для отслеживания тренировок, питания и целей
                         в сфере здоровья и спорта. Я делаю его как удобное рабочее пространство, где
                         можно собрать свои привычки, планы и прогресс в одном месте.
                     </p>
 
-                    <p className="mt-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+                    <p className="mt-4 text-sm sm:text-base text-gray-700 dark:text-white leading-relaxed">
                         Код проекта доступен на GitHub, так что вы можете посмотреть, как всё устроено
                         внутри, предложить улучшения или поучаствовать в разработке.
                     </p>

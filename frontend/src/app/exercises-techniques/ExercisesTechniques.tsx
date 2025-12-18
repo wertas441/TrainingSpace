@@ -7,6 +7,7 @@ import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {ExerciseDifficultFilter} from "@/types/indexTypes";
+import NullElementsError from "@/components/errors/NullElementsError";
 
 function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
@@ -70,11 +71,10 @@ function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
                         )
                     )
                 ) : (
-                    <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        Таких упражнений не найдено. попробуйте изменить фильтры и проверить подключение к сети.
-                    </div>
+                    <NullElementsError text={'Таких упражнений не найдено. попробуйте изменить фильтры и проверить подключение к сети.'} />
                 )}
             </div>
+
 
             {totalItems > itemsPerPage && (
                 <MainPagination
