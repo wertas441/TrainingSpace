@@ -14,11 +14,12 @@ function SelectableExerciseRow({exercise, selected, onToggle}: SelectableExercis
     const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`;
 
     return (
-        <div className={`w-full rounded-lg border ${selected ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-emerald-100'} bg-white p-4 shadow-sm hover:shadow-md transition-shadow`}>
+        <div className={`w-full dark:bg-neutral-800 dark:border-neutral-700 rounded-lg border p-4 shadow-sm hover:shadow-md transition-shadow
+        ${selected ? 'border-emerald-300 ring-1 ring-emerald-200 dark:border-emerald-400 dark:ring-emerald-300' : 'border-emerald-100'} `}>
             <div className="flex flex-col space-y-2 gap-3 md:flex-row md:items-start md:justify-between">
                 <div className="flex-1 space-y-3">
                     <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-semibold text-gray-800">{exercise.name}</h3>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{exercise.name}</h3>
                         <span className={badgeClasses}>
                             {exercise.difficulty === 'Лёгкий' ? 'Лёгкий' : exercise.difficulty === 'Средний' ? 'Средний' : 'Сложный'}
                         </span>
@@ -27,7 +28,7 @@ function SelectableExerciseRow({exercise, selected, onToggle}: SelectableExercis
                         {exercise.partOfTheBody.map((part) => (
                             <span
                                 key={part}
-                                className="px-2 py-0.5 text-xs border rounded-full border-gray-200 text-gray-700 bg-gray-50"
+                                className="px-2 py-0.5 text-xs border rounded-full border-gray-200 text-gray-700 bg-gray-50 dark:text-white dark:bg-emerald-800 dark:border-emerald-700"
                             >
                                 {part}
                             </span>
@@ -38,10 +39,10 @@ function SelectableExerciseRow({exercise, selected, onToggle}: SelectableExercis
                     <button
                         type="button"
                         onClick={() => onToggle(exercise.id)}
-                        className={`inline-flex cursor-pointer w-full  items-center gap-2 rounded-md border px-3 py-2 text-sm transition ${
+                        className={`inline-flex cursor-pointer w-full  items-center  dark:hover:bg-neutral-700 gap-2 rounded-md border px-3 py-2 text-sm transition ${
                             selected
-                                ? 'border-rose-200 text-rose-700 hover:bg-rose-50'
-                                : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50'
+                                ? 'border-rose-200 text-rose-700 hover:bg-rose-50 dark:text-white dark:border-rose-400 '
+                                : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50  dark:text-white dark:border-emerald-400'
                         }`}
                     >
                         {useMemo(() => selected

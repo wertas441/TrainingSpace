@@ -2,6 +2,7 @@ import {memo, ReactNode, useState} from "react";
 import {EyeIcon, EyeSlashIcon} from "@heroicons/react/24/outline";
 import {mainInputClasses} from "@/lib";
 import {InputsStructure} from "@/types/indexTypes";
+import InputError from "@/components/errors/InputError";
 
 interface MainHideInputProps extends InputsStructure<string> {
     icon?: ReactNode;
@@ -24,7 +25,7 @@ function MainHideInput(
     return (
         <div>
             {label && (
-                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-500">
+                <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-500 dark:text-gray-300">
                     {label}
                 </label>
             )}
@@ -47,8 +48,7 @@ function MainHideInput(
                     className={`${mainInputClasses.trim()} ${icon ? 'pl-10 pr-4' : 'px-4'}`}
                 />
 
-                <div
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                     onClick={() => setShowPassword(!showPassword)}
                 >
                     {showPassword ? (
@@ -60,9 +60,7 @@ function MainHideInput(
 
             </div>
 
-            {error && (
-                <p className="pt-2 pl-1 text-xs text-red-500">{error}</p>
-            )}
+            <InputError error={error} />
         </div>
     )
 }

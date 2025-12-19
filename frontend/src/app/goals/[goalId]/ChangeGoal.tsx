@@ -103,7 +103,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
         <>
             <BlockPageContext>
                 <div className="space-y-6">
-                    <h2 className="text-2xl font-semibold text-center text-gray-900">
+                    <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
                         Изменение цели
                     </h2>
 

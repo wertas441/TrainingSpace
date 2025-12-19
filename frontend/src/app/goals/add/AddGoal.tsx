@@ -79,10 +79,10 @@ export default function AddGoal() {
         <BlockPageContext>
             <div className="space-y-6">
                 <div>
-                    <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900">
+                    <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white">
                         Добавить цель
                     </h2>
-                    <p className="text-center text-gray-600">
+                    <p className="text-center text-gray-600 dark:text-gray-300">
                         Добавьте цель в свой список и стремитесь ее выполнить
                     </p>
                 </div>

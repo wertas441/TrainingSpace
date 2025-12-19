@@ -1,5 +1,5 @@
 import FilterInput from "@/components/inputs/FilterInput";
-import {CalendarIcon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {NutritionHeaderProps} from "@/types/nutritionTypes";
@@ -7,6 +7,8 @@ import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
 import BarsButton from "@/components/buttons/other/BarsButton";
+import {secondDarkColorTheme} from "@/lib";
+import XMarkButton from "@/components/buttons/other/XMarkButton";
 
 function NutritionHeader(
     {
@@ -36,13 +38,16 @@ function NutritionHeader(
     }: NutritionHeaderProps) {
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
+
     const router = useRouter();
+    const plusButtonAction = useCallback(() => router.push('/nutrition/add'), [router])
+
 
     return (
-        <div className="relative w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm">
+        <div className={`${secondDarkColorTheme} relative w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
-                    <h1 className="text-3xl font-semibold text-emerald-800">Питание</h1>
+                    <h1 className="text-3xl font-semibold text-emerald-800 dark:text-white">Питание</h1>
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5 w-full md:w-auto">
@@ -53,7 +58,7 @@ function NutritionHeader(
                                 placeholder="Поиск по названию дня..."
                                 value={searchName}
                                 onChange={(v) => onSearchNameChange(String(v))}
-                                icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />}
+                                icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-300" />}
                             />
                         </div>
 
@@ -64,14 +69,14 @@ function NutritionHeader(
                                 placeholder="Дата"
                                 value={searchDate}
                                 onChange={(v) => onSearchDateChange(String(v))}
-                                icon={<CalendarIcon className="h-5 w-5 text-gray-400" />}
+                                icon={<CalendarIcon className="h-5 w-5 text-gray-300" />}
                             />
                         </div>
                     </div>
 
                     <div className="flex flex-row justify-end gap-2">
                         <PlusButton
-                            onClick={useCallback(() => router.push('/nutrition/add'), [router])}
+                            onClick={plusButtonAction}
                             className={`w-full`}
                         />
                         <BarsButton
@@ -83,23 +88,18 @@ function NutritionHeader(
                 </div>
 
                 {isFilterWindowOpen && (
-                    <div
-                        ref={modalWindowRef}
-                        className="absolute right-0 top-full mt-2 z-20 w-full md:w-[560px] rounded-xl bg-white shadow-lg border border-emerald-100"
+                    <div ref={modalWindowRef}
+                        className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[560px] 
+                        rounded-xl shadow-lg border border-emerald-100`}
                     >
-                        <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100">
-                            <h2 className="text-lg font-semibold text-emerald-800">Фильтры</h2>
-                            <button
-                                onClick={toggleFilterWindow}
-                                className="rounded-md px-2 py-1 text-emerald-700 hover:bg-emerald-50"
-                            >
-                                <XMarkIcon className="h-6 w-6 text-emerald-600" />
-                            </button>
+                        <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-100 dark:border-neutral-700">
+                            <h2 className="text-lg font-semibold text-emerald-800 dark:text-white">Фильтры</h2>
+                            <XMarkButton onClick={toggleFilterWindow} />
                         </div>
                         <div className="px-5 py-4 space-y-6">
                             <div className="flex flex-col gap-6 md:flex-row">
                                 <div>
-                                    <h1 className="text-sm font-medium text-gray-700 mb-2">Калории (ккал)</h1>
+                                    <h1 className="text-sm font-medium text-gray-700 dark:text-white mb-2">Калории</h1>
                                     <div className="grid grid-cols-2 gap-3">
                                         <FilterInput
                                             id="calories-min"
@@ -125,7 +125,7 @@ function NutritionHeader(
                                 </div>
 
                                 <div>
-                                    <h1 className="text-sm font-medium text-gray-700 mb-2">Белки (г)</h1>
+                                    <h1 className="text-sm font-medium text-gray-700 dark:text-white mb-2">Белки</h1>
                                     <div className="grid grid-cols-2 gap-3">
                                         <FilterInput
                                             id="protein-min"
@@ -153,7 +153,7 @@ function NutritionHeader(
 
                             <div className="flex flex-col gap-6 md:flex-row">
                                 <div>
-                                    <h1 className="text-sm font-medium text-gray-700 mb-2">Жиры (г)</h1>
+                                    <h1 className="text-sm font-medium text-gray-700 dark:text-white mb-2">Жиры</h1>
                                     <div className="grid grid-cols-2 gap-3">
                                         <FilterInput
                                             id="fat-min"
@@ -179,7 +179,7 @@ function NutritionHeader(
                                 </div>
 
                                 <div>
-                                    <h1 className="text-sm font-medium text-gray-700 mb-2">Углеводы (г)</h1>
+                                    <h1 className="text-sm font-medium text-gray-700 dark:text-white mb-2">Углеводы</h1>
                                     <div className="grid grid-cols-2 gap-3">
                                         <FilterInput
                                             id="carb-min"
@@ -205,7 +205,7 @@ function NutritionHeader(
                                 </div>
                             </div>
                         </div>
-                        <div className="px-5 py-4 border-t border-emerald-100">
+                        <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
                             <LightGreenGlassBtn
                                 label={`Сбросить`}
                                 onClick={onResetFilters}

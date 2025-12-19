@@ -11,11 +11,10 @@ import {
 } from "recharts";
 import {NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
 
-type NutritionMetric = 'calories' | 'protein' | 'fat' | 'carb';
 
 interface NutritionTrendChartProps {
     days: NutritionStatisticsGraphicResponse[];
-    metric: NutritionMetric;
+    metric: 'calories' | 'protein' | 'fat' | 'carb';
 }
 
 const CustomTooltip = ({active, payload}: any) => {
@@ -36,6 +35,13 @@ const CustomTooltip = ({active, payload}: any) => {
     );
 };
 
+const metricConfig = {
+    calories: {key: "calories", name: "Калории", color: "#059669"},
+    protein: {key: "protein", name: "Белки", color: "#059669"},
+    fat: {key: "fat", name: "Жиры", color: "#059669"},
+    carb: {key: "carb", name: "Углеводы", color: "#059669"},
+} as const;
+
 function NutritionTrendChart({days, metric}: NutritionTrendChartProps) {
 
     const chartData = useMemo(() => {
@@ -46,7 +52,7 @@ function NutritionTrendChart({days, metric}: NutritionTrendChartProps) {
 
         return sorted.map((d) => {
             // ожидаемый формат даты с бэка: YYYY-MM-DD
-            const [day, month, year] = d.date.split("-");
+            const [day, month] = d.date.split("-");
             const shortLabel = `${day}.${month}`; // 31.12
 
             return {
@@ -68,12 +74,7 @@ function NutritionTrendChart({days, metric}: NutritionTrendChartProps) {
         );
     }
 
-    const metricConfig: Record<NutritionMetric, { key: keyof typeof chartData[number]; name: string; color: string }> = {
-        calories: {key: "calories", name: "Калории", color: "#059669"},
-        protein: {key: "protein", name: "Белки", color: "#059669"},
-        fat: {key: "fat", name: "Жиры", color: "#059669"},
-        carb: {key: "carb", name: "Углеводы", color: "#059669"},
-    };
+
 
     const {key, name, color} = metricConfig[metric];
 

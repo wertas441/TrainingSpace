@@ -23,15 +23,16 @@ function ChipRadioGroup<T extends string>(
 
     return (
         <div className="space-y-2">
-            <div className="block mb-3 text-sm font-medium text-gray-500">{label}</div>
+            <div className="block mb-3 text-sm font-medium text-gray-500 dark:text-gray-300">{label}</div>
             <div id={id} className={`flex flex-wrap gap-2 ${className}`}>
                 {choices.map((choice) => {
                     const checked = value === choice;
                     return (
                         <label
                             key={choice}
-                            className={`cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm ${
-                                checked ? 'border-emerald-300 bg-emerald-50 text-emerald-800' : 'border-gray-200 bg-gray-50 text-gray-700'
+                            className={`cursor-pointer inline-flex dark:text-white  items-center gap-2 px-3 py-1.5 rounded-full border text-sm ${
+                                checked ? 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:bg-neutral-700' 
+                                        : 'border-gray-200 dark:border-neutral-700  bg-gray-50 text-gray-700 dark:bg-neutral-800'
                             }`}
                         >
                             <input

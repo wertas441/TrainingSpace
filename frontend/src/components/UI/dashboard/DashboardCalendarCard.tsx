@@ -1,6 +1,9 @@
 
 import {CalendarDaysIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
+import {secondDarkColorTheme} from "@/lib";
+
+const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"] as const;
 
 function DashboardCalendarCard() {
     const today = new Date();
@@ -34,25 +37,25 @@ function DashboardCalendarCard() {
     const days = getMonthMatrix(year, month);
 
     return (
-        <div className="flex flex-col h-full rounded-2xl bg-white border border-emerald-100 shadow-sm p-5 gap-4">
+        <div className={`${secondDarkColorTheme} flex flex-col h-full rounded-2xl border border-emerald-100 shadow-sm p-5 gap-4`}>
             <div className="flex items-center justify-between gap-2">
-                <div>
+                <div className="space-y-1">
                     <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">
                         Календарь
                     </p>
-                    <h2 className="text-lg font-semibold text-emerald-900">
+                    <h2 className="text-lg font-semibold dark:text-white text-emerald-900">
                         {monthName.charAt(0).toUpperCase() + monthName.slice(1)} {year}
                     </h2>
                 </div>
-                <div className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 border border-emerald-100">
-                    <CalendarDaysIcon className="h-4 w-4 mr-1.5" />
-                    Сегодня: {day}
+                <div className="inline-flex items-center rounded-full bg-emerald-50  dark:text-white dark:bg-neutral-800 dark:border-neutral-800 px-3 py-1 text-xs font-medium text-emerald-700 border border-emerald-100">
+                    <CalendarDaysIcon className="h-4 w-4 mr-1.5 mb-1" />
+                    Сегодня: {day} число
                 </div>
             </div>
 
             <div className="grid grid-cols-7 gap-3 text-xs text-center mt-1">
-                {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((label) => (
-                    <div key={label} className="text-[11px] font-medium text-gray-500 py-1">
+                {weekDays.map((label) => (
+                    <div key={label} className="text-[11px] font-medium text-gray-500 dark:text-gray-400 py-1">
                         {label}
                     </div>
                 ))}
@@ -61,12 +64,12 @@ function DashboardCalendarCard() {
                     return (
                         <div
                             key={idx}
-                            className={`flex items-center justify-center h-7 rounded-full text-[12px] 
+                            className={`flex cursor-pointer items-center justify-center h-7 rounded-full text-[12px] 
                             ${d === null
                                 ? "text-transparent"
                                 : isToday
                                     ? "bg-emerald-500 text-white font-semibold shadow-sm"
-                                    : "text-gray-700 hover:bg-emerald-50 cursor-default"}`}
+                                    : "text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-neutral-700 cursor-default"}`}
                         >
                             {d ?? "-"}
                         </div>

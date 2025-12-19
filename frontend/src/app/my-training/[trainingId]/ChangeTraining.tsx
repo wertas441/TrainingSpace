@@ -8,7 +8,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators";
-import {baseUrlForBackend} from "@/lib";
+import {baseUrlForBackend, secondDarkColorTheme} from "@/lib";
 import {BackendApiResponse} from "@/types/indexTypes";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -38,6 +38,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow();
+    const initialSelectedExerciseIds = trainingInfo.exercises;
 
     const {
         partOfBodyFilter,
@@ -49,7 +50,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
         filteredList,
         handleToggleExercise,
         selectedExerciseIds
-    } = useTrainingUtils({exercises, setExercisesError})
+    } = useTrainingUtils({exercises, setExercisesError, initialSelectedExerciseIds})
 
     const {
         currentPage,
@@ -132,9 +133,9 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
     return (
         <>
             <main className="flex items-center justify-center min-h-screen p-4">
-                <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-xl border border-emerald-100">
+                <div className={`${secondDarkColorTheme} w-full max-w-2xl p-8 space-y-8 rounded-2xl shadow-xl border border-emerald-100`}>
                     <div className="space-y-6" >
-                        <h2 className="text-2xl font-semibold text-center text-gray-900">
+                        <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
                             Изменение тренировки
                         </h2>
 

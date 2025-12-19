@@ -127,7 +127,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
         <>
             <BlockPageContext>
                 <div className="space-y-6">
-                    <h2 className="text-2xl font-semibold text-center text-gray-900">
+                    <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
                         Изменение дня
                     </h2>
 

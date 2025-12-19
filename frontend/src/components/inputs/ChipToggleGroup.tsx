@@ -26,10 +26,10 @@ function ChipToggleGroup<T extends string>(
     return (
         <div className="space-y-2">
             {label && (
-                <div className="block mb-3 text-sm font-medium text-gray-500">
+                <div className="block mb-3 text-sm font-medium text-gray-500 dark:text-gray-300">
                     {label}
-                </div>
-            )}
+                </div>)
+            }
             <div id={id} className={`flex flex-wrap gap-1 md:gap-2 ${className}`}>
                 {choices.map((choice) => {
                     const active = value === choice;
@@ -43,10 +43,10 @@ function ChipToggleGroup<T extends string>(
                                 if (active && alwaysSelected) return;
                                 onChange(active ? null : choice);
                             }}
-                            className={`cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm transition
+                            className={`cursor-pointer inline-flex dark:text-white items-center gap-2 px-3 py-1.5 rounded-full border text-sm transition
                                 ${active
-                                ? 'border-emerald-300 bg-emerald-50 text-emerald-800 shadow-sm'
-                                : 'border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100'
+                                ? 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:bg-neutral-700'
+                                : 'border-gray-200 dark:border-neutral-700 bg-gray-50 text-gray-700 dark:bg-neutral-800'
                             }`}
                         >
                             <span

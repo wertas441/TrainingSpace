@@ -9,7 +9,7 @@ function RedGlassBtn({label, onClick, className = '', disabled = false, type = "
             onClick={onClick}
             disabled={disabled}
             className={`px-4 w-full cursor-pointer py-2.5 text-sm rounded-md border 
-                border-red-200 text-red-700 hover:bg-red-50 ${className}`}
+                border-red-200 text-red-700 hover:bg-red-50 dark:text-white dark:border-red-300 dark:hover:bg-neutral-800  ${className}`}
         >
             {label}
         </button>

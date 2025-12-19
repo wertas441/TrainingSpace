@@ -6,6 +6,7 @@ import GoalsHeader from "@/components/UI/headers/GoalsHeader";
 import MainPagination from "@/components/UI/other/MainPagination";
 import CompleteGoalRow from "@/components/elements/CompleteGoalRow";
 import {CompleteGoalsStructure} from "@/types/goalTypes";
+import NullElementsError from "@/components/errors/NullElementsError";
 
 export default function CompletedGoals({completeList}: {completeList: CompleteGoalsStructure[]}){
 
@@ -47,14 +48,15 @@ export default function CompletedGoals({completeList}: {completeList: CompleteGo
                         />
                     ))
                 ) : (
-                    <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                        {completeList.length === 0
+                    <NullElementsError text={
+                        completeList.length === 0
                             ? "У вас пока нет выполненных целей. Нажмите «Завершить цель», чтобы завершить первую."
                             : "По заданным параметрам поиска выполненные цели не найдены. Попробуйте изменить фильтр."
-                        }
-                    </div>
+                    } />
                 )}
             </div>
+
+
 
             {totalItems > itemsPerPage && (
                 <MainPagination
