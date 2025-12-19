@@ -5,7 +5,7 @@ import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {getTrainingExercises} from "@/lib/controllers/activityController";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {secondDarkColorTheme} from "@/lib";
+import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/lib";
 
 interface MyActivityRowProps {
     activity: ActivityDataStructure;
@@ -58,11 +58,11 @@ function MyActivityRow({activity}: MyActivityRowProps){
         >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 items-start md:items-center">
                 <div className="md:col-span-2 flex items-start md:items-center gap-3 sm:gap-4 md:gap-8 px-1">
-                    <div className="border rounded-full p-1.5 sm:p-2 border-emerald-200 flex items-center justify-center">
+                    <div className={`${iconDarkColorTheme} border rounded-full p-1.5 sm:p-2 border-emerald-200 flex items-center justify-center`}>
                         {isExpanded ? (
-                            <ChevronDownIcon className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
+                            <ChevronDownIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                             ) : (
-                            <ChevronUpIcon className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
+                            <ChevronUpIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                         )}
                     </div>
 
@@ -85,10 +85,12 @@ function MyActivityRow({activity}: MyActivityRowProps){
                 <div className="md:col-span-2">
                     <div className="flex flex-col items-center gap-3 md:flex-row md:justify-end md:gap-7">
                         <div className="flex flex-wrap my-3 gap-2 sm:gap-3">
-                            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs sm:text-sm lg:text-base font-medium text-emerald-800 border border-emerald-100">
+                            <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs sm:text-sm
+                                lg:text-base font-medium border ${getColorStyles(activityHeader.type)}`}>
                                 {activityHeader.type}
                             </span>
-                            <span className="inline-flex items-center rounded-full bg-sky-50 px-2.5 py-1 text-xs sm:text-sm lg:text-base font-medium text-sky-800 border border-sky-100">
+                        <span className={`inline-flex items-center rounded-full  px-2.5 py-1 text-xs sm:text-sm lg:text-base
+                            font-medium border ${getColorStyles(activityHeader.difficulty)}`}>
                                 {activityHeader.difficulty}
                             </span>
                         </div>
@@ -106,7 +108,7 @@ function MyActivityRow({activity}: MyActivityRowProps){
             </div>
 
             {isExpanded && (
-                <div className="mt-4 pt-3 border-t border-emerald-100">
+                <div className="mt-4 pt-3 border-t border-emerald-100 dark:border-neutral-700">
                     {isLoadingExercises && (
                         <div className="text-sm text-gray-500">
                             Загрузка упражнений...
@@ -123,12 +125,12 @@ function MyActivityRow({activity}: MyActivityRowProps){
                         <div className="space-y-3">
                             {activity.exercises.map((ex) => {
                                 const exerciseInfo = trainingExercises?.find((t) => t.id === ex.exercisesId);
-
                                 return (
-                                    <div key={ex.exercisesId} className="rounded-lg bg-emerald-50/60 border border-emerald-100 px-3 py-2">
+                                    <div key={ex.exercisesId} className={`dark:bg-neutral-800 dark:border-neutral-600
+                                    rounded-lg bg-emerald-50/60 border border-emerald-100 px-3 py-2`}>
                                         <div className="flex items-center justify-between gap-2">
                                             <div>
-                                                <div className="text-sm font-semibold text-emerald-900">
+                                                <div className="text-sm font-semibold text-emerald-900 dark:text-white">
                                                     {exerciseInfo?.name ?? `Упражнение #${ex.exercisesId}`}
                                                 </div>
                                             </div>
@@ -137,7 +139,9 @@ function MyActivityRow({activity}: MyActivityRowProps){
                                             {ex.try.map((set) => (
                                                 <span
                                                     key={set.id}
-                                                    className="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs text-emerald-800 border border-emerald-100 shadow-sm"
+                                                    className={`inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs 
+                                                        text-emerald-800 border border-emerald-100 dark:bg-emerald-800 
+                                                        dark:text-white dark:border-emerald-700 shadow-sm`}
                                                 >
                                                     {set.id} подход: {set.weight} кг × {set.quantity}
                                                 </span>

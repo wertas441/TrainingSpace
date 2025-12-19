@@ -1,8 +1,9 @@
 import {BackendApiResponse, DifficultOptionsStructure} from "@/types/indexTypes";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {GoalPriority} from "@/types/goalTypes";
+import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
 
-type ColorStylesChoices = DifficultOptionsStructure | GoalPriority;
+type ColorStylesChoices = DifficultOptionsStructure | GoalPriority | ActivityTypeStructure | ActivityDifficultyStructure;
 
 export const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002';
 
@@ -60,13 +61,28 @@ export async function getExercisesList(tokenValue: string | undefined):Promise<E
 export function getColorStyles(colorStyles: ColorStylesChoices) {
     switch (colorStyles) {
         case "Лёгкий":
+        case "Лёгкая":
         case "Низкий":
-            return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:bg-emerald-200 dark:border-emerald-100 dark:text-gray-800";
+            return "border-emerald-200 bg-emerald-50 text-emerald-700 dark:text-emerald-900  dark:bg-emerald-200 dark:border-emerald-100 ";
+
+        case "Средняя":
         case "Средний":
-            return "border-amber-200 bg-amber-50 text-amber-700 dark:bg-amber-200 dark:border-amber-100 dark:text-gray-800";
+            return "border-amber-200 bg-amber-50 text-amber-700 dark:bg-amber-200 dark:text-amber-900 dark:border-amber-100 ";
+
         case "Сложный":
+        case "Тяжелая":
         case "Высокий":
-            return "border-rose-200 bg-rose-50 text-rose-700 dark:bg-rose-200 dark:border-rose-100 dark:text-gray-800";
+            return "border-rose-200 bg-rose-50 text-rose-700 dark:bg-rose-200 dark:border-rose-100 dark:text-rose-900 ";
+
+        case "Силовая":
+            return "border-rose-200 bg-rose-200 text-rose-600 dark:bg-rose-300 dark:border-rose-200 dark:text-rose-900 ";
+
+        case "Кардио":
+            return "border-blue-200 bg-blue-200 text-blue-600 dark:bg-blue-200 dark:border-blue-100 dark:text-blue-900 ";
+
+        case "Комбинированный":
+            return "border-yellow-200 bg-yellow-200 text-yellow-700 dark:bg-yellow-200 dark:border-yellow-100 dark:text-yellow-900 ";
+
         default:
             return "border-gray-200 bg-gray-50 text-gray-700";
     }

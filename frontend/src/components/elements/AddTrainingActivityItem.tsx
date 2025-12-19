@@ -104,16 +104,18 @@ export default function AddTrainingActivityItem(
                                             className={`${secondDarkColorTheme} w-full h-10 text-sm border border-gray-300 rounded-md bg-gray-50 text-gray-700 dark:text-white px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
                                         />
                                     </div>
-                                    <div className="col-span-12 sm:col-span-1 py-2 sm:py-0">
-                                        <button
-                                            type="button"
-                                            onClick={() => removeSet(exId, s.id)}
-                                            className={`${iconDarkColorTheme} p-2.5 w-full text-center text-sm cursor-pointer border border-gray-200 
+                                    {s.id != 1 && (
+                                        <div className="col-span-12 sm:col-span-1 py-2 sm:py-0">
+                                            <button
+                                                type="button"
+                                                onClick={() => removeSet(exId, s.id)}
+                                                className={`${iconDarkColorTheme} p-2.5 w-full text-center text-sm cursor-pointer border border-gray-200 
                                                 rounded-md bg-gray-50 text-gray-600 hover:bg-gray-100`}
-                                        >
-                                            {TrashIconComponent}
-                                        </button>
-                                    </div>
+                                            >
+                                                {TrashIconComponent}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
