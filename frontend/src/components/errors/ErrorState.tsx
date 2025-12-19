@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import {secondDarkColorTheme} from "@/lib";
 
 interface ErrorStateProps {
     /** Заголовок сообщения об ошибке */
@@ -18,19 +19,18 @@ function ErrorState({
 
     return (
         <div className={`w-full ${fullHeight ? "min-h-[60vh] flex items-center justify-center" : ""}`}>
-            <div
-                className="mx-auto max-w-md rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm text-center"
+            <div className={`${secondDarkColorTheme} mx-auto max-w-md rounded-2xl border border-emerald-100 p-6 shadow-sm text-center`}
                 role="alert"
             >
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-rose-50">
                     <ExclamationTriangleIcon className="h-8 w-8 text-rose-500" />
                 </div>
 
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                     {title}
                 </h2>
 
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     {description}
                 </p>
             </div>
