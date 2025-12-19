@@ -38,6 +38,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow();
+    const initialSelectedExerciseIds = trainingInfo.exercises;
 
     const {
         partOfBodyFilter,
@@ -49,7 +50,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
         filteredList,
         handleToggleExercise,
         selectedExerciseIds
-    } = useTrainingUtils({exercises, setExercisesError})
+    } = useTrainingUtils({exercises, setExercisesError, initialSelectedExerciseIds})
 
     const {
         currentPage,
