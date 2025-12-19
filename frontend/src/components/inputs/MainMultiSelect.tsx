@@ -14,7 +14,7 @@ interface MainMultiSelectProps {
     options: OptionType[];
     onChange: (vals: OptionType[]) => void;
     placeholder?: string;
-    error?: string;
+    error: string | null;
     noOptionsMessage?: () => string;
     isMulti?: boolean;
 }

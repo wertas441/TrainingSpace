@@ -24,7 +24,8 @@ function MyTrainingHeader({searchName, setSearchName}:HeaderMinimumProps) {
                             placeholder="Поиск по названию тренировки..."
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
-                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />, [])}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-300" />, [])}
+                            error={null}
                         />
                     </div>
                     <div className="flew-row md:flex gap-2 ">

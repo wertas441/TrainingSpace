@@ -155,7 +155,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         placeholder={`Тренировка в бассейне`}
                         value={activityName.inputState.value}
                         onChange={activityName.setValue}
-                        error={activityName.inputState.error || undefined}
+                        error={activityName.inputState?.error}
                     />
 
                     <MainInput
@@ -164,7 +164,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         label="Дата активности"
                         value={activityDate.inputState.value}
                         onChange={activityDate.setValue}
-                        error={activityDate.inputState.error || undefined}
+                        error={activityDate.inputState?.error}
                     />
 
                     <MainTextarea
@@ -173,7 +173,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         placeholder="Опционально: комментарий к сессии"
                         value={activityDescription.inputState.value}
                         onChange={activityDescription.setValue}
-                        error={activityDescription.inputState.error || undefined}
+                        error={activityDescription.inputState?.error}
                         rows={4}
                     />
 
@@ -204,6 +204,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         placeholder="Выберите тренировку"
                         isMulti={false}
                         noOptionsMessage={() => 'У вас пока не создано ни одной тренировки или вы неправильно ввели название'}
+                        error={null}
                     />
 
                     {selectedTraining && (

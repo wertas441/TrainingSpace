@@ -1,5 +1,7 @@
 'use client'
 
+import {useInputField} from "@/lib/hooks/useInputField";
+import {FormEvent, useMemo, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
 import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
@@ -10,28 +12,33 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {baseUrlForBackend} from "@/lib";
 import {LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
 import type {BackendApiResponse} from "@/types/indexTypes";
-import {Controller, useForm} from "react-hook-form";
-
-interface LoginFormValues {
-    userName: string;
-    password: string;
-    rememberMe: boolean;
-}
 
 export default function Login(){
 
+    const userName = useInputField('');
+    const password = useInputField('');
+    const [rememberMe, setRememberMe] = useState<boolean>(false);
+
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
-    const {control, handleSubmit,} = useForm<LoginFormValues>({
-        defaultValues: {
-            userName: '',
-            password: '',
-            rememberMe: false,
-        }
-    });
+    const validateForm = () => {
+        const userNameError = validateUserName(userName.inputState.value);
+        userName.setError(userNameError);
 
-    const onSubmit = async (data: LoginFormValues):Promise<void> => {
+        const passwordError = validateUserPassword(password.inputState.value);
+        password.setError(passwordError);
+
+        return !(userNameError || passwordError);
+    }
+
+    const handleSubmit = async (event: FormEvent):Promise<void> => {
+        event.preventDefault();
         setServerError(null);
+
+        if (!validateForm()) {
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -42,9 +49,9 @@ export default function Login(){
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    userName: data.userName,
-                    password: data.password,
-                    rememberMe: data.rememberMe,
+                    userName: userName.inputState.value,
+                    password: password.inputState.value,
+                    rememberMe: rememberMe,
                 }),
             });
 
@@ -53,8 +60,8 @@ export default function Login(){
                 return;
             }
 
-            const responseData = await result.json() as BackendApiResponse;
-            setServerError(responseData.error || responseData.message || "Ошибка авторизации. Проверьте правильность введенных данных.");
+            const data = await result.json() as BackendApiResponse;
+            setServerError(data.error || data.message || "Ошибка авторизации. Проверьте правильность введенных данных.");
             setIsSubmitting(false);
         } catch (error) {
             setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
@@ -77,72 +84,48 @@ export default function Login(){
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+                <form className="space-y-5" onSubmit={handleSubmit}>
 
-                    <Controller
-                        name="userName"
-                        control={control}
-                        rules={{
-                            validate: (value) => validateUserName(value) || true,
-                        }}
-                        render={({ field, fieldState }) => (
-                            <MainInput
-                                id={'userName'}
-                                value={field.value}
-                                onChange={field.onChange}
-                                icon={<UserIcon className="h-5 w-5 text-gray-500" />}
-                                label={'Имя пользователя'}
-                                error={fieldState.error?.message}
+                    <MainInput
+                        id={'userName'}
+                        value={userName.inputState.value}
+                        onChange={userName.setValue}
+                        icon={useMemo(() => <UserIcon className="h-5 w-5 text-gray-300" />, [])}
+                        label={'Имя пользователя'}
+                        error={userName.inputState?.error}
+                    />
+
+                    <MainInput
+                        id={'password'}
+                        type="password"
+                        value={password.inputState.value}
+                        onChange={password.setValue}
+                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-300" />, [])}
+                        label={'Пароль'}
+                        error={password.inputState?.error}
+                    />
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <input
+                                id="remember-me"
+                                name="remember-me"
+                                type="checkbox"
+                                className="w-4 h-4 cursor-pointer border-gray-300 rounded text-emerald-600 focus:ring-emerald-500"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
                             />
-                        )}
-                    />
+                            <label htmlFor="remember-me" className="block ml-2 cursor-pointer text-sm text-gray-700 dark:text-gray-400">
+                                Запомнить меня
+                            </label>
+                        </div>
 
-                    <Controller
-                        name="password"
-                        control={control}
-                        rules={{
-                            validate: (value) => validateUserPassword(value) || true,
-                        }}
-                        render={({ field, fieldState }) => (
-                            <MainInput
-                                id={'password'}
-                                type="password"
-                                value={field.value}
-                                onChange={field.onChange}
-                                icon={<LockClosedIcon className="h-5 w-5 text-gray-500" />}
-                                label={'Пароль'}
-                                error={fieldState.error?.message}
-                            />
-                        )}
-                    />
-
-                    <Controller
-                        name="rememberMe"
-                        control={control}
-                        render={({ field }) => (
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <input
-                                        id="remember-me"
-                                        name="remember-me"
-                                        type="checkbox"
-                                        className="w-4 h-4 cursor-pointer border-gray-300 rounded text-emerald-600 focus:ring-emerald-500"
-                                        checked={field.value}
-                                        onChange={(e) => field.onChange(e.target.checked)}
-                                    />
-                                    <label htmlFor="remember-me" className="block ml-2 cursor-pointer text-sm text-gray-700 dark:text-gray-400">
-                                        Запомнить меня
-                                    </label>
-                                </div>
-
-                                <div className="text-sm">
-                                    <Link href="/auth/forgot-password" className={`font-medium textLinks `}>
-                                        Забыли пароль?
-                                    </Link>
-                                </div>
-                            </div>
-                        )}
-                    />
+                        <div className="text-sm">
+                            <Link href="/auth/forgot-password" className={`font-medium textLinks `}>
+                                Забыли пароль?
+                            </Link>
+                        </div>
+                    </div>
 
                     <LightGreenSubmitBtn
                         label={!isSubmitting ? 'Войти' : 'Вход...'}

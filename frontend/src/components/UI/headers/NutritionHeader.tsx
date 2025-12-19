@@ -59,6 +59,7 @@ function NutritionHeader(
                                 value={searchName}
                                 onChange={(v) => onSearchNameChange(String(v))}
                                 icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-300" />}
+                                error={null}
                             />
                         </div>
 
@@ -70,6 +71,7 @@ function NutritionHeader(
                                 value={searchDate}
                                 onChange={(v) => onSearchDateChange(String(v))}
                                 icon={<CalendarIcon className="h-5 w-5 text-gray-300" />}
+                                error={null}
                             />
                         </div>
                     </div>
@@ -110,6 +112,7 @@ function NutritionHeader(
                                                 const s = String(v);
                                                 onCaloriesMinChange(s.trim() === '' ? Number.NaN : Number(s));
                                             }}
+                                            error={null}
                                         />
                                         <FilterInput
                                             id="calories-max"
@@ -120,6 +123,7 @@ function NutritionHeader(
                                                 const s = String(v);
                                                 onCaloriesMaxChange(s.trim() === '' ? Number.NaN : Number(s));
                                             }}
+                                            error={null}
                                         />
                                     </div>
                                 </div>
@@ -136,6 +140,7 @@ function NutritionHeader(
                                                 const s = String(v);
                                                 onProteinMinChange(s.trim() === '' ? Number.NaN : Number(s));
                                             }}
+                                            error={null}
                                         />
                                         <FilterInput
                                             id="protein-max"
@@ -146,6 +151,7 @@ function NutritionHeader(
                                                 const s = String(v);
                                                 onProteinMaxChange(s.trim() === '' ? Number.NaN : Number(s));
                                             }}
+                                            error={null}
                                         />
                                     </div>
                                 </div>
@@ -164,6 +170,7 @@ function NutritionHeader(
                                                 const s = String(v);
                                                 onFatMinChange(s.trim() === '' ? Number.NaN : Number(s));
                                             }}
+                                            error={null}
                                         />
                                         <FilterInput
                                             id="fat-max"
@@ -174,6 +181,7 @@ function NutritionHeader(
                                                 const s = String(v);
                                                 onFatMaxChange(s.trim() === '' ? Number.NaN : Number(s));
                                             }}
+                                            error={null}
                                         />
                                     </div>
                                 </div>
@@ -190,6 +198,7 @@ function NutritionHeader(
                                                 const s = String(v);
                                                 onCarbMinChange(s.trim() === '' ? Number.NaN : Number(s));
                                             }}
+                                            error={null}
                                         />
                                         <FilterInput
                                             id="carb-max"
@@ -200,6 +209,7 @@ function NutritionHeader(
                                                 const s = String(v);
                                                 onCarbMaxChange(s.trim() === '' ? Number.NaN : Number(s));
                                             }}
+                                            error={null}
                                         />
                                     </div>
                                 </div>

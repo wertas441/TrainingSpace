@@ -104,9 +104,9 @@ export default function Registration(){
                         id={'userName'}
                         value={userName.inputState.value}
                         onChange={userName.setValue}
-                        icon={<UserIcon className="h-5 w-5 text-gray-500" />}
+                        icon={<UserIcon className="h-5 w-5 text-gray-300" />}
                         label={'Имя пользователя'}
-                        error={userName.inputState.error || undefined}
+                        error={userName.inputState?.error}
                     />
 
                     <MainInput
@@ -114,18 +114,18 @@ export default function Registration(){
                         value={email.inputState.value}
                         type="email"
                         onChange={email.setValue}
-                        icon={<AtSymbolIcon className="h-5 w-5 text-gray-500" />}
+                        icon={<AtSymbolIcon className="h-5 w-5 text-gray-300" />}
                         label={'Email'}
-                        error={email.inputState.error || undefined}
+                        error={email.inputState?.error}
                     />
 
                     <MainHideInput
                         id={'password'}
                         value={password.inputState.value}
                         onChange={password.setValue}
-                        icon={<LockClosedIcon className="h-5 w-5 text-gray-500" />}
+                        icon={<LockClosedIcon className="h-5 w-5 text-gray-300" />}
                         label={'Пароль'}
-                        error={password.inputState.error || undefined}
+                        error={password.inputState?.error}
                     />
 
                     <MainInput
@@ -133,9 +133,9 @@ export default function Registration(){
                         type={'password'}
                         value={confirmPassword.inputState.value}
                         onChange={confirmPassword.setValue}
-                        icon={<LockClosedIcon className="h-5 w-5 text-gray-500" />}
+                        icon={<LockClosedIcon className="h-5 w-5 text-gray-300" />}
                         label={'Подтверждение пароля'}
-                        error={confirmPassword.inputState.error || undefined}
+                        error={confirmPassword.inputState?.error}
                     />
 
                     <LightGreenSubmitBtn
