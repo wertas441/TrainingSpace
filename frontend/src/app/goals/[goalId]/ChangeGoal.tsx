@@ -103,7 +103,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
         <>
             <BlockPageContext>
                 <div className="space-y-6">
-                    <h2 className="text-2xl font-semibold text-center text-gray-900">
+                    <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
                         Изменение цели
                     </h2>
 
@@ -117,7 +117,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
                             onChange={goalName.setValue}
                             label={'Название цели'}
                             placeholder={'Например: Пожать 100кг'}
-                            error={goalName.inputState.error || undefined}
+                            error={goalName.inputState.error}
                         />
 
                         <MainTextarea
@@ -126,7 +126,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
                             placeholder="Опционально: описание для цели"
                             value={goalDescription.inputState.value}
                             onChange={goalDescription.setValue}
-                            error={goalDescription.inputState.error || undefined}
+                            error={goalDescription.inputState.error}
                             rows={4}
                         />
 

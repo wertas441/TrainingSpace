@@ -1,5 +1,6 @@
 @use "tailwindcss";
 @use "./animations";
+@custom-variant dark (&:where(.dark, .dark *));
 
 html, body {
   min-height: 100%;

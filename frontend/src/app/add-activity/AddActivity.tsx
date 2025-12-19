@@ -6,7 +6,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
-import {baseUrlForBackend} from "@/lib";
+import {baseUrlForBackend, secondDarkColorTheme} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
@@ -140,11 +140,11 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     return (
         <main className="flex items-center justify-center min-h-screen p-4">
-            <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-xl border border-emerald-100">
+            <div className={`${secondDarkColorTheme} w-full max-w-2xl p-8 space-y-8 rounded-2xl shadow-xl border border-emerald-100`}>
                 <form className="space-y-6" onSubmit={handleSubmit}>
                     <div className="space-y-2 text-center">
-                        <h1 className="text-2xl font-semibold text-gray-800">Добавить активность</h1>
-                        <p className="text-sm text-gray-500">Выберите тренировку и введите подходы по упражнениям</p>
+                        <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">Добавить активность</h1>
+                        <p className="text-sm text-gray-500 dark:text-gray-300">Выберите тренировку и введите подходы по упражнениям</p>
                     </div>
 
                     <ServerError message={serverError} />
@@ -155,7 +155,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         placeholder={`Тренировка в бассейне`}
                         value={activityName.inputState.value}
                         onChange={activityName.setValue}
-                        error={activityName.inputState.error || undefined}
+                        error={activityName.inputState?.error}
                     />
 
                     <MainInput
@@ -164,7 +164,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         label="Дата активности"
                         value={activityDate.inputState.value}
                         onChange={activityDate.setValue}
-                        error={activityDate.inputState.error || undefined}
+                        error={activityDate.inputState?.error}
                     />
 
                     <MainTextarea
@@ -173,7 +173,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         placeholder="Опционально: комментарий к сессии"
                         value={activityDescription.inputState.value}
                         onChange={activityDescription.setValue}
-                        error={activityDescription.inputState.error || undefined}
+                        error={activityDescription.inputState?.error}
                         rows={4}
                     />
 
@@ -204,6 +204,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         placeholder="Выберите тренировку"
                         isMulti={false}
                         noOptionsMessage={() => 'У вас пока не создано ни одной тренировки или вы неправильно ввели название'}
+                        error={null}
                     />
 
                     {selectedTraining && (

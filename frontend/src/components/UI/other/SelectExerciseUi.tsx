@@ -11,7 +11,7 @@ export default function SelectExerciseUi({selectedExerciseIds, exercisesError, e
 
     return (
         <div className="mt-2">
-            <div className="text-sm font-medium text-emerald-900 mb-2">
+            <div className="text-sm font-medium text-emerald-900 dark:text-white mb-2">
                 Выбранные упражнения ({selectedExerciseIds.length})
             </div>
             {exercisesError && (
@@ -27,16 +27,18 @@ export default function SelectExerciseUi({selectedExerciseIds, exercisesError, e
                                 key={id}
                                 type="button"
                                 onClick={() => handleToggleExercise(id)}
-                                className="inline-flex cursor-pointer items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs hover:bg-emerald-100"
+                                className={`inline-flex cursor-pointer items-center gap-2 px-3 py-1.5 rounded-full 
+                                    border border-emerald-200 bg-emerald-50 dark:bg-neutral-800 dark:text-white 
+                                    dark:border-neutral-700 text-emerald-800 text-xs hover:bg-emerald-100 dark:hover:bg-neutral-700`}
                             >
                                 {ex.name}
-                                <span className=" rounded-full bg-white/60 px-1.5 py-1 text-xs border border-emerald-200">убрать</span>
+                                <span className={`dark:bg-neutral-800 dark:text-white dark:border-neutral-700 rounded-full bg-white/60 px-1.5 py-1 text-xs border border-emerald-200`}>убрать</span>
                             </button>
                         )
                     })}
                 </div>
             ) : (
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                     Пока ничего не выбрано — добавьте упражнения из списка выше
                 </div>
             )}

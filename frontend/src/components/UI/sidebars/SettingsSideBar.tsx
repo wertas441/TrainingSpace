@@ -11,6 +11,7 @@ import {logout} from "@/lib/controllers/settingController";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
+import {secondDarkColorTheme} from "@/lib";
 
 const settingsMenuItems: SettingsMenuItemsStructure[] = [
     { id: 'profile', link: '/settings/profile',  label: 'Профиль', icon: UserCircleIcon },
@@ -26,34 +27,35 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
 
     const logOutButton = () => {
         logout();
-        router.replace("/login");
+        router.replace("/auth/login");
     }
 
     return (
         <>
-            <aside className="w-full lg:w-90">
-                <nav className="space-y-2 p-3 rounded-lg border border-emerald-100 bg-white shadow-sm">
+            <aside className={`w-full lg:w-90`}>
+                <nav className={`${secondDarkColorTheme} space-y-2 p-3 rounded-lg border border-emerald-100 shadow-sm`}>
                     {settingsMenuItems.map((item) => {
                         const IconComponent = item.icon;
+                        const active = pathname === item.link;
                         return (
                             <Link
                                 key={item.id}
                                 href={item.link}
                                 className={`w-full flex items-center gap-3 py-2.5 cursor-pointer px-3 rounded-md border transition text-left ${
-                                    pathname === item.link
-                                        ? 'bg-emerald-600 text-white border-emerald-600 shadow'
-                                        : 'bg-white text-emerald-700 border-white hover:bg-emerald-50'
+                                    active
+                                        ? 'bg-emerald-600 text-white border-emerald-600 shadow '
+                                        : 'text-emerald-700 border-white hover:bg-emerald-50 dark:hover:bg-neutral-800  dark:text-white dark:border-neutral-900'
                                 }`}
                             >
-                                <IconComponent className="h-5 w-5"/>
+                                <IconComponent className={`h-5 w-5 dark:group-hover:text-white ${!active ? 'text-emerald-600' : ''} `}/>
                                 <span className="text-sm font-medium">{item.label}</span>
                             </Link>
                         )
                     })}
-                    <div className="border-t border-emerald-100 my-2"></div>
+                    <div className="border-t border-emerald-100 dark:border-neutral-700 my-2"></div>
                     <button
                         className={`w-full flex items-center cursor-pointer gap-3 py-2.5 px-3 rounded-md transition-colors
-                        text-left text-red-700 bg-white hover:bg-red-50`}
+                        text-left text-red-700  hover:bg-red-50 dark:hover:bg-neutral-800 dark:hover:border-red-500 dark:text-red-400`}
                         onClick={toggleModalWindow}
                     >
                         <ArrowLeftOnRectangleIcon className="h-5 w-5" />
@@ -63,16 +65,16 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
             </aside>
 
             <ModalWindow
-                isExiting = {isExiting}
-                modalRef = {windowModalRef}
-                windowLabel = {'Подтверждение выхода'}
-                windowText = {`Вы действительно хотите удалить выйти из своего пользовательского аккаунта? Это действие необратимо.`}
-                cancelButtonLabel = {'Остаться'}
-                cancelFunction = {toggleModalWindow}
-                confirmButtonLabel = {'Выйти'}
-                confirmFunction = {logOutButton}
-                isProcess = {isProcess}
-                isRendered = {isRendered}
+                isExiting={isExiting}
+                modalRef={windowModalRef}
+                windowLabel={'Подтверждение выхода'}
+                windowText={`Вы действительно хотите удалить выйти из своего пользовательского аккаунта? Это действие необратимо.`}
+                cancelButtonLabel={'Остаться'}
+                cancelFunction={toggleModalWindow}
+                confirmButtonLabel={'Выйти'}
+                confirmFunction={logOutButton}
+                isProcess={isProcess}
+                isRendered={isRendered}
             />
         </>
     )

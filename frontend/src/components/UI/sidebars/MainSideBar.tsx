@@ -10,6 +10,7 @@ import {
     XMarkIcon
 } from "@heroicons/react/24/outline";
 import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";
+import {firstDarkColorTheme} from "@/lib";
 
 interface SideBarProps {
 	activePage: string;
@@ -105,8 +106,8 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: Sid
 			)}
 
 			<aside
-				className={`
-				fixed lg:static top-0 left-0 h-full lg:h-auto
+				className={`${firstDarkColorTheme}
+				fixed lg:static top-0 left-0 h-full lg:h-auto 
 				w-72 border-r border-emerald-100 px-4 pt-2 bg-white
 				transform transition-transform duration-300 ease-in-out z-50
 				${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
@@ -115,7 +116,7 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: Sid
 			>
 
                 <div className="lg:hidden flex justify-between items-center pb-5 ">
-                    <h1 className={`text-2xl pt-1 font-semibold text-emerald-800`}>TrainingSpace</h1>
+                    <h1 className={`text-2xl pt-1 font-semibold text-emerald-800 dark:text-white`}>TrainingSpace</h1>
                     <AnyStylesButton
                         onClick={onClose}
                         IconComponent={XMarkIcon}

@@ -108,10 +108,10 @@ export default function AddNutrition(){
         <BlockPageContext>
             <div className="space-y-6">
                 <div>
-                    <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900">
+                    <h2 className={`text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white`}>
                         Добавить день питания
                     </h2>
-                    <p className="text-center text-gray-600">
+                    <p className="text-center text-gray-600 dark:text-gray-400">
                         Заполните данные для отслеживания
                     </p>
                 </div>
@@ -125,7 +125,7 @@ export default function AddNutrition(){
                         value={dayName.inputState.value}
                         onChange={dayName.setValue}
                         label={'Наименование дня'}
-                        error={dayName.inputState.error || undefined}
+                        error={dayName.inputState.error}
                     />
 
                     <MainInput
@@ -133,7 +133,7 @@ export default function AddNutrition(){
                         value={calories.inputState.value}
                         onChange={calories.setValue}
                         label={'Калории (ккал)'}
-                        error={calories.inputState.error || undefined}
+                        error={calories.inputState.error}
                     />
 
                     <MainInput
@@ -141,7 +141,7 @@ export default function AddNutrition(){
                         value={protein.inputState.value}
                         onChange={protein.setValue}
                         label={'Белки (г)'}
-                        error={protein.inputState.error || undefined}
+                        error={protein.inputState.error}
                     />
 
                     <MainInput
@@ -149,7 +149,7 @@ export default function AddNutrition(){
                         value={fat.inputState.value}
                         onChange={fat.setValue}
                         label={'Жиры (г)'}
-                        error={fat.inputState.error || undefined}
+                        error={fat.inputState.error}
                     />
 
                     <MainInput
@@ -157,7 +157,7 @@ export default function AddNutrition(){
                         value={carb.inputState.value}
                         onChange={carb.setValue}
                         label={'Углеводы (г)'}
-                        error={carb.inputState.error || undefined}
+                        error={carb.inputState.error}
                     />
 
                     <MainInput
@@ -166,7 +166,7 @@ export default function AddNutrition(){
                         value={dayDate.inputState.value}
                         onChange={dayDate.setValue}
                         label={'Дата'}
-                        error={dayDate.inputState.error || undefined}
+                        error={dayDate.inputState.error}
                     />
 
                     <MainTextarea
@@ -175,7 +175,7 @@ export default function AddNutrition(){
                         onChange={dayDescription.setValue}
                         label={'Описание'}
                         placeholder={`Опционально: комментарий ко дню`}
-                        error={dayDescription.inputState.error || undefined}
+                        error={dayDescription.inputState.error}
                         rows={4}
                     />
 

@@ -17,8 +17,8 @@ export default function Dashboard({goalsShortyList, nutritionGraphicData}: Dashb
 
     return (
         <main className="w-full p-4 sm:p-6 lg:p-8 ">
-            <div className=" space-y-6">
-                <h1 className="text-3xl sm:text-4xl font-semibold text-emerald-900">
+            <div className="space-y-6">
+                <h1 className="text-3xl sm:text-4xl font-semibold text-emerald-900 dark:text-white">
                     Приветствую в TrainingSpace
                 </h1>
 

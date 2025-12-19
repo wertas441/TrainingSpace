@@ -88,10 +88,10 @@ export default function Registration(){
         <BlockPageContext>
             <div className="space-y-6">
                 <div>
-                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
+                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900 dark:text-white">
                         TrainingSpace
                     </h2>
-                    <p className="text-center text-gray-600">
+                    <p className="text-center text-gray-600 dark:text-gray-400">
                         Введите данные для регистрации нового аккаунта
                     </p>
                 </div>
@@ -104,9 +104,9 @@ export default function Registration(){
                         id={'userName'}
                         value={userName.inputState.value}
                         onChange={userName.setValue}
-                        icon={<UserIcon className="h-5 w-5 text-gray-500" />}
+                        icon={<UserIcon className="h-5 w-5 text-gray-300" />}
                         label={'Имя пользователя'}
-                        error={userName.inputState.error || undefined}
+                        error={userName.inputState?.error}
                     />
 
                     <MainInput
@@ -114,18 +114,18 @@ export default function Registration(){
                         value={email.inputState.value}
                         type="email"
                         onChange={email.setValue}
-                        icon={<AtSymbolIcon className="h-5 w-5 text-gray-500" />}
+                        icon={<AtSymbolIcon className="h-5 w-5 text-gray-300" />}
                         label={'Email'}
-                        error={email.inputState.error || undefined}
+                        error={email.inputState?.error}
                     />
 
                     <MainHideInput
                         id={'password'}
                         value={password.inputState.value}
                         onChange={password.setValue}
-                        icon={<LockClosedIcon className="h-5 w-5 text-gray-500" />}
+                        icon={<LockClosedIcon className="h-5 w-5 text-gray-300" />}
                         label={'Пароль'}
-                        error={password.inputState.error || undefined}
+                        error={password.inputState?.error}
                     />
 
                     <MainInput
@@ -133,9 +133,9 @@ export default function Registration(){
                         type={'password'}
                         value={confirmPassword.inputState.value}
                         onChange={confirmPassword.setValue}
-                        icon={<LockClosedIcon className="h-5 w-5 text-gray-500" />}
+                        icon={<LockClosedIcon className="h-5 w-5 text-gray-300" />}
                         label={'Подтверждение пароля'}
-                        error={confirmPassword.inputState.error || undefined}
+                        error={confirmPassword.inputState?.error}
                     />
 
                     <LightGreenSubmitBtn
@@ -144,7 +144,7 @@ export default function Registration(){
                     />
                 </form>
 
-                <div className="mt-4 text-sm text-gray-700 text-center">
+                <div className="mt-4 text-sm text-gray-700 dark:text-gray-400 text-center">
                     Уже есть аккаунт? <Link href="/auth/login" className={`font-medium textLinks`}>Авторизуетесь</Link>
                 </div>
             </div>

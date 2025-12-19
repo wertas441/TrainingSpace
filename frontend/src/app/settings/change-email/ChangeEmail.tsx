@@ -87,7 +87,7 @@ export default function ChangeEmail(){
                         label={'Новая почта'}
                         value={newEmail.inputState.value}
                         onChange={newEmail.setValue}
-                        error={newEmail.inputState.error || undefined}
+                        error={newEmail.inputState.error }
                     />
 
                     <MainInput
@@ -97,7 +97,7 @@ export default function ChangeEmail(){
                         icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
                         value={currentPassword.inputState.value}
                         onChange={currentPassword.setValue}
-                        error={currentPassword.inputState.error || undefined}
+                        error={currentPassword.inputState.error}
                     />
 
                     <div className="pt-2">

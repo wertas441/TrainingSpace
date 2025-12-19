@@ -7,7 +7,7 @@ import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {baseUrlForBackend} from "@/lib";
+import {baseUrlForBackend, secondDarkColorTheme} from "@/lib";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
@@ -21,6 +21,7 @@ import type {BackendApiResponse} from "@/types/indexTypes";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
+import NullElementsError from "@/components/errors/NullElementsError";
 
 export default function AddNewTraining({exercises}:{exercises: ExerciseTechniqueItem[]}){
 
@@ -109,14 +110,14 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
     }
 
     return (
-        <main className="flex items-center justify-center min-h-screen p-4">
-            <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-xl border border-emerald-100">
+        <main className={`flex items-center justify-center min-h-screen p-4`}>
+            <div className={`${secondDarkColorTheme} w-full max-w-2xl p-8 space-y-8 rounded-2xl shadow-xl border border-emerald-100`}>
                 <div className="space-y-6" >
                     <div>
-                        <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900">
+                        <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white">
                             Добавить новую тренировку
                         </h2>
-                        <p className="text-center text-gray-600">
+                        <p className="text-center text-gray-600 dark:text-gray-400">
                             Заполните данные для отслеживания
                         </p>
                     </div>
@@ -131,7 +132,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             onChange={trainingName.setValue}
                             label={`Название тренировки`}
                             placeholder={'Силовая тренировка на грудь'}
-                            error={trainingName.inputState.error || undefined}
+                            error={trainingName.inputState.error}
                         />
 
                         <MainTextarea
@@ -140,7 +141,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             onChange={trainingDescription.setValue}
                             label={'Описание тренировки'}
                             placeholder="Опционально: описание для тренировки"
-                            error={trainingDescription.inputState.error || undefined}
+                            error={trainingDescription.inputState.error}
                             rows={4}
                         />
 
@@ -151,6 +152,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
                             label="Поиск упражнения по имени"
+                            error={null}
                         />
 
                         <MainMultiSelect
@@ -160,6 +162,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
                             label="Поиск упражнения по группе мышц"
                             placeholder={'Выберите группу мышц...'}
+                            error={null}
                         />
 
                         <div className="grid grid-cols-1 gap-3">
@@ -173,11 +176,10 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                                     />
                                 ))
                             ) : (
-                                <div className="w-full rounded-lg bg-white p-6 text-center text-sm text-gray-500">
-                                    Таких упражнений не найдено. Попробуйте изменить запрос.
-                                </div>
+                                <NullElementsError text={`Таких упражнений не найдено. Попробуйте изменить запрос.`} />
                             )}
                         </div>
+
 
                         {totalItems > itemsPerPage && (
                             <MainPagination

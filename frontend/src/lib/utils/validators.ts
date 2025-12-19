@@ -5,7 +5,7 @@ import {ExerciseSetsByExerciseId} from "@/types/activityTypes";
 
 export const validateUserName = (userName: string): string | null => {
     if(!userName.trim()){
-        return ('Пожалуйста, введите имя для вашего аккаунта')
+        return ('Пожалуйста, введите имя пользователя')
     }
 
     if(userName.length < 3){

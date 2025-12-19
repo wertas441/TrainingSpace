@@ -74,10 +74,10 @@ export default function Login(){
         <BlockPageContext>
             <div className="space-y-6">
                 <div>
-                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900">
+                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900 dark:text-white">
                         TrainingSpace
                     </h2>
-                    <p className="text-center text-gray-600">
+                    <p className="text-center text-gray-600 dark:text-gray-400">
                         Войдите в свой аккаунт
                     </p>
                 </div>
@@ -90,9 +90,9 @@ export default function Login(){
                         id={'userName'}
                         value={userName.inputState.value}
                         onChange={userName.setValue}
-                        icon={useMemo(() => <UserIcon className="h-5 w-5 text-gray-500" />, [])}
+                        icon={useMemo(() => <UserIcon className="h-5 w-5 text-gray-300" />, [])}
                         label={'Имя пользователя'}
-                        error={userName.inputState.error || undefined}
+                        error={userName.inputState?.error}
                     />
 
                     <MainInput
@@ -100,9 +100,9 @@ export default function Login(){
                         type="password"
                         value={password.inputState.value}
                         onChange={password.setValue}
-                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
+                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-300" />, [])}
                         label={'Пароль'}
-                        error={password.inputState.error || undefined}
+                        error={password.inputState?.error}
                     />
 
                     <div className="flex items-center justify-between">
@@ -115,13 +115,13 @@ export default function Login(){
                                 checked={rememberMe}
                                 onChange={(e) => setRememberMe(e.target.checked)}
                             />
-                            <label htmlFor="remember-me" className="block ml-2 cursor-pointer text-sm text-gray-700">
+                            <label htmlFor="remember-me" className="block ml-2 cursor-pointer text-sm text-gray-700 dark:text-gray-400">
                                 Запомнить меня
                             </label>
                         </div>
 
                         <div className="text-sm">
-                            <Link href="/auth/forgot-password" className={`font-medium textLinks`}>
+                            <Link href="/auth/forgot-password" className={`font-medium textLinks `}>
                                 Забыли пароль?
                             </Link>
                         </div>
@@ -133,7 +133,7 @@ export default function Login(){
                     />
                 </form>
 
-                <div className="mt-4 text-sm text-gray-700 text-center">
+                <div className="mt-4 text-sm text-gray-700 dark:text-gray-400 text-center">
                     Нет аккаунта? <Link href="/auth/registration" className={`font-medium textLinks`}>Зарегистрироваться</Link>
                 </div>
             </div>

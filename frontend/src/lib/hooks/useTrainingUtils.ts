@@ -5,11 +5,12 @@ import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 interface UseTrainingUtilsProps {
     exercises: ExerciseTechniqueItem[];
     setExercisesError: Dispatch<SetStateAction<string | null>>;
+    initialSelectedExerciseIds?: number[];
 }
 
-export function useTrainingUtils({exercises, setExercisesError}:UseTrainingUtilsProps) {
+export function useTrainingUtils({exercises, setExercisesError, initialSelectedExerciseIds}:UseTrainingUtilsProps) {
 
-    const [selectedExerciseIds, setSelectedExerciseIds] = useState<number[]>([]);
+    const [selectedExerciseIds, setSelectedExerciseIds] = useState<number[]>(() => initialSelectedExerciseIds ?? []);
     const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
     const [searchName, setSearchName] = useState<string>('');
     
@@ -28,12 +29,27 @@ export function useTrainingUtils({exercises, setExercisesError}:UseTrainingUtils
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
-        return exercises.filter(e => {
+
+        const base = exercises.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
-            const matchesPart = partOfBodyFilter.length === 0 || e.partOfTheBody.some(p => partOfBodyFilter.includes(p));
+            const matchesPart =
+                partOfBodyFilter.length === 0 ||
+                e.partOfTheBody.some(p => partOfBodyFilter.includes(p));
             return matchesName && matchesPart;
         });
-    }, [searchName, exercises, partOfBodyFilter]);
+
+        // Сначала уже добавленные в тренировку (selected), затем остальные
+        return base.sort((a, b) => {
+            const aSelected = selectedExerciseIds.includes(a.id);
+            const bSelected = selectedExerciseIds.includes(b.id);
+
+            if (aSelected === bSelected) {
+                return 0;
+            }
+
+            return aSelected ? -1 : 1;
+        });
+    }, [searchName, exercises, partOfBodyFilter, selectedExerciseIds]);
 
     const handleToggleExercise = useCallback((id: number) => {
         setSelectedExerciseIds(prev => {

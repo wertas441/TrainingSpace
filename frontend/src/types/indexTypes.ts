@@ -7,7 +7,7 @@ export interface InputsStructure<T extends string | number> {
     onChange: (newValue: T ) => void;
     required?: boolean;
     placeholder?: string;
-    error?: string;
+    error: string | null;
 }
 
 // icon?: ComponentType<SVGProps<SVGSVGElement>>; //

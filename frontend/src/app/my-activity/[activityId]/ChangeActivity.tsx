@@ -18,7 +18,7 @@ import {useInputField} from "@/lib/hooks/useInputField";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import {deleteActivity, getTrainingExercises} from "@/lib/controllers/activityController";
-import {baseUrlForBackend} from "@/lib";
+import {baseUrlForBackend, secondDarkColorTheme} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
@@ -221,9 +221,9 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
     return (
         <>
             <main className="flex items-center justify-center min-h-screen p-4">
-                <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-xl border border-emerald-100">
+                <div className={`${secondDarkColorTheme} w-full max-w-2xl p-8 space-y-8 rounded-2xl shadow-xl border border-emerald-100`}>
                     <form className="space-y-6" onSubmit={handleSubmit}>
-                        <h1 className="text-2xl text-center font-semibold text-gray-800">Изменение активности</h1>
+                        <h1 className="text-2xl text-center font-semibold text-gray-800 dark:text-white">Изменение активности</h1>
 
                         <ServerError message={serverError} />
 
@@ -233,7 +233,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             placeholder={`Тренировка в бассейне`}
                             value={activityName.inputState.value}
                             onChange={activityName.setValue}
-                            error={activityName.inputState.error || undefined}
+                            error={activityName.inputState.error}
                         />
 
                         <MainInput
@@ -242,7 +242,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             label="Дата активности"
                             value={activityDate.inputState.value}
                             onChange={activityDate.setValue}
-                            error={activityDate.inputState.error || undefined}
+                            error={activityDate.inputState.error}
                         />
 
                         <MainTextarea
@@ -251,7 +251,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             placeholder="Опционально: комментарий к сессии"
                             value={activityDescription.inputState.value}
                             onChange={activityDescription.setValue}
-                            error={activityDescription.inputState.error || undefined}
+                            error={activityDescription.inputState.error}
                             rows={4}
                         />
 
@@ -282,7 +282,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             placeholder="Выберите тренировку"
                             isMulti={false}
                             noOptionsMessage={() => 'Нет тренировок'}
-
+                            error={null}
                         />
 
                         {trainingId.inputState.error && (

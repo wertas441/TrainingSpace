@@ -1,5 +1,5 @@
 import FilterInput from "@/components/inputs/FilterInput";
-import {MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback, useMemo} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
@@ -8,6 +8,8 @@ import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
+import {secondDarkColorTheme} from "@/lib";
+import XMarkButton from "@/components/buttons/other/XMarkButton";
 
 interface ValueOptions {
     value: string;
@@ -54,10 +56,10 @@ function ExercisesTechniquesHeader(
     }, [setDifficultFilter, setPartOfBodyFilter]) ;
 
     return (
-        <div className="w-full bg-white border border-emerald-100 rounded-lg p-4 shadow-sm relative" >
+        <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm relative`}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
-                    <h1 className="text-3xl font-semibold text-emerald-800">Техника выполнения упражнений</h1>
+                    <h1 className="text-3xl font-semibold text-emerald-800 dark:text-white">Техника выполнения упражнений</h1>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -67,7 +69,8 @@ function ExercisesTechniquesHeader(
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
                             placeholder="Поиск по названию упражнения..."
-                            icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" />, [])}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4 text-gray-300" />, [])}
+                            error={null}
                         />
                     </div>
 
@@ -78,15 +81,10 @@ function ExercisesTechniquesHeader(
                 </div>
 
                 {isFilterWindowOpen && (
-                    <div ref={modalWindowRef} className="absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl bg-white shadow-lg border border-emerald-100">
-                        <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-100">
-                            <h2 className="text-lg font-semibold text-emerald-800">Фильтры</h2>
-                            <button
-                                onClick={toggleFilterWindow}
-                                className="rounded-md px-2 py-1 text-emerald-700 hover:bg-emerald-50"
-                            >
-                                <XMarkIcon className="h-6 w-6 text-emerald-600" />
-                            </button>
+                    <div ref={modalWindowRef} className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl shadow-lg border border-emerald-100`}>
+                        <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-100 dark:border-neutral-700">
+                            <h2 className="text-lg font-semibold text-emerald-800 dark:text-white">Фильтры</h2>
+                            <XMarkButton onClick={toggleFilterWindow} />
                         </div>
                         <div className="px-5 py-4 space-y-6">
 
@@ -107,11 +105,12 @@ function ExercisesTechniquesHeader(
                                     value={selectedMuscles}
                                     onChange={(vals) => handleMusclesChange(vals as { value: string; label: string }[])}
                                     placeholder="Выберите группы..."
+                                    error={null}
                                 />
                                 <div className="mt-1.5 text-xs text-gray-500">По умолчанию показываются все группы</div>
                             </div>
                         </div>
-                        <div className="px-5 py-4 border-t border-emerald-100">
+                        <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
                             <LightGreenGlassBtn
                                 label={`Сбросить`}
                                 onClick={handleReset}

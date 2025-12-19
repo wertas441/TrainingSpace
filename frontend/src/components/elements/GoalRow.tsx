@@ -3,19 +3,20 @@ import {memo, useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import CheckButton from "@/components/buttons/other/CheckButton";
-import {getColorStyles} from "@/lib";
+import {getColorStyles, secondDarkColorTheme} from "@/lib";
 import {completeGoal} from "@/lib/controllers/goalController";
 
 interface GoalRowProps extends GoalsStructure{
     token: string;
 }
 
-function GoalRow({id, publicId, name, description, priority, token}: GoalRowProps ) {
+function GoalRow({publicId, name, description, priority, token}: GoalRowProps ) {
 
     const [isCompleting, setIsCompleting] = useState<boolean>(false);
     const [isHidden, setIsHidden] = useState<boolean>(false);
 
     const router = useRouter();
+    const changeGoalRoute = useCallback(() => router.push(`/goals/${publicId}`), [publicId, router])
 
     const handleCompleteClick = useCallback(() => {
         if (isCompleting) return;
@@ -41,19 +42,19 @@ function GoalRow({id, publicId, name, description, priority, token}: GoalRowProp
     }
 
     return (
-        <div className={`w-full rounded-lg border border-emerald-100 bg-white p-4 shadow-sm transition-all duration-300 ease-out 
+        <div className={`${secondDarkColorTheme} w-full rounded-lg border border-emerald-100 p-4 shadow-sm transition-all duration-300 ease-out 
             ${isCompleting ? 'opacity-0 translate-y-1 scale-95' : 'opacity-100 hover:shadow-md'}`}>
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
-                        <h3 className={`text-lg font-semibold ${isCompleting ? 'text-gray-400 line-through' : 'text-gray-800'}`}>{name}</h3>
+                        <h3 className={`text-lg font-semibold dark:text-white ${isCompleting ? 'text-gray-400 line-through' : 'text-gray-800'}`}>{name}</h3>
                         <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(priority)}`}>
                             {priority === 'Низкий' ? 'Низкий' : priority === 'Средний' ? 'Средний' : 'Высокий'}
                         </span>
                     </div>
                     <p
-                        className={`mt-1 text-sm break-words whitespace-pre-wrap ${
-                            isCompleting ? 'text-gray-300' : 'text-gray-600'
+                        className={`mt-1 text-sm break-words dark:text-emerald-500 whitespace-pre-wrap ${
+                            isCompleting ? 'text-gray-300' : 'text-gray-600 '
                         }`}
                     >
                         {description}
@@ -66,7 +67,7 @@ function GoalRow({id, publicId, name, description, priority, token}: GoalRowProp
                         disabled={isCompleting}
                     />
                     <ChangeButton
-                        onClick={useCallback(() => router.push(`/goals/${publicId}`), [publicId, router])}
+                        onClick={changeGoalRoute}
                         className={'w-full'}
                     />
                 </div>
