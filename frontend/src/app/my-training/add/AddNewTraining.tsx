@@ -132,7 +132,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             onChange={trainingName.setValue}
                             label={`Название тренировки`}
                             placeholder={'Силовая тренировка на грудь'}
-                            error={trainingName.inputState.error || undefined}
+                            error={trainingName.inputState.error}
                         />
 
                         <MainTextarea
@@ -141,7 +141,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             onChange={trainingDescription.setValue}
                             label={'Описание тренировки'}
                             placeholder="Опционально: описание для тренировки"
-                            error={trainingDescription.inputState.error || undefined}
+                            error={trainingDescription.inputState.error}
                             rows={4}
                         />
 
@@ -152,6 +152,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
                             label="Поиск упражнения по имени"
+                            error={null}
                         />
 
                         <MainMultiSelect
@@ -161,6 +162,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
                             label="Поиск упражнения по группе мышц"
                             placeholder={'Выберите группу мышц...'}
+                            error={null}
                         />
 
                         <div className="grid grid-cols-1 gap-3">

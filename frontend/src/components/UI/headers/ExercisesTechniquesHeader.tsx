@@ -70,6 +70,7 @@ function ExercisesTechniquesHeader(
                             onChange={(v) => setSearchName(String(v))}
                             placeholder="Поиск по названию упражнения..."
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4 text-gray-300" />, [])}
+                            error={null}
                         />
                     </div>
 
@@ -104,6 +105,7 @@ function ExercisesTechniquesHeader(
                                     value={selectedMuscles}
                                     onChange={(vals) => handleMusclesChange(vals as { value: string; label: string }[])}
                                     placeholder="Выберите группы..."
+                                    error={null}
                                 />
                                 <div className="mt-1.5 text-xs text-gray-500">По умолчанию показываются все группы</div>
                             </div>

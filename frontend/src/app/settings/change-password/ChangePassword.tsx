@@ -96,7 +96,7 @@ export default function ChangePassword(){
                         label={'Ваш текущий пароль'}
                         value={currentPassword.inputState.value}
                         onChange={currentPassword.setValue}
-                        error={currentPassword.inputState.error || undefined}
+                        error={currentPassword.inputState.error}
                     />
 
                     <MainHideInput
@@ -105,7 +105,7 @@ export default function ChangePassword(){
                         icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
                         value={newPassword.inputState.value}
                         onChange={newPassword.setValue}
-                        error={newPassword.inputState.error || undefined}
+                        error={newPassword.inputState.error}
                     />
 
                     <MainInput
@@ -115,7 +115,7 @@ export default function ChangePassword(){
                         icon={useMemo(() => <CheckIcon className="h-5 w-5 text-gray-500" />, [])}
                         value={confirmPassword.inputState.value}
                         onChange={confirmPassword.setValue}
-                        error={confirmPassword.inputState.error || undefined}
+                        error={confirmPassword.inputState.error}
                     />
 
                     <div className="pt-2">

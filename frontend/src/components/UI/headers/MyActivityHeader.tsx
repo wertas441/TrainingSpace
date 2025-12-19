@@ -1,6 +1,6 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {useCallback, useMemo} from "react";
-import {CalendarIcon, MagnifyingGlassIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {
@@ -54,6 +54,7 @@ export default function MyActivityHeader(
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-300 " />, [])}
+                            error={null}
                         />
                     </div>
 
@@ -65,6 +66,7 @@ export default function MyActivityHeader(
                             value={searchDate}
                             onChange={(v) => setSearchDate(String(v))}
                             icon={<CalendarIcon className="h-5 w-5 text-gray-300" />}
+                            error={null}
                         />
                     </div>
 

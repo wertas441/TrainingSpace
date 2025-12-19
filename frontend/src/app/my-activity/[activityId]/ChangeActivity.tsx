@@ -233,7 +233,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             placeholder={`Тренировка в бассейне`}
                             value={activityName.inputState.value}
                             onChange={activityName.setValue}
-                            error={activityName.inputState.error || undefined}
+                            error={activityName.inputState.error}
                         />
 
                         <MainInput
@@ -242,7 +242,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             label="Дата активности"
                             value={activityDate.inputState.value}
                             onChange={activityDate.setValue}
-                            error={activityDate.inputState.error || undefined}
+                            error={activityDate.inputState.error}
                         />
 
                         <MainTextarea
@@ -251,7 +251,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             placeholder="Опционально: комментарий к сессии"
                             value={activityDescription.inputState.value}
                             onChange={activityDescription.setValue}
-                            error={activityDescription.inputState.error || undefined}
+                            error={activityDescription.inputState.error}
                             rows={4}
                         />
 
@@ -282,7 +282,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             placeholder="Выберите тренировку"
                             isMulti={false}
                             noOptionsMessage={() => 'Нет тренировок'}
-
+                            error={null}
                         />
 
                         {trainingId.inputState.error && (

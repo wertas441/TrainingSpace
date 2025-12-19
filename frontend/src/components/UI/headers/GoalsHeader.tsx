@@ -32,6 +32,7 @@ function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />, [])}
+                            error={null}
                         />
                     </div>
 

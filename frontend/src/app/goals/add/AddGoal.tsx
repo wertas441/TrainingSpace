@@ -1,7 +1,7 @@
 'use client'
 
 import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useMemo, useState} from "react";
+import {FormEvent, useState} from "react";
 import {GoalPriority} from "@/types/goalTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -14,6 +14,8 @@ import {baseUrlForBackend} from "@/lib";
 import {validateGoalDescription, validateGoalName, validateGoalPriority} from "@/lib/utils/validators";
 import type {BackendApiResponse} from "@/types/indexTypes";
 
+const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
+
 export default function AddGoal() {
 
     const goalName = useInputField('');
@@ -21,8 +23,6 @@ export default function AddGoal() {
     const [goalPriority, setGoalPriority] = useState<GoalPriority>('Средний');
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
-
-    const goalPriorityOptions: GoalPriority[] = useMemo(() => ['Низкий', 'Средний', 'Высокий'], []) ;
 
     const validateForm = (): boolean => {
         const goalNameError = validateGoalName(goalName.inputState.value);
@@ -97,7 +97,7 @@ export default function AddGoal() {
                         onChange={goalName.setValue}
                         label={'Название цели'}
                         placeholder={'Пожать 100кг'}
-                        error={goalName.inputState.error || undefined}
+                        error={goalName.inputState.error}
                     />
 
                     <MainTextarea
@@ -106,7 +106,7 @@ export default function AddGoal() {
                         placeholder="Опционально: описание для цели"
                         value={goalDescription.inputState.value}
                         onChange={goalDescription.setValue}
-                        error={goalDescription.inputState.error || undefined}
+                        error={goalDescription.inputState.error}
                         rows={4}
                     />
 
