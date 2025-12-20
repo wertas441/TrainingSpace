@@ -2,7 +2,7 @@ import type {NextRequest} from 'next/server'
 import {NextResponse} from 'next/server'
 
 const AUTH_COOKIE_NAME = 'token';
-const AUTH_PATHS = ['/auth/login', '/auth/registration'];
+const AUTH_PATHS = ['/auth/login', '/auth/registration', '/auth/forgot-password'];
 const LOGIN_PATH = '/auth/login';
 const DEFAULT_REDIRECT_PATH = '/';
 

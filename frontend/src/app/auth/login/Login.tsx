@@ -121,7 +121,7 @@ export default function Login(){
                         </div>
 
                         <div className="text-sm">
-                            <Link href="/auth/forgot-password" className={`font-medium textLinks `}>
+                            <Link href="/auth/forgot-password" className={`font-medium textLinks`}>
                                 Забыли пароль?
                             </Link>
                         </div>
