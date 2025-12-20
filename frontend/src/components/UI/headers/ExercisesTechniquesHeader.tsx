@@ -69,7 +69,7 @@ function ExercisesTechniquesHeader(
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
                             placeholder="Поиск по названию упражнения..."
-                            icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4 text-gray-300" />, [])}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4" />, [])}
                             error={null}
                         />
                     </div>

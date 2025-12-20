@@ -53,7 +53,7 @@ export default function MyActivityHeader(
                             placeholder="Поиск по названию активности..."
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
-                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-300 " />, [])}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5" />, [])}
                             error={null}
                         />
                     </div>
@@ -65,7 +65,7 @@ export default function MyActivityHeader(
                             placeholder="Дата"
                             value={searchDate}
                             onChange={(v) => setSearchDate(String(v))}
-                            icon={<CalendarIcon className="h-5 w-5 text-gray-300" />}
+                            icon={<CalendarIcon className="h-5 w-5" />}
                             error={null}
                         />
                     </div>

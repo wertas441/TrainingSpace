@@ -90,7 +90,7 @@ export default function Login(){
                         id={'userName'}
                         value={userName.inputState.value}
                         onChange={userName.setValue}
-                        icon={useMemo(() => <UserIcon className="h-5 w-5 text-gray-300" />, [])}
+                        icon={useMemo(() => <UserIcon className="h-5 w-5 " />, [])}
                         label={'Имя пользователя'}
                         error={userName.inputState?.error}
                     />
@@ -100,7 +100,7 @@ export default function Login(){
                         type="password"
                         value={password.inputState.value}
                         onChange={password.setValue}
-                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-300" />, [])}
+                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5" />, [])}
                         label={'Пароль'}
                         error={password.inputState?.error}
                     />

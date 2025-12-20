@@ -15,8 +15,12 @@ function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
 
     const pathname:string = usePathname();
     const isGoalPage = pathname.endsWith("/goals");
+
     const router = useRouter();
-    
+    const completeGoalAction = useCallback(() => router.push(isGoalPage? '/goals/completed' : '/goals'), [isGoalPage, router])
+    const addGoalAction = useCallback(() => router.push('/goals/add'), [router])
+
+
     return (
         <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -31,7 +35,7 @@ function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
                             placeholder="Поиск по названию цели..."
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
-                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />, [])}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5" />, [])}
                             error={null}
                         />
                     </div>
@@ -39,11 +43,11 @@ function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
                     <div className="flex gap-3">
                         <AnyStylesButton
                             IconComponent={isGoalPage ? ClipboardDocumentCheckIcon : ClipboardDocumentListIcon}
-                            onClick={useCallback(() => router.push(isGoalPage? '/goals/completed' : '/goals'), [isGoalPage, router])}
+                            onClick={completeGoalAction}
                             className="w-full"
                         />
                         <PlusButton
-                            onClick={useCallback(() => router.push('/goals/add'), [router])}
+                            onClick={addGoalAction}
                             className="w-full"
                         />
                     </div>

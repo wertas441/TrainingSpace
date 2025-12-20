@@ -9,6 +9,7 @@ import {secondDarkColorTheme} from "@/lib";
 function MyTrainingHeader({searchName, setSearchName}:HeaderMinimumProps) {
 
     const router = useRouter();
+    const addTrainingAction = useCallback(() => router.push('/my-training/add'), [router])
 
     return (
         <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
@@ -24,13 +25,13 @@ function MyTrainingHeader({searchName, setSearchName}:HeaderMinimumProps) {
                             placeholder="Поиск по названию тренировки..."
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
-                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5 text-gray-300" />, [])}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5" />, [])}
                             error={null}
                         />
                     </div>
                     <div className="flew-row md:flex gap-2 ">
                         <PlusButton
-                            onClick={useCallback(() => router.push('/my-training/add'), [router])}
+                            onClick={addTrainingAction}
                         />
                     </div>
                 </div>
