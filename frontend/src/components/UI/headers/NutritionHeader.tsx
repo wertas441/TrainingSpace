@@ -42,7 +42,6 @@ function NutritionHeader(
     const router = useRouter();
     const plusButtonAction = useCallback(() => router.push('/nutrition/add'), [router])
 
-
     return (
         <div className={`${secondDarkColorTheme} relative w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -58,7 +57,7 @@ function NutritionHeader(
                                 placeholder="Поиск по названию дня..."
                                 value={searchName}
                                 onChange={(v) => onSearchNameChange(String(v))}
-                                icon={<MagnifyingGlassIcon className="h-5 w-5 text-gray-300" />}
+                                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                                 error={null}
                             />
                         </div>
@@ -70,7 +69,7 @@ function NutritionHeader(
                                 placeholder="Дата"
                                 value={searchDate}
                                 onChange={(v) => onSearchDateChange(String(v))}
-                                icon={<CalendarIcon className="h-5 w-5 text-gray-300" />}
+                                icon={<CalendarIcon className="h-5 w-5" />}
                                 error={null}
                             />
                         </div>

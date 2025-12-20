@@ -30,7 +30,7 @@ function FilterInput(
 
             <div className="relative">
                 {icon && (
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <div className="pointer-events-none absolute inset-y-0 text-gray-500 dark:text-gray-300 left-0 flex items-center pl-3">
                         {icon}
                     </div>
                 )}
@@ -43,7 +43,7 @@ function FilterInput(
                     onChange={(e) => onChange(e.target.value)}
                     required={required}
                     placeholder={placeholder}
-                    className={`w-full ${thirdDarkColorTheme} h-10 text-sm border border-gray-300 rounded-md bg-white dark:text-gray-300 text-gray-900 placeholder-gray-400 dark:placeholder-gray-300 
+                    className={`w-full ${thirdDarkColorTheme} h-10 text-sm border border-gray-300 rounded-md bg-white dark:text-gray-300 text-gray-900 placeholder-gray-500 dark:placeholder-gray-300 
                     focus:outline-none focus:ring-2 focus:ring-emerald-500 hover:border-emerald-400 ease-in-out duration-300 transition-shadow 
                     ${icon ? 'pl-9 pr-3' : 'px-3'}`}
                 />

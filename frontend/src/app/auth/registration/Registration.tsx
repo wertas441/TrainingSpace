@@ -104,7 +104,7 @@ export default function Registration(){
                         id={'userName'}
                         value={userName.inputState.value}
                         onChange={userName.setValue}
-                        icon={<UserIcon className="h-5 w-5 text-gray-300" />}
+                        icon={<UserIcon className="h-5 w-5" />}
                         label={'Имя пользователя'}
                         error={userName.inputState?.error}
                     />
@@ -114,7 +114,7 @@ export default function Registration(){
                         value={email.inputState.value}
                         type="email"
                         onChange={email.setValue}
-                        icon={<AtSymbolIcon className="h-5 w-5 text-gray-300" />}
+                        icon={<AtSymbolIcon className="h-5 w-5" />}
                         label={'Email'}
                         error={email.inputState?.error}
                     />
@@ -123,7 +123,7 @@ export default function Registration(){
                         id={'password'}
                         value={password.inputState.value}
                         onChange={password.setValue}
-                        icon={<LockClosedIcon className="h-5 w-5 text-gray-300" />}
+                        icon={<LockClosedIcon className="h-5 w-5" />}
                         label={'Пароль'}
                         error={password.inputState?.error}
                     />
@@ -133,7 +133,7 @@ export default function Registration(){
                         type={'password'}
                         value={confirmPassword.inputState.value}
                         onChange={confirmPassword.setValue}
-                        icon={<LockClosedIcon className="h-5 w-5 text-gray-300" />}
+                        icon={<LockClosedIcon className="h-5 w-5" />}
                         label={'Подтверждение пароля'}
                         error={confirmPassword.inputState?.error}
                     />
