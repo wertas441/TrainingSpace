@@ -162,7 +162,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                             <MainInput
                                 id="exercise-search"
                                 value={searchName}
-                                onChange={(v) => setSearchName(String(v))}
+                                onChange={(e) => setSearchName(e.target.value)}
                                 label="Поиск упражнения по имени"
                                 error={undefined}
                             />
@@ -174,7 +174,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
                                 label="Поиск упражнения по группе мышц"
                                 onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
                                 placeholder={'Выберите группу мышц...'}
-                                error={null}
+                                error={undefined}
                             />
 
                             <div className="grid grid-cols-1 gap-3">

@@ -105,7 +105,7 @@ function ExercisesTechniquesHeader(
                                     value={selectedMuscles}
                                     onChange={(vals) => handleMusclesChange(vals as { value: string; label: string }[])}
                                     placeholder="Выберите группы..."
-                                    error={null}
+                                    error={undefined}
                                 />
                                 <div className="mt-1.5 text-xs text-gray-500">По умолчанию показываются все группы</div>
                             </div>

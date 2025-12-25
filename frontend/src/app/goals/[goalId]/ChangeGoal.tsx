@@ -1,7 +1,7 @@
 'use client'
 
 import {useCallback} from "react";
-import {GoalPriority, GoalsStructure} from "@/types/goalTypes";
+import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goalTypes";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
@@ -23,17 +23,11 @@ interface ChangeGoalProps {
     token: string;
 }
 
-interface ChangeGoalFormValues {
-    goalName: string;
-    goalDescription: string;
-    goalPriority: GoalPriority;
-}
-
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
 export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
 
-    const {register, handleSubmit, control, formState: { errors }} = useForm<ChangeGoalFormValues>({
+    const {register, handleSubmit, control, formState: { errors }} = useForm<GoalFormValues>({
         defaultValues: {
             goalName: goalInfo.name,
             goalDescription: goalInfo.description,
@@ -44,7 +38,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
-    const onSubmit = async (values: ChangeGoalFormValues)=> {
+    const onSubmit = async (values: GoalFormValues)=> {
         setServerError(null);
         setIsSubmitting(true);
 

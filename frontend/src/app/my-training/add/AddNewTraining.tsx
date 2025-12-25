@@ -142,7 +142,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                         <MainInput
                             id="exercise-search"
                             value={searchName}
-                            onChange={(v) => setSearchName(String(v))}
+                            onChange={(e) => setSearchName(e.target.value)}
                             label="Поиск упражнения по имени"
                             error={undefined}
                         />
@@ -154,7 +154,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
                             label="Поиск упражнения по группе мышц"
                             placeholder={'Выберите группу мышц...'}
-                            error={null}
+                            error={undefined}
                         />
 
                         <div className="grid grid-cols-1 gap-3">

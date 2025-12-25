@@ -1,4 +1,4 @@
-import {baseUrlForBackend} from "@/lib";
+import {api, baseUrlForBackend, getServerErrorMessage} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {ActivityDataStructure} from "@/types/activityTypes";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
@@ -44,40 +44,17 @@ export async function getActivityList(tokenValue: string | undefined):Promise<Ac
     }
 }
 
-// Упражнения, привязанные к конкретной тренировке (для AddActivity)
+// Упражнения, привязанные к конкретной тренировке
 export async function getTrainingExercises(trainingId: number): Promise<ExerciseTechniqueItem[]> {
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/training/${trainingId}/exercises`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-            },
-        });
+        const resp = await api.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>(
+            `/training/${trainingId}/exercises`
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения упражнений тренировки.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-            console.error(errorMessage);
-            return [];
-        }
-
-        const data = await response.json() as BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>;
-
-        if (!data.success || !data.data?.exercises) {
-            return [];
-        }
-
-        return data.data.exercises;
-    } catch (error) {
-        console.error("Ошибка запроса упражнений тренировки:", error);
+        if (!resp.data.success || !resp.data.data?.exercises) return [];
+        return resp.data.data.exercises;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса упражнений тренировки");
         return [];
     }
 }

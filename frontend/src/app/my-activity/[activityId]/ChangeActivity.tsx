@@ -2,23 +2,22 @@
 
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import {FormEvent, useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import {
     ActivityDataStructure,
-    ActivityDifficultyStructure,
+    ActivityDifficultyStructure, ActivityFormValues,
     ActivityTypeStructure,
     ExerciseSetsByExerciseId
 } from "@/types/activityTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import {useInputField} from "@/lib/hooks/useInputField";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
-import {deleteActivity, getTrainingExercises} from "@/lib/controllers/activityController";
-import {baseUrlForBackend} from "@/lib";
+import {deleteActivity} from "@/lib/controllers/activityController";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
@@ -27,10 +26,10 @@ import {
     validateActivityDescription,
     validateActivityName,
     validateActivitySets,
-    validateActivityTrainingId
 } from "@/lib/utils/validators";
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
+import {Controller, useForm} from "react-hook-form";
 
 interface ChangeActivityProps {
     activityInfo: ActivityDataStructure,
@@ -43,25 +42,35 @@ const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая'
 
 export default function ChangeActivity({activityInfo, myTrainings, token}: ChangeActivityProps){
 
-    const activityName = useInputField(activityInfo.name);
-    const activityDescription = useInputField(activityInfo.description);
-    const activityDate = useInputField(activityInfo.activityDate);
-    const [activityType, setActivityType] = useState<ActivityTypeStructure>(activityInfo.type);
-    const [activityDifficulty, setActivityDifficulty] = useState<ActivityDifficultyStructure>(activityInfo.difficulty);
-    const trainingId = useInputField(String(activityInfo.trainingId));
+    const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
+        defaultValues: {
+            activityName: activityInfo.name,
+            activityDescription: activityInfo.description,
+            activityDate: activityInfo.activityDate,
+            activityType: activityInfo.type,
+            activityDifficulty: activityInfo.difficulty,
+            trainingId: String(activityInfo.trainingId),
+        }
+    })
 
+    const trainingId = watch('trainingId')
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
     const {
         handleChangeTraining,
         trainingExercises,
-        setTrainingExercises,
         trainingOptions,
         selectedTrainingOption,
         selectedTraining
-    } = useActivityUtils({myTrainings, trainingId});
+    } = useActivityUtils({
+        myTrainings,
+        trainingId,
+        onTrainingIdChange: (val) => setValue('trainingId', val, { shouldDirty: true, shouldValidate: true }),
+    });
 
+
+    const [setsErrors, setSetsError] = useState<string  | null>(null)
     const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(() => {
         const initial: ExerciseSetsByExerciseId = {};
 
@@ -90,53 +99,37 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
         return initial;
     });
 
-    // Подтягиваем названия упражнений для выбранной тренировки при первой загрузке/смене тренировки
-    useEffect(() => {
-        const currentTrainingIdNum = Number(trainingId.inputState.value);
+    const handleTrainingSelect = (val: string) => {
+        setSetsError(null);
+        handleChangeTraining(val);
 
-        if (!currentTrainingIdNum || Number.isNaN(currentTrainingIdNum)) {
-            setTrainingExercises([]);
-            return;
-        }
-
-        const found = myTrainings.find(t => t.id === currentTrainingIdNum);
-
+        const found = val ? myTrainings.find(t => t.id === Number(val)) : undefined;
         if (!found) {
-            setTrainingExercises([]);
+            setExerciseSets({});
             return;
         }
 
-        getTrainingExercises(found.id)
-            .then(setTrainingExercises)
-            .catch((err) => {
-                console.error('Ошибка загрузки упражнений тренировки при редактировании активности:', err);
-                setTrainingExercises([]);
+        setExerciseSets((prev) => {
+            const next: ExerciseSetsByExerciseId = {};
+            found.exercises.forEach((exId) => {
+                next[exId] = prev[exId] ?? [{ id: 1, weight: 0, quantity: 0 }];
             });
-    }, [trainingId.inputState.value, myTrainings, setTrainingExercises]);
-
-    const validateForm = (): boolean => {
-        const nameError = validateActivityName(activityName.inputState.value);
-        activityName.setError(nameError);
-
-        const dateError = validateActivityDate(activityDate.inputState.value);
-        activityDate.setError(dateError);
-
-        const descriptionError = validateActivityDescription(activityDescription.inputState.value);
-        activityDescription.setError(descriptionError);
-
-        const trainingError = validateActivityTrainingId(trainingId.inputState.value);
-        trainingId.setError(trainingError);
-
-        const setsError = validateActivitySets(exerciseSets);
-        if (setsError) {
-            trainingId.setError(setsError);
-        }
-
-        return !(nameError || dateError || descriptionError || trainingError || setsError);
+            return next;
+        });
     };
 
-    const handleSubmit = async (event: FormEvent): Promise<void> => {
-        event.preventDefault();
+    const validateForm = (): boolean => {
+        const setsError = validateActivitySets(exerciseSets);
+        if (setsError) {
+            setSetsError(setsError);
+        } else {
+            setSetsError(null);
+        }
+
+        return !(setsError);
+    };
+
+    const onSubmit = async (values: ActivityFormValues)=> {
         setServerError(null);
 
         if (!validateForm()) {
@@ -175,37 +168,28 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
             id: activityInfo.id,
             publicId: activityInfo.publicId,
             activityId: activityInfo.publicId,
-            name: activityName.inputState.value.trim(),
-            description: activityDescription.inputState.value.trim(),
-            activityDate: activityDate.inputState.value,
-            type: activityType,
-            difficulty: activityDifficulty,
-            trainingId: Number(trainingId.inputState.value),
+            name: values.activityName,
+            description: values.activityDescription,
+            activityDate: values.activityDate,
+            type: values.activityType,
+            difficulty: values.activityDifficulty,
+            trainingId: Number(values.trainingId),
             exercises: exercisesPayload,
-        };
+        }
 
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/activity/update-my-activity`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify(payload),
-            });
+            await api.put<BackendApiResponse>('/activity/update-my-activity', payload)
 
-            if (result.ok) {
-                router.replace("/my-activity");
-                return;
-            }
+            router.replace("/my-activity");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json() as BackendApiResponse;
-            setServerError(data.error || data.message || "Ошибка изменения активности. Проверьте правильность введенных данных.");
-            setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("change activity error:", error);
+            setServerError(message);
+            if (showErrorMessage) console.error('change activity error:', err);
+
             setIsSubmitting(false);
         }
-    };
+    }
 
     const deleteActivityBtn = useCallback(async () => {
         setServerError(null);
@@ -223,7 +207,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
         <>
             <main className="flex items-center justify-center min-h-screen p-4">
                 <div className={`${secondDarkColorTheme} w-full max-w-2xl p-8 space-y-8 rounded-2xl shadow-xl border border-emerald-100`}>
-                    <form className="space-y-6" onSubmit={handleSubmit}>
+                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                         <h1 className="text-2xl text-center font-semibold text-gray-800 dark:text-white">Изменение активности</h1>
 
                         <ServerError message={serverError} />
@@ -232,46 +216,52 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             id="activityName"
                             label="Название активности"
                             placeholder={`Тренировка в бассейне`}
-                            value={activityName.inputState.value}
-                            onChange={activityName.setValue}
-                            error={activityName.inputState.error}
+                            error={errors.activityName?.message}
+                            {...register('activityName', {validate: (value) => validateActivityName(value) || true})}
                         />
 
                         <MainInput
                             id={'activityDate'}
                             type={'date'}
                             label="Дата активности"
-                            value={activityDate.inputState.value}
-                            onChange={activityDate.setValue}
-                            error={activityDate.inputState.error}
+                            error={errors.activityDate?.message}
+                            {...register('activityDate', {validate: (value) => validateActivityDate(value) || true})}
                         />
 
                         <MainTextarea
                             id="activityDescription"
                             label="Описание"
                             placeholder="Опционально: комментарий к сессии"
-                            value={activityDescription.inputState.value}
-                            onChange={activityDescription.setValue}
-                            error={activityDescription.inputState.error}
-                            rows={4}
+                            error={errors.activityDescription?.message}
+                            {...register('activityDescription', {validate: (value) => validateActivityDescription(value) || true})}
                         />
 
-                        <ChipRadioGroup<ActivityTypeStructure>
-                            id="activity-type"
+                        <Controller
+                            control={control}
                             name="activityType"
-                            label={`Тип`}
-                            choices={activityTypeChoices}
-                            value={activityType}
-                            onChange={setActivityType}
+                            render={({field}) => (
+                                <ChipRadioGroup<ActivityTypeStructure>
+                                    id="activityType"
+                                    label={`Тип`}
+                                    choices={activityTypeChoices}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            )}
                         />
 
-                        <ChipRadioGroup<ActivityDifficultyStructure>
-                            id="activity-difficulty"
-                            label={'Сложность'}
+                        <Controller
+                            control={control}
                             name="activityDifficulty"
-                            choices={activityDifficultyChoices}
-                            value={activityDifficulty}
-                            onChange={setActivityDifficulty}
+                            render={({field}) => (
+                                <ChipRadioGroup<ActivityDifficultyStructure>
+                                    id="activityDifficulty"
+                                    label={'Сложность'}
+                                    choices={activityDifficultyChoices}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            )}
                         />
 
                         <MainMultiSelect
@@ -279,15 +269,15 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
                             label="Тренировка"
                             options={trainingOptions}
                             value={selectedTrainingOption}
-                            onChange={(vals) => handleChangeTraining(vals[0]?.value ?? '')}
+                            onChange={(vals) => handleTrainingSelect(vals[0]?.value ?? '')}
                             placeholder="Выберите тренировку"
                             isMulti={false}
                             noOptionsMessage={() => 'Нет тренировок'}
-                            error={null}
+                            error={undefined}
                         />
 
-                        {trainingId.inputState.error && (
-                            <p className="pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
+                        {setsErrors && (
+                            <p className=" pl-1 text-xs text-red-500">{setsErrors}</p>
                         )}
 
                         {selectedTraining && (

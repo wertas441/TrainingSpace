@@ -1,6 +1,6 @@
 'use client'
 
-import {GoalPriority} from "@/types/goalTypes";
+import {GoalFormValues, GoalPriority} from "@/types/goalTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -12,22 +12,15 @@ import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {
     validateGoalDescription,
     validateGoalName,
-    validateGoalPriority,
 } from "@/lib/utils/validators";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {Controller, useForm} from "react-hook-form";
-
-interface AddGoalFormValues {
-    goalName: string;
-    goalDescription: string;
-    goalPriority: GoalPriority;
-}
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
 export default function AddGoal() {
 
-    const {register, handleSubmit, control, formState: { errors }} = useForm<AddGoalFormValues>({
+    const {register, handleSubmit, control, formState: { errors }} = useForm<GoalFormValues>({
         defaultValues: {
             goalName: '',
             goalDescription: '',
@@ -37,7 +30,7 @@ export default function AddGoal() {
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
 
-    const onSubmit = async (values: AddGoalFormValues)=> {
+    const onSubmit = async (values: GoalFormValues)=> {
         setServerError(null);
         setIsSubmitting(true);
 

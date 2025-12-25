@@ -9,6 +9,12 @@ export interface GoalsStructure {
     priority: GoalPriority;
 }
 
+export interface GoalFormValues {
+    goalName: string;
+    goalDescription: string;
+    goalPriority: GoalPriority;
+}
+
 export interface CompleteGoalsStructure {
     id: number;
     publicId: string;
