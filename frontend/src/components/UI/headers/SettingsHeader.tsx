@@ -1,5 +1,5 @@
 import {ComponentType, memo, SVGProps} from "react";
-import {iconDarkColorTheme} from "@/lib";
+import {iconDarkColorTheme} from "@/styles";
 
 interface SettingsHeaderProps {
     label: string;

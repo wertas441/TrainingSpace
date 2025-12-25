@@ -1,7 +1,7 @@
 import {memo, useMemo} from "react";
 import {PlusCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import {getColorStyles} from "@/lib";
+import {getColorStyles} from "@/styles";
 
 interface SelectableExerciseRowProps {
     exercise: ExerciseTechniqueItem;

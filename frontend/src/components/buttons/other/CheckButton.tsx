@@ -1,7 +1,7 @@
 import {memo, useMemo} from "react";
 import {BasicIconButtonProps} from "@/types/indexTypes";
 import {CheckIcon} from "@heroicons/react/24/outline";
-import {iconDarkColorTheme} from "@/lib";
+import {iconDarkColorTheme} from "@/styles";
 
 function CheckButton({onClick, className = '', disabled}:BasicIconButtonProps) {
 

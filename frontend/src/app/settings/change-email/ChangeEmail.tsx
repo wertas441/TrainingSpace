@@ -3,67 +3,53 @@
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import {useInputField} from "@/lib/hooks/useInputField";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators";
-import {FormEvent, useMemo} from "react";
-import {baseUrlForBackend} from "@/lib";
+import {useMemo} from "react";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, AtSymbolIcon} from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
+import {useForm} from "react-hook-form";
+import type {BackendApiResponse} from "@/types/indexTypes";
+
+interface ChangeEmailFormValues {
+    newEmail: string;
+    currentPassword: string;
+}
 
 export default function ChangeEmail(){
 
-    const newEmail = useInputField('');
-    const currentPassword = useInputField('');
+    const {register, handleSubmit, formState: { errors }} = useForm<ChangeEmailFormValues>({
+        defaultValues: {
+            newEmail: '',
+            currentPassword: '',
+        }
+    })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
-    const validateForm = () => {
-        const newEmailError = validateUserEmail(newEmail.inputState.value);
-        newEmail.setError(newEmailError);
-
-        const currentPasswordError = validateUserPassword(currentPassword.inputState.value);
-        currentPassword.setError(currentPasswordError);
-
-        return !(newEmailError || currentPasswordError);
-    }
-
-    const handleSubmit = async (event: FormEvent):Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: ChangeEmailFormValues)=> {
         setServerError(null);
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
 
+        const payload = {
+            newEmail: values.newEmail,
+            currentPassword: values.currentPassword,
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/settings/change-email`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    newEmail: newEmail.inputState.value,
-                    currentPassword: currentPassword.inputState.value,
-                }),
-            });
+            await api.post<BackendApiResponse>('/settings/change-email', payload)
 
-            if (result.ok) {
-                router.push("/settings/profile");
-                return;
-            }
+            router.push("/settings/profile");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json().catch(() => null);
-            setServerError((data && (data.error || data.message)) || "Ошибка смены почты. Проверьте правильность введенных данных.");
+            setServerError(message);
+            if (showErrorMessage) console.error('change email error:', err);
+
             setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("Change email error:", error);
-            setIsSubmitting(false);
+
         }
     }
 
@@ -77,17 +63,17 @@ export default function ChangeEmail(){
             />
 
             <div className="px-6 py-6 max-w-xl sm:px-8 sm:py-8">
+
                 <ServerError message={serverError} />
 
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                     <MainInput
                         id={'newEmail'}
                         type={'email'}
-                        icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
                         label={'Новая почта'}
-                        value={newEmail.inputState.value}
-                        onChange={newEmail.setValue}
-                        error={newEmail.inputState.error }
+                        icon={useMemo(() => <AtSymbolIcon className="h-5 w-5 text-gray-500" />, [])}
+                        error={errors.newEmail?.message}
+                        {...register('newEmail', {validate: (value) => validateUserEmail(value) || true})}
                     />
 
                     <MainInput
@@ -95,9 +81,8 @@ export default function ChangeEmail(){
                         type={'password'}
                         label={'Ваш текущий пароль'}
                         icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
-                        value={currentPassword.inputState.value}
-                        onChange={currentPassword.setValue}
-                        error={currentPassword.inputState.error}
+                        error={errors.currentPassword?.message}
+                        {...register('currentPassword', {validate: (value) => validateUserPassword(value) || true})}
                     />
 
                     <div className="pt-2">

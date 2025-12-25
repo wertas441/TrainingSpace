@@ -3,7 +3,7 @@ import Link from "next/link";
 import {ChevronRightIcon, SparklesIcon} from "@heroicons/react/24/outline";
 import {GoalShortyStructure} from "@/types/goalTypes";
 import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 interface DashboardGoalsCardProps {
     goalsShortyList: GoalShortyStructure[];

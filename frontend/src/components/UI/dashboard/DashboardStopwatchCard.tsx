@@ -1,7 +1,7 @@
 import {memo} from "react";
 import {PlayIcon, PauseIcon, ArrowPathIcon} from "@heroicons/react/24/outline";
 import {useStopwatch} from "@/lib/hooks/useStopwatch";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 function DashboardStopwatchCard() {
 

@@ -1,7 +1,5 @@
 'use client'
 
-import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useState} from "react";
 import {GoalPriority} from "@/types/goalTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -10,67 +8,55 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import MainTextarea from "@/components/inputs/MainTextarea";
-import {baseUrlForBackend} from "@/lib";
-import {validateGoalDescription, validateGoalName, validateGoalPriority} from "@/lib/utils/validators";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {
+    validateGoalDescription,
+    validateGoalName,
+    validateGoalPriority,
+} from "@/lib/utils/validators";
 import type {BackendApiResponse} from "@/types/indexTypes";
+import {Controller, useForm} from "react-hook-form";
+
+interface AddGoalFormValues {
+    goalName: string;
+    goalDescription: string;
+    goalPriority: GoalPriority;
+}
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
 export default function AddGoal() {
 
-    const goalName = useInputField('');
-    const goalDescription = useInputField('');
-    const [goalPriority, setGoalPriority] = useState<GoalPriority>('Средний');
+    const {register, handleSubmit, control, formState: { errors }} = useForm<AddGoalFormValues>({
+        defaultValues: {
+            goalName: '',
+            goalDescription: '',
+            goalPriority: 'Средний',
+        }
+    })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
 
-    const validateForm = (): boolean => {
-        const goalNameError = validateGoalName(goalName.inputState.value);
-        goalName.setError(goalNameError);
-
-        const goalDescriptionError = validateGoalDescription(goalDescription.inputState.value);
-        goalDescription.setError(goalDescriptionError);
-
-        const goalPriorityError = validateGoalPriority(goalPriority);
-
-        return !(goalDescriptionError || goalNameError || goalPriorityError);
-    }
-
-    const handleSubmit = async (event: FormEvent):Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: AddGoalFormValues)=> {
         setServerError(null);
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
 
+        const payload = {
+            name: values.goalName,
+            description: values.goalDescription,
+            priority: values.goalPriority,
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/goal/add-new-goal`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    name: goalName.inputState.value,
-                    description: goalDescription.inputState.value,
-                    priority: goalPriority,
-                }),
-            });
+            await api.post<BackendApiResponse>('/goal/add-new-goal', payload)
 
-            if (result.ok) {
-                router.push("/goals");
-                return;
-            }
+            router.push("/goals");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json() as BackendApiResponse;
-            setServerError(data.error || data.message || "Ошибка добавление цели. Проверьте правильность введенных данных.");
-            setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("Add goal error:", error);
+            setServerError(message);
+            if (showErrorMessage) console.error('add goal error:', err);
+
             setIsSubmitting(false);
         }
     }
@@ -89,34 +75,36 @@ export default function AddGoal() {
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
 
                     <MainInput
                         id={'goalName'}
-                        value={goalName.inputState.value}
-                        onChange={goalName.setValue}
                         label={'Название цели'}
                         placeholder={'Пожать 100кг'}
-                        error={goalName.inputState.error}
+                        error={errors.goalName?.message}
+                        {...register('goalName', {validate: (value) => validateGoalName(value) || true})}
                     />
 
                     <MainTextarea
-                        id="activityDescription"
+                        id="goalDescription"
                         label="Описание"
                         placeholder="Опционально: описание для цели"
-                        value={goalDescription.inputState.value}
-                        onChange={goalDescription.setValue}
-                        error={goalDescription.inputState.error}
-                        rows={4}
+                        error={errors.goalDescription?.message}
+                        {...register('goalDescription', {validate: (value) => validateGoalDescription(value) || true})}
                     />
 
-                    <ChipRadioGroup<GoalPriority>
-                        id="goal-Priority"
+                    <Controller
+                        control={control}
                         name="goalPriority"
-                        label={`Приоритет цели`}
-                        choices={goalPriorityOptions}
-                        value={goalPriority}
-                        onChange={setGoalPriority}
+                        render={({field}) => (
+                            <ChipRadioGroup<GoalPriority>
+                                id="goalPriority"
+                                label={`Приоритет цели`}
+                                choices={goalPriorityOptions}
+                                value={field.value}
+                                onChange={field.onChange}
+                            />
+                        )}
                     />
 
                     <LightGreenSubmitBtn

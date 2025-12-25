@@ -4,7 +4,7 @@ import {memo, useCallback, useMemo} from "react";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {useRouter} from "next/navigation";
 import NutritionInfo from "@/components/elements/NutritionInfo";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 
 function NutritionDayRow({publicId, name, date, description, calories, protein, fat, carb }: NutritionDay) {

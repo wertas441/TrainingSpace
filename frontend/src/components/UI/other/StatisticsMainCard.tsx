@@ -1,5 +1,5 @@
 import {ElementType, memo, ReactNode} from "react";
-import {secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
 interface StatisticsMainCardProps {
     label: string;

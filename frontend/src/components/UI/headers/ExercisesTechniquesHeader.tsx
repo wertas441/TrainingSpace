@@ -8,7 +8,7 @@ import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {DifficultOptionsStructure} from "@/types/indexTypes";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 import XMarkButton from "@/components/buttons/other/XMarkButton";
 
 interface ValueOptions {

@@ -18,7 +18,7 @@ import {useInputField} from "@/lib/hooks/useInputField";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import {deleteActivity, getTrainingExercises} from "@/lib/controllers/activityController";
-import {baseUrlForBackend, secondDarkColorTheme} from "@/lib";
+import {baseUrlForBackend} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
@@ -30,6 +30,7 @@ import {
     validateActivityTrainingId
 } from "@/lib/utils/validators";
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
+import {secondDarkColorTheme} from "@/styles";
 
 interface ChangeActivityProps {
     activityInfo: ActivityDataStructure,

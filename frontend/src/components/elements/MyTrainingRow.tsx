@@ -1,7 +1,7 @@
 import {memo, useCallback, useMemo} from "react";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {useRouter} from "next/navigation";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 interface MyTrainingRowProps {
     id: number;

@@ -4,7 +4,7 @@ import {memo, useCallback, useMemo} from "react";
 import {HeaderMinimumProps} from "@/types/indexTypes";
 import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 function MyTrainingHeader({searchName, setSearchName}:HeaderMinimumProps) {
 

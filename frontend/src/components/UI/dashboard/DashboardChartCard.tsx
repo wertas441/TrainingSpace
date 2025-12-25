@@ -1,7 +1,7 @@
 import {memo, useState} from "react";
 import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
 import {MetricOptionStructure, NutritionMetric, NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
-import {secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
 const metricOptions: MetricOptionStructure[] = [
     {id: 'calories', label: 'Калории'},

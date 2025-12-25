@@ -1,12 +1,10 @@
 'use client'
 
-import {useInputField} from "@/lib/hooks/useInputField";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
-import {FormEvent} from "react";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {baseUrlForBackend} from "@/lib";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {
     validateCalories,
     validateCarbGrams,
@@ -14,95 +12,60 @@ import {
     validateDayName,
     validateFatGrams,
     validateProteinGrams,
-    validateDayDescription
+    validateDayDescription,
 } from "@/lib/utils/validators";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import MainInput from "@/components/inputs/MainInput";
 import type {BackendApiResponse} from "@/types/indexTypes";
+import {useForm} from "react-hook-form";
+import {NutritionFormValues} from "@/types/nutritionTypes";
 
 export default function AddNutrition(){
 
     const today = new Date();
     const initialDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-    const dayName = useInputField("");
-    const dayDescription = useInputField("");
-    const calories = useInputField("");
-    const protein = useInputField("");
-    const fat = useInputField("");
-    const carb = useInputField("");
-    const dayDate = useInputField(initialDate);
+    const {register, handleSubmit, formState: { errors }} = useForm<NutritionFormValues>({
+        defaultValues: {
+            dayName: '',
+            dayDescription: '',
+            calories: '',
+            protein: '',
+            fat: '',
+            carb: '',
+            dayDate: initialDate,
+        }
+    })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
-    const validateForm = (): boolean => {
-        const dayNameError = validateDayName(dayName.inputState.value);
-        dayName.setError(dayNameError);
-
-        const caloriesError = validateCalories(calories.inputState.value);
-        calories.setError(caloriesError);
-
-        const proteinError = validateProteinGrams(protein.inputState.value);
-        protein.setError(proteinError);
-
-        const fatError = validateFatGrams(fat.inputState.value);
-        fat.setError(fatError);
-
-        const carbError = validateCarbGrams(carb.inputState.value);
-        carb.setError(carbError);
-
-        const dateError = validateDayDate(dayDate.inputState.value);
-        dayDate.setError(dateError);
-
-        const descriptionError = validateDayDescription(dayDescription.inputState.value);
-        dayDescription.setError(descriptionError);
-
-        return !(dayNameError || caloriesError || proteinError || fatError || carbError || dateError || descriptionError);
-    }
-
-    const handleSubmit = async (event: FormEvent):Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: NutritionFormValues)=> {
         setServerError(null);
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
 
+        const payload = {
+            name: values.dayName,
+            description: values.dayDescription,
+            date: values.dayDate,
+            calories: parseInt(values.calories, 10),
+            protein: parseInt(values.protein, 10),
+            fat: parseInt(values.fat, 10),
+            carb: parseInt(values.carb, 10),
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/nutrition/add-new-day`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    name: dayName.inputState.value,
-                    description: dayDescription.inputState.value,
-                    date: dayDate.inputState.value,
-                    calories: parseInt(calories.inputState.value, 10),
-                    protein: parseInt(protein.inputState.value, 10),
-                    fat: parseInt(fat.inputState.value, 10),
-                    carb: parseInt(carb.inputState.value, 10),
-                }),
-            });
+            await api.post<BackendApiResponse>('/nutrition/add-new-day', payload)
 
-            if (result.ok) {
-                router.push("/nutrition");
-                return;
-            }
+            router.push("/nutrition");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json() as BackendApiResponse;
-            setServerError(data.error || data.message || "Ошибка добавление дня. Проверьте правильность введенных данных.");
-            setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("Add nutrition day error:", error);
+            setServerError(message);
+            if (showErrorMessage) console.error('add new nutrition day error:', err);
+
             setIsSubmitting(false);
         }
     }
-
 
     return (
         <BlockPageContext>
@@ -118,65 +81,57 @@ export default function AddNutrition(){
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
 
                     <MainInput
                         id={'dayName'}
-                        value={dayName.inputState.value}
-                        onChange={dayName.setValue}
                         label={'Наименование дня'}
-                        error={dayName.inputState.error}
+                        error={errors.dayName?.message}
+                        {...register('dayName', {validate: (value) => validateDayName(value) || true})}
                     />
 
                     <MainInput
                         id={'calories'}
-                        value={calories.inputState.value}
-                        onChange={calories.setValue}
                         label={'Калории (ккал)'}
-                        error={calories.inputState.error}
+                        error={errors.calories?.message}
+                        {...register('calories', {validate: (value) => validateCalories(value) || true})}
                     />
 
                     <MainInput
                         id={'protein'}
-                        value={protein.inputState.value}
-                        onChange={protein.setValue}
                         label={'Белки (г)'}
-                        error={protein.inputState.error}
+                        error={errors.protein?.message}
+                        {...register('protein', {validate: (value) => validateProteinGrams(value) || true})}
                     />
 
                     <MainInput
                         id={'fat'}
-                        value={fat.inputState.value}
-                        onChange={fat.setValue}
                         label={'Жиры (г)'}
-                        error={fat.inputState.error}
+                        error={errors.fat?.message}
+                        {...register('fat', {validate: (value) => validateFatGrams(value) || true})}
                     />
 
                     <MainInput
                         id={'carb'}
-                        value={carb.inputState.value}
-                        onChange={carb.setValue}
                         label={'Углеводы (г)'}
-                        error={carb.inputState.error}
+                        error={errors.carb?.message}
+                        {...register('carb', {validate: (value) => validateCarbGrams(value) || true})}
                     />
 
                     <MainInput
                         id={'dayDate'}
                         type={'date'}
-                        value={dayDate.inputState.value}
-                        onChange={dayDate.setValue}
                         label={'Дата'}
-                        error={dayDate.inputState.error}
+                        error={errors.dayDate?.message}
+                        {...register('dayDate', {validate: (value) => validateDayDate(value) || true})}
                     />
 
                     <MainTextarea
                         id={'dayDescription'}
-                        value={dayDescription.inputState.value}
-                        onChange={dayDescription.setValue}
                         label={'Описание'}
                         placeholder={`Опционально: комментарий ко дню`}
-                        error={dayDescription.inputState.error}
-                        rows={4}
+                        error={errors.dayDescription?.message}
+                        {...register('dayDescription', {validate: (value) => validateDayDescription(value) || true})}
                     />
 
                     <LightGreenSubmitBtn

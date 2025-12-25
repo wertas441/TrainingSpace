@@ -1,12 +1,8 @@
-import {memo, ReactNode, useState} from "react";
+import {memo, useState} from "react";
 import {EyeIcon, EyeSlashIcon} from "@heroicons/react/24/outline";
-import {mainInputClasses} from "@/lib";
-import {InputsStructure} from "@/types/indexTypes";
+import {mainInputClasses} from "@/styles";
+import {MainInputProps} from "@/types/indexTypes";
 import InputError from "@/components/errors/InputError";
-
-interface MainHideInputProps extends InputsStructure<string> {
-    icon?: ReactNode;
-}
 
 function MainHideInput(
     {
@@ -15,10 +11,9 @@ function MainHideInput(
         icon,
         required = false,
         placeholder,
-        value,
-        onChange,
-        error
-    }:MainHideInputProps){
+        error,
+        ...rest
+    }:MainInputProps){
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -41,11 +36,10 @@ function MainHideInput(
                     id={id}
                     name={id}
                     type={showPassword ? "text" : "password"}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
                     required={required}
                     placeholder={placeholder}
                     className={`${mainInputClasses.trim()} ${icon ? 'pl-10 pr-4' : 'px-4'}`}
+                    {...rest}
                 />
 
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"

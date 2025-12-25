@@ -5,7 +5,7 @@ import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {getTrainingExercises} from "@/lib/controllers/activityController";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/lib";
+import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/styles";
 
 interface MyActivityRowProps {
     activity: ActivityDataStructure;

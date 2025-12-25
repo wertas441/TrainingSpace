@@ -1,13 +1,12 @@
 'use client'
 
-import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {baseUrlForBackend, secondDarkColorTheme} from "@/lib";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
@@ -22,11 +21,23 @@ import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import NullElementsError from "@/components/errors/NullElementsError";
+import {secondDarkColorTheme} from "@/styles";
+import {useForm} from "react-hook-form";
+
+interface AddNewTrainingFormValues {
+    trainingName: string;
+    trainingDescription: string;
+}
 
 export default function AddNewTraining({exercises}:{exercises: ExerciseTechniqueItem[]}){
 
-    const trainingName = useInputField("");
-    const trainingDescription = useInputField("");
+    const {register, handleSubmit, formState: { errors }} = useForm<AddNewTrainingFormValues>({
+        defaultValues: {
+            trainingName: '',
+            trainingDescription: '',
+        }
+    })
+
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;
 
@@ -58,20 +69,13 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
     }, [searchName, partOfBodyFilter, setCurrentPage]);
 
     const validateForm = (): boolean => {
-        const trainingNameError = validateTrainingName(trainingName.inputState.value);
-        trainingName.setError(trainingNameError);
-
-        const descriptionError = validateTrainingDescription(trainingDescription.inputState.value);
-        trainingDescription.setError(descriptionError);
-
         const exercisesValidationError = validateTrainingExercises(selectedExerciseIds);
         setExercisesError(exercisesValidationError);
 
-        return !(trainingNameError || descriptionError || exercisesValidationError);
+        return !(exercisesValidationError);
     }
 
-    const handleSubmit = async (event: FormEvent):Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: AddNewTrainingFormValues)=> {
         setServerError(null);
 
         if (!validateForm()) {
@@ -80,31 +84,22 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
 
         setIsSubmitting(true);
 
+        const payload = {
+            name: values.trainingName,
+            description: values.trainingDescription,
+            exercises: selectedExerciseIds,
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/training/add-new-training`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    name: trainingName.inputState.value,
-                    description: trainingDescription.inputState.value,
-                    exercises: selectedExerciseIds,
-                }),
-            });
+            await api.post<BackendApiResponse>('/training/add-new-training', payload)
 
-            if (result.ok) {
-                router.push("/my-training");
-                return;
-            }
+            router.push("/my-training");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json() as BackendApiResponse;
-            setServerError(data.error || data.message || "Ошибка добавление тренировки. Проверьте правильность введенных данных.");
-            setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("Add new training error:", error);
+            setServerError(message);
+            if (showErrorMessage) console.error('add new training error:', err);
+
             setIsSubmitting(false);
         }
     }
@@ -124,25 +119,22 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
 
                     <ServerError message={serverError} />
 
-                    <form className="space-y-5"  onSubmit={handleSubmit}>
+                    <form className="space-y-5"  onSubmit={handleSubmit(onSubmit)}>
 
                         <MainInput
                             id={'trainingName'}
-                            value={trainingName.inputState.value}
-                            onChange={trainingName.setValue}
                             label={`Название тренировки`}
                             placeholder={'Силовая тренировка на грудь'}
-                            error={trainingName.inputState.error}
+                            error={errors.trainingName?.message}
+                            {...register('trainingName', {validate: (value) => validateTrainingName(value) || true})}
                         />
 
                         <MainTextarea
                             id={'trainingDescription'}
-                            value={trainingDescription.inputState.value}
-                            onChange={trainingDescription.setValue}
                             label={'Описание тренировки'}
                             placeholder="Опционально: описание для тренировки"
-                            error={trainingDescription.inputState.error}
-                            rows={4}
+                            error={errors.trainingDescription?.message}
+                            {...register('trainingDescription', {validate: (value) => validateTrainingDescription(value) || true})}
                         />
 
                         <div ref={listTopRef} className=""></div>
@@ -152,7 +144,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                             value={searchName}
                             onChange={(v) => setSearchName(String(v))}
                             label="Поиск упражнения по имени"
-                            error={null}
+                            error={undefined}
                         />
 
                         <MainMultiSelect
@@ -179,7 +171,6 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                                 <NullElementsError text={`Таких упражнений не найдено. Попробуйте изменить запрос.`} />
                             )}
                         </div>
-
 
                         {totalItems > itemsPerPage && (
                             <MainPagination

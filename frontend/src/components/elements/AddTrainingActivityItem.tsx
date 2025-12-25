@@ -4,7 +4,7 @@ import type {TrainingDataStructure} from "@/types/indexTypes";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import type {ExerciseSetsByExerciseId} from "@/types/activityTypes";
 import {Dispatch, JSX, SetStateAction, useMemo} from "react";
-import {iconDarkColorTheme, secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
+import {iconDarkColorTheme, secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
 interface AddTrainingActivityItemProps {
     selectedTraining: TrainingDataStructure;

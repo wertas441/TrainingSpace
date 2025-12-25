@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 interface ErrorStateProps {
     /** Заголовок сообщения об ошибке */

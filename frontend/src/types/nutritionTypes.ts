@@ -11,6 +11,18 @@ export interface NutritionDay {
     carb: number;
 }
 
+export interface NutritionFormValues {
+    dayName: string;
+    dayDescription: string;
+    calories: string;
+    protein: string;
+    fat: string;
+    carb: string;
+    dayDate: string;
+}
+
+
+
 export interface NutritionHeaderProps {
     searchName: string;
     onSearchNameChange: (newValue: string) => void;
@@ -36,3 +48,5 @@ export interface NutritionHeaderProps {
     toggleFilterWindow: () => void;
     onResetFilters: () => void;
 }
+
+

@@ -1,6 +1,6 @@
 import {Bars3Icon, MoonIcon, SunIcon} from "@heroicons/react/24/outline";
 import {useTheme} from "@/lib/utils/ThemeProvider";
-import {firstDarkColorTheme} from "@/lib";
+import {firstDarkColorTheme} from "@/styles";
 
 export default function MainHeader({ onToggleSidebar }: {onToggleSidebar?: () => void }) {
 

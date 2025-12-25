@@ -7,7 +7,7 @@ import {
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {UserProfileRequest} from "@/types/indexTypes";
-import {thirdDarkColorTheme} from "@/lib";
+import {thirdDarkColorTheme} from "@/styles";
 
 export default function Profile({ userData }: { userData: UserProfileRequest}) {
 

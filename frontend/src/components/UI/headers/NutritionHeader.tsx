@@ -7,7 +7,7 @@ import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
 import BarsButton from "@/components/buttons/other/BarsButton";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 import XMarkButton from "@/components/buttons/other/XMarkButton";
 
 function NutritionHeader(

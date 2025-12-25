@@ -1,6 +1,6 @@
 import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
-import {thirdDarkColorTheme} from "@/lib";
+import {thirdDarkColorTheme} from "@/styles";
 
 interface MainPaginationProps{
     currentPage: number;

@@ -6,7 +6,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
-import {baseUrlForBackend, secondDarkColorTheme} from "@/lib";
+import {baseUrlForBackend} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
@@ -21,6 +21,7 @@ import {
     validateActivityTrainingId
 } from "@/lib/utils/validators";
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
+import {secondDarkColorTheme} from "@/styles";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;

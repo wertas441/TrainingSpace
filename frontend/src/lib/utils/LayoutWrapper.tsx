@@ -4,7 +4,7 @@ import {ReactElement, ReactNode, useCallback, useMemo, useState} from "react";
 import {usePathname} from "next/navigation";
 import MainHeader from "@/components/UI/headers/MainHeader";
 import MainSideBar from "@/components/UI/sidebars/MainSideBar";
-import {firstDarkColorTheme} from "@/lib";
+import {firstDarkColorTheme} from "@/styles";
 
 export default function LayoutWrapper({children}: {children: ReactNode}):ReactElement {
 

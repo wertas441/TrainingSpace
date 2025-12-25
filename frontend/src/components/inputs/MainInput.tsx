@@ -1,12 +1,8 @@
-import {mainInputClasses} from "@/lib";
-import {memo, ReactNode} from "react";
-import {InputsStructure} from "@/types/indexTypes";
+import {mainInputClasses} from "@/styles";
+import {memo} from "react";
+import {MainInputProps} from "@/types/indexTypes";
 import InputError from "@/components/errors/InputError";
 
-interface MainInputProps extends InputsStructure<string>  {
-    type?: string;
-    icon?: ReactNode;
-}
 
 function MainInput(
     {
@@ -16,9 +12,8 @@ function MainInput(
         icon,
         required = false,
         placeholder,
-        value,
-        onChange,
         error,
+        ...rest
     }: MainInputProps) {
 
     return (
@@ -40,11 +35,10 @@ function MainInput(
                     id={id}
                     name={id}
                     type={type}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
                     required={required}
                     placeholder={placeholder}
                     className={`${mainInputClasses.trim()} ${icon ? 'pl-10 pr-4' : 'px-4'}`}
+                    {...rest}
                 />
             </div>
 

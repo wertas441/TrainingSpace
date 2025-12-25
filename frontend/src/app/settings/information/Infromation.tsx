@@ -11,25 +11,29 @@ import {
 import Link from "next/link";
 import InformationPageBlock from "@/components/elements/InformationPageBlock";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
-import {thirdDarkColorTheme} from "@/lib";
+import {thirdDarkColorTheme} from "@/styles";
 
 const informationBlock = [
     {
+        id: 1,
         label: "Тренировки и активность",
         text: 'Планируйте и отслеживайте тренировки, комбинируйте упражнения, следите за прогрессом и делайте тренировки более осознанными.',
         icon: HeartIcon,
     },
     {
+        id: 2,
         label: "Цели и мотивация",
         text: 'Создавайте цели, отслеживайте выполнение и держите фокус на том, что для вас действительно важно в тренировочном процессе.',
         icon: SparklesIcon,
     },
     {
+        id: 3,
         label: "Открытый код",
         text: 'Проект разрабатывается как Open Source — вы можете изучать код, форкать репозиторий, предлагать идеи и контрибьютить.',
         icon: GlobeAltIcon,
     },
     {
+        id: 4,
         label: "Обратная связь",
         text: 'Если у вас есть идеи, замечания или вы нашли баг — создайте issue на GitHub или напишите мне. Обратная связь помогает делать TrainingSpace лучше.',
         icon: InformationCircleIcon,
@@ -76,9 +80,9 @@ export default function Information() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {informationBlock.map((item, i) => (
+                    {informationBlock.map((item) => (
                         <InformationPageBlock
-                            key={i}
+                            key={item.id}
                             label={item.label}
                             text={item.text}
                             icon={item.icon}

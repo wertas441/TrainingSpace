@@ -1,5 +1,5 @@
 
-export default function InputError({error}:{error: string | null}){
+export default function InputError({error}:{error: string | undefined}){
 
     return (
         <div className="error">

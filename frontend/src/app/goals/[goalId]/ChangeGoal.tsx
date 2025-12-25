@@ -1,11 +1,10 @@
 'use client'
 
-import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useCallback, useMemo, useState} from "react";
+import {useCallback} from "react";
 import {GoalPriority, GoalsStructure} from "@/types/goalTypes";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateGoalDescription, validateGoalName, validateGoalPriority} from "@/lib/utils/validators";
-import {baseUrlForBackend} from "@/lib";
+import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -17,72 +16,55 @@ import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import {deleteGoal} from "@/lib/controllers/goalController";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import ModalWindow from "@/components/UI/other/ModalWindow";
+import {Controller, useForm} from "react-hook-form";
 
 interface ChangeGoalProps {
     goalInfo: GoalsStructure;
     token: string;
 }
 
+interface ChangeGoalFormValues {
+    goalName: string;
+    goalDescription: string;
+    goalPriority: GoalPriority;
+}
+
+const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
+
 export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
 
-    const goalName = useInputField(goalInfo.name);
-    const goalDescription = useInputField(goalInfo.description);
-    const [goalPriority, setGoalPriority] = useState<GoalPriority>(goalInfo.priority);
+    const {register, handleSubmit, control, formState: { errors }} = useForm<ChangeGoalFormValues>({
+        defaultValues: {
+            goalName: goalInfo.name,
+            goalDescription: goalInfo.description,
+            goalPriority: goalInfo.priority,
+        }
+    })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
-
-    const goalPriorityOptions: GoalPriority[] = useMemo(() => ['Низкий', 'Средний', 'Высокий'], []);
-
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
-    const validateForm = (): boolean => {
-        const goalNameError = validateGoalName(goalName.inputState.value);
-        goalName.setError(goalNameError);
-
-        const goalDescriptionError = validateGoalDescription(goalDescription.inputState.value);
-        goalDescription.setError(goalDescriptionError);
-
-        const goalPriorityError = validateGoalPriority(goalPriority);
-
-        return !(goalDescriptionError || goalNameError || goalPriorityError);
-    }
-
-    const handleSubmit = async (event: FormEvent): Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: ChangeGoalFormValues)=> {
         setServerError(null);
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
 
+        const payload = {
+            goalId: goalInfo.publicId,
+            name: values.goalName,
+            description: values.goalDescription,
+            priority: values.goalPriority,
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/goal/update-my-goal`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    goalId: goalInfo.publicId,
-                    name: goalName.inputState.value,
-                    description: goalDescription.inputState.value,
-                    priority: goalPriority,
-                }),
-            });
+            await api.put<BackendApiResponse>('/goal/update-my-goal', payload)
 
-            if (result.ok) {
-                router.replace("/goals");
-                return;
-            }
+            router.replace("/goals");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json() as BackendApiResponse;
-            setServerError(data.error || data.message || "Ошибка изменения цели. Проверьте правильность введенных данных.");
-            setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("change goal error:", error);
+            setServerError(message);
+            if (showErrorMessage) console.error('change goal error:', err);
+
             setIsSubmitting(false);
         }
     }
@@ -109,34 +91,36 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
 
                     <ServerError message={serverError}/>
 
-                    <form className="space-y-6" onSubmit={handleSubmit}>
+                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
 
                         <MainInput
                             id={'goalName'}
-                            value={goalName.inputState.value}
-                            onChange={goalName.setValue}
                             label={'Название цели'}
                             placeholder={'Например: Пожать 100кг'}
-                            error={goalName.inputState.error}
+                            error={errors.goalName?.message}
+                            {...register('goalName', {validate: (value) => validateGoalName(value) || true})}
                         />
 
                         <MainTextarea
-                            id="activityDescription"
+                            id="goalDescription"
                             label="Описание"
                             placeholder="Опционально: описание для цели"
-                            value={goalDescription.inputState.value}
-                            onChange={goalDescription.setValue}
-                            error={goalDescription.inputState.error}
-                            rows={4}
+                            error={errors.goalDescription?.message}
+                            {...register('goalDescription', {validate: (value) => validateGoalDescription(value) || true})}
                         />
 
-                        <ChipRadioGroup<GoalPriority>
-                            id="goal-Priority"
+                        <Controller
+                            control={control}
                             name="goalPriority"
-                            label={`Приоритет цели`}
-                            choices={goalPriorityOptions}
-                            value={goalPriority}
-                            onChange={setGoalPriority}
+                            render={({field}) => (
+                                <ChipRadioGroup<GoalPriority>
+                                    id="goalPriority"
+                                    label={`Приоритет цели`}
+                                    choices={goalPriorityOptions}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            )}
                         />
 
                         <div className="mt-8 md:flex flex-row space-y-4 md:space-y-0  items-center gap-x-8">

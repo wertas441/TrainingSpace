@@ -3,7 +3,6 @@ import {memo} from "react";
 interface ChipRadioGroupProps<T extends string> {
     id: string;
     label: string;
-    name: string;
     choices: T[];
     value: T;
     onChange: (v: T) => void;
@@ -13,7 +12,6 @@ interface ChipRadioGroupProps<T extends string> {
 function ChipRadioGroup<T extends string>(
     {
         id,
-        name,
         label,
         choices,
         value,
@@ -24,7 +22,7 @@ function ChipRadioGroup<T extends string>(
     return (
         <div className="space-y-2">
             <div className="block mb-3 text-sm font-medium text-gray-500 dark:text-gray-300">{label}</div>
-            <div id={id} className={`flex flex-wrap gap-2 ${className}`}>
+            <div className={`flex flex-wrap gap-2 ${className}`}>
                 {choices.map((choice) => {
                     const checked = value === choice;
                     return (
@@ -36,8 +34,8 @@ function ChipRadioGroup<T extends string>(
                             }`}
                         >
                             <input
+                                id={id}
                                 type="radio"
-                                name={name}
                                 className="sr-only"
                                 checked={checked}
                                 value={choice}
