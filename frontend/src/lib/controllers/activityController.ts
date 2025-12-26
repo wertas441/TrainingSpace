@@ -1,45 +1,24 @@
-import {api, baseUrlForBackend, getServerErrorMessage} from "@/lib";
+import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {ActivityDataStructure} from "@/types/activityTypes";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 
-export async function getActivityList(tokenValue: string | undefined):Promise<ActivityDataStructure[] | undefined> {
+export async function getActivityList(tokenValue: string):Promise<ActivityDataStructure[] | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/activity/my-activity-list`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ activity: ActivityDataStructure[] }>>(
+            '/activity/my-activity-list',
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения списка активностей.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ activity: ActivityDataStructure[] }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-            console.error(errorMessage);
-
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ activity: ActivityDataStructure[] }>;
-
-        if (!data.success || !data.data?.activity) {
-            return undefined;
-        }
-
-        return data.data.activity;
-    } catch (error) {
-        console.error("Ошибка запроса списка активностей:", error);
-
+        if (!response.data.success || !response.data.data?.activity) return undefined;
+        return response.data.data.activity;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса листа активностей");
         return undefined;
     }
 }
@@ -59,80 +38,43 @@ export async function getTrainingExercises(trainingId: number): Promise<Exercise
     }
 }
 
-export async function getActivityInformation(tokenValue: string | undefined, activityId: string):Promise<ActivityDataStructure | null> {
+export async function getActivityInformation(tokenValue: string, activityId: string):Promise<ActivityDataStructure | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/activity/about-my-activity?activityId=${encodeURIComponent(activityId)}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ activity: ActivityDataStructure }>>(
+            `/activity/about-my-activity?activityId=${encodeURIComponent(activityId)}`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения информации об активности .";
-            try {
-                const data = await response.json() as BackendApiResponse<{ activity: ActivityDataStructure }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return null;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ activity: ActivityDataStructure }>;
-
-        return data.data?.activity ?? null;
-    } catch (error) {
-        console.error("Ошибка запроса информации об активности:", error);
-        return null;
+        if (!response.data.success || !response.data.data?.activity) return undefined;
+        return response.data.data.activity;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса информации активностей");
+        return undefined;
     }
 }
 
-export async function deleteActivity(tokenValue: string | undefined, activityId: string):Promise<void> {
+export async function deleteActivity(tokenValue: string, activityId: string):Promise<void> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+        data: { activityId },
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/activity/delete-my-activity`, {
-            method: "DELETE",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            body: JSON.stringify({activityId}),
-            cache: 'no-store',
-        });
+        const response = await api.delete<BackendApiResponse>(
+            `/activity/delete-my-activity`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка удаления активности.";
-            try {
-                const data = await response.json() as BackendApiResponse;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return;
-        }
-
-        const data = await response.json() as BackendApiResponse;
-
-        if (!data.success) {
-            console.error(data.error || data.message || "Ошибка удаления активности.");
-        }
-
+        if (!response.data.success) return;
         return;
-    } catch (error) {
-        console.error("Ошибка запроса удаления активности:", error);
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка удаления активности");
         return;
     }
 }

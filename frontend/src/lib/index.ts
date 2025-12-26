@@ -2,6 +2,10 @@ import {BackendApiResponse} from "@/types/indexTypes";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import axios from "axios";
 
+export function getTokenHeaders(token: string) {
+    return {Cookie: `token=${token}`};
+}
+
 export const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002';
 export const showErrorMessage:boolean = true;
 

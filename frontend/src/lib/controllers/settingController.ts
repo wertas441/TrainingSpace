@@ -1,54 +1,35 @@
-import {baseUrlForBackend} from "@/lib";
+import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse, UserProfileRequest} from "@/types/indexTypes";
 
 export async function logout() {
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/auth/logout`, {
-            method: "POST",
-            credentials: "include",
-        });
+        const response = await api.post<BackendApiResponse>(`/auth/logout`);
 
-        if (!response.ok) {
-            console.error("logout error: bad status", response.status, response.statusText);
-        }
-
-    } catch (error) {
-        console.error("logout error:", error);
+        if (!response.data.success) return;
+        return;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка выхода");
+        return;
     }
 }
 
 export async function getUserData(tokenValue: string):Promise<UserProfileRequest | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/auth/me`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ userData: UserProfileRequest }>>(
+            '/auth/me',
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения информации о пользователе.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ userData: UserProfileRequest }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ userData: UserProfileRequest }>;
-
-        return data.data?.userData ?? undefined;
-    } catch (error) {
-        console.error("Ошибка запроса получения данных пользователя:", error);
+        if (!response.data.success || !response.data.data?.userData) return undefined;
+        return response.data.data.userData;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса информации об аккаунте");
         return undefined;
     }
 }

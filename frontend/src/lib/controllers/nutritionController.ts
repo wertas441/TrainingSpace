@@ -1,122 +1,64 @@
-import {baseUrlForBackend} from "@/lib";
+import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {NutritionDay} from "@/types/nutritionTypes";
 
 export async function getDayList(tokenValue: string):Promise<NutritionDay[] | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/nutrition/my-day-list`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ days: NutritionDay[] }>>(
+            '/nutrition/my-day-list',
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения списка дней.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ days: NutritionDay[] }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-
-            }
-            console.error(errorMessage);
-
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ days: NutritionDay[] }>;
-
-        if (!data.success || !data.data?.days) {
-            return undefined;
-        }
-
-        return data.data.days;
-    } catch (error) {
-        console.error("Ошибка запроса списка дней:", error);
-
+        if (!response.data.success || !response.data.data?.days) return undefined;
+        return response.data.data.days;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса листа дней");
         return undefined;
     }
 }
 
 export async function getDayInformation(tokenValue: string, dayId: string):Promise<NutritionDay | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ day: NutritionDay }>>(
+            `/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения информации о цели.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ day: NutritionDay }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-            console.error(errorMessage);
-
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ day: NutritionDay }>;
-
-        return data.data?.day ?? undefined;
-    } catch (error) {
-        console.error("Ошибка запроса списка целей:", error);
+        if (!response.data.success || !response.data.data?.day) return undefined;
+        return response.data.data.day;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса ифнормации о дне");
         return undefined;
     }
 }
 
-export async function deleteDay(tokenValue: string | undefined, dayId: string):Promise<void> {
+export async function deleteDay(tokenValue: string, dayId: string):Promise<void> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+        data: { dayId },
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/nutrition/delete-my-day`, {
-            method: "DELETE",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            body: JSON.stringify({dayId: dayId}),
-            cache: 'no-store',
-        });
+        const response = await api.delete<BackendApiResponse>(
+            `/nutrition/delete-my-day`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка удаления дня.";
-            try {
-                const data = await response.json() as BackendApiResponse;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return;
-        }
-
-        const data = await response.json() as BackendApiResponse;
-
-        if (!data.success) {
-            console.error(data.error || data.message || "Ошибка удаления дня.");
-        }
-
+        if (!response.data.success) return;
         return;
-    } catch (error) {
-        console.error("Ошибка запроса удаления дня:", error);
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка удаления дня");
         return;
     }
 }

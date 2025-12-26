@@ -1,247 +1,126 @@
-import { baseUrlForBackend } from "@/lib";
+import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type { BackendApiResponse } from "@/types/indexTypes";
 import {CompleteGoalsStructure, GoalShortyStructure, GoalsStructure} from "@/types/goalTypes";
 
 export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/goal/my-goals-list`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ goals: GoalsStructure[] }>>(
+            '/goal/my-goals-list',
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения списка целей.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ goals: GoalsStructure[] }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-            console.error(errorMessage);
-
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ goals: GoalsStructure[] }>;
-
-        if (!data.success || !data.data?.goals) {
-            return undefined;
-        }
-
-        return data.data.goals;
-    } catch (error) {
-        console.error("Ошибка запроса списка целей:", error);
-
+        if (!response.data.success || !response.data.data?.goals) return undefined;
+        return response.data.data.goals;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса списка целей");
         return undefined;
     }
 }
 
 export async function getCompleteGoalList(tokenValue: string):Promise<CompleteGoalsStructure[] | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/goal/my-complete-list`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ goals: CompleteGoalsStructure[] }>>(
+            '/goal/my-complete-list',
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения списка выполненных целей.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ goals: CompleteGoalsStructure[] }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-            console.error(errorMessage);
-
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ goals: CompleteGoalsStructure[] }>;
-
-        if (!data.success || !data.data?.goals) {
-            return undefined;
-        }
-
-        return data.data.goals;
-    } catch (error) {
-        console.error("Ошибка запроса списка выполненных целей:", error);
-
+        if (!response.data.success || !response.data.data?.goals) return undefined;
+        return response.data.data.goals;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса списка выполненных целей");
         return undefined;
     }
 }
 
 
 export async function getGoalShortyList(tokenValue: string):Promise<GoalShortyStructure[]> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/goal/my-shorty-list`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ goals: GoalShortyStructure[] }>>(
+            '/goal/my-shorty-list',
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения короткого списка целей.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ goals: GoalShortyStructure[] }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-            console.error(errorMessage);
-
-            return [];
-        }
-
-        const data = await response.json() as BackendApiResponse<{ goals: GoalShortyStructure[] }>;
-
-        if (!data.success || !data.data?.goals) {
-            return [];
-        }
-
-        return data.data.goals;
-    } catch (error) {
-        console.error("Ошибка запроса короткого списка целей:", error);
-
+        if (!response.data.success || !response.data.data?.goals) return [];
+        return response.data.data.goals;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса короткого списка целей");
         return [];
     }
 }
 
 export async function getGoalInformation(tokenValue: string, goalId: string):Promise<GoalsStructure | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ goal: GoalsStructure }>>(
+            `/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения информации о цели.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ goal: GoalsStructure }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ goal: GoalsStructure }>;
-
-        return data.data?.goal ?? undefined;
-    } catch (error) {
-        console.error("Ошибка запроса списка целей:", error);
+        if (!response.data.success || !response.data.data?.goal) return undefined;
+        return response.data.data.goal;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса информации о цели");
         return undefined;
     }
 }
 
 export async function deleteGoal(tokenValue: string, goalId: string):Promise<void> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+        data: { goalId },
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/goal/delete-my-goal`, {
-            method: "DELETE",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            body: JSON.stringify({goalId}),
-            cache: 'no-store',
-        });
+        const response = await api.delete<BackendApiResponse>(
+            `/activity/delete-my-goal`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка удаления цели.";
-            try {
-                const data = await response.json() as BackendApiResponse;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return;
-        }
-
-        const data = await response.json() as BackendApiResponse;
-
-        if (!data.success) {
-            console.error(data.error || data.message || "Ошибка удаления цели.");
-        }
-
+        if (!response.data.success) return;
         return;
-    } catch (error) {
-        console.error("Ошибка запроса удаления цели:", error);
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка удаления цели");
         return;
     }
 }
 
 export async function completeGoal(tokenValue: string, goalId: string):Promise<void> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+        data: { goalId },
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/goal/complete-my-goal`, {
-            method: "PUT",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            body: JSON.stringify({goalId}),
-            cache: 'no-store',
-        });
+        const response = await api.put<BackendApiResponse>(
+            `/activity/complete-my-goal`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка выполнения цели.";
-            try {
-                const data = await response.json() as BackendApiResponse;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return;
-        }
-
-        const data = await response.json() as BackendApiResponse;
-
-        if (!data.success) {
-            console.error(data.error || data.message || "Ошибка выполнения цели.");
-        }
-
+        if (!response.data.success) return;
         return;
-    } catch (error) {
-        console.error("Ошибка запроса выполнения цели:", error);
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса о выполнении цели");
         return;
     }
 }

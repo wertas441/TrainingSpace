@@ -142,7 +142,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/logout', async (req, res) => {
+router.post('/logout', authGuard, async (req, res) => {
     try {
 
         const userId = (req as any).userId as number;

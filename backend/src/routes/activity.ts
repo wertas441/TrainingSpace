@@ -12,7 +12,7 @@ import {
     validateActivityTrainingId,
     validateActivityType
 } from "../lib/backendValidators/activityValidators";
-import {ActivityUpdateFrontendStructure, AddActivityFrontendRequest} from "../types/activityBackendTypes";
+import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activityBackendTypes";
 import {ActivityModel} from "../models/Activity";
 import {GoalModel} from "../models/Goal";
 
@@ -115,10 +115,9 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
 
-        const activityPublicIdRaw = req.query.activityId;
-        const activityPublicId = String(activityPublicIdRaw || '').trim();
+        const activityId = req.query.activityId;
 
-        if (!activityPublicId) {
+        if (!activityId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор активности.',
@@ -126,7 +125,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const activityInfo = await ActivityModel.information(userId, activityPublicId);
+        const activityInfo = await ActivityModel.information(userId, activityId);
 
         if (!activityInfo) {
             const response: ApiResponse = {
@@ -160,12 +159,10 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
 
 router.delete('/delete-my-activity', authGuard, async (req, res) => {
     try {
-        const { activityId: activityPublicIdRaw } = req.body as { activityId?: string };
+        const { activityId } = req.body as { activityId?: string };
         const userId = (req as any).userId as number;
 
-        const activityPublicId = String(activityPublicIdRaw || '').trim();
-
-        if (!activityPublicId) {
+        if (!activityId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор активности.',
@@ -173,7 +170,7 @@ router.delete('/delete-my-activity', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const isDeleted = await ActivityModel.delete(userId, activityPublicId);
+        const isDeleted = await ActivityModel.delete(userId, activityId);
 
         if (!isDeleted) {
             const response: ApiResponse = {
@@ -205,7 +202,7 @@ router.delete('/delete-my-activity', authGuard, async (req, res) => {
 router.put('/update-my-activity', authGuard, async (req, res) => {
     try {
         const {
-            activityId,
+            id,
             name,
             description,
             type,
@@ -213,7 +210,7 @@ router.put('/update-my-activity', authGuard, async (req, res) => {
             trainingId,
             activityDate,
             exercises,
-        }: ActivityUpdateFrontendStructure = req.body;
+        }: ActivityListFrontendStructure = req.body;
 
         const activityNameError:boolean = validateActivityName(name);
         const activityDescriptionError:boolean = validateActivityDescription(description);
@@ -224,16 +221,6 @@ router.put('/update-my-activity', authGuard, async (req, res) => {
         const activityExercisesError:boolean = validateActivityExercisesUpdate(exercises);
 
         const userId = (req as any).userId as number;
-
-        const activityPublicId = String(activityId || '').trim();
-
-        if (!activityPublicId) {
-            const response: ApiResponse = {
-                success: false,
-                error: 'Некорректный идентификатор активности.',
-            };
-            return res.status(400).json(response);
-        }
 
         if (!activityNameError
             || !activityDescriptionError
@@ -251,8 +238,7 @@ router.put('/update-my-activity', authGuard, async (req, res) => {
         }
 
         await ActivityModel.update({
-            id: 0, // фактический id будет получен по publicId внутри модели
-            publicId: activityPublicId,
+            id,
             userId,
             name,
             description,
@@ -261,7 +247,7 @@ router.put('/update-my-activity', authGuard, async (req, res) => {
             trainingId,
             activityDate,
             exercises,
-        } as any);
+        });
 
         const response: ApiResponse = {
             success: true,

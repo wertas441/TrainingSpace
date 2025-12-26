@@ -1,123 +1,64 @@
-import {baseUrlForBackend} from "@/lib";
+import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {TrainingListResponse} from "@/types/trainingTypes";
 
 export async function getTrainingList(tokenValue: string):Promise<TrainingListResponse[] | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/training/my-training-list`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ trainings: TrainingListResponse[] }>>(
+            '/training/my-training-list',
+            payload
+        );
 
-        if (!response.ok) {
-
-            let errorMessage = "Ошибка получения списка тренировок.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ trainings: TrainingListResponse[] }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-            console.error(errorMessage);
-
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ trainings: TrainingListResponse[] }>;
-
-        if (!data.success || !data.data?.trainings) {
-            return undefined;
-        }
-
-        return data.data.trainings;
-    } catch (error) {
-        console.error("Ошибка запроса списка тренировок:", error);
-
+        if (!response.data.success || !response.data.data?.trainings) return undefined;
+        return response.data.data.trainings;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса листа тренировок");
         return undefined;
     }
 }
 
 export async function getTrainingInformation(tokenValue: string, trainingId: string):Promise<TrainingListResponse | undefined> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            cache: 'no-store',
-        });
+        const response = await api.get<BackendApiResponse<{ training: TrainingListResponse }>>(
+            `/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения информации о тренировке.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ training: TrainingListResponse }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ training: TrainingListResponse }>;
-
-        return data.data?.training ?? undefined;
-    } catch (error) {
-        console.error("Ошибка запроса информаации о тренировке:", error);
+        if (!response.data.success || !response.data.data?.training) return undefined;
+        return response.data.data.training;
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка запроса информации о тренировоке");
         return undefined;
     }
 }
 
-export async function deleteTraining(tokenValue: string | undefined, trainingId: string):Promise<void> {
+export async function deleteTraining(tokenValue: string, trainingId: string):Promise<void> {
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+        data: { trainingId },
+    }
+
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/training/delete-my-training`, {
-            method: "DELETE",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-            body: JSON.stringify({trainingId}),
-            cache: 'no-store',
-        });
+        const response = await api.delete<BackendApiResponse>(
+            `/training/delete-my-training`,
+            payload
+        );
 
-        if (!response.ok) {
-            let errorMessage = "Ошибка удаления тренировки.";
-            try {
-                const data = await response.json() as BackendApiResponse;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-
-            console.error(errorMessage);
-            return;
-        }
-
-        const data = await response.json() as BackendApiResponse;
-
-        if (!data.success) {
-            console.error(data.error || data.message || "Ошибка удаления тренировки.");
-        }
-
+        if (!response.data.success) return;
         return;
-    } catch (error) {
-        console.error("Ошибка запроса удаления тренировки:", error);
+    } catch (err) {
+        console.error(getServerErrorMessage(err) || "Ошибка удаления тренировки");
         return;
     }
 }
