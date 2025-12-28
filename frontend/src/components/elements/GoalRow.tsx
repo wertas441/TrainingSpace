@@ -3,7 +3,7 @@ import {memo, useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import CheckButton from "@/components/buttons/other/CheckButton";
-import {getColorStyles, secondDarkColorTheme} from "@/lib";
+import {getColorStyles, secondDarkColorTheme} from "@/styles";
 import {completeGoal} from "@/lib/controllers/goalController";
 
 interface GoalRowProps extends GoalsStructure{

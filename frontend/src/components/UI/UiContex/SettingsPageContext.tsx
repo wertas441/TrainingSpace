@@ -1,5 +1,5 @@
 import {ReactNode} from "react";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 export default function SettingsPageContext({children}: { children: ReactNode }) {
 

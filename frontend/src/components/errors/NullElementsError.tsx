@@ -1,4 +1,4 @@
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 
 export default function NullElementsError({text}:{text: string}) {

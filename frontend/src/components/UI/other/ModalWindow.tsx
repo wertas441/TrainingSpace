@@ -1,7 +1,7 @@
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {memo, Ref} from "react";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 interface ModalWindowProps {
     isExiting: boolean;

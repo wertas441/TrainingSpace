@@ -1,7 +1,5 @@
 "use client"
 
-import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {
     validateConfirmPassword,
@@ -9,7 +7,7 @@ import {
     validateUserName,
     validateUserPassword
 } from "@/lib/utils/validators";
-import {baseUrlForBackend} from "@/lib";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -18,68 +16,48 @@ import Link from "next/link";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainHideInput from "@/components/inputs/MainHideInput";
 import type {BackendApiResponse} from "@/types/indexTypes";
+import {useForm} from "react-hook-form";
+
+interface RegistrationFormValues {
+    userName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
 
 export default function Registration(){
 
-    const userName = useInputField('');
-    const email = useInputField('');
-    const password = useInputField('');
-    const confirmPassword = useInputField('');
+    const {register, handleSubmit, getValues, formState: { errors }} = useForm<RegistrationFormValues>({
+        defaultValues: {
+            userName: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        }
+    })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
 
-    const validateForm = (): boolean => {
-        const userNameError = validateUserName(userName.inputState.value);
-        userName.setError(userNameError);
-
-        const emailError = validateUserEmail(email.inputState.value);
-        email.setError(emailError);
-
-        const passwordError = validateUserPassword(password.inputState.value);
-        password.setError(passwordError);
-
-        const confirmPasswordError = validateConfirmPassword(password.inputState.value, confirmPassword.inputState.value);
-        confirmPassword.setError(confirmPasswordError);
-
-        return !(userNameError || emailError || passwordError || confirmPasswordError);
-    }
-
-
-    const handleSubmit = async (event: FormEvent):Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: RegistrationFormValues)=> {
         setServerError(null);
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
 
+        const payload = {
+            userName: values.userName,
+            email: values.email,
+            password: values.password,
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/auth/registration`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    userName: userName.inputState.value,
-                    email: email.inputState.value,
-                    password: password.inputState.value,
-                }),
-            });
+            await api.post<BackendApiResponse>('/auth/registration', payload)
 
-            if (result.ok) {
-                router.push("/auth/login");
-                return;
-            }
+            router.push("/auth/login");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json() as BackendApiResponse;
-            setServerError(data.error || data.message || "Ошибка регистрации. Проверьте правильность введенных данных.");
-            setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("Registration error:", error);
+            setServerError(message);
+            if (showErrorMessage) console.error('Registration error:', err);
+
             setIsSubmitting(false);
         }
     }
@@ -98,44 +76,43 @@ export default function Registration(){
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-5" onSubmit={handleSubmit}>
+                <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
 
                     <MainInput
                         id={'userName'}
-                        value={userName.inputState.value}
-                        onChange={userName.setValue}
-                        icon={<UserIcon className="h-5 w-5" />}
                         label={'Имя пользователя'}
-                        error={userName.inputState?.error}
+                        icon={<UserIcon className="h-5 w-5" />}
+                        error={errors.userName?.message}
+                        {...register('userName', {validate: (value) => validateUserName(value) || true})}
                     />
 
                     <MainInput
                         id={'email'}
-                        value={email.inputState.value}
                         type="email"
-                        onChange={email.setValue}
-                        icon={<AtSymbolIcon className="h-5 w-5" />}
                         label={'Email'}
-                        error={email.inputState?.error}
+                        icon={<AtSymbolIcon className="h-5 w-5" />}
+                        error={errors.email?.message}
+                        {...register('email', {validate: (value) => validateUserEmail(value) || true})}
                     />
 
                     <MainHideInput
                         id={'password'}
-                        value={password.inputState.value}
-                        onChange={password.setValue}
                         icon={<LockClosedIcon className="h-5 w-5" />}
                         label={'Пароль'}
-                        error={password.inputState?.error}
+                        error={errors.password?.message}
+                        {...register('password', {validate: (value) => validateUserPassword(value) || true})}
                     />
 
                     <MainInput
                         id={'confirmPassword'}
                         type={'password'}
-                        value={confirmPassword.inputState.value}
-                        onChange={confirmPassword.setValue}
-                        icon={<LockClosedIcon className="h-5 w-5" />}
                         label={'Подтверждение пароля'}
-                        error={confirmPassword.inputState?.error}
+                        icon={<LockClosedIcon className="h-5 w-5" />}
+                        error={errors.confirmPassword?.message}
+                        {...register('confirmPassword', {
+                            validate: (value) =>
+                                validateConfirmPassword(getValues("password"), value) || true,
+                        })}
                     />
 
                     <LightGreenSubmitBtn

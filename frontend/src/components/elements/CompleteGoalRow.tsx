@@ -1,5 +1,5 @@
 import {memo} from "react";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 interface CompleteGoalRowProps {
     name: string;

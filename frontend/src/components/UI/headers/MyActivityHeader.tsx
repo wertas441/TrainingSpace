@@ -10,7 +10,7 @@ import {
 } from "@/types/activityTypes";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 import XMarkButton from "@/components/buttons/other/XMarkButton";
 
 const difficultOptions: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;

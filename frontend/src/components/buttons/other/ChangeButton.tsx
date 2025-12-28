@@ -1,7 +1,7 @@
 import {memo, useMemo} from "react";
 import {PencilSquareIcon} from "@heroicons/react/24/outline";
 import {BasicIconButtonProps} from "@/types/indexTypes";
-import {iconDarkColorTheme} from "@/lib";
+import {iconDarkColorTheme} from "@/styles";
 
 function ChangeButton({onClick, className = ''}:BasicIconButtonProps){
 

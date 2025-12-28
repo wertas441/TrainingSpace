@@ -1,7 +1,6 @@
 'use client'
 
-import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useMemo, useState} from "react";
+import {useMemo} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
 import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
@@ -9,64 +8,51 @@ import MainInput from "@/components/inputs/MainInput";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import {baseUrlForBackend} from "@/lib";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
 import type {BackendApiResponse} from "@/types/indexTypes";
+import {useForm} from "react-hook-form";
+
+interface LoginFormValues {
+    userName: string;
+    password: string;
+    rememberMe: boolean;
+}
 
 export default function Login(){
 
-    const userName = useInputField('');
-    const password = useInputField('');
-    const [rememberMe, setRememberMe] = useState<boolean>(false);
+    const {register, handleSubmit, formState: { errors }} = useForm<LoginFormValues>({
+        defaultValues: {
+            userName: '',
+            password: '',
+            rememberMe: false,
+        }
+    })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
-    const validateForm = () => {
-        const userNameError = validateUserName(userName.inputState.value);
-        userName.setError(userNameError);
-
-        const passwordError = validateUserPassword(password.inputState.value);
-        password.setError(passwordError);
-
-        return !(userNameError || passwordError);
-    }
-
-    const handleSubmit = async (event: FormEvent):Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: LoginFormValues)=> {
         setServerError(null);
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
 
+        const payload = {
+            userName: values.userName,
+            password: values.password,
+            rememberMe: values.rememberMe,
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    userName: userName.inputState.value,
-                    password: password.inputState.value,
-                    rememberMe: rememberMe,
-                }),
-            });
+            await api.post<BackendApiResponse>('/auth/login', payload)
 
-            if (result.ok) {
-                router.replace("/");
-                return;
-            }
+            router.replace("/");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json() as BackendApiResponse;
-            setServerError(data.error || data.message || "Ошибка авторизации. Проверьте правильность введенных данных.");
+            setServerError(message);
+            if (showErrorMessage) console.error('Login error:', err);
+
             setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("Login error:", error);
-            setIsSubmitting(false);
+
         }
     }
 
@@ -84,36 +70,32 @@ export default function Login(){
 
                 <ServerError message={serverError} />
 
-                <form className="space-y-5" onSubmit={handleSubmit}>
+                <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
 
                     <MainInput
                         id={'userName'}
-                        value={userName.inputState.value}
-                        onChange={userName.setValue}
                         icon={useMemo(() => <UserIcon className="h-5 w-5 " />, [])}
                         label={'Имя пользователя'}
-                        error={userName.inputState?.error}
+                        error={errors.userName?.message}
+                        {...register('userName', {validate: (value) => validateUserName(value) || true})}
                     />
 
                     <MainInput
                         id={'password'}
                         type="password"
-                        value={password.inputState.value}
-                        onChange={password.setValue}
-                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5" />, [])}
                         label={'Пароль'}
-                        error={password.inputState?.error}
+                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5" />, [])}
+                        error={errors.password?.message}
+                        {...register('password', {validate: (value) => validateUserPassword(value) || true})}
                     />
 
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <input
-                                id="remember-me"
-                                name="remember-me"
+                                id="rememberMe"
                                 type="checkbox"
                                 className="w-4 h-4 cursor-pointer border-gray-300 rounded text-emerald-600 focus:ring-emerald-500"
-                                checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.checked)}
+                                {...register('rememberMe')}
                             />
                             <label htmlFor="remember-me" className="block ml-2 cursor-pointer text-sm text-gray-700 dark:text-gray-400">
                                 Запомнить меня

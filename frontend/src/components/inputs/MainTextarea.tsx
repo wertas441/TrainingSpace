@@ -1,10 +1,12 @@
-import {InputsStructure} from "@/types/indexTypes";
-import {mainInputClasses} from "@/lib";
-import {memo} from "react";
+import {mainInputClasses} from "@/styles";
+import {memo, TextareaHTMLAttributes} from "react";
 import InputError from "@/components/errors/InputError";
 
-interface MainTextareaProps extends InputsStructure<string> {
-    rows?: number;
+export interface TextAreaInputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+    id: string;
+    label: string;
+    error?: string;
+    className?: string;
 }
 
 function MainTextarea(
@@ -13,11 +15,9 @@ function MainTextarea(
         id,
         required = false,
         placeholder,
-        value,
-        onChange,
         error,
-        rows = 4
-    }: MainTextareaProps) {
+        ...rest
+    }: TextAreaInputProps) {
 
     return (
         <div>
@@ -31,12 +31,11 @@ function MainTextarea(
                 <textarea
                     id={id}
                     name={id}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
                     required={required}
                     placeholder={placeholder}
-                    rows={rows}
+                    rows={4}
                     className={`${mainInputClasses.trim()} px-4 textDescriptionArea resize-y`}
+                    {...rest}
                 />
             </div>
 

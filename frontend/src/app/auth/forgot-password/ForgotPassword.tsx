@@ -1,70 +1,55 @@
 'use client'
 
-import {FormEvent, useState} from "react";
-import {useInputField} from "@/lib/hooks/useInputField";
+import {useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateUserEmail} from "@/lib/utils/validators";
-import {baseUrlForBackend} from "@/lib";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {AtSymbolIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
+import {useForm} from "react-hook-form";
 import type {BackendApiResponse} from "@/types/indexTypes";
+
+interface ForgotPasswordFormValues {
+    email: string;
+}
 
 export default function ForgotPassword() {
 
-    const email = useInputField('');
+    const {register, handleSubmit, formState: { errors }} = useForm<ForgotPasswordFormValues>({
+        defaultValues: {
+            email: '',
+        }
+    })
+
     const {serverError, setServerError, isSubmitting, setIsSubmitting} = usePageUtils();
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    const validateForm = (): boolean => {
-        const emailError = validateUserEmail(email.inputState.value);
-        email.setError(emailError);
-
-        return !emailError;
-    };
-
-    const handleSubmit = async (event: FormEvent): Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: ForgotPasswordFormValues)=> {
         setServerError(null);
-        setSuccessMessage(null);
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
 
+        const payload = {
+            email: values.email,
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/auth/forgot-password`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    email: email.inputState.value,
-                }),
-            });
+            await api.post<BackendApiResponse>('/auth/forgot-password', payload)
 
-            if (result.ok) {
-                setSuccessMessage("Если указанный email зарегистрирован, мы отправили на него письмо с дальнейшими инструкциями по восстановлению пароля.");
-                setIsSubmitting(false);
-                return;
-            }
+            setSuccessMessage("Если указанный email зарегистрирован, мы отправили на него письмо с дальнейшими инструкциями по восстановлению пароля.");
+            setIsSubmitting(false)
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            setServerError("Функция в разработке");
-            // const data = await result.json() as BackendApiResponse;
-            // setServerError(data.error || data.message || "Не удалось отправить письмо для восстановления пароля. Попробуйте позже.");
-            setIsSubmitting(false);
-        } catch (error) {
-            console.error("ForgotPassword error:", error);
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
+            setServerError(message);
+            if (showErrorMessage) console.error('forgot password error:', err);
+
             setIsSubmitting(false);
         }
-    };
+    }
 
     return (
         <BlockPageContext>
@@ -87,15 +72,14 @@ export default function ForgotPassword() {
                     </div>
                 )}
 
-                <form className="space-y-5" onSubmit={handleSubmit}>
+                <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                     <MainInput
                         id={'email'}
-                        value={email.inputState.value}
-                        type="email"
-                        onChange={email.setValue}
-                        icon={<AtSymbolIcon className="h-5 w-5"/>}
                         label={'Email'}
-                        error={email.inputState?.error}
+                        type="email"
+                        icon={<AtSymbolIcon className="h-5 w-5"/>}
+                        error={errors.email?.message}
+                        {...register('email', {validate: (value) => validateUserEmail(value) || true})}
                     />
 
                     <LightGreenSubmitBtn

@@ -1,10 +1,12 @@
 'use client'
 
-import {useInputField} from "@/lib/hooks/useInputField";
 import MainHideInput from "@/components/inputs/MainHideInput";
-import {validateConfirmPassword, validateTwoPassword, validateUserPassword} from "@/lib/utils/validators";
-import {FormEvent, useMemo} from "react";
-import {baseUrlForBackend} from "@/lib";
+import {
+    validateConfirmPassword,
+    validateUserPassword
+} from "@/lib/utils/validators";
+import {useMemo} from "react";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -12,67 +14,49 @@ import MainInput from "@/components/inputs/MainInput";
 import {LockClosedIcon, CheckIcon} from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
+import {useForm} from "react-hook-form";
+import type {BackendApiResponse} from "@/types/indexTypes";
+
+interface ChangePasswordFormValues {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}
 
 export default function ChangePassword(){
 
-    const currentPassword = useInputField('');
-    const newPassword = useInputField('');
-    const confirmPassword = useInputField('');
+    const {register, handleSubmit, getValues, formState: { errors }} = useForm<ChangePasswordFormValues>({
+        defaultValues: {
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: '',
+        }
+    })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
-    const validateForm = () => {
-        const currentPasswordError = validateUserPassword(currentPassword.inputState.value);
-        currentPassword.setError(currentPasswordError);
-
-        const newPasswordError = validateUserPassword(newPassword.inputState.value);
-        newPassword.setError(newPasswordError);
-
-        const confirmPasswordError = validateConfirmPassword(newPassword.inputState.value, confirmPassword.inputState.value);
-        confirmPassword.setError(confirmPasswordError);
-
-        const twoPasswordError = validateTwoPassword(currentPassword.inputState.value, newPassword.inputState.value )
-        newPassword.setError(twoPasswordError);
-
-        return !(currentPasswordError || newPasswordError || confirmPasswordError || twoPasswordError);
-    }
-
-    const handleSubmit = async (event: FormEvent):Promise<void> => {
-        event.preventDefault();
+    const onSubmit = async (values: ChangePasswordFormValues)=> {
         setServerError(null);
-
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
 
+        const payload = {
+            currentPassword: values.currentPassword,
+            newPassword: values.newPassword,
+            confirmPassword: values.confirmPassword,
+        }
+
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/settings/change-password`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    currentPassword: currentPassword.inputState.value,
-                    newPassword: newPassword.inputState.value,
-                    confirmPassword: confirmPassword.inputState.value,
-                }),
-            });
+            await api.post<BackendApiResponse>('/settings/change-password', payload)
 
-            if (result.ok) {
-                router.push("/settings/profile");
-                return;
-            }
+            router.push("/settings/profile");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json().catch(() => null);
-            setServerError((data && (data.error || data.message)) || "Ошибка смены пароля. Проверьте правильность введенных данных.");
+            setServerError(message);
+            if (showErrorMessage) console.error('change password error:', err);
+
             setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("Change password error:", error);
-            setIsSubmitting(false);
+
         }
     }
 
@@ -88,24 +72,22 @@ export default function ChangePassword(){
             <div className="px-6 py-6 max-w-xl sm:px-8 sm:py-8">
                 <ServerError message={serverError} />
 
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                     <MainInput
                         id={'currentPassword'}
                         type={'password'}
-                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
                         label={'Ваш текущий пароль'}
-                        value={currentPassword.inputState.value}
-                        onChange={currentPassword.setValue}
-                        error={currentPassword.inputState.error}
+                        icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
+                        error={errors.currentPassword?.message}
+                        {...register('currentPassword', {validate: (value) => validateUserPassword(value) || true})}
                     />
 
                     <MainHideInput
                         id={'newPassword'}
                         label={'Новый пароль'}
                         icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
-                        value={newPassword.inputState.value}
-                        onChange={newPassword.setValue}
-                        error={newPassword.inputState.error}
+                        error={errors.newPassword?.message}
+                        {...register('newPassword', {validate: (value) => validateUserPassword(value) || true})}
                     />
 
                     <MainInput
@@ -113,9 +95,11 @@ export default function ChangePassword(){
                         type={'password'}
                         label={'Подтверждение нового пароля'}
                         icon={useMemo(() => <CheckIcon className="h-5 w-5 text-gray-500" />, [])}
-                        value={confirmPassword.inputState.value}
-                        onChange={confirmPassword.setValue}
-                        error={confirmPassword.inputState.error}
+                        error={errors.confirmPassword?.message}
+                        {...register('confirmPassword', {
+                            validate: (value) =>
+                                validateConfirmPassword(getValues("newPassword"), value) || true,
+                        })}
                     />
 
                     <div className="pt-2">

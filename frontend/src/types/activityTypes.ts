@@ -8,6 +8,16 @@ export type ActivityDifficultyFilter= ActivityDifficultyStructure | null ;
 
 export type ActivityTypeFilter = ActivityTypeStructure | null;
 
+export interface ActivityFormValues {
+    activityName: string;
+    activityDescription: string;
+    activityDate: string;
+    activityType: ActivityTypeStructure;
+    activityDifficulty: ActivityDifficultyStructure;
+    trainingId: string;
+}
+
+
 export interface ActivityDataStructure {
     id: number;
     publicId: string;

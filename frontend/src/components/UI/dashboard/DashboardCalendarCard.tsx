@@ -1,7 +1,7 @@
 
 import {CalendarDaysIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"] as const;
 

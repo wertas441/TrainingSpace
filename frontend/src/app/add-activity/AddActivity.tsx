@@ -1,15 +1,14 @@
 'use client'
 
-import {useInputField} from "@/lib/hooks/useInputField";
-import {FormEvent, useState} from "react";
+import {useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
-import {baseUrlForBackend, secondDarkColorTheme} from "@/lib";
+import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
+import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activityTypes";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
@@ -18,9 +17,10 @@ import {
     validateActivityDescription,
     validateActivityName,
     validateActivitySets,
-    validateActivityTrainingId
 } from "@/lib/utils/validators";
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
+import {secondDarkColorTheme} from "@/styles";
+import {Controller, useForm} from "react-hook-form";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
@@ -29,14 +29,21 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const today = new Date();
     const initialDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    const activityName = useInputField('');
-    const activityDescription = useInputField('');
-    const activityDate = useInputField(initialDate);
-    const [activityType, setActivityType] = useState<ActivityTypeStructure>('Силовая');
-    const [activityDifficulty, setActivityDifficulty] = useState<ActivityDifficultyStructure>('Средняя');
-    const trainingId = useInputField('');
 
+    const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
+        defaultValues: {
+            activityName: '',
+            activityDescription: '',
+            activityDate: initialDate,
+            activityType: 'Силовая',
+            activityDifficulty: 'Средняя',
+            trainingId: '',
+        }
+    })
+
+    const trainingId = watch('trainingId')
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+    const [setsErrors, setSetsError] = useState<string  | null>(null)
 
     const {
         exerciseSets,
@@ -46,31 +53,29 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         selectedTrainingOption,
         selectedTraining,
         handleChangeTraining
-    } = useActivityUtils({myTrainings, trainingId});
+    } = useActivityUtils({
+        myTrainings,
+        trainingId,
+        onTrainingIdChange: (val) => setValue('trainingId', val, { shouldDirty: true, shouldValidate: true }),
+    });
 
-    const validateForm = (): boolean => {
-        const nameError = validateActivityName(activityName.inputState.value);
-        activityName.setError(nameError);
-
-        const dateError = validateActivityDate(activityDate.inputState.value);
-        activityDate.setError(dateError);
-
-        const descriptionError = validateActivityDescription(activityDescription.inputState.value);
-        activityDescription.setError(descriptionError);
-
-        const trainingError = validateActivityTrainingId(trainingId.inputState.value);
-        trainingId.setError(trainingError);
-
-        const setsError = validateActivitySets(exerciseSets);
-        if (setsError) {
-            trainingId.setError(setsError);
-        }
-
-        return !(nameError || dateError || descriptionError || trainingError || setsError);
+    const handleTrainingSelect = (val: string) => {
+        setSetsError(null);
+        handleChangeTraining(val);
     };
 
-    const handleSubmit = async (event: FormEvent): Promise<void> => {
-        event.preventDefault();
+    const validateForm = (): boolean => {
+        const setsError = validateActivitySets(exerciseSets);
+        if (setsError) {
+            setSetsError(setsError);
+        } else {
+            setSetsError(null);
+        }
+
+        return !(setsError);
+    };
+
+    const onSubmit = async (values: ActivityFormValues)=> {
         setServerError(null);
 
         if (!validateForm()) {
@@ -79,7 +84,6 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
         setIsSubmitting(true);
 
-        // Оставляем только те упражнения и подходы, где вес и повторения > 0
         const exercisesPayload = Object.entries(exerciseSets).reduce<
             { id: number; try: { id: number; weight: number; quantity: number }[] }[]
         >((acc, [exId, sets]) => {
@@ -106,42 +110,33 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         }, []);
 
         const payload = {
-            activity_name: activityName.inputState.value.trim(),
-            description: activityDescription.inputState.value.trim(),
-            performed_at: activityDate.inputState.value,
-            activity_type: activityType,
-            activity_difficult: activityDifficulty,
-            training_id: Number(trainingId.inputState.value),
+            activity_name: values.activityName,
+            description: values.activityDescription,
+            performed_at: values.activityDate,
+            activity_type: values.activityType,
+            activity_difficult: values.activityDifficulty,
+            training_id: Number(values.trainingId),
             exercises: exercisesPayload,
-        };
+        }
 
         try {
-            const result = await fetch(`${baseUrlForBackend}/api/activity/add-new-activity`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify(payload),
-            });
+            await api.post<BackendApiResponse>('/activity/add-new-activity', payload)
 
-            if (result.ok) {
-                router.push("/my-activity");
-                return;
-            }
+            router.push("/my-activity");
+        } catch (err) {
+            const message:string = getServerErrorMessage(err);
 
-            const data = await result.json() as BackendApiResponse;
-            setServerError(data.error || data.message || "Ошибка добавление активности. Проверьте правильность введенных данных.");
-            setIsSubmitting(false);
-        } catch (error) {
-            setServerError("Не удалось связаться с сервером. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.");
-            console.error("Add new activity error:", error);
+            setServerError(message);
+            if (showErrorMessage) console.error('add activity error:', err);
+
             setIsSubmitting(false);
         }
-    };
+    }
 
     return (
         <main className="flex items-center justify-center min-h-screen p-4">
             <div className={`${secondDarkColorTheme} w-full max-w-2xl p-8 space-y-8 rounded-2xl shadow-xl border border-emerald-100`}>
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     <div className="space-y-2 text-center">
                         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">Добавить активность</h1>
                         <p className="text-sm text-gray-500 dark:text-gray-300">Выберите тренировку и введите подходы по упражнениям</p>
@@ -153,46 +148,52 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         id="activityName"
                         label="Название активности"
                         placeholder={`Тренировка в бассейне`}
-                        value={activityName.inputState.value}
-                        onChange={activityName.setValue}
-                        error={activityName.inputState?.error}
+                        error={errors.activityName?.message}
+                        {...register('activityName', {validate: (value) => validateActivityName(value) || true})}
                     />
 
                     <MainInput
                         id={'activityDate'}
                         type={'date'}
                         label="Дата активности"
-                        value={activityDate.inputState.value}
-                        onChange={activityDate.setValue}
-                        error={activityDate.inputState?.error}
+                        error={errors.activityDate?.message}
+                        {...register('activityDate', {validate: (value) => validateActivityDate(value) || true})}
                     />
 
                     <MainTextarea
                         id="activityDescription"
                         label="Описание"
                         placeholder="Опционально: комментарий к сессии"
-                        value={activityDescription.inputState.value}
-                        onChange={activityDescription.setValue}
-                        error={activityDescription.inputState?.error}
-                        rows={4}
+                        error={errors.activityDescription?.message}
+                        {...register('activityDescription', {validate: (value) => validateActivityDescription(value) || true})}
                     />
 
-                    <ChipRadioGroup<ActivityTypeStructure>
-                        id="activity-type"
+                    <Controller
+                        control={control}
                         name="activityType"
-                        label={`Тип`}
-                        choices={activityTypeChoices}
-                        value={activityType}
-                        onChange={setActivityType}
+                        render={({field}) => (
+                            <ChipRadioGroup<ActivityTypeStructure>
+                                id="activityType"
+                                label={`Тип`}
+                                choices={activityTypeChoices}
+                                value={field.value}
+                                onChange={field.onChange}
+                            />
+                        )}
                     />
 
-                    <ChipRadioGroup<ActivityDifficultyStructure>
-                        id="activity-difficulty"
-                        label={'Сложность'}
+                    <Controller
+                        control={control}
                         name="activityDifficulty"
-                        choices={activityDifficultyChoices}
-                        value={activityDifficulty}
-                        onChange={setActivityDifficulty}
+                        render={({field}) => (
+                            <ChipRadioGroup<ActivityDifficultyStructure>
+                                id="activityDifficulty"
+                                label={'Сложность'}
+                                choices={activityDifficultyChoices}
+                                value={field.value}
+                                onChange={field.onChange}
+                            />
+                        )}
                     />
 
                     <MainMultiSelect
@@ -200,11 +201,11 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                         label="Тренировка"
                         options={trainingOptions}
                         value={selectedTrainingOption}
-                        onChange={(vals) => handleChangeTraining(vals[0]?.value ?? '')}
+                        onChange={(vals) => handleTrainingSelect(vals[0]?.value ?? '')}
                         placeholder="Выберите тренировку"
                         isMulti={false}
                         noOptionsMessage={() => 'У вас пока не создано ни одной тренировки или вы неправильно ввели название'}
-                        error={null}
+                        error={undefined}
                     />
 
                     {selectedTraining && (
@@ -216,7 +217,9 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                                 setExerciseSets={setExerciseSets}
                             />
 
-                            <p className=" pl-1 text-xs text-red-500">{trainingId.inputState.error}</p>
+                            {setsErrors && (
+                                <p className=" pl-1 text-xs text-red-500">{setsErrors}</p>
+                            )}
 
                             <LightGreenSubmitBtn
                                 label={!isSubmitting ? "Сохранить активность" : 'Сохранение...' }

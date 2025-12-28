@@ -1,6 +1,6 @@
 import {InputsStructure} from "@/types/indexTypes";
 import {memo, ReactNode} from "react";
-import {thirdDarkColorTheme} from "@/lib";
+import {thirdDarkColorTheme} from "@/styles";
 
 interface FilterInputProps extends InputsStructure<string | number> {
     type?: string;

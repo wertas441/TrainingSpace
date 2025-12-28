@@ -5,7 +5,7 @@ import {HeaderMinimumProps} from "@/types/indexTypes";
 import {usePathname, useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
 import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 
 interface GoalsHeaderProps extends HeaderMinimumProps {
     label: string;

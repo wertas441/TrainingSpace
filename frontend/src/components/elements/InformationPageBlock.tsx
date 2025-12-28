@@ -1,5 +1,5 @@
 import {ElementType} from "react";
-import {thirdDarkColorTheme} from "@/lib";
+import {thirdDarkColorTheme} from "@/styles";
 
 interface InformationPageBlockProps {
     label: string;

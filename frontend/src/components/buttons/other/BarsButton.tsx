@@ -1,7 +1,7 @@
 import {memo, Ref, useMemo} from "react";
 import {Bars3Icon} from "@heroicons/react/24/outline";
 import {BasicIconButtonProps} from "@/types/indexTypes";
-import {iconDarkColorTheme} from "@/lib";
+import {iconDarkColorTheme} from "@/styles";
 
 interface BarsButtonProps extends BasicIconButtonProps {
     ref?: Ref<HTMLButtonElement>;

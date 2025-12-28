@@ -6,7 +6,7 @@ import {
     Squares2X2Icon,
 } from "@heroicons/react/24/outline";
 import {memo} from "react";
-import {secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
 const actions = [
     {

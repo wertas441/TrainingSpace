@@ -1,6 +1,6 @@
 import Image from "next/image";
 import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
-import {secondDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme} from "@/styles";
 import {Metadata} from "next";
 
 export const metadata: Metadata = {

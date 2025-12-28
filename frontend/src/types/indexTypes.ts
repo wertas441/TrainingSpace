@@ -1,4 +1,4 @@
-import {ElementType} from "react";
+import {ElementType, InputHTMLAttributes, ReactNode} from "react";
 
 export interface InputsStructure<T extends string | number> {
     id: string;
@@ -8,6 +8,14 @@ export interface InputsStructure<T extends string | number> {
     required?: boolean;
     placeholder?: string;
     error: string | null;
+}
+
+export interface MainInputProps extends InputHTMLAttributes<HTMLInputElement> {
+    id: string;
+    icon?: ReactNode;
+    label: string;
+    error?: string;
+    className?: string;
 }
 
 // icon?: ComponentType<SVGProps<SVGSVGElement>>; //

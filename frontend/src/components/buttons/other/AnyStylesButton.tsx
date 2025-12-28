@@ -1,6 +1,6 @@
 import {ComponentType, memo, SVGProps, useMemo} from "react";
 import {BasicIconButtonProps} from "@/types/indexTypes";
-import {iconDarkColorTheme} from "@/lib";
+import {iconDarkColorTheme} from "@/styles";
 
 interface AnyStylesButtonProps extends BasicIconButtonProps {
     IconComponent: ComponentType<SVGProps<SVGSVGElement>>;

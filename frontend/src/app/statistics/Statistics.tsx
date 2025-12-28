@@ -21,7 +21,7 @@ import {
     ScaleIcon
 } from "@heroicons/react/24/outline";
 import {ChartBarIcon} from "@heroicons/react/24/solid";
-import {secondDarkColorTheme, thirdDarkColorTheme} from "@/lib";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
 interface StatisticsProps {
     mainCardData: MainStatisticsCardResponse;
