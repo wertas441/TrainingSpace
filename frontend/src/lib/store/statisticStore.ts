@@ -1,30 +1,36 @@
 import { create, type StateCreator } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware/persist'
 
-interface GlobalStatistics {
+interface GlobalStatisticsData {
     addedDays: number;
     addedTrainings: number;
     goalCompleted: number;
     addedActivity: number;
 }
 
+interface GlobalStatistics {
+    data: GlobalStatisticsData;
+}
+
 interface StatisticStore {
     globalStatistics: GlobalStatistics;
-    getGlobalStatistics: () => GlobalStatistics;
+    getGlobalStatistics: () => GlobalStatisticsData;
 }
 
 const initialState = {
     globalStatistics: {
-        addedDays: 0,
-        addedTrainings: 0,
-        goalCompleted: 0,
-        addedActivity: 0,
+        data: {
+            addedDays: 0,
+            addedTrainings: 0,
+            goalCompleted: 0,
+            addedActivity: 0,
+        },
     },
 }
 
 const statisticStore: StateCreator<StatisticStore> = (_set, get) => ({
     ...initialState,
-    getGlobalStatistics: () => get().globalStatistics,
+    getGlobalStatistics: () => get().globalStatistics.data,
 
 })
 
@@ -35,6 +41,6 @@ export const useStatisticStore = create<StatisticStore>()(
     }),
 )
 
-// Селектор для быстрого доступа к globalStatistics
-export const globalStatisticInfo = (state: StatisticStore) => state.globalStatistics
+// Мне нужен селектор для получения данных и все
+export const globalStatisticInfo = (state: StatisticStore) => state.globalStatistics.data
 
