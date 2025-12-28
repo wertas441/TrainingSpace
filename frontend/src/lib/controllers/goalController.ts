@@ -88,11 +88,11 @@ export async function deleteGoal(tokenValue: string, goalId: string):Promise<voi
     const payload = {
         headers: getTokenHeaders(tokenValue),
         data: { goalId },
-    }
+    };
 
     try {
         const response = await api.delete<BackendApiResponse>(
-            `/activity/delete-my-goal`,
+            `/goal/delete-my-goal`,
             payload
         );
 
@@ -106,15 +106,15 @@ export async function deleteGoal(tokenValue: string, goalId: string):Promise<voi
 
 export async function completeGoal(tokenValue: string, goalId: string):Promise<void> {
 
-    const payload = {
+    const config = {
         headers: getTokenHeaders(tokenValue),
-        data: { goalId },
-    }
+    };
 
     try {
         const response = await api.put<BackendApiResponse>(
-            `/activity/complete-my-goal`,
-            payload
+            `/goal/complete-my-goal`,
+            { goalId },
+            config
         );
 
         if (!response.data.success) return;

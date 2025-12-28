@@ -248,12 +248,11 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
 
 router.put('/complete-my-goal', authGuard, async (req, res) => {
     try {
-        const { goalId: goalPublicIdRaw } = req.body;
-        const goalPublicId = String(goalPublicIdRaw || '').trim();
+        const { goalId }:{goalId: string} = req.body;
         const userId = (req as any).userId as number;
 
 
-        if (!goalPublicId) {
+        if (!goalId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор цели.',
@@ -261,7 +260,7 @@ router.put('/complete-my-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await GoalModel.complete(userId, goalPublicId);
+        await GoalModel.complete(userId, goalId);
 
         const response: ApiResponse = {
             success: true,

@@ -14,7 +14,6 @@ import {
 } from "../lib/backendValidators/activityValidators";
 import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activityBackendTypes";
 import {ActivityModel} from "../models/Activity";
-import {GoalModel} from "../models/Goal";
 
 const router = Router();
 
@@ -115,9 +114,10 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
 
-        const activityId = req.query.activityId;
+        const activityPublicIdRaw = req.query.activityId;
+        const activityPublicId = String(activityPublicIdRaw || '').trim();
 
-        if (!activityId) {
+        if (!activityPublicId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор активности.',
@@ -125,7 +125,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const activityInfo = await ActivityModel.information(userId, activityId);
+        const activityInfo = await ActivityModel.information(userId, activityPublicId);
 
         if (!activityInfo) {
             const response: ApiResponse = {
@@ -204,6 +204,7 @@ router.put('/update-my-activity', authGuard, async (req, res) => {
         const {
             id,
             name,
+            publicId,
             description,
             type,
             difficulty,
@@ -240,6 +241,7 @@ router.put('/update-my-activity', authGuard, async (req, res) => {
         await ActivityModel.update({
             id,
             userId,
+            publicId,
             name,
             description,
             type,
