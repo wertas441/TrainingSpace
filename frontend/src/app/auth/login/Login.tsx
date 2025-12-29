@@ -12,6 +12,7 @@ import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {useForm} from "react-hook-form";
+import {useUserStore} from "@/lib/store/userStore";
 
 interface LoginFormValues {
     userName: string;
@@ -30,6 +31,7 @@ export default function Login(){
     })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const initUserData = useUserStore((s) => s.initUserData)
 
     const onSubmit = async (values: LoginFormValues)=> {
         setServerError(null);
@@ -44,6 +46,14 @@ export default function Login(){
         try {
             await api.post<BackendApiResponse>('/auth/login', payload)
 
+            await initUserData();
+            const userData = useUserStore.getState().userData;
+            if (!userData) {
+                setServerError("Не удалось получить данные пользователя после входа. Попробуйте обновить страницу.");
+                setIsSubmitting(false);
+                return;
+            }
+
             router.replace("/");
         } catch (err) {
             const message:string = getServerErrorMessage(err);
@@ -52,7 +62,6 @@ export default function Login(){
             if (showErrorMessage) console.error('Login error:', err);
 
             setIsSubmitting(false);
-
         }
     }
 

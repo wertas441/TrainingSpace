@@ -11,6 +11,8 @@ import {thirdDarkColorTheme} from "@/styles";
 
 export default function Profile({ userData }: { userData: UserProfileRequest}) {
 
+
+
     const createdAtDate = userData.createdAt ? new Date(userData.createdAt) : null;
 
     const memberSince =

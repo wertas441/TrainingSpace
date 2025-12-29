@@ -1,5 +1,5 @@
 import { create, type StateCreator } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware/persist'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface GlobalStatisticsData {
     addedDays: number;
@@ -8,30 +8,57 @@ interface GlobalStatisticsData {
     addedActivity: number;
 }
 
-interface GlobalStatistics {
-    data: GlobalStatisticsData;
-}
-
 interface StatisticStore {
-    globalStatistics: GlobalStatistics;
+    globalStatistics: GlobalStatisticsData;
+    initGlobalStatistics: () => void;
     getGlobalStatistics: () => GlobalStatisticsData;
+    addNewDay: () => void;
+    addNewTraining: () => void;
+    completeGoal: () => void;
+    addNewActivity: () => void;
 }
 
 const initialState = {
     globalStatistics: {
-        data: {
-            addedDays: 0,
-            addedTrainings: 0,
-            goalCompleted: 0,
-            addedActivity: 0,
-        },
+        addedDays: 0,
+        addedTrainings: 0,
+        goalCompleted: 0,
+        addedActivity: 0,
     },
 }
 
-const statisticStore: StateCreator<StatisticStore> = (_set, get) => ({
+const statisticStore: StateCreator<StatisticStore> = (set, get) => ({
     ...initialState,
-    getGlobalStatistics: () => get().globalStatistics.data,
-
+    initGlobalStatistics: () => get().globalStatistics,
+    getGlobalStatistics: () => get().globalStatistics,
+    addNewDay: () =>
+        set((s) => ({
+            globalStatistics: {
+                ...s.globalStatistics,
+                addedDays: s.globalStatistics.addedDays + 1,
+            },
+        })),
+    addNewTraining: () =>
+        set((s) => ({
+            globalStatistics: {
+                ...s.globalStatistics,
+                addedTrainings: s.globalStatistics.addedTrainings + 1,
+            },
+        })),
+    completeGoal: () =>
+        set((s) => ({
+            globalStatistics: {
+                ...s.globalStatistics,
+                goalCompleted: s.globalStatistics.goalCompleted + 1,
+            },
+        })),
+    addNewActivity: () =>
+        set((s) => ({
+            globalStatistics: {
+                ...s.globalStatistics,
+                addedActivity: s.globalStatistics.addedActivity + 1,
+            },
+        })),
 })
 
 export const useStatisticStore = create<StatisticStore>()(
@@ -41,6 +68,6 @@ export const useStatisticStore = create<StatisticStore>()(
     }),
 )
 
-// Мне нужен селектор для получения данных и все
-export const globalStatisticInfo = (state: StatisticStore) => state.globalStatistics.data
+// селекторы
+export const globalStatisticInfo = (state: StatisticStore) => state.globalStatistics
 

@@ -1,0 +1,51 @@
+import { create, type StateCreator } from "zustand";
+import type { BackendApiResponse, UserProfileRequest } from "@/types/indexTypes";
+import { api, getServerErrorMessage } from "@/lib";
+import { createJSONStorage, persist } from "zustand/middleware";
+
+interface UserStore {
+    userData: UserProfileRequest | null;
+
+    initUserData: () => Promise<void>;
+    fetchUserData: () => Promise<UserProfileRequest | undefined>;
+
+    getUserData: () => UserProfileRequest | null;
+    changeEmail: (email: string) => void;
+}
+
+const userStore: StateCreator<UserStore> = (set, get) => ({
+    userData: null,
+    getUserData: () => get().userData,
+    initUserData: async () => {
+        if (get().userData) return;
+        await get().fetchUserData();
+    },
+    fetchUserData: async () => {
+        try {
+            const response = await api.get<BackendApiResponse<{ userData: UserProfileRequest }>>(
+                "/auth/me",
+            );
+
+            if (!response.data.success || !response.data.data?.userData) return undefined;
+
+            const userData = response.data.data.userData;
+            set({userData});
+            return userData;
+        } catch (err) {
+            console.error(getServerErrorMessage(err) || "Ошибка запроса информации об аккаунте");
+            return undefined;
+        }
+    },
+    changeEmail: (email) =>
+        set((s) => ({
+            userData: s.userData ? { ...s.userData, email } : s.userData,
+        })),
+})
+
+export const useUserStore = create<UserStore>()(
+    persist(userStore, {
+        name: "userStore",
+        storage: createJSONStorage(() => localStorage)
+    })
+)
+

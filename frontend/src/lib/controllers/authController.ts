@@ -1,19 +1,14 @@
-import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse, UserProfileRequest} from "@/types/indexTypes";
+import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
+import {cookies} from "next/headers";
 
-export async function logout() {
-    try {
-        const response = await api.post<BackendApiResponse>(`/auth/logout`);
+export async function getUserData():Promise<UserProfileRequest | undefined> {
 
-        if (!response.data.success) return;
-        return;
-    } catch (err) {
-        console.error(getServerErrorMessage(err) || "Ошибка выхода");
-        return;
+    const tokenValue = (await cookies()).get('token')?.value;
+
+    if (!tokenValue) {
+        return undefined;
     }
-}
-
-export async function getUserData(tokenValue: string):Promise<UserProfileRequest | undefined> {
 
     const payload = {
         headers: getTokenHeaders(tokenValue),
@@ -32,5 +27,4 @@ export async function getUserData(tokenValue: string):Promise<UserProfileRequest
         return undefined;
     }
 }
-
 
