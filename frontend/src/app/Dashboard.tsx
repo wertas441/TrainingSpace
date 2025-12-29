@@ -7,6 +7,7 @@ import DashboardChartCard from "@/components/UI/dashboard/DashboardChartCard";
 import DashboardGoalsCard from "@/components/UI/dashboard/DashboardGoalsCard";
 import {GoalShortyStructure} from "@/types/goalTypes";
 import {NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
+import {getUserData, useUserStore} from "@/lib/store/userStore";
 
 interface DashboardProps {
     goalsShortyList: GoalShortyStructure[],
@@ -15,11 +16,13 @@ interface DashboardProps {
 
 export default function Dashboard({goalsShortyList, nutritionGraphicData}: DashboardProps) {
 
+    const userData = useUserStore(getUserData)
+
     return (
         <main className="w-full p-4 sm:p-6 lg:p-8 ">
             <div className="space-y-6">
                 <h1 className="text-3xl sm:text-4xl font-semibold text-emerald-900 dark:text-white">
-                    Приветствую в TrainingSpace
+                    Приветствую {userData?.userName}
                 </h1>
 
                 <section className="grid gap-4 lg:gap-6 grid-cols-1 lg:grid-cols-3">

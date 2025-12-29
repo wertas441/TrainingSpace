@@ -12,6 +12,7 @@ import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
 import type {BackendApiResponse} from "@/types/indexTypes";
+import {useUserStore} from "@/lib/store/userStore";
 
 interface ChangeEmailFormValues {
     newEmail: string;
@@ -28,6 +29,7 @@ export default function ChangeEmail(){
     })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const changeEmail = useUserStore((s) => s.changeEmail);
 
     const onSubmit = async (values: ChangeEmailFormValues)=> {
         setServerError(null);
@@ -41,6 +43,7 @@ export default function ChangeEmail(){
         try {
             await api.post<BackendApiResponse>('/settings/change-email', payload)
 
+            changeEmail(values.newEmail)
             router.push("/settings/profile");
         } catch (err) {
             const message:string = getServerErrorMessage(err);

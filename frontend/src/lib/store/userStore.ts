@@ -11,15 +11,18 @@ interface UserStore {
 
     getUserData: () => UserProfileRequest | null;
     changeEmail: (email: string) => void;
+    logout: () => Promise<void>;
 }
 
 const userStore: StateCreator<UserStore> = (set, get) => ({
     userData: null,
     getUserData: () => get().userData,
+
     initUserData: async () => {
         if (get().userData) return;
         await get().fetchUserData();
     },
+
     fetchUserData: async () => {
         try {
             const response = await api.get<BackendApiResponse<{ userData: UserProfileRequest }>>(
@@ -36,10 +39,25 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
             return undefined;
         }
     },
+
     changeEmail: (email) =>
         set((s) => ({
             userData: s.userData ? { ...s.userData, email } : s.userData,
         })),
+
+    logout: async () => {
+        try {
+            const response = await api.post<BackendApiResponse>(`/auth/logout`);
+
+            if (!response.data.success) return;
+
+            set({userData: null});
+            return;
+        } catch (err) {
+            console.error(getServerErrorMessage(err) || "Ошибка выхода");
+            return;
+        }
+    },
 })
 
 export const useUserStore = create<UserStore>()(
@@ -49,3 +67,6 @@ export const useUserStore = create<UserStore>()(
     })
 )
 
+export const getUserData = (s: UserStore) => s.userData;
+export const makeLogout = (s: UserStore) => s.logout;
+export const makeInitUserData = (s: UserStore) => s.initUserData;

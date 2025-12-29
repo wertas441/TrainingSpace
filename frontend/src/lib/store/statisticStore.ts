@@ -69,5 +69,5 @@ export const useStatisticStore = create<StatisticStore>()(
 )
 
 // селекторы
-export const globalStatisticInfo = (state: StatisticStore) => state.globalStatistics
+export const getGlobalStatistic = (state: StatisticStore) => state.globalStatistics
 

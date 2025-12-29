@@ -12,7 +12,7 @@ import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
 import type {BackendApiResponse} from "@/types/indexTypes";
 import {useForm} from "react-hook-form";
-import {useUserStore} from "@/lib/store/userStore";
+import {makeInitUserData, useUserStore} from "@/lib/store/userStore";
 
 interface LoginFormValues {
     userName: string;
@@ -31,7 +31,7 @@ export default function Login(){
     })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
-    const initUserData = useUserStore((s) => s.initUserData)
+    const initUserData = useUserStore(makeInitUserData)
 
     const onSubmit = async (values: LoginFormValues)=> {
         setServerError(null);
