@@ -3,7 +3,7 @@
 import MainPagination from "@/components/UI/other/MainPagination";
 import MyTrainingHeader from "@/components/UI/headers/MyTrainingHeader";
 import {usePagination} from "@/lib/hooks/usePagination";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import MyTrainingRow from "@/components/elements/MyTrainingRow";
 import {TrainingDataStructure} from "@/types/indexTypes";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
@@ -18,6 +18,14 @@ export default function MyTraining({trainingList, exercises}: MyTrainingProps) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
+
+    const exerciseNameById = useMemo(() => {
+        const map = new Map<number, string>();
+        for (const ex of exercises) {
+            map.set(ex.id, ex.name);
+        }
+        return map;
+    }, [exercises]);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
@@ -35,6 +43,11 @@ export default function MyTraining({trainingList, exercises}: MyTrainingProps) {
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
+    // чтобы при фильтрации не оставаться на странице, где элементов уже нет
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchName, setCurrentPage]);
+
     return (
         <div className="space-y-4" ref={listTopRef} >
             <MyTrainingHeader
@@ -48,21 +61,17 @@ export default function MyTraining({trainingList, exercises}: MyTrainingProps) {
                         // Преобразуем id упражнений в имена; поддержим оба варианта:
                         // 1) id из поля exercises.id (1..N)
                         // 2) индекс массива exercises (0..N-1), если id не найден
-                        // eslint-disable-next-line react-hooks/rules-of-hooks
-                        const exerciseNames: string[] = useMemo(()=>{
-                            return (
-                                item.exercises
-                                    .map((n) => {
-                                        const byId = exercises.find(ex => ex.id === n);
-                                        if (byId) return byId.name;
-                                        // если n — корректный индекс
-                                        if (n >= 0 && n < exercises.length) {
-                                            return exercises[n].name;
-                                        }
-                                        return null;
-                                    })
-                                    .filter((v): v is string => Boolean(v)))
-                        }, [item.exercises])
+                        const exerciseNames: string[] = item.exercises
+                            .map((n) => {
+                                const byId = exerciseNameById.get(n);
+                                if (byId) return byId;
+                                // если n — корректный индекс
+                                if (n >= 0 && n < exercises.length) {
+                                    return exercises[n]?.name ?? null;
+                                }
+                                return null;
+                            })
+                            .filter((v): v is string => Boolean(v));
 
                         return (
                             <MyTrainingRow

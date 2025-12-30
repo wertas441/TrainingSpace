@@ -67,5 +67,26 @@ export async function getExercisesList(tokenValue: string | undefined):Promise<E
     }
 }
 
+export const normalizeToYMD = (dateStr: string): string => {
+    const s = String(dateStr ?? '').trim();
+    if (!s) return '';
 
+    // already ISO date
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+    // legacy backend / UI formats: DD-MM-YYYY or DD.MM.YYYY
+    const m = s.match(/^(\d{2})[.-](\d{2})[.-](\d{4})$/);
+    if (m) {
+        const [, dd, mm, yyyy] = m;
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // fallback: try native Date parsing
+    const d = new Date(s);
+    if (Number.isNaN(d.getTime())) return s;
+    const y = d.getFullYear();
+    const mo = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${mo}-${day}`;
+};
 

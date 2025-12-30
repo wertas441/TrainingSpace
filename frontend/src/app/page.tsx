@@ -26,6 +26,7 @@ export default async function Home() {
     const goalsShortyList = await getGoalShortyList(tokenValue);
     const nutritionGraphicData = await getNutritionGraphicInfo(tokenValue);
 
+
     if (!nutritionGraphicData || !goalsShortyList) {
         return (
             <ErrorState

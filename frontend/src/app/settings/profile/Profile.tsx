@@ -6,10 +6,20 @@ import {
 } from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
-import {UserProfileRequest} from "@/types/indexTypes";
 import {thirdDarkColorTheme} from "@/styles";
+import {getUserData, useUserStore} from "@/lib/store/userStore";
+import ErrorState from "@/components/errors/ErrorState";
 
-export default function Profile({ userData }: { userData: UserProfileRequest}) {
+export default function Profile() {
+
+    const userData = useUserStore(getUserData)
+
+    if (!userData) {
+        return <ErrorState
+            title="Проблема с получением ваших данных"
+            description="Похоже, что ваша сессия истекла или отсутствует токен доступа. Попробуйте войти заново."
+        />
+    }
 
     const createdAtDate = userData.createdAt ? new Date(userData.createdAt) : null;
 

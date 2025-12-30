@@ -7,6 +7,7 @@ import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
 import NullElementsError from "@/components/errors/NullElementsError";
+import {normalizeToYMD} from "@/lib";
 
 function Nutrition({userDays}: {userDays: NutritionDay[]}) {
 
@@ -41,7 +42,7 @@ function Nutrition({userDays}: {userDays: NutritionDay[]}) {
 
         return userDays.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
-            const matchesData = searchDate === '' || e.date === searchDate;
+            const matchesData = searchDate === '' || normalizeToYMD(e.date) === searchDate;
             const byCaloriesMin = cMin === undefined || e.calories >= cMin;
             const byCaloriesMax = cMax === undefined || e.calories <= cMax;
             const byProteinMin = pMin === undefined || e.protein >= pMin;

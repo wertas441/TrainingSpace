@@ -7,11 +7,11 @@ import {
     UserCircleIcon
 } from "@heroicons/react/24/outline";
 import {SettingsMenuItemsStructure} from "@/types/indexTypes";
-import {logout} from "@/lib/controllers/settingController";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import {secondDarkColorTheme} from "@/styles";
+import {makeLogout, useUserStore} from "@/lib/store/userStore";
 
 const settingsMenuItems: SettingsMenuItemsStructure[] = [
     { id: 'profile', link: '/settings/profile',  label: 'Профиль', icon: UserCircleIcon },
@@ -24,9 +24,11 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
 
     const {router} = usePageUtils();
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
+    const logout = useUserStore(makeLogout);
 
-    const logOutButton = () => {
-        logout().then(r => router.replace("/auth/login") );
+    const logOutButton = async () => {
+        await logout();
+        router.replace("/auth/login");
     }
 
     return (
