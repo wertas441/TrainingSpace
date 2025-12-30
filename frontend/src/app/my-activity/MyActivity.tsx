@@ -7,6 +7,7 @@ import MainPagination from "@/components/UI/other/MainPagination";
 import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
 import MyActivityRow from "@/components/elements/MyActivityRow";
 import NullElementsError from "@/components/errors/NullElementsError";
+import {normalizeToYMD} from "@/lib";
 
 export default function MyActivity({clientActivity}:{clientActivity: ActivityDataStructure[]; }) {
 
@@ -31,7 +32,7 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
                 q.length === 0 || activity.name.toLowerCase().includes(q);
 
             const matchesDate =
-                !searchDate || activity.activityDate.startsWith(searchDate);
+                !searchDate || normalizeToYMD(activity.activityDate) === searchDate;
 
             const matchesDifficulty =
                 difficultFilter === null || activity.difficulty === difficultFilter;
