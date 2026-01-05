@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {AddTrainingFrontendStructure, TrainingListFrontendStructure, TrainingUpdateFrontendStructure} from "../types/trainingBackendTypes";
+import {
+    AddTrainingFrontendStructure,
+    TrainingUpdateFrontendStructure
+} from "../types/trainingBackendTypes";
 import {
     validateTrainingDescription,
     validateTrainingExercises,
@@ -15,11 +18,11 @@ const router = Router();
 
 router.post('/add-new-training', authGuard, async (req, res) => {
     try {
-        const {name, description, exercises}: AddTrainingFrontendStructure = req.body;
+        const { requestData }: {requestData: AddTrainingFrontendStructure} = req.body;
 
-        const trainingNameError:boolean = validateTrainingName(name);
-        const trainingDescriptionError:boolean = validateTrainingDescription(description);
-        const exercisesError:boolean = validateTrainingExercises(exercises);
+        const trainingNameError:boolean = validateTrainingName(requestData.name);
+        const trainingDescriptionError:boolean = validateTrainingDescription(requestData.description);
+        const exercisesError:boolean = validateTrainingExercises(requestData.exercises);
 
         const userId = (req as any).userId as number;
 
@@ -31,7 +34,7 @@ router.post('/add-new-training', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await TrainingModel.create({user_id: userId, name, description, exercises});
+        await TrainingModel.create(userId, requestData);
 
         const response: ApiResponse = {
             success: true,
@@ -48,9 +51,7 @@ router.post('/add-new-training', authGuard, async (req, res) => {
 
 router.get('/my-training-list', authGuard, async (req, res) => {
     try {
-
         const userId = (req as any).userId as number;
-
         const trainings = await TrainingModel.getList(userId);
 
         const response: ApiResponse = {
@@ -71,6 +72,7 @@ router.get('/my-training-list', authGuard, async (req, res) => {
 router.get('/:id/exercises', authGuard, async (req, res) => {
     try {
         const trainingId = Number(req.params.id);
+
         if (!Number.isFinite(trainingId)) {
             const response: ApiResponse = {
                 success: false,
@@ -80,7 +82,6 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
         }
 
         const userId = (req as any).userId as number;
-
         const exercises = await ExerciseModel.getByTrainingId(trainingId, userId);
 
         const response: ApiResponse = {
@@ -100,8 +101,7 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
 router.get('/about-my-training', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-        const trainingPublicIdRaw = req.query.trainingId;
-        const trainingPublicId = String(trainingPublicIdRaw || '').trim();
+        const trainingPublicId = String(req.query.trainingId || '').trim();
 
         if (!trainingPublicId) {
             const response: ApiResponse = {
@@ -137,10 +137,10 @@ router.get('/about-my-training', authGuard, async (req, res) => {
 
 router.delete('/delete-my-training', authGuard, async (req, res) => {
     try {
-        const { trainingId: trainingPublicIdRaw } = req.body;
+        const { trainingId } = req.body;
         const userId = (req as any).userId as number;
 
-        const trainingPublicId = String(trainingPublicIdRaw || '').trim();
+        const trainingPublicId = String(trainingId || '').trim();
 
         if (!trainingPublicId) {
             const response: ApiResponse = {
@@ -175,22 +175,12 @@ router.delete('/delete-my-training', authGuard, async (req, res) => {
 
 router.put('/update-my-training', authGuard, async (req, res) => {
     try {
-        const {trainingId, name, description, exercises}: TrainingUpdateFrontendStructure = req.body;
+        const { requestData }: {requestData: TrainingUpdateFrontendStructure} = req.body;
         const userId = (req as any).userId as number;
 
-        const trainingPublicId = String(trainingId || '').trim();
-
-        if (!trainingPublicId) {
-            const response: ApiResponse = {
-                success: false,
-                error: 'Некорректный идентификатор тренировки.',
-            };
-            return res.status(400).json(response);
-        }
-
-        const trainingNameError:boolean = validateTrainingName(name);
-        const trainingDescriptionError:boolean = validateTrainingDescription(description);
-        const exercisesError:boolean = validateTrainingExercises(exercises);
+        const trainingNameError:boolean = validateTrainingName(requestData.name);
+        const trainingDescriptionError:boolean = validateTrainingDescription(requestData.description);
+        const exercisesError:boolean = validateTrainingExercises(requestData.exercises);
 
         if (!trainingNameError || !trainingDescriptionError || !exercisesError) {
             const response: ApiResponse = {
@@ -200,7 +190,7 @@ router.put('/update-my-training', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await TrainingModel.update(userId, trainingPublicId, {name, description, exercises});
+        await TrainingModel.update(userId, requestData);
 
         const response: ApiResponse = {
             success: true,

@@ -1,5 +1,4 @@
 
-
 export interface MainStatisticsBackendResponse {
     totalDays: number;
     totalTraining: number;

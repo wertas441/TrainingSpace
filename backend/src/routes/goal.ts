@@ -3,7 +3,6 @@ import { authGuard } from '../middleware/authMiddleware';
 import { ApiResponse } from "../types";
 import {
     AddNewGoalFrontendStructure,
-    GoalUpdateFrontendResponse,
     GoalUpdateFrontendStructure
 } from "../types/goalBackendTypes";
 import { validateGoalDescription, validateGoalName, validateGoalPriority } from "../lib/backendValidators/goalValidators";
@@ -14,11 +13,11 @@ const router = Router();
 
 router.post('/add-new-goal', authGuard, async (req, res) => {
     try {
-        const {name, description, priority}: AddNewGoalFrontendStructure = req.body;
+        const { requestData }: {requestData: AddNewGoalFrontendStructure} = req.body;
 
-        const goalNameError:boolean = validateGoalName(name);
-        const goalDescriptionError:boolean = validateGoalDescription(description);
-        const goalPriorityError:boolean = validateGoalPriority(priority);
+        const goalNameError:boolean = validateGoalName(requestData.name);
+        const goalDescriptionError:boolean = validateGoalDescription(requestData.description);
+        const goalPriorityError:boolean = validateGoalPriority(requestData.priority);
 
         const userId = (req as any).userId as number;
 
@@ -30,7 +29,7 @@ router.post('/add-new-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await GoalModel.create({userId, name, description, priority });
+        await GoalModel.create(userId, requestData);
 
         const response: ApiResponse = {
             success: true,
@@ -47,9 +46,7 @@ router.post('/add-new-goal', authGuard, async (req, res) => {
 
 router.get('/my-goals-list', authGuard, async (req, res) => {
     try {
-
         const userId = (req as any).userId as number;
-
         const goals = await GoalModel.getList(userId);
         
         const response: ApiResponse = {
@@ -68,7 +65,6 @@ router.get('/my-goals-list', authGuard, async (req, res) => {
 
 router.get('/my-shorty-list', authGuard, async (req, res) => {
     try {
-
         const userId = (req as any).userId as number;
         const goals = await GoalModel.getShortyList(userId);
 
@@ -88,10 +84,10 @@ router.get('/my-shorty-list', authGuard, async (req, res) => {
 
 router.delete('/delete-my-goal', authGuard, async (req, res) => {
     try {
-        const { goalId: goalPublicIdRaw } = req.body;
+        const { goalId } = req.body;
         const userId = (req as any).userId as number;
 
-        const goalPublicId = String(goalPublicIdRaw || '').trim();
+        const goalPublicId = String(goalId || '').trim();
 
         if (!goalPublicId) {
             const response: ApiResponse = {
@@ -127,9 +123,7 @@ router.delete('/delete-my-goal', authGuard, async (req, res) => {
 router.get('/about-my-goal', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-
-        const goalPublicIdRaw = req.query.goalId;
-        const goalPublicId = String(goalPublicIdRaw || '').trim();
+        const goalPublicId = String(req.query.goalId || '').trim();
 
         if (!goalPublicId) {
             const response: ApiResponse = {
@@ -165,11 +159,10 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
 
 router.put('/update-my-goal', authGuard, async (req, res) => {
     try {
-        const { goalId, name, description, priority }: GoalUpdateFrontendStructure = req.body;
+        const { requestData }: {requestData: GoalUpdateFrontendStructure} = req.body;
         const userId = (req as any).userId as number;
 
-
-        const goalPublicId = String(goalId || '').trim();
+        const goalPublicId = String(requestData.goalId || '').trim();
 
         if (!goalPublicId) {
             const response: ApiResponse = {
@@ -179,9 +172,9 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const goalNameValid = validateGoalName(name);
-        const goalDescriptionValid = validateGoalDescription(description);
-        const goalPriorityValid = validateGoalPriority(priority);
+        const goalNameValid = validateGoalName(requestData.name);
+        const goalDescriptionValid = validateGoalDescription(requestData.description);
+        const goalPriorityValid = validateGoalPriority(requestData.priority);
 
         if (!goalNameValid || !goalDescriptionValid || !goalPriorityValid) {
             const response: ApiResponse = {
@@ -191,7 +184,7 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await GoalModel.update({name, description, priority, goalId: goalPublicId, userId} as GoalUpdateFrontendResponse);
+        await GoalModel.update(userId, requestData);
 
         const response: ApiResponse = {
             success: true,
@@ -208,9 +201,8 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
 
 router.put('/complete-my-goal', authGuard, async (req, res) => {
     try {
-        const { goalId }:{goalId: string} = req.body;
+        const { goalId } = req.body;
         const userId = (req as any).userId as number;
-
 
         if (!goalId) {
             const response: ApiResponse = {
@@ -237,9 +229,7 @@ router.put('/complete-my-goal', authGuard, async (req, res) => {
 
 router.get('/my-complete-list', authGuard, async (req, res) => {
     try {
-
         const userId = (req as any).userId as number;
-
         const goals = await GoalModel.getCompleteList(userId);
 
         const response: ApiResponse = {

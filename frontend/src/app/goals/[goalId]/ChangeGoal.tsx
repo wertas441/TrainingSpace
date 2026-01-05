@@ -43,10 +43,12 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
         setIsSubmitting(true);
 
         const payload = {
-            goalId: goalInfo.publicId,
-            name: values.goalName,
-            description: values.goalDescription,
-            priority: values.goalPriority,
+            requestData: {
+                goalId: goalInfo.publicId,
+                name: values.goalName,
+                description: values.goalDescription,
+                priority: values.goalPriority,
+            }
         }
 
         try {

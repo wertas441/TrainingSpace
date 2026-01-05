@@ -1,5 +1,9 @@
 import { pool } from '../config/database';
-import {User, UserCreateRequest, UserProfileResponse} from "../types/authBackendTypes";
+import {
+    User,
+    UserCreateRequest,
+    UserProfileResponse
+} from "../types/authBackendTypes";
 
 export class UserModel {
 

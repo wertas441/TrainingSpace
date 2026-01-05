@@ -94,10 +94,12 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
         setIsSubmitting(true);
 
         const payload = {
-            trainingId: trainingInfo.publicId,
-            name: values.trainingName,
-            description: values.trainingDescription,
-            exercises: selectedExerciseIds,
+            requestData: {
+                trainingId: trainingInfo.publicId,
+                name: values.trainingName,
+                description: values.trainingDescription,
+                exercises: selectedExerciseIds,
+            }
         }
 
         try {

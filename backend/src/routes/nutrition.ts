@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {AddNewDayFrontendStructure, DayListFrontendStructure, DayUpdateFrontendStructure} from "../types/nutritionBackendTypes";
+import {AddNewDayFrontendStructure, DayUpdateFrontendStructure} from "../types/nutritionBackendTypes";
 import {
-    validateCalories, validateCarb,
+    validateCalories,
+    validateCarb,
     validateDayDescription,
     validateDayName,
-    validateFat, validateNutritionDayDate,
+    validateFat,
+    validateNutritionDayDate,
     validateProtein
 } from "../lib/backendValidators/nutrationValidators";
 import {NutritionModel} from "../models/Nutrition";
@@ -16,15 +18,15 @@ const router = Router();
 
 router.post('/add-new-day', authGuard, async (req, res) => {
     try {
-        const {name, description, calories, protein, fat, carb, date}: AddNewDayFrontendStructure = req.body;
+        const { requestData }: {requestData: AddNewDayFrontendStructure } = req.body;
 
-        const dayNameError:boolean = validateDayName(name);
-        const dayDescriptionError:boolean = validateDayDescription(description);
-        const caloriesError:boolean = validateCalories(calories);
-        const proteinError:boolean = validateProtein(protein);
-        const fatError:boolean = validateFat(fat);
-        const carbError:boolean = validateCarb(carb);
-        const dayDateError:boolean = validateNutritionDayDate(date);
+        const dayNameError:boolean = validateDayName(requestData.name);
+        const dayDescriptionError:boolean = validateDayDescription(requestData.description);
+        const caloriesError:boolean = validateCalories(requestData.calories);
+        const proteinError:boolean = validateProtein(requestData.protein);
+        const fatError:boolean = validateFat(requestData.fat);
+        const carbError:boolean = validateCarb(requestData.carb);
+        const dayDateError:boolean = validateNutritionDayDate(requestData.date);
 
         const userId = (req as any).userId as number;
 
@@ -36,7 +38,7 @@ router.post('/add-new-day', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await NutritionModel.create({user_id: userId, name, description, calories, protein, fat, carb, date});
+        await NutritionModel.create(userId, requestData);
 
         const response: ApiResponse = {
             success: true,
@@ -54,7 +56,6 @@ router.post('/add-new-day', authGuard, async (req, res) => {
 router.get('/my-day-list', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-
         const days = await NutritionModel.getList(userId);
 
         const response: ApiResponse = {
@@ -69,15 +70,14 @@ router.get('/my-day-list', authGuard, async (req, res) => {
 
         res.status(500).json(response);
     }
-
 });
 
 router.delete('/delete-my-day', authGuard, async (req, res) => {
     try {
-        const { dayId: dayPublicIdRaw } = req.body;
+        const { dayId } = req.body;
         const userId = (req as any).userId as number;
 
-        const dayPublicId = String(dayPublicIdRaw || '').trim();
+        const dayPublicId = String(dayId || '').trim();
 
         if (!dayPublicId) {
             const response: ApiResponse = {
@@ -113,9 +113,7 @@ router.delete('/delete-my-day', authGuard, async (req, res) => {
 router.get('/about-my-day', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-
-        const dayPublicIdRaw = req.query.dayId;
-        const dayPublicId = String(dayPublicIdRaw || '').trim();
+        const dayPublicId = String(req.query.dayId || '').trim();
 
         if (!dayPublicId) {
             const response: ApiResponse = {
@@ -151,27 +149,16 @@ router.get('/about-my-day', authGuard, async (req, res) => {
 
 router.put('/update-my-day', authGuard, async (req, res) => {
     try {
-        const {dayId, name, description, calories, protein, fat, carb, date}: DayUpdateFrontendStructure = req.body;
+        const { requestData }: {requestData: DayUpdateFrontendStructure} = req.body;
         const userId = (req as any).userId as number;
 
-        const dayPublicId = String(dayId || '').trim();
-
-        if (!dayPublicId) {
-            const response: ApiResponse = {
-                success: false,
-                error: 'Некорректный идентификатор дня.',
-            };
-            return res.status(400).json(response);
-        }
-
-        const dayNameError:boolean = validateDayName(name);
-        const dayDescriptionError:boolean = validateDayDescription(description);
-        const caloriesError:boolean = validateCalories(calories);
-        const proteinError:boolean = validateProtein(protein);
-        const fatError:boolean = validateFat(fat);
-        const carbError:boolean = validateCarb(carb);
-        const dayDateError:boolean = validateNutritionDayDate(date);
-
+        const dayNameError:boolean = validateDayName(requestData.name);
+        const dayDescriptionError:boolean = validateDayDescription(requestData.description);
+        const caloriesError:boolean = validateCalories(requestData.calories);
+        const proteinError:boolean = validateProtein(requestData.protein);
+        const fatError:boolean = validateFat(requestData.fat);
+        const carbError:boolean = validateCarb(requestData.carb);
+        const dayDateError:boolean = validateNutritionDayDate(requestData.date);
 
         if (!dayNameError || !dayDescriptionError || !caloriesError || !proteinError || !fatError || !carbError || !dayDateError) {
             const response: ApiResponse = {
@@ -181,17 +168,7 @@ router.put('/update-my-day', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await NutritionModel.update({
-            name,
-            description,
-            calories,
-            protein,
-            fat,
-            carb,
-            date,
-            publicId: dayPublicId,
-            user_id: userId,
-        });
+        await NutritionModel.update(userId, requestData);
 
         const response: ApiResponse = {
             success: true,

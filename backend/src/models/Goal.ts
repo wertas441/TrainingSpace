@@ -1,21 +1,23 @@
 import { pool } from '../config/database';
 import {
+    AddNewGoalFrontendStructure,
     CompleteGoalListFrontendResponse,
-    CreateGoalFrontendStructure,
-    GoalListFrontendResponse, GoalShortyFrontendResponse, GoalUpdateFrontendResponse,
+    GoalListFrontendResponse,
+    GoalShortyFrontendResponse,
+    GoalUpdateFrontendStructure,
 } from "../types/goalBackendTypes";
 
 export class GoalModel {
 
     // Создание новой цели
-    static async create(goalData: CreateGoalFrontendStructure) {
+    static async create(userId: number, goalData: AddNewGoalFrontendStructure) {
         const query = `
             INSERT INTO goal (user_id, name, description, priority)
             VALUES ($1, $2, $3, $4)
         `;
 
         const values = [
-            goalData.userId,
+            userId,
             goalData.name,
             goalData.description,
             goalData.priority,
@@ -76,7 +78,7 @@ export class GoalModel {
     }
 
     // Обновление существующей цели пользователя
-    static async update(updateData: GoalUpdateFrontendResponse): Promise<void> {
+    static async update(userId: number, updateData: GoalUpdateFrontendStructure): Promise<void> {
         const query = `
             UPDATE goal
             SET name = $1, 
@@ -90,7 +92,7 @@ export class GoalModel {
             updateData.description,
             updateData.priority,
             updateData.goalId,
-            updateData.userId,
+            userId,
         ];
 
         const { rowCount } = await pool.query(query, values);

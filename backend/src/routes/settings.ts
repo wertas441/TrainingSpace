@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
 import {ChangeEmailFrontendStructure, ChangePasswordFrontendStructure} from "../types/settingsBackendTypes";
-import { config } from '../config';
 import {
     validateConfirmPassword,
     validateTwoPassword, validateUserEmail,
@@ -15,11 +14,11 @@ const router = Router();
 
 router.post('/change-email', authGuard, async (req, res) => {
     try {
-        const {newEmail, currentPassword}: ChangeEmailFrontendStructure = req.body;
+        const {requestData}: {requestData: ChangeEmailFrontendStructure} = req.body;
         const userId = (req as any).userId as number;
 
-        const newEmailError:boolean = validateUserEmail(newEmail);
-        const currentPasswordError:boolean = validateUserPassword(currentPassword);
+        const newEmailError:boolean = validateUserEmail(requestData.newEmail);
+        const currentPasswordError:boolean = validateUserPassword(requestData.currentPassword);
 
         if (!newEmailError || !currentPasswordError) {
             const response: ApiResponse = {
@@ -29,7 +28,7 @@ router.post('/change-email', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await SettingModel.changeEmail({userId, newEmail, currentPassword});
+        await SettingModel.changeEmail(userId, requestData);
 
         const response: ApiResponse = {
             success: true,
@@ -80,12 +79,12 @@ router.post('/change-email', authGuard, async (req, res) => {
 
 router.post('/change-password', authGuard, async (req, res) => {
     try {
-        const {currentPassword, newPassword, confirmPassword}: ChangePasswordFrontendStructure = req.body;
+        const { requestData }: {requestData: ChangePasswordFrontendStructure} = req.body;
 
-        const currentPasswordError:boolean = validateUserPassword(currentPassword);
-        const newPasswordError:boolean = validateUserPassword(newPassword);
-        const confirmPasswordError:boolean = validateConfirmPassword(newPassword, confirmPassword);
-        const twoPasswordError:boolean = validateTwoPassword(currentPassword, newPassword);
+        const currentPasswordError:boolean = validateUserPassword(requestData.currentPassword);
+        const newPasswordError:boolean = validateUserPassword(requestData.newPassword);
+        const confirmPasswordError:boolean = validateConfirmPassword(requestData.newPassword, requestData.confirmPassword);
+        const twoPasswordError:boolean = validateTwoPassword(requestData.currentPassword, requestData.newPassword);
 
         const userId = (req as any).userId as number;
 
@@ -97,7 +96,7 @@ router.post('/change-password', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await SettingModel.changePassword({userId, currentPassword, newPassword, confirmPassword});
+        await SettingModel.changePassword(userId, requestData);
 
         const response: ApiResponse = {
             success: true,
@@ -130,8 +129,8 @@ router.post('/change-password', authGuard, async (req, res) => {
     }
 });
 
-router.delete('/delete-my-account', authGuard, async (req, res) => {
-
-});
+// router.delete('/delete-my-account', authGuard, async (req, res) => {
+//
+// });
 
 export default router;

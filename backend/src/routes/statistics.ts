@@ -1,6 +1,5 @@
 import {Router} from 'express';
 import {authGuard} from '../middleware/authMiddleware';
-import {config} from '../config';
 import {StatisticsModel} from "../models/Statistics";
 import {
     MainStatisticsBackendResponse,
@@ -15,7 +14,6 @@ const router = Router();
 router.get('/main-information', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-
         const mainCardsData = await StatisticsModel.getMainInformation(userId);
 
         const response: ApiResponse<{ mainCardsData: MainStatisticsBackendResponse }> = {
@@ -35,7 +33,6 @@ router.get('/main-information', authGuard, async (req, res) => {
 router.get('/nutrition-information', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-
         const nutritionCardData = await StatisticsModel.getNutritionInformation(userId);
 
         const response: ApiResponse<{ nutritionCardData: NutritionStatisticsBackendResponse }> = {
@@ -55,7 +52,6 @@ router.get('/nutrition-information', authGuard, async (req, res) => {
 router.get('/nutrition-graphic-info', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-
         const nutritionGraphicData = await StatisticsModel.getNutritionGraphicInformation(userId);
 
         const response: ApiResponse<{ graphicData: NutritionGraphicBackendResponse[] }> = {

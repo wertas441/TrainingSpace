@@ -1,6 +1,9 @@
 import { pool } from '../config/database';
 import bcrypt from 'bcryptjs';
-import {ChangeEmailBackendRequest, ChangePasswordBackendRequest} from "../types/settingsBackendTypes";
+import {
+    ChangeEmailFrontendStructure,
+    ChangePasswordFrontendStructure,
+} from "../types/settingsBackendTypes";
 
 export class SettingModel {
 
@@ -36,12 +39,12 @@ export class SettingModel {
         return userRow; // Возвращаем данные
     }
 
-    static async changePassword(userData: ChangePasswordBackendRequest)  {
+    static async changePassword(userId: number, data: ChangePasswordFrontendStructure)  {
 
-        await this.#verifyUserAndGetInfo(userData.userId, userData.currentPassword);
+        await this.#verifyUserAndGetInfo(userId, data.currentPassword);
 
         // Хешируем новый пароль и обновляем его в таблице users
-        const newHashedPassword = await bcrypt.hash(userData.newPassword, 10);
+        const newHashedPassword = await bcrypt.hash(data.newPassword, 10);
 
         const updateQuery = `
             UPDATE users
@@ -50,15 +53,15 @@ export class SettingModel {
             WHERE id = $2
         `;
 
-        await pool.query(updateQuery, [newHashedPassword, userData.userId]);
+        await pool.query(updateQuery, [newHashedPassword, userId]);
     }
 
-    static async changeEmail(userData: ChangeEmailBackendRequest) {
+    static async changeEmail(userId:number, data: ChangeEmailFrontendStructure) {
 
         // Нормализуем новый email (обрезаем пробелы, приводим к нижнему регистру)
-        const normalizedNewEmail = userData.newEmail.trim().toLowerCase();
+        const normalizedNewEmail = data.newEmail.trim().toLowerCase();
 
-        const userRow = await this.#verifyUserAndGetInfo(userData.userId, userData.currentPassword);
+        const userRow = await this.#verifyUserAndGetInfo(userId, data.currentPassword);
 
         const normalizedCurrentEmail =
             typeof userRow.email === 'string'
@@ -79,7 +82,7 @@ export class SettingModel {
         `;
 
         try {
-            await pool.query(updateQuery, [normalizedNewEmail, userData.userId]);
+            await pool.query(updateQuery, [normalizedNewEmail, userId]);
         } catch (err: any) {
             // Обработка уникального ограничения email (PostgreSQL: 23505)
             if (err?.code === '23505') {

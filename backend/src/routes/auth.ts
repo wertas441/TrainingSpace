@@ -73,6 +73,7 @@ router.post('/registration', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { userName, password, rememberMe }: LoginRequest = req.body;
+
         const userNameValidation = userNameValidator(userName)
         const passwordValidation = userPasswordValidator(password);
 

@@ -52,14 +52,16 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
         setIsSubmitting(true);
 
         const payload = {
-            dayId: dayInfo.publicId,
-            name: values.dayName,
-            description: values.dayDescription,
-            date: values.dayDate,
-            calories: parseInt(values.calories, 10),
-            protein: parseInt(values.protein, 10),
-            fat: parseInt(values.fat, 10),
-            carb: parseInt(values.carb, 10),
+            requestData: {
+                publicId: dayInfo.publicId,
+                name: values.dayName,
+                description: values.dayDescription,
+                date: values.dayDate,
+                calories: parseInt(values.calories, 10),
+                protein: parseInt(values.protein, 10),
+                fat: parseInt(values.fat, 10),
+                carb: parseInt(values.carb, 10),
+            }
         }
 
         try {

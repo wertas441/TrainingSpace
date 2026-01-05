@@ -1,13 +1,13 @@
 import { pool } from '../config/database';
 import {
-    AddDayModelRequestStructure,
+    AddNewDayFrontendStructure,
     DayListFrontendStructure,
-    DayUpgradeRequestStructure
+    DayUpdateFrontendStructure,
 } from "../types/nutritionBackendTypes";
 
 export class NutritionModel {
 
-    static async create(nutritionData: AddDayModelRequestStructure) {
+    static async create(userId: number, nutritionData: AddNewDayFrontendStructure) {
 
         // Проверяем, есть ли уже запись с такой датой для этого пользователя
         const checkQuery = `
@@ -18,7 +18,7 @@ export class NutritionModel {
         `;
 
         const { rows: existingRows } = await pool.query(checkQuery, [
-            nutritionData.user_id,
+            userId,
             nutritionData.date,
         ]);
 
@@ -42,7 +42,7 @@ export class NutritionModel {
         `;
 
         const values = [
-            nutritionData.user_id,
+            userId,
             nutritionData.name,
             nutritionData.description,
             nutritionData.calories,
@@ -97,7 +97,7 @@ export class NutritionModel {
         return rows[0] ?? null;
     }
 
-    static async update(updateData: DayUpgradeRequestStructure): Promise<void> {
+    static async update(userId: number, updateData: DayUpdateFrontendStructure): Promise<void> {
         const query = `
             UPDATE nutrition
             SET name = $1, 
@@ -119,7 +119,7 @@ export class NutritionModel {
             updateData.carb,
             updateData.date,
             updateData.publicId,
-            updateData.user_id
+            userId
         ];
 
         const { rowCount } = await pool.query(query, values);

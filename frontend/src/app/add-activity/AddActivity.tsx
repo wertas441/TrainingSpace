@@ -110,13 +110,15 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         }, []);
 
         const payload = {
-            activity_name: values.activityName,
-            description: values.activityDescription,
-            performed_at: values.activityDate,
-            activity_type: values.activityType,
-            activity_difficult: values.activityDifficulty,
-            training_id: Number(values.trainingId),
-            exercises: exercisesPayload,
+            requestData: {
+                activityName: values.activityName,
+                description: values.activityDescription,
+                performedAt: values.activityDate,
+                activityType: values.activityType,
+                activityDifficult: values.activityDifficulty,
+                trainingId: Number(values.trainingId),
+                exercises: exercisesPayload,
+            }
         }
 
         try {
