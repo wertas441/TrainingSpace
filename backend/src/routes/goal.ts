@@ -8,7 +8,7 @@ import {
 } from "../types/goalBackendTypes";
 import { validateGoalDescription, validateGoalName, validateGoalPriority } from "../lib/backendValidators/goalValidators";
 import { GoalModel } from "../models/Goal";
-import { config } from '../config';
+import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
@@ -39,14 +39,7 @@ router.post('/add-new-goal', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка добавления цели', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при добавлении новой цели ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при добавлении новой цели');
 
         res.status(500).json(response);
     }
@@ -67,14 +60,7 @@ router.get('/my-goals-list', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка показа списка целей', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при показе списка целей ${devSuffix}`
-        };
+        const response = showBackendError(error, `Ошибка при показе списка целей`);
 
         res.status(500).json(response);
     }
@@ -94,14 +80,7 @@ router.get('/my-shorty-list', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка показа короткого списка целей', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при показе короткого списка целей ${devSuffix}`
-        };
+        const response = showBackendError(error, `Ошибка при показе короткого списка целей`);
 
         res.status(500).json(response);
     }
@@ -139,13 +118,7 @@ router.delete('/delete-my-goal', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка удаления цели', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при удалении цели ${devSuffix}`
-        };
+        const response = showBackendError(error, `Ошибка при удалении цели`);
 
         res.status(500).json(response);
     }
@@ -184,14 +157,7 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка получения информации о цели', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при получении информации о цели ${devSuffix}`
-        };
+        const response = showBackendError(error, `Ошибка при получении информации о цели`);
 
         res.status(500).json(response);
     }
@@ -234,13 +200,7 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка изменения цели', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при изменении цели ${devSuffix}`
-        };
+        const response = showBackendError(error, `Ошибка при изменении цели`);
 
         res.status(500).json(response);
     }
@@ -269,13 +229,7 @@ router.put('/complete-my-goal', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка выполнения цели', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при выполннеии цели ${devSuffix}`
-        };
+        const response = showBackendError(error, `Ошибка при выполнении цели`);
 
         res.status(500).json(response);
     }
@@ -296,14 +250,7 @@ router.get('/my-complete-list', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка показа списка завершенных целей', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при показе списка завершенных целей ${devSuffix}`
-        };
+        const response = showBackendError(error, `Ошибка при показе списка завершенных целей`);
 
         res.status(500).json(response);
     }

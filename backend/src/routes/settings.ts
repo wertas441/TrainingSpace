@@ -9,6 +9,7 @@ import {
     validateUserPassword
 } from "../lib/backendValidators/settingsValidators";
 import {SettingModel} from "../models/Setting";
+import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
@@ -71,13 +72,7 @@ router.post('/change-email', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        console.error('Ошибка смены почты', error);
-
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при смене почты ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при смене почты');
 
         res.status(500).json(response);
     }
@@ -129,13 +124,7 @@ router.post('/change-password', authGuard, async (req, res) => {
             return res.status(404).json(response);
         }
 
-        console.error('Ошибка смены пароля', error);
-
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при смене пароля ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при смене пароля');
 
         res.status(500).json(response);
     }

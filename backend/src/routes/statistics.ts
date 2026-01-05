@@ -8,6 +8,7 @@ import {
     NutritionStatisticsBackendResponse
 } from "../types/statisticsBackendTypes";
 import {ApiResponse} from "../types";
+import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
@@ -20,20 +21,12 @@ router.get('/main-information', authGuard, async (req, res) => {
         const response: ApiResponse<{ mainCardsData: MainStatisticsBackendResponse }> = {
             success: true,
             message: 'main information was get successfully',
-            data: {
-                mainCardsData
-            }
+            data: { mainCardsData }
         };
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка получение информации для главных карточек', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при получении информации для главных карточек ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при получении информации для главных карточек');
 
         res.status(500).json(response);
     }
@@ -53,13 +46,7 @@ router.get('/nutrition-information', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка получение информации для карточек питания', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при получении информации для карточек питания ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при получении информации для карточек питания');
 
         res.status(500).json(response);
     }
@@ -79,13 +66,7 @@ router.get('/nutrition-graphic-info', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка получение информации для графика питания', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при получении информации для графика питания ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при получении информации для графика питания');
 
         res.status(500).json(response);
     }

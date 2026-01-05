@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import { config } from '../config';
 import {
     validateActivityDescription,
     validateActivityDifficult,
@@ -14,6 +13,7 @@ import {
 } from "../lib/backendValidators/activityValidators";
 import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activityBackendTypes";
 import {ActivityModel} from "../models/Activity";
+import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
@@ -72,13 +72,7 @@ router.post('/add-new-activity', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка добавления активности ', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при добавлении активности ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при добавлении активности');
 
         res.status(500).json(response);
     }
@@ -98,13 +92,7 @@ router.get('/my-activity-list', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка показа списка активностей', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при показе списка активностей ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при показе списка активностей');
 
         res.status(500).json(response);
     }
@@ -143,14 +131,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка получения информации об активности', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при получении информации об активности ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при получении информации об активности');
 
         res.status(500).json(response);
     }
@@ -187,13 +168,7 @@ router.delete('/delete-my-activity', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка удаления активности', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при удалении активности ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при удалении активности');
 
         res.status(500).json(response);
     }
@@ -258,13 +233,7 @@ router.put('/update-my-activity', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка изменения активности ', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при изменении активности ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при изменении активности');
 
         res.status(500).json(response);
     }

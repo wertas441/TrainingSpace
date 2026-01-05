@@ -10,7 +10,7 @@ import {
     validateProtein
 } from "../lib/backendValidators/nutrationValidators";
 import {NutritionModel} from "../models/Nutrition";
-import { config } from '../config';
+import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
@@ -45,13 +45,7 @@ router.post('/add-new-day', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка добавления дня', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при добавлении нового дня ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при добавлении нового дня');
 
         res.status(500).json(response);
     }
@@ -71,14 +65,7 @@ router.get('/my-day-list', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка показа списка дней', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при показе списка дней ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при показе списка дней');
 
         res.status(500).json(response);
     }
@@ -117,13 +104,7 @@ router.delete('/delete-my-day', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка удаления дня', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при удалении дня ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при удалении дня');
 
         res.status(500).json(response);
     }
@@ -162,14 +143,7 @@ router.get('/about-my-day', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка получения информации о дне', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при получении информации о дне ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при получении информации о дне');
 
         res.status(500).json(response);
     }
@@ -226,13 +200,7 @@ router.put('/update-my-day', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка изменения дня', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при изменении дня ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при изменении дня');
 
         res.status(500).json(response);
     }

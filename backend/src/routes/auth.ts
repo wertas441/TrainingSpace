@@ -7,12 +7,14 @@ import { UserModel } from '../models/User';
 import { config } from '../config';
 import { authGuard } from '../middleware/authMiddleware';
 import {LoginRequest, RegisterRequest} from "../types/authBackendTypes";
+import {showBackendError} from "../lib/indexUtils";
+
 const router = Router();
 
 router.post('/registration', async (req, res) => {
     try {
-
         const { email, password, userName }: RegisterRequest = req.body;
+
         const nameValidation = userNameValidator(userName);
         const emailValidation = userEmailValidator(email)
         const passwordValidation = userPasswordValidator(password);
@@ -62,13 +64,7 @@ router.post('/registration', async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка регистрации пользователя:', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при регистрации пользователя${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при регистрации пользователя');
 
         res.status(500).json(response);
     }
@@ -131,28 +127,21 @@ router.post('/login', async (req, res) => {
 
         res.json(response);
     } catch (error) {
-        console.error('Ошибка входа в систему:', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при входе в систему${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при входе в систему');
+
         res.status(500).json(response);
     }
 });
 
 router.post('/logout', authGuard, async (req, res) => {
     try {
-
         const userId = (req as any).userId as number;
 
         if (userId) {
             try {
                 await (await import('../config/database')).pool.query(
                     'UPDATE users SET last_seen_at = NOW() WHERE id = $1',
-                    [userId]
-                );
+                    [userId]);
             } catch {/* ignore */
             }
         }
@@ -194,13 +183,8 @@ router.get('/me', authGuard, async (req, res) => {
 
         res.json(response);
     } catch (error) {
-        console.error('Ошибка получения текущего пользователя:', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка получения пользователя${devSuffix}`
-        };
+        const response = showBackendError(error, `Ошибка получения информации о текущем пользователе`);
+
         res.status(500).json(response);
     }
 });
