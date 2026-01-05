@@ -33,8 +33,7 @@ export class GoalModel {
                    description,
                    priority
             FROM goal
-            WHERE user_id = $1
-              AND status IS NULL
+            WHERE user_id = $1 AND status IS NULL
             ORDER BY created_at DESC, id DESC
         `;
 
@@ -49,8 +48,7 @@ export class GoalModel {
                    public_id AS "publicId",
                    name
             FROM goal
-            WHERE user_id = $1
-              AND status IS NULL
+            WHERE user_id = $1 AND status IS NULL
             ORDER BY created_at DESC, id DESC
             LIMIT 10
         `;
@@ -81,7 +79,9 @@ export class GoalModel {
     static async update(updateData: GoalUpdateFrontendResponse): Promise<void> {
         const query = `
             UPDATE goal
-            SET name = $1, description = $2, priority = $3
+            SET name = $1, 
+                description = $2,
+                priority = $3
             WHERE public_id = $4 AND user_id = $5
         `;
 
@@ -135,8 +135,7 @@ export class GoalModel {
                    description,
                    achieve_at
             FROM goal
-            WHERE user_id = $1
-              AND status IS NOT NULL
+            WHERE user_id = $1 AND status IS NOT NULL
             ORDER BY achieve_at DESC, id DESC
         `;
 

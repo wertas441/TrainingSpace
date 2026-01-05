@@ -13,8 +13,7 @@ export class NutritionModel {
         const checkQuery = `
             SELECT id
             FROM nutrition
-            WHERE user_id = $1
-              AND day_date = $2::date
+            WHERE user_id = $1 AND day_date = $2::date
             LIMIT 1
         `;
 
@@ -59,16 +58,15 @@ export class NutritionModel {
     static async getList(userId: number): Promise<DayListFrontendStructure[]> {
 
         const query = `
-            SELECT 
-                id,
-                public_id AS "publicId",
-                name,
-                description,
-                calories,
-                protein,
-                fat,
-                carb,
-                to_char(day_date::date, 'DD-MM-YYYY') AS date
+            SELECT  id,
+                    public_id AS "publicId",
+                    name,
+                    description,
+                    calories,
+                    protein,
+                    fat,
+                    carb,
+                    to_char(day_date::date, 'DD-MM-YYYY') AS date
             FROM nutrition
             WHERE user_id = $1
             ORDER BY day_date DESC, id DESC
@@ -81,16 +79,15 @@ export class NutritionModel {
 
     static async information(userId: number, dayPublicId: string): Promise<DayListFrontendStructure | null> {
         const query = `
-            SELECT 
-                id,
-                public_id AS "publicId",
-                name, 
-                description, 
-                calories, 
-                protein, 
-                fat, 
-                carb, 
-                to_char(day_date::date, 'YYYY-MM-DD') AS date
+            SELECT  id,
+                    public_id AS "publicId",
+                    name, 
+                    description, 
+                    calories, 
+                    protein, 
+                    fat, 
+                    carb, 
+                    to_char(day_date::date, 'YYYY-MM-DD') AS date
             FROM nutrition
             WHERE public_id = $1 AND user_id = $2
         `;
