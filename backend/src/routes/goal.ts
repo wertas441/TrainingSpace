@@ -30,7 +30,7 @@ router.post('/add-new-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await GoalModel.create({user_id: userId, name, description, priority });
+        await GoalModel.create({userId, name, description, priority });
 
         const response: ApiResponse = {
             success: true,

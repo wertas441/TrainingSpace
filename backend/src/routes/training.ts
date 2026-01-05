@@ -133,7 +133,6 @@ router.get('/about-my-training', authGuard, async (req, res) => {
 
         res.status(500).json(response);
     }
-
 });
 
 router.delete('/delete-my-training', authGuard, async (req, res) => {
@@ -172,7 +171,6 @@ router.delete('/delete-my-training', authGuard, async (req, res) => {
 
         res.status(500).json(response);
     }
-
 });
 
 router.put('/update-my-training', authGuard, async (req, res) => {
@@ -215,7 +213,6 @@ router.put('/update-my-training', authGuard, async (req, res) => {
 
         res.status(500).json(response);
     }
-
 });
 
 

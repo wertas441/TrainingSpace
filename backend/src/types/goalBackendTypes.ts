@@ -9,7 +9,7 @@ export interface AddNewGoalFrontendStructure {
 
 
 export interface CreateGoalFrontendStructure extends AddNewGoalFrontendStructure {
-    user_id: number;
+    userId: number;
 }
 
 export interface GoalListFrontendResponse extends AddNewGoalFrontendStructure {

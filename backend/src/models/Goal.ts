@@ -15,7 +15,7 @@ export class GoalModel {
         `;
 
         const values = [
-            goalData.user_id,
+            goalData.userId,
             goalData.name,
             goalData.description,
             goalData.priority,
