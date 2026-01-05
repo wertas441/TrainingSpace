@@ -1,19 +1,22 @@
 import { pool } from '../config/database';
 import bcrypt from 'bcryptjs';
-import {ChangeEmailBackendRequest, ChangePasswordBackendRequest} from "../types/settingsBackendTypes";
+import {
+    ChangeEmailFrontendStructure,
+    ChangePasswordFrontendStructure,
+} from "../types/settingsBackendTypes";
 
 export class SettingModel {
 
-    static async changePassword(userData: ChangePasswordBackendRequest)  {
-
-        // Находим пользователя и его текущий хеш пароля
+    static async #verifyUserAndGetInfo(userId: number, currentPassword: string) {
         const getUserQuery = `
-            SELECT id, email, password_hash
+            SELECT  id, 
+                    email, 
+                    password_hash
             FROM users
             WHERE id = $1
         `;
 
-        const userResult = await pool.query(getUserQuery, [userData.userId]);
+        const userResult = await pool.query(getUserQuery, [userId]);
         const userRow = userResult.rows[0];
 
         if (!userRow) {
@@ -22,9 +25,8 @@ export class SettingModel {
             throw error;
         }
 
-        // Проверяем, что текущий пароль введён верно
         const isPasswordValid = await bcrypt.compare(
-            userData.currentPassword,
+            currentPassword,
             userRow.password_hash
         );
 
@@ -34,8 +36,15 @@ export class SettingModel {
             throw error;
         }
 
+        return userRow; // Возвращаем данные
+    }
+
+    static async changePassword(userId: number, data: ChangePasswordFrontendStructure)  {
+
+        await this.#verifyUserAndGetInfo(userId, data.currentPassword);
+
         // Хешируем новый пароль и обновляем его в таблице users
-        const newHashedPassword = await bcrypt.hash(userData.newPassword, 10);
+        const newHashedPassword = await bcrypt.hash(data.newPassword, 10);
 
         const updateQuery = `
             UPDATE users
@@ -44,41 +53,15 @@ export class SettingModel {
             WHERE id = $2
         `;
 
-        await pool.query(updateQuery, [newHashedPassword, userData.userId]);
+        await pool.query(updateQuery, [newHashedPassword, userId]);
     }
 
-    static async changeEmail(userData: ChangeEmailBackendRequest) {
+    static async changeEmail(userId:number, data: ChangeEmailFrontendStructure) {
 
         // Нормализуем новый email (обрезаем пробелы, приводим к нижнему регистру)
-        const normalizedNewEmail = userData.newEmail.trim().toLowerCase();
+        const normalizedNewEmail = data.newEmail.trim().toLowerCase();
 
-        // Находим пользователя и его текущий email и хеш пароля
-        const getUserQuery = `
-            SELECT id, email, password_hash
-            FROM users
-            WHERE id = $1
-        `;
-
-        const userResult = await pool.query(getUserQuery, [userData.userId]);
-        const userRow = userResult.rows[0];
-
-        if (!userRow) {
-            const error: any = new Error('User not found');
-            error.code = 'USER_NOT_FOUND';
-            throw error;
-        }
-
-        // Проверяем, что текущий пароль введён верно
-        const isPasswordValid = await bcrypt.compare(
-            userData.currentPassword,
-            userRow.password_hash
-        );
-
-        if (!isPasswordValid) {
-            const error: any = new Error('Неверный текущий пароль');
-            error.code = 'INVALID_CURRENT_PASSWORD';
-            throw error;
-        }
+        const userRow = await this.#verifyUserAndGetInfo(userId, data.currentPassword);
 
         const normalizedCurrentEmail =
             typeof userRow.email === 'string'
@@ -99,7 +82,7 @@ export class SettingModel {
         `;
 
         try {
-            await pool.query(updateQuery, [normalizedNewEmail, userData.userId]);
+            await pool.query(updateQuery, [normalizedNewEmail, userId]);
         } catch (err: any) {
             // Обработка уникального ограничения email (PostgreSQL: 23505)
             if (err?.code === '23505') {

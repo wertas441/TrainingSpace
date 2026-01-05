@@ -17,18 +17,15 @@ export interface ActivityExerciseRequest {
 
 // Тело запроса от фронта при создании активности
 export interface AddActivityFrontendRequest {
-    activity_name: string;
+    activityName: string;
     description: string;
-    activity_type: ActivityTypeStructure;
-    activity_difficult: ActivityDifficultyStructure;
-    training_id: number;
-    performed_at: string;
+    activityType: ActivityTypeStructure;
+    activityDifficult: ActivityDifficultyStructure;
+    trainingId: number;
+    performedAt: string;
     exercises: ActivityExerciseRequest[];
 }
 
-export interface AddActivityModelRequest extends AddActivityFrontendRequest {
-    user_id: number;
-}
 
 export interface ActivityExerciseFrontend {
     exercisesId: number;
@@ -38,17 +35,6 @@ export interface ActivityExerciseFrontend {
 export interface ActivityListFrontendStructure {
     id: number;
     publicId: string;
-    name: string;
-    description: string;
-    activityDate: string;
-    type: ActivityTypeStructure;
-    difficulty: ActivityDifficultyStructure;
-    trainingId: number;
-    exercises: ActivityExerciseFrontend[];
-}
-
-export interface ActivityUpdateFrontendStructure {
-    activityId: string;
     name: string;
     description: string;
     activityDate: string;

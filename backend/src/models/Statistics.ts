@@ -9,8 +9,7 @@ export class StatisticsModel {
 
     static async getMainInformation(userId: number): Promise<MainStatisticsBackendResponse> {
         const query = `
-            SELECT
-                (
+            SELECT (
                     SELECT COUNT(DISTINCT day_date)
                     FROM nutrition
                     WHERE user_id = $1
@@ -41,13 +40,12 @@ export class StatisticsModel {
     static async getNutritionInformation(userId: number): Promise<NutritionStatisticsBackendResponse> {
 
         const query = `
-            SELECT
-                COALESCE(ROUND(AVG(calories)::numeric, 1), 0)::float8 AS "averageCalories",
-                COALESCE(ROUND(AVG(protein)::numeric, 1), 0)::float8  AS "averageProtein",
-                COALESCE(ROUND(AVG(fat)::numeric, 1), 0)::float8      AS "averageFat",
-                COALESCE(ROUND(AVG(carb)::numeric, 1), 0)::float8     AS "averageCarb"
-            FROM nutrition
-            WHERE user_id = $1
+            SELECT  COALESCE(ROUND(AVG(calories)::numeric, 1), 0)::float8 AS "averageCalories",
+                    COALESCE(ROUND(AVG(protein)::numeric, 1), 0)::float8  AS "averageProtein",
+                    COALESCE(ROUND(AVG(fat)::numeric, 1), 0)::float8      AS "averageFat",
+                    COALESCE(ROUND(AVG(carb)::numeric, 1), 0)::float8     AS "averageCarb"
+            FROM    nutrition
+            WHERE   user_id = $1
         `;
 
         const {rows} = await pool.query(query, [userId]);
@@ -63,16 +61,15 @@ export class StatisticsModel {
 
     static async getNutritionGraphicInformation(userId: number): Promise<NutritionGraphicBackendResponse[]> {
         const query = `
-            SELECT
-                to_char(day_date::date, 'DD-MM-YYYY') AS date,
-                SUM(calories) AS calories,
-                SUM(protein)  AS protein,
-                SUM(fat)      AS fat,
-                SUM(carb)     AS carb
-            FROM nutrition
-            WHERE user_id = $1
-            GROUP BY day_date
-            ORDER BY day_date ASC
+            SELECT  to_char(day_date::date, 'DD-MM-YYYY') AS date,
+                    SUM(calories) AS calories,
+                    SUM(protein)  AS protein,
+                    SUM(fat)      AS fat,
+                    SUM(carb)     AS carb
+            FROM    nutrition
+            WHERE   user_id = $1
+            GROUP   BY day_date
+            ORDER   BY day_date ASC
         `;
 
         const {rows} = await pool.query(query, [userId]);

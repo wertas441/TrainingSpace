@@ -1,25 +1,24 @@
 import { pool } from '../config/database';
 import {
-    AddDayModelRequestStructure,
+    AddNewDayFrontendStructure,
     DayListFrontendStructure,
-    DayUpgradeRequestStructure
+    DayUpdateFrontendStructure,
 } from "../types/nutritionBackendTypes";
 
 export class NutritionModel {
 
-    static async create(nutritionData: AddDayModelRequestStructure) {
+    static async create(userId: number, nutritionData: AddNewDayFrontendStructure) {
 
         // Проверяем, есть ли уже запись с такой датой для этого пользователя
         const checkQuery = `
             SELECT id
             FROM nutrition
-            WHERE user_id = $1
-              AND day_date = $2::date
+            WHERE user_id = $1 AND day_date = $2::date
             LIMIT 1
         `;
 
         const { rows: existingRows } = await pool.query(checkQuery, [
-            nutritionData.user_id,
+            userId,
             nutritionData.date,
         ]);
 
@@ -43,7 +42,7 @@ export class NutritionModel {
         `;
 
         const values = [
-            nutritionData.user_id,
+            userId,
             nutritionData.name,
             nutritionData.description,
             nutritionData.calories,
@@ -59,16 +58,15 @@ export class NutritionModel {
     static async getList(userId: number): Promise<DayListFrontendStructure[]> {
 
         const query = `
-            SELECT 
-                id,
-                public_id AS "publicId",
-                name,
-                description,
-                calories,
-                protein,
-                fat,
-                carb,
-                to_char(day_date::date, 'DD-MM-YYYY') AS date
+            SELECT  id,
+                    public_id AS "publicId",
+                    name,
+                    description,
+                    calories,
+                    protein,
+                    fat,
+                    carb,
+                    to_char(day_date::date, 'DD-MM-YYYY') AS date
             FROM nutrition
             WHERE user_id = $1
             ORDER BY day_date DESC, id DESC
@@ -81,16 +79,15 @@ export class NutritionModel {
 
     static async information(userId: number, dayPublicId: string): Promise<DayListFrontendStructure | null> {
         const query = `
-            SELECT 
-                id,
-                public_id AS "publicId",
-                name, 
-                description, 
-                calories, 
-                protein, 
-                fat, 
-                carb, 
-                to_char(day_date::date, 'YYYY-MM-DD') AS date
+            SELECT  id,
+                    public_id AS "publicId",
+                    name, 
+                    description, 
+                    calories, 
+                    protein, 
+                    fat, 
+                    carb, 
+                    to_char(day_date::date, 'YYYY-MM-DD') AS date
             FROM nutrition
             WHERE public_id = $1 AND user_id = $2
         `;
@@ -100,7 +97,7 @@ export class NutritionModel {
         return rows[0] ?? null;
     }
 
-    static async update(updateData: DayUpgradeRequestStructure): Promise<void> {
+    static async update(userId: number, updateData: DayUpdateFrontendStructure): Promise<void> {
         const query = `
             UPDATE nutrition
             SET name = $1, 
@@ -122,7 +119,7 @@ export class NutritionModel {
             updateData.carb,
             updateData.date,
             updateData.publicId,
-            updateData.user_id
+            userId
         ];
 
         const { rowCount } = await pool.query(query, values);

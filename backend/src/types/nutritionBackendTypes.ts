@@ -14,15 +14,6 @@ export interface DayListFrontendStructure extends AddNewDayFrontendStructure {
     publicId: string;
 }
 
-export interface AddDayModelRequestStructure extends AddNewDayFrontendStructure {
-    user_id: number;
-}
-
-export interface DayUpgradeRequestStructure extends AddNewDayFrontendStructure {
-    publicId: string;
-    user_id: number;
-}
-
 export interface DayUpdateFrontendStructure extends AddNewDayFrontendStructure {
-    dayId: string;
+    publicId: string;
 }

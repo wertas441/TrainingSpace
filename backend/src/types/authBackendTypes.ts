@@ -7,6 +7,12 @@ export interface User {
     updatedAt: Date;
 }
 
+export interface UserCreateRequest {
+    email: string;
+    userName: string;
+    password: string;
+}
+
 export interface UserProfileResponse {
     publicId: string;
     email: string;

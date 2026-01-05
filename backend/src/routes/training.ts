@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {AddTrainingFrontendStructure, TrainingListFrontendStructure, TrainingUpdateFrontendStructure} from "../types/trainingBackendTypes";
-import { config } from '../config';
+import {
+    AddTrainingFrontendStructure,
+    TrainingUpdateFrontendStructure
+} from "../types/trainingBackendTypes";
 import {
     validateTrainingDescription,
     validateTrainingExercises,
@@ -10,41 +12,46 @@ import {
 } from "../lib/backendValidators/trainingValidators";
 import {TrainingModel} from "../models/Training";
 import {ExerciseModel} from "../models/Exercise";
+import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
 router.post('/add-new-training', authGuard, async (req, res) => {
-    const {name, description, exercises}: AddTrainingFrontendStructure = req.body;
+    try {
+        const { requestData }: {requestData: AddTrainingFrontendStructure} = req.body;
 
-    const trainingNameError:boolean = validateTrainingName(name);
-    const trainingDescriptionError:boolean = validateTrainingDescription(description);
-    const exercisesError:boolean = validateTrainingExercises(exercises);
+        const trainingNameError:boolean = validateTrainingName(requestData.name);
+        const trainingDescriptionError:boolean = validateTrainingDescription(requestData.description);
+        const exercisesError:boolean = validateTrainingExercises(requestData.exercises);
 
-    const userId = (req as any).userId as number;
+        const userId = (req as any).userId as number;
 
-    if (!trainingNameError || !trainingDescriptionError || !exercisesError) {
+        if (!trainingNameError || !trainingDescriptionError || !exercisesError) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Ошибка добавления новой тренировки, пожалуйста проверьте введенные вами данные.'
+            };
+            return res.status(400).json(response);
+        }
+
+        await TrainingModel.create(userId, requestData);
+
         const response: ApiResponse = {
-            success: false,
-            error: 'Ошибка добавления новой тренировки, пожалуйста проверьте введенные вами данные.'
+            success: true,
+            message: 'training created successfully',
         };
-        return res.status(400).json(response);
+
+        res.status(200).json(response);
+    } catch (error) {
+        const response = showBackendError(error, 'Ошибка при добавлении новой тренировки');
+
+        res.status(500).json(response);
     }
-
-    await TrainingModel.create({user_id: userId, name, description, exercises});
-
-    const response: ApiResponse = {
-        success: true,
-        message: 'training created successfully',
-    };
-
-    res.status(200).json(response);
 });
 
 router.get('/my-training-list', authGuard, async (req, res) => {
     try {
-
         const userId = (req as any).userId as number;
-
         const trainings = await TrainingModel.getList(userId);
 
         const response: ApiResponse = {
@@ -55,24 +62,17 @@ router.get('/my-training-list', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-
-        console.error('Ошибка показа списка тренировок', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при показе списка тренировок ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при показе списка тренировок');
 
         res.status(500).json(response);
     }
-
 });
 
 // Упражнения конкретной тренировки пользователя
 router.get('/:id/exercises', authGuard, async (req, res) => {
     try {
         const trainingId = Number(req.params.id);
+
         if (!Number.isFinite(trainingId)) {
             const response: ApiResponse = {
                 success: false,
@@ -82,7 +82,6 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
         }
 
         const userId = (req as any).userId as number;
-
         const exercises = await ExerciseModel.getByTrainingId(trainingId, userId);
 
         const response: ApiResponse = {
@@ -93,13 +92,7 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('Ошибка показа упражнений тренировки', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при показе упражнений тренировки ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при показе упражнений тренировки');
 
         res.status(500).json(response);
     }
@@ -108,8 +101,7 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
 router.get('/about-my-training', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-        const trainingPublicIdRaw = req.query.trainingId;
-        const trainingPublicId = String(trainingPublicIdRaw || '').trim();
+        const trainingPublicId = String(req.query.trainingId || '').trim();
 
         if (!trainingPublicId) {
             const response: ApiResponse = {
@@ -137,25 +129,18 @@ router.get('/about-my-training', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка получения информации о тренировке', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при получении информации о тренировке ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при получении информации о тренировке');
 
         res.status(500).json(response);
     }
-
 });
 
 router.delete('/delete-my-training', authGuard, async (req, res) => {
     try {
-        const { trainingId: trainingPublicIdRaw } = req.body;
+        const { trainingId } = req.body;
         const userId = (req as any).userId as number;
 
-        const trainingPublicId = String(trainingPublicIdRaw || '').trim();
+        const trainingPublicId = String(trainingId || '').trim();
 
         if (!trainingPublicId) {
             const response: ApiResponse = {
@@ -182,37 +167,20 @@ router.delete('/delete-my-training', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка удаления тренировки', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при удалении тренировки ${devSuffix}`
-        };
+        const response = showBackendError(error, '`Ошибка при удалении тренировки');
 
         res.status(500).json(response);
     }
-
 });
 
 router.put('/update-my-training', authGuard, async (req, res) => {
     try {
-        const {trainingId, name, description, exercises}: TrainingUpdateFrontendStructure = req.body;
+        const { requestData }: {requestData: TrainingUpdateFrontendStructure} = req.body;
         const userId = (req as any).userId as number;
 
-        const trainingPublicId = String(trainingId || '').trim();
-
-        if (!trainingPublicId) {
-            const response: ApiResponse = {
-                success: false,
-                error: 'Некорректный идентификатор тренировки.',
-            };
-            return res.status(400).json(response);
-        }
-
-        const trainingNameError:boolean = validateTrainingName(name);
-        const trainingDescriptionError:boolean = validateTrainingDescription(description);
-        const exercisesError:boolean = validateTrainingExercises(exercises);
+        const trainingNameError:boolean = validateTrainingName(requestData.name);
+        const trainingDescriptionError:boolean = validateTrainingDescription(requestData.description);
+        const exercisesError:boolean = validateTrainingExercises(requestData.exercises);
 
         if (!trainingNameError || !trainingDescriptionError || !exercisesError) {
             const response: ApiResponse = {
@@ -222,7 +190,7 @@ router.put('/update-my-training', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        await TrainingModel.update(userId, trainingPublicId, {name, description, exercises});
+        await TrainingModel.update(userId, requestData);
 
         const response: ApiResponse = {
             success: true,
@@ -231,17 +199,10 @@ router.put('/update-my-training', authGuard, async (req, res) => {
 
         res.status(200).json(response);
     } catch (error){
-        console.error('Ошибка изменения тренировки', error);
-        const err: any = error;
-        const devSuffix = (config.nodeEnv !== 'production' && (err?.message || err?.detail)) ? `: ${err.message || err.detail}` : '';
-        const response: ApiResponse = {
-            success: false,
-            error: `Ошибка при изменении тренировки ${devSuffix}`
-        };
+        const response = showBackendError(error, 'Ошибка при изменении тренировки');
 
         res.status(500).json(response);
     }
-
 });
 
 

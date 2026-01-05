@@ -1,8 +1,8 @@
 import { pool } from '../config/database';
 import {
     AddTrainingFrontendStructure,
-    AddTrainingModelRequestStructure,
-    TrainingListFrontendStructure
+    TrainingListFrontendStructure,
+    TrainingUpdateFrontendStructure
 } from "../types/trainingBackendTypes";
 
 export class TrainingModel {
@@ -12,7 +12,7 @@ export class TrainingModel {
      * 1) вставляем запись в таблицу training
      * 2) сохраняем связанные упражнения в training_exercises
      */
-    static async create(trainingData: AddTrainingModelRequestStructure): Promise<void> {
+    static async create(userId: number, trainingData: AddTrainingFrontendStructure): Promise<void> {
         const client = await pool.connect();
 
         try {
@@ -27,7 +27,7 @@ export class TrainingModel {
             const insertTrainingValues = [
                 trainingData.name,
                 trainingData.description,
-                trainingData.user_id,
+                userId,
             ];
 
             const { rows } = await client.query(insertTrainingQuery, insertTrainingValues);
@@ -77,18 +77,14 @@ export class TrainingModel {
 
     static async getList(userId: number): Promise<TrainingListFrontendStructure[]> {
         const query = `
-            SELECT
-                t.id,
-                t.public_id AS "publicId",
-                t.training_name AS name,
-                COALESCE(t.description, '') AS description,
-                COALESCE(
-                    ARRAY_AGG(te.exercise_id ORDER BY te.order_index)
-                    FILTER (WHERE te.exercise_id IS NOT NULL),
-                    '{}'::INT[]
-                ) AS exercises
+            SELECT  t.id,
+                    t.public_id AS "publicId",
+                    t.training_name AS name,
+                    COALESCE(t.description, '') AS description,
+                    COALESCE(ARRAY_AGG(te.exercise_id ORDER BY te.order_index) FILTER (WHERE te.exercise_id IS NOT NULL),
+                    '{}'::INT[]) AS exercises
             FROM training t
-                     LEFT JOIN training_exercises te ON te.training_id = t.id
+            LEFT JOIN training_exercises te ON te.training_id = t.id
             WHERE t.user_id = $1
             GROUP BY t.id, t.training_name, t.description
             ORDER BY t.created_at DESC, t.id DESC
@@ -101,18 +97,14 @@ export class TrainingModel {
 
     static async information(userId: number, trainingPublicId: string): Promise<TrainingListFrontendStructure | null> {
         const query = `
-            SELECT
-                t.id,
-                t.public_id AS "publicId",
-                t.training_name AS name,
-                COALESCE(t.description, '') AS description,
-                COALESCE(
-                    ARRAY_AGG(te.exercise_id ORDER BY te.order_index)
-                    FILTER (WHERE te.exercise_id IS NOT NULL),
-                    '{}'::INT[]
-                ) AS exercises
+            SELECT  t.id,
+                    t.public_id AS "publicId",
+                    t.training_name AS name,
+                    COALESCE(t.description, '') AS description,
+                    COALESCE(ARRAY_AGG(te.exercise_id ORDER BY te.order_index)FILTER (WHERE te.exercise_id IS NOT NULL),
+                    '{}'::INT[]) AS exercises
             FROM training t
-                     LEFT JOIN training_exercises te ON te.training_id = t.id
+            LEFT JOIN training_exercises te ON te.training_id = t.id
             WHERE t.public_id = $1 AND t.user_id = $2
             GROUP BY t.id, t.training_name, t.description
         `;
@@ -122,7 +114,7 @@ export class TrainingModel {
         return rows[0] ?? null;
     }
 
-    static async update(userId: number, trainingPublicId: string, data: AddTrainingFrontendStructure): Promise<void> {
+    static async update(userId: number, data: TrainingUpdateFrontendStructure): Promise<void> {
         const client = await pool.connect();
 
         try {
@@ -131,7 +123,7 @@ export class TrainingModel {
             // Получаем внутренний id по public_id
             const { rows: trainingRows } = await client.query(
                 'SELECT id FROM training WHERE public_id = $1 AND user_id = $2',
-                [trainingPublicId, userId]
+                [data.trainingId, userId]
             );
 
             if (trainingRows.length === 0) {

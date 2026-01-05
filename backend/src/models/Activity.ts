@@ -1,8 +1,8 @@
 import {pool} from '../config/database';
 import {
-    AddActivityModelRequest,
     ActivityListFrontendStructure,
     ActivityExerciseFrontend,
+    AddActivityFrontendRequest,
 } from "../types/activityBackendTypes";
 
 export class ActivityModel {
@@ -13,7 +13,7 @@ export class ActivityModel {
      * 2) создаём записи в activity_exercises
      * 3) создаём подходы в activity_sets
      */
-    static async create(data: AddActivityModelRequest): Promise<void> {
+    static async create(userId: number, data: AddActivityFrontendRequest): Promise<void> {
         const client = await pool.connect();
 
         try {
@@ -34,13 +34,13 @@ export class ActivityModel {
             `;
 
             const { rows } = await client.query(insertActivityQuery, [
-                data.user_id,
-                data.training_id,
-                data.activity_name,
+                userId,
+                data.trainingId,
+                data.activityName,
                 data.description,
-                data.activity_type,
-                data.activity_difficult,
-                data.performed_at,
+                data.activityType,
+                data.activityDifficult,
+                data.performedAt,
             ]);
 
             const activityId: number = rows[0]?.id;
@@ -271,7 +271,7 @@ export class ActivityModel {
     }
 
 
-    static async update(data: ActivityListFrontendStructure & { userId: number }): Promise<void> {
+    static async update(userId: number, data: ActivityListFrontendStructure): Promise<void> {
         const client = await pool.connect();
 
         try {
@@ -279,7 +279,7 @@ export class ActivityModel {
 
             const { rows: checkRows } = await client.query(
                 'SELECT id FROM activity WHERE public_id = $1 AND user_id = $2',
-                [data.publicId, data.userId]
+                [data.publicId, userId]
             );
 
             if (checkRows.length === 0) {
@@ -308,7 +308,7 @@ export class ActivityModel {
                     data.difficulty,
                     data.activityDate,
                     activityId,
-                    data.userId,
+                    userId,
                 ]
             );
 

@@ -99,20 +99,17 @@ export default function Login(){
                     />
 
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center">
+                        <label className="inline-flex items-center gap-2 text-xs text-slate-300">
                             <input
-                                id="rememberMe"
                                 type="checkbox"
                                 className="w-4 h-4 cursor-pointer border-gray-300 rounded text-emerald-600 focus:ring-emerald-500"
                                 {...register('rememberMe')}
                             />
-                            <label htmlFor="remember-me" className="block ml-2 cursor-pointer text-sm text-gray-700 dark:text-gray-400">
-                                Запомнить меня
-                            </label>
-                        </div>
+                            <span className="block cursor-pointer text-xs sm:text-sm text-gray-700 dark:text-gray-400">Запомнить меня</span>
+                        </label>
 
                         <div className="text-sm">
-                            <Link href="/auth/forgot-password" className={`font-medium textLinks`}>
+                            <Link href="/auth/forgot-password" className={`text-xs sm:text-sm font-medium textLinks`}>
                                 Забыли пароль?
                             </Link>
                         </div>

@@ -85,9 +85,11 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
         setIsSubmitting(true);
 
         const payload = {
-            name: values.trainingName,
-            description: values.trainingDescription,
-            exercises: selectedExerciseIds,
+            requestData: {
+                name: values.trainingName,
+                description: values.trainingDescription,
+                exercises: selectedExerciseIds,
+            }
         }
 
         try {

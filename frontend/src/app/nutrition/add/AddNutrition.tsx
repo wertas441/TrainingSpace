@@ -44,13 +44,15 @@ export default function AddNutrition(){
         setIsSubmitting(true);
 
         const payload = {
-            name: values.dayName,
-            description: values.dayDescription,
-            date: values.dayDate,
-            calories: parseInt(values.calories, 10),
-            protein: parseInt(values.protein, 10),
-            fat: parseInt(values.fat, 10),
-            carb: parseInt(values.carb, 10),
+            requestData: {
+                name: values.dayName,
+                description: values.dayDescription,
+                date: values.dayDate,
+                calories: parseInt(values.calories, 10),
+                protein: parseInt(values.protein, 10),
+                fat: parseInt(values.fat, 10),
+                carb: parseInt(values.carb, 10),
+            }
         }
 
         try {

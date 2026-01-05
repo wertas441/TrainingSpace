@@ -165,16 +165,18 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
         }, []);
 
         const payload = {
-            id: activityInfo.id,
-            publicId: activityInfo.publicId,
-            activityId: activityInfo.publicId,
-            name: values.activityName,
-            description: values.activityDescription,
-            activityDate: values.activityDate,
-            type: values.activityType,
-            difficulty: values.activityDifficulty,
-            trainingId: Number(values.trainingId),
-            exercises: exercisesPayload,
+            requestData: {
+                id: activityInfo.id,
+                publicId: activityInfo.publicId,
+                activityId: activityInfo.publicId,
+                name: values.activityName,
+                description: values.activityDescription,
+                activityDate: values.activityDate,
+                type: values.activityType,
+                difficulty: values.activityDifficulty,
+                trainingId: Number(values.trainingId),
+                exercises: exercisesPayload,
+            }
         }
 
         try {
