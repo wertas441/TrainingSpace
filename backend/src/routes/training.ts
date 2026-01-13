@@ -16,7 +16,7 @@ import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
-router.post('/add-new-training', authGuard, async (req, res) => {
+router.post('/training', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: AddTrainingFrontendStructure} = req.body;
 
@@ -38,7 +38,6 @@ router.post('/add-new-training', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'training created successfully',
         };
 
         res.status(200).json(response);
@@ -49,7 +48,7 @@ router.post('/add-new-training', authGuard, async (req, res) => {
     }
 });
 
-router.get('/my-training-list', authGuard, async (req, res) => {
+router.get('/trainings', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
         const trainings = await TrainingModel.getList(userId);
@@ -86,7 +85,6 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting exercises for training',
             data: { exercises },
         };
 
@@ -111,9 +109,9 @@ router.get('/about-my-training', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const trainingInfo = await TrainingModel.information(userId, trainingPublicId);
+        const training = await TrainingModel.information(userId, trainingPublicId);
 
-        if (!trainingInfo) {
+        if (!training) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Тренировка не найдена или у вас нет к ней доступа.',
@@ -123,8 +121,7 @@ router.get('/about-my-training', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting training information',
-            data: { training: trainingInfo }
+            data: { training }
         };
 
         res.status(200).json(response);
@@ -135,7 +132,7 @@ router.get('/about-my-training', authGuard, async (req, res) => {
     }
 });
 
-router.delete('/delete-my-training', authGuard, async (req, res) => {
+router.delete('/training', authGuard, async (req, res) => {
     try {
         const { trainingId } = req.body;
         const userId = (req as any).userId as number;
@@ -162,7 +159,6 @@ router.delete('/delete-my-training', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'training delete successfully',
         };
 
         res.status(200).json(response);
@@ -173,7 +169,7 @@ router.delete('/delete-my-training', authGuard, async (req, res) => {
     }
 });
 
-router.put('/update-my-training', authGuard, async (req, res) => {
+router.put('/training', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: TrainingUpdateFrontendStructure} = req.body;
         const userId = (req as any).userId as number;
@@ -194,7 +190,6 @@ router.put('/update-my-training', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'training updated successfully',
         };
 
         res.status(200).json(response);

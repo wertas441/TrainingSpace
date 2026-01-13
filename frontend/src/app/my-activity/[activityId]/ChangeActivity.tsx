@@ -180,7 +180,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
         }
 
         try {
-            await api.put<BackendApiResponse>('/activity/update-my-activity', payload)
+            await api.put<BackendApiResponse>('/activity/activity', payload)
 
             router.replace("/my-activity");
         } catch (err) {

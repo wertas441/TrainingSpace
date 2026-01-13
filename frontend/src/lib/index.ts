@@ -28,7 +28,7 @@ export function getServerErrorMessage(err: unknown){
 
 export async function getExercisesList(tokenValue: string | undefined):Promise<ExerciseTechniqueItem[] | undefined>{
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/exercises/exercises-list`, {
+        const response = await fetch(`${baseUrlForBackend}/api/exercises/exercises`, {
             method: "GET",
             credentials: "include",
             headers: {

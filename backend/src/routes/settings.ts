@@ -32,7 +32,6 @@ router.post('/change-email', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'email was changed successfully',
         };
 
         res.status(200).json(response);
@@ -100,7 +99,6 @@ router.post('/change-password', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'password was changed successfully',
         };
 
         res.status(200).json(response);

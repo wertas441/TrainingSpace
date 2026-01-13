@@ -10,7 +10,7 @@ export async function getTrainingList(tokenValue: string):Promise<TrainingListRe
 
     try {
         const response = await api.get<BackendApiResponse<{ trainings: TrainingListResponse[] }>>(
-            '/training/my-training-list',
+            '/training/trainings',
             payload
         );
 
@@ -30,7 +30,7 @@ export async function getTrainingInformation(tokenValue: string, trainingId: str
 
     try {
         const response = await api.get<BackendApiResponse<{ training: TrainingListResponse }>>(
-            `/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`,
+            `/training/training?trainingId=${encodeURIComponent(trainingId)}`,
             payload
         );
 
@@ -51,7 +51,7 @@ export async function deleteTraining(tokenValue: string, trainingId: string):Pro
 
     try {
         const response = await api.delete<BackendApiResponse>(
-            `/training/delete-my-training`,
+            `/training/delete`,
             payload
         );
 

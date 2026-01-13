@@ -10,7 +10,7 @@ export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] |
 
     try {
         const response = await api.get<BackendApiResponse<{ goals: GoalsStructure[] }>>(
-            '/goal/my-goals-list',
+            '/goal/goals',
             payload
         );
 
@@ -30,7 +30,7 @@ export async function getCompleteGoalList(tokenValue: string):Promise<CompleteGo
 
     try {
         const response = await api.get<BackendApiResponse<{ goals: CompleteGoalsStructure[] }>>(
-            '/goal/my-complete-list',
+            '/goal/completed-list',
             payload
         );
 
@@ -51,7 +51,7 @@ export async function getGoalShortyList(tokenValue: string):Promise<GoalShortySt
 
     try {
         const response = await api.get<BackendApiResponse<{ goals: GoalShortyStructure[] }>>(
-            '/goal/my-shorty-list',
+            '/goal/short-goals',
             payload
         );
 
@@ -71,7 +71,7 @@ export async function getGoalInformation(tokenValue: string, goalId: string):Pro
 
     try {
         const response = await api.get<BackendApiResponse<{ goal: GoalsStructure }>>(
-            `/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`,
+            `/goal/goal?goalId=${encodeURIComponent(goalId)}`,
             payload
         );
 
@@ -92,7 +92,7 @@ export async function deleteGoal(tokenValue: string, goalId: string):Promise<voi
 
     try {
         const response = await api.delete<BackendApiResponse>(
-            `/goal/delete-my-goal`,
+            `/goal/delete`,
             payload
         );
 
@@ -112,7 +112,7 @@ export async function completeGoal(tokenValue: string, goalId: string):Promise<v
 
     try {
         const response = await api.put<BackendApiResponse>(
-            `/goal/complete-my-goal`,
+            `/goal/complete-goal`,
             { goalId },
             config
         );

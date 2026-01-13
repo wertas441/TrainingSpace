@@ -10,7 +10,7 @@ export async function getDayList(tokenValue: string):Promise<NutritionDay[] | un
 
     try {
         const response = await api.get<BackendApiResponse<{ days: NutritionDay[] }>>(
-            '/nutrition/my-day-list',
+            '/nutrition/days',
             payload
         );
 
@@ -30,7 +30,7 @@ export async function getDayInformation(tokenValue: string, dayId: string):Promi
 
     try {
         const response = await api.get<BackendApiResponse<{ day: NutritionDay }>>(
-            `/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`,
+            `/nutrition/day?dayId=${encodeURIComponent(dayId)}`,
             payload
         );
 
@@ -51,7 +51,7 @@ export async function deleteDay(tokenValue: string, dayId: string):Promise<void>
 
     try {
         const response = await api.delete<BackendApiResponse>(
-            `/nutrition/delete-my-day`,
+            `/nutrition/delete`,
             payload
         );
 

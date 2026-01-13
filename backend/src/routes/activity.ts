@@ -17,7 +17,7 @@ import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
-router.post('/add-new-activity', authGuard, async (req, res) => {
+router.post('/activity', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: AddActivityFrontendRequest} = req.body;
 
@@ -50,7 +50,6 @@ router.post('/add-new-activity', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'activity created successfully',
         };
 
         res.status(200).json(response);
@@ -61,14 +60,13 @@ router.post('/add-new-activity', authGuard, async (req, res) => {
     }
 });
 
-router.get('/my-activity-list', authGuard, async (req, res) => {
+router.get('/activities', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
         const activity = await ActivityModel.getList(userId);
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting list of activity',
             data: { activity }
         };
 
@@ -93,9 +91,9 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const activityInfo = await ActivityModel.information(userId, activityPublicId);
+        const activity = await ActivityModel.information(userId, activityPublicId);
 
-        if (!activityInfo) {
+        if (!activity) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Активность не найдена или у вас нет к ней доступа.',
@@ -106,7 +104,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
         const response: ApiResponse = {
             success: true,
             message: 'success of getting activity information',
-            data: { activity: activityInfo }
+            data: { activity }
         };
 
         res.status(200).json(response);
@@ -118,7 +116,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
 });
 
 
-router.delete('/delete-my-activity', authGuard, async (req, res) => {
+router.delete('/actvity', authGuard, async (req, res) => {
     try {
         const { activityId } = req.body;
         const userId = (req as any).userId as number;
@@ -143,7 +141,6 @@ router.delete('/delete-my-activity', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'activity delete successfully',
         };
 
         res.status(200).json(response);
@@ -154,7 +151,7 @@ router.delete('/delete-my-activity', authGuard, async (req, res) => {
     }
 });
 
-router.put('/update-my-activity', authGuard, async (req, res) => {
+router.put('/activity', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: ActivityListFrontendStructure} = req.body;
 
@@ -187,7 +184,6 @@ router.put('/update-my-activity', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'activity changed successfully',
         };
 
         res.status(200).json(response);

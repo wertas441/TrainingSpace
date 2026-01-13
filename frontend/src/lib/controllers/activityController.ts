@@ -11,7 +11,7 @@ export async function getActivityList(tokenValue: string):Promise<ActivityDataSt
 
     try {
         const response = await api.get<BackendApiResponse<{ activity: ActivityDataStructure[] }>>(
-            '/activity/my-activity-list',
+            '/activity/activities',
             payload
         );
 
@@ -46,7 +46,7 @@ export async function getActivityInformation(tokenValue: string, activityId: str
 
     try {
         const response = await api.get<BackendApiResponse<{ activity: ActivityDataStructure }>>(
-            `/activity/about-my-activity?activityId=${encodeURIComponent(activityId)}`,
+            `/activity/activity?activityId=${encodeURIComponent(activityId)}`,
             payload
         );
 
@@ -67,7 +67,7 @@ export async function deleteActivity(tokenValue: string, activityId: string):Pro
 
     try {
         const response = await api.delete<BackendApiResponse>(
-            `/activity/delete-my-activity`,
+            `/activity/activity`,
             payload
         );
 
