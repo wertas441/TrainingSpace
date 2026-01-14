@@ -16,12 +16,7 @@ export class GoalModel {
             VALUES ($1, $2, $3, $4)
         `;
 
-        const values = [
-            userId,
-            goalData.name,
-            goalData.description,
-            goalData.priority,
-        ];
+        const values = [userId, goalData.name, goalData.description, goalData.priority,];
 
         await pool.query(query, values);
     }

@@ -15,9 +15,11 @@ export async function getTrainingList(tokenValue: string):Promise<TrainingListRe
         );
 
         if (!response.data.success || !response.data.data?.trainings) return undefined;
+
         return response.data.data.trainings;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса листа тренировок");
+
         return undefined;
     }
 }
@@ -30,14 +32,16 @@ export async function getTrainingInformation(tokenValue: string, trainingId: str
 
     try {
         const response = await api.get<BackendApiResponse<{ training: TrainingListResponse }>>(
-            `/training/training?trainingId=${encodeURIComponent(trainingId)}`,
+            `/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`,
             payload
         );
 
         if (!response.data.success || !response.data.data?.training) return undefined;
+
         return response.data.data.training;
     } catch (err) {
-        console.error(getServerErrorMessage(err) || "Ошибка запроса информации о тренировоке");
+        console.error(getServerErrorMessage(err) || "Ошибка запроса информации о тренировке");
+
         return undefined;
     }
 }
@@ -50,15 +54,12 @@ export async function deleteTraining(tokenValue: string, trainingId: string):Pro
     }
 
     try {
-        const response = await api.delete<BackendApiResponse>(
-            `/training/delete`,
-            payload
-        );
+        await api.delete<BackendApiResponse>(`/training/training`, payload);
 
-        if (!response.data.success) return;
         return;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка удаления тренировки");
+
         return;
     }
 }

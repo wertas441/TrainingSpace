@@ -27,7 +27,6 @@ router.post('/registration', async (req, res) => {
             return res.status(400).json(response);
         }
 
-        // Проверка существования пользователя по email и userName
         const existingByEmail = await UserModel.findByEmail(email);
         if (existingByEmail) {
             const response: ApiResponse = {
@@ -46,20 +45,12 @@ router.post('/registration', async (req, res) => {
             return res.status(409).json(response);
         }
 
-        // Хеширование пароля
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Создание пользователя в базе данных
-        const created = await UserModel.create({ email, userName: userName, password: hashedPassword });
-
-        const user = {
-            userName: (created as any).userName,
-        };
+        await UserModel.create({ email, userName, password: hashedPassword });
 
         const response: ApiResponse = {
             success: true,
-            message: 'Пользователь успешно зарегистрирован',
-            data: { user }
         };
 
         res.status(200).json(response);
@@ -120,10 +111,7 @@ router.post('/login', async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'Успешный вход в систему',
-            data: {
-                token
-            }
+            data: { token }
         };
 
         res.json(response);
@@ -138,27 +126,24 @@ router.post('/logout', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
 
-        if (userId) {
-            try {
-                await (await import('../config/database')).pool.query(
-                    'UPDATE users SET last_seen_at = NOW() WHERE id = $1',
-                    [userId]);
-            } catch {/* ignore */
-            }
-        }
+        await UserModel.logout(userId);
 
         res.clearCookie('token');
 
         const response: ApiResponse = {
             success: true,
-            message: 'Успешный выход из системы'
         };
 
         res.json(response);
     } catch (error) {
-        console.error('Ошибка выхода из системы:', error);
+        console.error('Ошибка корректного выхода из системы:', error);
         res.clearCookie('token');
-        res.json({success: true, message: 'Успешный выход из системы'});
+
+        const response: ApiResponse = {
+            success: true,
+        };
+
+        res.json(response);
     }
 });
 
@@ -178,8 +163,7 @@ router.get('/me', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting user information',
-            data: { userData: userData }
+            data: { userData }
         };
 
         res.json(response);

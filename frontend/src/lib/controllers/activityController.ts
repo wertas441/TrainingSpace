@@ -16,9 +16,11 @@ export async function getActivityList(tokenValue: string):Promise<ActivityDataSt
         );
 
         if (!response.data.success || !response.data.data?.activity) return undefined;
+
         return response.data.data.activity;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса листа активностей");
+
         return undefined;
     }
 }
@@ -31,9 +33,11 @@ export async function getTrainingExercises(trainingId: number): Promise<Exercise
         );
 
         if (!resp.data.success || !resp.data.data?.exercises) return [];
+
         return resp.data.data.exercises;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса упражнений тренировки");
+
         return [];
     }
 }
@@ -46,14 +50,16 @@ export async function getActivityInformation(tokenValue: string, activityId: str
 
     try {
         const response = await api.get<BackendApiResponse<{ activity: ActivityDataStructure }>>(
-            `/activity/activity?activityId=${encodeURIComponent(activityId)}`,
+            `/activity/about-my-activity?activityId=${encodeURIComponent(activityId)}`,
             payload
         );
 
         if (!response.data.success || !response.data.data?.activity) return undefined;
+
         return response.data.data.activity;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса информации активностей");
+
         return undefined;
     }
 }
@@ -66,15 +72,12 @@ export async function deleteActivity(tokenValue: string, activityId: string):Pro
     }
 
     try {
-        const response = await api.delete<BackendApiResponse>(
-            `/activity/activity`,
-            payload
-        );
+        await api.delete<BackendApiResponse>(`/activity/activity`, payload);
 
-        if (!response.data.success) return;
         return;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка удаления активности");
+
         return;
     }
 }

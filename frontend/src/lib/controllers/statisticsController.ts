@@ -19,9 +19,11 @@ export async function getMainStatisticsCardInfo(tokenValue: string):Promise<Main
         );
 
         if (!response.data.success || !response.data.data?.mainCardsData) return undefined;
+
         return response.data.data.mainCardsData;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка получения общей статистической информации ");
+
         return undefined;
     }
 }
@@ -39,9 +41,11 @@ export async function getNutritionStatisticsCardInfo(tokenValue: string):Promise
         );
 
         if (!response.data.success || !response.data.data?.nutritionCardData) return undefined;
+
         return response.data.data.nutritionCardData;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка получения информации о питании");
+
         return undefined;
     }
 }
@@ -59,9 +63,11 @@ export async function getNutritionGraphicInfo(tokenValue: string):Promise<Nutrit
         );
 
         if (!response.data.success || !response.data.data?.graphicData) return [];
+
         return response.data.data.graphicData;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка получения информации для графика питания");
+
         return [];
     }
 }

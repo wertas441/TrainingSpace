@@ -116,7 +116,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
 });
 
 
-router.delete('/actvity', authGuard, async (req, res) => {
+router.delete('/activity', authGuard, async (req, res) => {
     try {
         const { activityId } = req.body;
         const userId = (req as any).userId as number;

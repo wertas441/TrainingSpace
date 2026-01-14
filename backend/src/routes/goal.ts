@@ -136,6 +136,7 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
                 success: false,
                 error: 'Цель не найдена или у вас нет к ней доступа.',
             };
+
             return res.status(404).json(response);
         }
 
@@ -227,7 +228,6 @@ router.get('/completed-goals', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting complete list of goals',
             data: { goals }
         };
 
