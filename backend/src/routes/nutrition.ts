@@ -16,7 +16,7 @@ import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
-router.post('/add-new-day', authGuard, async (req, res) => {
+router.post('/day', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: AddNewDayFrontendStructure } = req.body;
 
@@ -42,7 +42,6 @@ router.post('/add-new-day', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'day created successfully',
         };
 
         res.status(200).json(response);
@@ -53,14 +52,13 @@ router.post('/add-new-day', authGuard, async (req, res) => {
     }
 });
 
-router.get('/my-day-list', authGuard, async (req, res) => {
+router.get('/days', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
         const days = await NutritionModel.getList(userId);
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting list of days',
             data: { days }
         };
 
@@ -72,7 +70,7 @@ router.get('/my-day-list', authGuard, async (req, res) => {
     }
 });
 
-router.delete('/delete-my-day', authGuard, async (req, res) => {
+router.delete('/day', authGuard, async (req, res) => {
     try {
         const { dayId } = req.body;
         const userId = (req as any).userId as number;
@@ -99,7 +97,6 @@ router.delete('/delete-my-day', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'day delete successfully',
         };
 
         res.status(200).json(response);
@@ -123,9 +120,9 @@ router.get('/about-my-day', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const dayInfo = await NutritionModel.information(userId, dayPublicId);
+        const day = await NutritionModel.information(userId, dayPublicId);
 
-        if (!dayInfo) {
+        if (!day) {
             const response: ApiResponse = {
                 success: false,
                 error: 'День не найден или у вас нет к нему доступа.',
@@ -135,8 +132,7 @@ router.get('/about-my-day', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting day information',
-            data: { day: dayInfo }
+            data: { day }
         };
 
         res.status(200).json(response);
@@ -147,7 +143,7 @@ router.get('/about-my-day', authGuard, async (req, res) => {
     }
 });
 
-router.put('/update-my-day', authGuard, async (req, res) => {
+router.put('/day', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: DayUpdateFrontendStructure} = req.body;
         const userId = (req as any).userId as number;
@@ -172,7 +168,6 @@ router.put('/update-my-day', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'day changed successfully',
         };
 
         res.status(200).json(response);

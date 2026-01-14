@@ -122,7 +122,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         }
 
         try {
-            await api.post<BackendApiResponse>('/activity/add-new-activity', payload)
+            await api.post<BackendApiResponse>('/activity/activity', payload)
 
             router.push("/my-activity");
         } catch (err) {

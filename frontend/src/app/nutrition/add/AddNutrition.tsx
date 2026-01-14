@@ -56,7 +56,7 @@ export default function AddNutrition(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/nutrition/add-new-day', payload)
+            await api.post<BackendApiResponse>('/nutrition/day', payload)
 
             router.push("/nutrition");
         } catch (err) {

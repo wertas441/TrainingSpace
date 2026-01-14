@@ -52,7 +52,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
         }
 
         try {
-            await api.put<BackendApiResponse>('/goal/update-my-goal', payload)
+            await api.put<BackendApiResponse>('/goal/goal', payload)
 
             router.replace("/goals");
         } catch (err) {

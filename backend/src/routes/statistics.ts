@@ -18,7 +18,6 @@ router.get('/main-information', authGuard, async (req, res) => {
 
         const response: ApiResponse<{ mainCardsData: MainStatisticsBackendResponse }> = {
             success: true,
-            message: 'main information was get successfully',
             data: { mainCardsData }
         };
 
@@ -37,7 +36,6 @@ router.get('/nutrition-information', authGuard, async (req, res) => {
 
         const response: ApiResponse<{ nutritionCardData: NutritionStatisticsBackendResponse }> = {
             success: true,
-            message: 'nutrition information was get successfully',
             data: { nutritionCardData }
         };
 
@@ -52,12 +50,11 @@ router.get('/nutrition-information', authGuard, async (req, res) => {
 router.get('/nutrition-graphic-info', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
-        const nutritionGraphicData = await StatisticsModel.getNutritionGraphicInformation(userId);
+        const graphicData = await StatisticsModel.getNutritionGraphicInformation(userId);
 
         const response: ApiResponse<{ graphicData: NutritionGraphicBackendResponse[] }> = {
             success: true,
-            message: 'nutrition graphic information was get successfully',
-            data: { graphicData: nutritionGraphicData }
+            data: { graphicData }
         };
 
         res.status(200).json(response);

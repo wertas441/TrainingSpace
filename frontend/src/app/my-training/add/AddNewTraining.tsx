@@ -93,7 +93,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
         }
 
         try {
-            await api.post<BackendApiResponse>('/training/add-new-training', payload)
+            await api.post<BackendApiResponse>('/training/training', payload)
 
             router.push("/my-training");
         } catch (err) {

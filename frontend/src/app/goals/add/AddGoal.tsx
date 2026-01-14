@@ -43,7 +43,7 @@ export default function AddGoal() {
         }
 
         try {
-            await api.post<BackendApiResponse>('/goal/add-new-goal', payload)
+            await api.post<BackendApiResponse>('/goal/goal', payload)
 
             router.push("/goals");
         } catch (err) {

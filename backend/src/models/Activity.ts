@@ -55,11 +55,7 @@ export class ActivityModel {
                     RETURNING id
                 `;
 
-                const { rows: aeRows } = await client.query(insertActivityExerciseQuery, [
-                    activityId,
-                    ex.id,
-                    i + 1,
-                ]);
+                const { rows: aeRows } = await client.query(insertActivityExerciseQuery, [activityId, ex.id, i + 1,]);
 
                 const activityExerciseId: number = aeRows[0]?.id;
 
@@ -70,12 +66,7 @@ export class ActivityModel {
                         VALUES ($1, $2, $3, $4)
                     `;
 
-                    await client.query(insertSetQuery, [
-                        activityExerciseId,
-                        s.id,          // set_number
-                        s.quantity,    // reps
-                        s.weight,      // weight
-                    ]);
+                    await client.query(insertSetQuery, [activityExerciseId, s.id, s.quantity, s.weight,]);
                 }
             }
 
@@ -349,12 +340,7 @@ export class ActivityModel {
                             INSERT INTO activity_sets (activity_exercise_id, set_number, reps, weight)
                             VALUES ($1, $2, $3, $4)
                         `,
-                        [
-                            activityExerciseId,
-                            s.id,        // set_number
-                            s.quantity,  // reps
-                            s.weight,    // weight
-                        ]
+                        [activityExerciseId, s.id, s.quantity, s.weight,]
                     );
                 }
             }

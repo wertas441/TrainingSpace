@@ -10,14 +10,16 @@ export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] |
 
     try {
         const response = await api.get<BackendApiResponse<{ goals: GoalsStructure[] }>>(
-            '/goal/my-goals-list',
+            '/goal/goals',
             payload
         );
 
         if (!response.data.success || !response.data.data?.goals) return undefined;
+
         return response.data.data.goals;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса списка целей");
+
         return undefined;
     }
 }
@@ -30,14 +32,16 @@ export async function getCompleteGoalList(tokenValue: string):Promise<CompleteGo
 
     try {
         const response = await api.get<BackendApiResponse<{ goals: CompleteGoalsStructure[] }>>(
-            '/goal/my-complete-list',
+            '/goal/completed-goals',
             payload
         );
 
         if (!response.data.success || !response.data.data?.goals) return undefined;
+
         return response.data.data.goals;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса списка выполненных целей");
+
         return undefined;
     }
 }
@@ -51,14 +55,16 @@ export async function getGoalShortyList(tokenValue: string):Promise<GoalShortySt
 
     try {
         const response = await api.get<BackendApiResponse<{ goals: GoalShortyStructure[] }>>(
-            '/goal/my-shorty-list',
+            '/goal/short-goals',
             payload
         );
 
         if (!response.data.success || !response.data.data?.goals) return [];
+
         return response.data.data.goals;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса короткого списка целей");
+
         return [];
     }
 }
@@ -76,9 +82,11 @@ export async function getGoalInformation(tokenValue: string, goalId: string):Pro
         );
 
         if (!response.data.success || !response.data.data?.goal) return undefined;
+
         return response.data.data.goal;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса информации о цели");
+
         return undefined;
     }
 }
@@ -91,15 +99,12 @@ export async function deleteGoal(tokenValue: string, goalId: string):Promise<voi
     };
 
     try {
-        const response = await api.delete<BackendApiResponse>(
-            `/goal/delete-my-goal`,
-            payload
-        );
+        await api.delete<BackendApiResponse>(`/goal/goal`, payload);
 
-        if (!response.data.success) return;
         return;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка удаления цели");
+
         return;
     }
 }
@@ -111,16 +116,12 @@ export async function completeGoal(tokenValue: string, goalId: string):Promise<v
     };
 
     try {
-        const response = await api.put<BackendApiResponse>(
-            `/goal/complete-my-goal`,
-            { goalId },
-            config
-        );
+        await api.put<BackendApiResponse>(`/goal/complete-goal`, { goalId }, config);
 
-        if (!response.data.success) return;
         return;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса о выполнении цели");
+
         return;
     }
 }

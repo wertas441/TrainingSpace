@@ -65,7 +65,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
         }
 
         try {
-            await api.put<BackendApiResponse>('/nutrition/update-my-day', payload)
+            await api.put<BackendApiResponse>('/nutrition/day', payload)
 
             router.replace("/nutrition");
         } catch (err) {

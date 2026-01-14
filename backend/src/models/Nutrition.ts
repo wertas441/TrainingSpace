@@ -17,12 +17,9 @@ export class NutritionModel {
             LIMIT 1
         `;
 
-        const { rows: existingRows } = await pool.query(checkQuery, [
-            userId,
-            nutritionData.date,
-        ]);
+        const { rows } = await pool.query(checkQuery, [userId, nutritionData.date,]);
 
-        if (existingRows.length > 0) {
+        if (rows.length > 0) {
             throw new Error('Запись с такой датой уже существует');
         }
 

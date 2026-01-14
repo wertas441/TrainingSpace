@@ -11,7 +11,7 @@ import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
 
-router.post('/add-new-goal', authGuard, async (req, res) => {
+router.post('/goal', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: AddNewGoalFrontendStructure} = req.body;
 
@@ -33,7 +33,6 @@ router.post('/add-new-goal', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'goal created successfully',
         };
 
         res.status(200).json(response);
@@ -44,14 +43,13 @@ router.post('/add-new-goal', authGuard, async (req, res) => {
     }
 });
 
-router.get('/my-goals-list', authGuard, async (req, res) => {
+router.get('/goals', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
         const goals = await GoalModel.getList(userId);
         
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting list of goals',
             data: { goals }
         };
 
@@ -63,14 +61,13 @@ router.get('/my-goals-list', authGuard, async (req, res) => {
     }
 });
 
-router.get('/my-shorty-list', authGuard, async (req, res) => {
+router.get('/short-goals', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
         const goals = await GoalModel.getShortyList(userId);
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting shorty list of goals',
             data: { goals }
         };
 
@@ -82,7 +79,7 @@ router.get('/my-shorty-list', authGuard, async (req, res) => {
     }
 });
 
-router.delete('/delete-my-goal', authGuard, async (req, res) => {
+router.delete('/goal', authGuard, async (req, res) => {
     try {
         const { goalId } = req.body;
         const userId = (req as any).userId as number;
@@ -109,7 +106,6 @@ router.delete('/delete-my-goal', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'goal delete successfully',
         };
 
         res.status(200).json(response);
@@ -133,20 +129,20 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const goalInfo = await GoalModel.information(userId, goalPublicId);
+        const goal = await GoalModel.information(userId, goalPublicId);
 
-        if (!goalInfo) {
+        if (!goal) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Цель не найдена или у вас нет к ней доступа.',
             };
+
             return res.status(404).json(response);
         }
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting goal information',
-            data: { goal: goalInfo }
+            data: { goal }
         };
 
         res.status(200).json(response);
@@ -157,7 +153,7 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
     }
 });
 
-router.put('/update-my-goal', authGuard, async (req, res) => {
+router.put('/goal', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: GoalUpdateFrontendStructure} = req.body;
         const userId = (req as any).userId as number;
@@ -188,7 +184,6 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'goal updated successfully',
         };
 
         res.status(200).json(response);
@@ -199,7 +194,7 @@ router.put('/update-my-goal', authGuard, async (req, res) => {
     }
 });
 
-router.put('/complete-my-goal', authGuard, async (req, res) => {
+router.put('/complete-goal', authGuard, async (req, res) => {
     try {
         const { goalId } = req.body;
         const userId = (req as any).userId as number;
@@ -216,7 +211,6 @@ router.put('/complete-my-goal', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'goal complete successfully',
         };
 
         res.status(200).json(response);
@@ -227,14 +221,13 @@ router.put('/complete-my-goal', authGuard, async (req, res) => {
     }
 });
 
-router.get('/my-complete-list', authGuard, async (req, res) => {
+router.get('/completed-goals', authGuard, async (req, res) => {
     try {
         const userId = (req as any).userId as number;
         const goals = await GoalModel.getCompleteList(userId);
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting complete list of goals',
             data: { goals }
         };
 

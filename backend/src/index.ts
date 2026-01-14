@@ -25,7 +25,6 @@ dotenv.config();
 const app = express();
 const PORT = config.port;
 const shouldInit = process.env.DB_AUTO_INIT === 'true';
-const shouldSeed = process.env.DB_AUTO_SEED === 'true' && config.nodeEnv === 'development';
 
 // HTTP-сервер, чтобы можно было корректно его останавливать
 let server: http.Server | null = null;
@@ -38,7 +37,7 @@ app.use(cors({
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
-})); // CORS для фронтенда с поддержкой credentials
+}));
 
 app.use(morgan('combined')); // Логирование
 app.use(express.json()); // Парсинг JSON
@@ -99,7 +98,6 @@ const startServer = async () => {
         server.listen(PORT, () => {
             console.log(`Сервер запущен на порту ${PORT}`);
             console.log(`API доступно по адресу: http://localhost:${PORT}`);
-            console.log(`Проверка здоровья: http://localhost:${PORT}/api/health`);
         });
     } catch (error) {
         console.error('Ошибка при запуске сервера:', error);

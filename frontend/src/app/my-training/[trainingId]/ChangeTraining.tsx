@@ -103,7 +103,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: Chang
         }
 
         try {
-            await api.put<BackendApiResponse>('/training/update-my-training', payload)
+            await api.put<BackendApiResponse>('/training/training', payload)
 
             router.replace("/my-training");
         } catch (err) {
