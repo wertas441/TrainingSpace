@@ -7,7 +7,7 @@ export const validateTrainingName = (trainingName: string): boolean => {
         return false;
     }
 
-    if (trainingName.length > 30) {
+    if (trainingName.length > 40) {
         return false;
     }
 

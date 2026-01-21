@@ -98,7 +98,7 @@ URL: https://your-training.space
 
 ```bash
 cd backend
-npm install
+yarn install
 ```
 
 ### 2. Настройка окружения
@@ -135,7 +135,7 @@ JWT_SECRET=your-jwt-secret
 
 ```bash
 cd backend
-npm run dev
+yarn dev
 ```
 
 Backend по умолчанию будет слушать порт `3002` (или тот, что указан в `PORT`).
@@ -144,8 +144,8 @@ Backend по умолчанию будет слушать порт `3002` (ил�
 
 ```bash
 cd backend
-npm run build
-npm start
+yarn build
+yarn start
 ```
 
 ---
