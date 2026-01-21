@@ -84,8 +84,8 @@ export const validateDayName = (dayName: string): string | null => {
         return (`Имя дня должно содержать минимум 3 символов (сейчас ${dayName.length})`)
     }
 
-    if(dayName.length > 30){
-        return (`Имя дня может содержать максимум 30 символов (сейчас ${dayName.length})`)
+    if(dayName.length > 40){
+        return (`Имя дня может содержать максимум 40 символов (сейчас ${dayName.length})`)
     }
 
     // Разрешаем латиницу, кириллицу, цифры, пробел и часть спецсимволов
@@ -186,8 +186,8 @@ export const validateTrainingName = (trainingName: string): string | null => {
         return (`Имя тренировки должно содержать минимум 3 символа (сейчас ${trainingName.length})`);
     }
 
-    if (trainingName.length > 30) {
-        return (`Имя тренировки может содержать максимум 30 символов (сейчас ${trainingName.length})`);
+    if (trainingName.length > 40) {
+        return (`Имя тренировки может содержать максимум 40 символов (сейчас ${trainingName.length})`);
     }
 
     // Разрешаем латиницу, цифры и базовые спецсимволы как в остальных валидаторах
@@ -240,8 +240,8 @@ export const validateGoalName = (goalName: string): string | null => {
         return (`Название цели должно содержать минимум 3 символа (сейчас ${goalName.length})`);
     }
 
-    if (goalName.length > 30) {
-        return (`Название цели может содержать максимум 30 символов (сейчас ${goalName.length})`);
+    if (goalName.length > 40) {
+        return (`Название цели может содержать максимум 40 символов (сейчас ${goalName.length})`);
     }
 
     const goalNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
@@ -284,8 +284,8 @@ export const validateActivityName = (activityName: string): string | null => {
         return (`Название активности должно содержать минимум 3 символа (сейчас ${activityName.length})`);
     }
 
-    if (activityName.length > 15) {
-        return (`Название активности может содержать максимум 15 символов (сейчас ${activityName.length})`);
+    if (activityName.length > 40) {
+        return (`Название активности может содержать максимум 40 символов (сейчас ${activityName.length})`);
     }
 
     // Разрешаем латиницу, кириллицу, цифры, пробел и часть спецсимволов

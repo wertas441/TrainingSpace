@@ -5,22 +5,22 @@ import {
     ActivityExerciseFrontend
 } from "../../types/activityBackendTypes";
 
-export const validateActivityName = (goalName: string): boolean => {
-    if(!goalName.trim()){
+export const validateActivityName = (name: string): boolean => {
+    if(!name.trim()){
         return false;
     }
 
-    if(goalName.length < 3){
+    if(name.length < 3){
         return false;
     }
 
-    if(goalName.length > 15){
+    if(name.length > 40){
         return false;
     }
 
     // Разрешаем латиницу, кириллицу, цифры, пробел и часть спецсимволов
     const activityNameRegex = /^[a-zA-Z\u0400-\u04FF0-9 !@#$%^&*.]+$/u;
-    if(!activityNameRegex.test(goalName)) {
+    if(!activityNameRegex.test(name)) {
         return false;
     }
 
@@ -28,11 +28,8 @@ export const validateActivityName = (goalName: string): boolean => {
 }
 
 export const validateActivityDescription = (description: string): boolean => {
-    if (description.length > 500) {
-        return false;
-    }
+    return description.length <= 500;
 
-    return true;
 }
 
 export const validateActivityType = (type: ActivityTypeStructure): boolean => {

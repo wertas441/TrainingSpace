@@ -7,7 +7,7 @@ export const validateDayName = (dayName: string): boolean => {
         return false;
     }
 
-    if(dayName.length > 30){
+    if(dayName.length > 40){
         return false;
     }
 
