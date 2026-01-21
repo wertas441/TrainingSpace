@@ -30,8 +30,8 @@ jobs:
 
           echo "🚀 Deploying Backend..."
           cd backend
-          npm install
-          npm run build
+          yarn install
+          yarn build
           pm2 restart backend
           cd ..
 

@@ -72,6 +72,23 @@ URL: https://your-training.space
 
 ---
 
+## Скриншоты
+
+<details>
+  <summary>Click</summary>
+
+![Главное в светлой теме](./frontend/public/mainLight.png)
+![Главное в темной теме](./frontend/public/mainDark.png)
+![Мои тренировки](./frontend/public/myTrainings.png)
+![Статистика](./frontend/public/stats.png)
+![Питание](./frontend/public/nutrition.png)
+![Цели](./frontend/public/goals.png)
+![Упражнения](./frontend/public/exercises.png)
+![Профиль](./frontend/public/profile.png)
+
+</details>
+
+
 ## Запуск проекта локально
 
 Перед запуском убедитесь, что у вас установлены:

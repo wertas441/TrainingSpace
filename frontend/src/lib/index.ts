@@ -6,11 +6,11 @@ export function getTokenHeaders(token: string) {
     return {Cookie: `token=${token}`};
 }
 
-export const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002';
+const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002/api';
 export const showErrorMessage:boolean = true;
 
 export const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002/api',
+    baseURL: baseUrlForBackend,
     withCredentials: true,
     timeout: 9000,
 });
@@ -28,7 +28,7 @@ export function getServerErrorMessage(err: unknown){
 
 export async function getExercisesList(tokenValue: string | undefined):Promise<ExerciseTechniqueItem[] | undefined>{
     try {
-        const response = await fetch(`${baseUrlForBackend}/api/exercises/exercises`, {
+        const response = await fetch(`${baseUrlForBackend}/exercises/exercises`, {
             method: "GET",
             credentials: "include",
             headers: {
