@@ -8,6 +8,7 @@ import {
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
 import ChangeEmail from "@/app/settings/change-email/ChangeEmail";
+import {mockAxiosInstance} from "@/tests/utils/mockAxios";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -31,7 +32,7 @@ describe('Смена почты', () => {
     });
 
     it('Не успешная отправка формы из-за backend', async () => {
-        global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+        mockAxiosInstance.post.mockRejectedValue(new Error('Network error'));
 
         render(<ChangeEmail />);
 
@@ -41,7 +42,7 @@ describe('Смена почты', () => {
         const submitButton = screen.getByRole('button', { name: 'Сменить почту' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() =>
             expect(setServerErrorMock).toHaveBeenCalledWith(
@@ -52,8 +53,7 @@ describe('Смена почты', () => {
 
 
     it('Успешная отправка формы', async () => {
-
-        global.fetch = jest.fn().mockResolvedValue({ ok: true });
+        mockAxiosInstance.post.mockResolvedValue({ data: { success: true } });
 
         render(<ChangeEmail />);
 
@@ -63,7 +63,7 @@ describe('Смена почты', () => {
         const submitButton = screen.getByRole('button', { name: 'Сменить почту' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() => expect(pushMock).toHaveBeenCalledWith('/settings/profile'));
     });

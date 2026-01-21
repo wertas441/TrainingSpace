@@ -8,6 +8,7 @@ import {
     setServerErrorMock,
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
+import { mockAxiosInstance } from '@/tests/utils/mockAxios';
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -27,14 +28,14 @@ describe('Регистрация', () => {
         const submitButton = screen.getByRole('button', { name: 'Зарегистрироваться' });
         await userEvent.click(submitButton);
 
-        expect(await screen.findByText('Пожалуйста, введите имя для вашего аккаунта')).toBeInTheDocument();
+        expect(await screen.findByText('Пожалуйста, введите имя пользователя')).toBeInTheDocument();
         expect(await screen.findByText('Пожалуйста, введите ваш email')).toBeInTheDocument();
         expect(await screen.findByText('Пожалуйста, введите ваш пароль')).toBeInTheDocument();
         expect(await screen.findByText('Пожалуйста, подтвердите ваш пароль')).toBeInTheDocument();
     });
 
     it('Не успешная отправка формы из-за backend', async () => {
-        global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+        mockAxiosInstance.post.mockRejectedValue(new Error('Network error'));
 
         render(<Registration />);
 
@@ -46,7 +47,7 @@ describe('Регистрация', () => {
         const submitButton = screen.getByRole('button', { name: 'Зарегистрироваться' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() =>
             expect(setServerErrorMock).toHaveBeenCalledWith(
@@ -57,7 +58,7 @@ describe('Регистрация', () => {
 
 
     it('Успешная отправка формы', async () => {
-        global.fetch = jest.fn().mockResolvedValue({ ok: true });
+        mockAxiosInstance.post.mockResolvedValue({ data: { success: true } });
 
         render (<Registration />);
 
@@ -69,7 +70,7 @@ describe('Регистрация', () => {
         const submitButton = screen.getByRole('button', { name: 'Зарегистрироваться' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() => expect(pushMock).toHaveBeenCalledWith('/auth/login'));
     });

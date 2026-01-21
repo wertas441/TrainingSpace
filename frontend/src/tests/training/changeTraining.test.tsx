@@ -10,6 +10,7 @@ import {replaceMock} from '@/tests/utils/mockNextNavigation';
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import ChangeTraining from "@/app/my-training/[trainingId]/ChangeTraining";
 import {TrainingListResponse} from "@/types/trainingTypes";
+import { mockAxiosInstance } from '@/tests/utils/mockAxios';
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -57,14 +58,14 @@ describe('Изменить тренировку', () => {
     });
 
     it('Не успешная отправка формы из-за backend', async () => {
-        global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+        mockAxiosInstance.put.mockRejectedValue(new Error('Network error'));
 
         render(<ChangeTraining trainingInfo={trainingData} token={'test-token'} exercises={exercisesData} />);
 
         const submitButton = screen.getByRole('button', { name: 'Изменить' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.put).toHaveBeenCalled());
 
         await waitFor(() =>
             expect(setServerErrorMock).toHaveBeenCalledWith(
@@ -75,7 +76,7 @@ describe('Изменить тренировку', () => {
 
 
     it('Успешная отправка формы', async () => {
-        global.fetch = jest.fn().mockResolvedValue({ ok: true });
+        mockAxiosInstance.put.mockResolvedValue({ data: { success: true } });
       
         render(<ChangeTraining trainingInfo={trainingData} token={'test-token'} exercises={exercisesData} />);
       
@@ -85,8 +86,9 @@ describe('Изменить тренировку', () => {
       
         const submitButton = screen.getByRole('button', { name: 'Изменить' });
         await userEvent.click(submitButton);
-      
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+
+        await waitFor(() => expect(mockAxiosInstance.put).toHaveBeenCalled());
+
         await waitFor(() => expect(replaceMock).toHaveBeenCalledWith('/my-training'));
       });
 });

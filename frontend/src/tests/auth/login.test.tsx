@@ -8,10 +8,24 @@ import {
 	setServerErrorMock,
 } from '@/tests/utils/mockUsePageUtils';
 import { replaceMock } from '@/tests/utils/mockNextNavigation';
+import { mockAxiosInstance } from '@/tests/utils/mockAxios';
+
+const initUserDataMock = jest.fn().mockResolvedValue(undefined);
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
 	...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
+}));
+
+jest.mock('@/lib/store/userStore', () => ({
+	useUserStore: Object.assign(
+		(selector?: (state: { initUserData: () => Promise<void> }) => unknown) =>
+			selector ? selector({ initUserData: initUserDataMock }) : { initUserData: initUserDataMock },
+		{
+			getState: () => ({ userData: { id: 'test-user' } }),
+		}
+	),
+	makeInitUserData: (s: { initUserData: () => Promise<void> }) => s.initUserData,
 }));
 
 describe('Логин', () => {
@@ -26,12 +40,12 @@ describe('Логин', () => {
 		const submitButton = screen.getByRole('button', { name: 'Войти' });
 		await userEvent.click(submitButton);
 
-		expect(await screen.findByText('Пожалуйста, введите имя для вашего аккаунта')).toBeInTheDocument();
+		expect(await screen.findByText('Пожалуйста, введите имя пользователя')).toBeInTheDocument();
 		expect(await screen.findByText('Пожалуйста, введите ваш пароль')).toBeInTheDocument();
 	});
 
     it('Не успешная отправка формы из-за backend', async () => {
-        global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+        mockAxiosInstance.post.mockRejectedValue(new Error('Network error'));
 
         render(<Login />);
 
@@ -41,7 +55,7 @@ describe('Логин', () => {
         const submitButton = screen.getByRole('button', { name: 'Войти' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() =>
             expect(setServerErrorMock).toHaveBeenCalledWith(
@@ -52,8 +66,7 @@ describe('Логин', () => {
 
 
 	it('Успешная отправка формы', async () => {
-
-		global.fetch = jest.fn().mockResolvedValue({ ok: true });
+		mockAxiosInstance.post.mockResolvedValue({ data: { success: true } });
 
 		render(<Login />);
 
@@ -63,7 +76,7 @@ describe('Логин', () => {
 		const submitButton = screen.getByRole('button', { name: 'Войти' });
 		await userEvent.click(submitButton);
 
-		await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+		await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
 		await waitFor(() => expect(replaceMock).toHaveBeenCalledWith('/'));
 	});
