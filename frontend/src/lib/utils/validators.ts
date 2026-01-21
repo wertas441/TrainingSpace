@@ -52,6 +52,26 @@ export const validateUserPassword = (password: string):string | null => {
     return null;
 }
 
+export const validateNewPassword = (newPassword: string):string | null => {
+    if (!newPassword.trim()){
+        return ('Пожалуйста, введите ваш новый пароль');
+    }
+
+    if (newPassword.length < 8)  {
+        return (`Новый пароль должен содержать минимум 8 символов (сейчас ${newPassword.length})`);
+    }
+
+    if (newPassword.length > 25){
+        return (`Новый пароль может быть максимум 25 символов (сейчас ${newPassword.length})`);
+    }
+
+    const passwordRegex = /^[a-zA-Z0-9!@#$%^&*.]+$/;
+    if(!passwordRegex.test(newPassword)) {
+        return ('Новый пароль может содержать только латинские буквы, цифры и некоторые спец.символы')
+    }
+    return null;
+}
+
 export const validateConfirmPassword = (password:string, confirmPassword:string):string | null => {
     if (!password.trim()){
         return ('Пожалуйста, подтвердите ваш пароль');
@@ -63,15 +83,6 @@ export const validateConfirmPassword = (password:string, confirmPassword:string)
 
     return null;
 }
-
-export const validateTwoPassword = (currentPassword:string, newPassword:string):string | null => {
-    if (currentPassword === newPassword){
-        return ('Ваш новый пароль такой же как и нынешний')
-    }
-
-    return null;
-}
-
 
 /// Nutrition Validators
 

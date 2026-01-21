@@ -8,6 +8,7 @@ import {
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
 import AddNutrition from "@/app/nutrition/add/AddNutrition";
+import { mockAxiosInstance } from '@/tests/utils/mockAxios';
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -38,7 +39,7 @@ describe('Добавить новый день для отслеживания',
     });
 
     it('Не успешная отправка формы из-за backend', async () => {
-        global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+        mockAxiosInstance.post.mockRejectedValue(new Error('Network error'));
 
         render(<AddNutrition />);
 
@@ -55,7 +56,7 @@ describe('Добавить новый день для отслеживания',
         const submitButton = screen.getByRole('button', { name: 'Добавить' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() =>
             expect(setServerErrorMock).toHaveBeenCalledWith(
@@ -67,7 +68,7 @@ describe('Добавить новый день для отслеживания',
 
     it('Успешная отправка формы', async () => {
 
-        global.fetch = jest.fn().mockResolvedValue({ ok: true });
+        mockAxiosInstance.post.mockResolvedValue({ data: { success: true } });
 
         render(<AddNutrition />);
 
@@ -84,7 +85,7 @@ describe('Добавить новый день для отслеживания',
         const submitButton = screen.getByRole('button', { name: 'Добавить' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() => expect(pushMock).toHaveBeenCalledWith('/nutrition'));
     });

@@ -2,7 +2,7 @@
 
 import MainHideInput from "@/components/inputs/MainHideInput";
 import {
-    validateConfirmPassword,
+    validateConfirmPassword, validateNewPassword,
     validateUserPassword
 } from "@/lib/utils/validators";
 import {useMemo} from "react";
@@ -87,7 +87,7 @@ export default function ChangePassword(){
                         label={'Новый пароль'}
                         icon={useMemo(() => <LockClosedIcon className="h-5 w-5 text-gray-500" />, [])}
                         error={errors.newPassword?.message}
-                        {...register('newPassword', {validate: (value) => validateUserPassword(value) || true})}
+                        {...register('newPassword', {validate: (value) => validateNewPassword(value) || true})}
                     />
 
                     <MainInput

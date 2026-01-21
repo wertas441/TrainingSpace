@@ -9,6 +9,7 @@ import {
 import {pushMock} from '@/tests/utils/mockNextNavigation';
 import AddNewTraining from "@/app/my-training/add/AddNewTraining";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import { mockAxiosInstance } from '@/tests/utils/mockAxios';
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -42,7 +43,7 @@ describe('Добавить новую тренировку', () => {
     });
 
     it('Не успешная отправка формы из-за backend', async () => {
-        global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+        mockAxiosInstance.post.mockRejectedValue(new Error('Network error'));
 
         render(<AddNewTraining exercises={exercisesData}  />);
 
@@ -54,7 +55,7 @@ describe('Добавить новую тренировку', () => {
         const submitButton = screen.getByRole('button', { name: 'Добавить тренировку' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() =>
             expect(setServerErrorMock).toHaveBeenCalledWith(
@@ -65,7 +66,7 @@ describe('Добавить новую тренировку', () => {
 
 
     it('Успешная отправка формы', async () => {
-        global.fetch = jest.fn().mockResolvedValue({ ok: true });
+        mockAxiosInstance.post.mockResolvedValue({ data: { success: true } });
 
         render(<AddNewTraining exercises={exercisesData}  />);
 
@@ -77,7 +78,7 @@ describe('Добавить новую тренировку', () => {
         const submitButton = screen.getByRole('button', { name: 'Добавить тренировку' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        await waitFor(() => expect(mockAxiosInstance.post).toHaveBeenCalled());
 
         await waitFor(() => expect(pushMock).toHaveBeenCalledWith('/my-training'));
     });
