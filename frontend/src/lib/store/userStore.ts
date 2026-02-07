@@ -47,7 +47,7 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
 
     logout: async () => {
         try {
-            const response = await api.post<BackendApiResponse>(`/auth/logout`);
+            const response = await api.post<BackendApiResponse>(`/user/logout`);
 
             if (!response.data.success) return;
 
@@ -62,7 +62,7 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
 
 export const useUserStore = create<UserStore>()(
     persist(userStore, {
-        name: "userStore",
+        name: "TSUserStore",
         storage: createJSONStorage(() => localStorage)
     })
 )

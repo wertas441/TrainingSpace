@@ -19,12 +19,11 @@ const router = Router();
 router.post('/training', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: AddTrainingFrontendStructure} = req.body;
+        const userId = (req as any).userId as number;
 
         const trainingNameError:boolean = validateTrainingName(requestData.name);
         const trainingDescriptionError:boolean = validateTrainingDescription(requestData.description);
         const exercisesError:boolean = validateTrainingExercises(requestData.exercises);
-
-        const userId = (req as any).userId as number;
 
         if (!trainingNameError || !trainingDescriptionError || !exercisesError) {
             const response: ApiResponse = {
@@ -36,9 +35,7 @@ router.post('/training', authGuard, async (req, res) => {
 
         await TrainingModel.create(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {
@@ -55,7 +52,6 @@ router.get('/trainings', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting list of trainings',
             data: { trainings }
         };
 
@@ -71,6 +67,7 @@ router.get('/trainings', authGuard, async (req, res) => {
 router.get('/:id/exercises', authGuard, async (req, res) => {
     try {
         const trainingId = Number(req.params.id);
+        const userId = (req as any).userId as number;
 
         if (!Number.isFinite(trainingId)) {
             const response: ApiResponse = {
@@ -80,7 +77,6 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const userId = (req as any).userId as number;
         const exercises = await ExerciseModel.getByTrainingId(trainingId, userId);
 
         const response: ApiResponse = {
@@ -157,9 +153,7 @@ router.delete('/training', authGuard, async (req, res) => {
             return res.status(404).json(response);
         }
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
@@ -188,9 +182,7 @@ router.put('/training', authGuard, async (req, res) => {
 
         await TrainingModel.update(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){

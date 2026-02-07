@@ -49,9 +49,7 @@ router.post('/registration', async (req, res) => {
 
         await UserModel.create({ email, userName, password: hashedPassword });
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {
@@ -130,9 +128,7 @@ router.post('/logout', authGuard, async (req, res) => {
 
         res.clearCookie('token');
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.json(response);
     } catch (error) {

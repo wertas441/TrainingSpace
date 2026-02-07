@@ -12,7 +12,6 @@ router.get('/exercises', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting list of exercises',
             data: { exercises }
         };
 

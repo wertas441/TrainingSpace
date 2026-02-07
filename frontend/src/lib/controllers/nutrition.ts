@@ -9,14 +9,11 @@ export async function getDayList(tokenValue: string):Promise<NutritionDay[] | un
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ days: NutritionDay[] }>>(
-            '/nutrition/days',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ days: NutritionDay[] }>>('/nutrition/days', payload);
 
-        if (!response.data.success || !response.data.data?.days) return undefined;
+        if (!data.success || !data.data?.days) return undefined;
 
-        return response.data.data.days;
+        return data.data.days;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса листа дней");
 
@@ -31,14 +28,12 @@ export async function getDayInformation(tokenValue: string, dayId: string):Promi
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ day: NutritionDay }>>(
-            `/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`,
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ day: NutritionDay }>>(
+            `/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`, payload);
 
-        if (!response.data.success || !response.data.data?.day) return undefined;
+        if (!data.success || !data.data?.day) return undefined;
 
-        return response.data.data.day;
+        return data.data.day;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса ифнормации о дне");
 

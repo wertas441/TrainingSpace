@@ -13,14 +13,11 @@ export async function getMainStatisticsCardInfo(tokenValue: string):Promise<Main
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ mainCardsData: MainStatisticsCardResponse }>>(
-            '/statistics/main-information',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ mainCardsData: MainStatisticsCardResponse }>>('/statistics/main-information', payload);
 
-        if (!response.data.success || !response.data.data?.mainCardsData) return undefined;
+        if (!data.success || !data.data?.mainCardsData) return undefined;
 
-        return response.data.data.mainCardsData;
+        return data.data.mainCardsData;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка получения общей статистической информации ");
 
@@ -35,14 +32,11 @@ export async function getNutritionStatisticsCardInfo(tokenValue: string):Promise
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ nutritionCardData: NutritionStatisticsCardResponse }>>(
-            '/statistics/nutrition-information',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ nutritionCardData: NutritionStatisticsCardResponse }>>('/statistics/nutrition-information', payload);
 
-        if (!response.data.success || !response.data.data?.nutritionCardData) return undefined;
+        if (!data.success || !data.data?.nutritionCardData) return undefined;
 
-        return response.data.data.nutritionCardData;
+        return data.data.nutritionCardData;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка получения информации о питании");
 
@@ -57,14 +51,11 @@ export async function getNutritionGraphicInfo(tokenValue: string):Promise<Nutrit
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ graphicData: NutritionStatisticsGraphicResponse[] }>>(
-            '/statistics/nutrition-graphic-info',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ graphicData: NutritionStatisticsGraphicResponse[] }>>('/statistics/nutrition-graphic-info', payload);
 
-        if (!response.data.success || !response.data.data?.graphicData) return [];
+        if (!data.success || !data.data?.graphicData) return [];
 
-        return response.data.data.graphicData;
+        return data.data.graphicData;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка получения информации для графика питания");
 

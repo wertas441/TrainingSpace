@@ -14,12 +14,11 @@ const router = Router();
 router.post('/goal', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: AddNewGoalFrontendStructure} = req.body;
+        const userId = (req as any).userId as number;
 
         const goalNameError:boolean = validateGoalName(requestData.name);
         const goalDescriptionError:boolean = validateGoalDescription(requestData.description);
         const goalPriorityError:boolean = validateGoalPriority(requestData.priority);
-
-        const userId = (req as any).userId as number;
 
         if (!goalNameError || !goalDescriptionError || !goalPriorityError) {
             const response: ApiResponse = {
@@ -31,9 +30,7 @@ router.post('/goal', authGuard, async (req, res) => {
 
         await GoalModel.create(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
