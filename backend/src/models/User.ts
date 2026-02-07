@@ -3,7 +3,7 @@ import {
     User,
     UserCreateRequest,
     UserProfileResponse
-} from "../types/authBackendTypes";
+} from "../types/user";
 
 export class UserModel {
 

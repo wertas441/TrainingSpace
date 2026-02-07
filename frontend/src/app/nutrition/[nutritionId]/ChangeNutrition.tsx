@@ -12,25 +12,25 @@ import {
 } from "@/lib/utils/validators";
 import {useCallback} from "react";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import {NutritionDay, NutritionFormValues} from "@/types/nutritionTypes";
+import {NutritionDay, NutritionFormValues} from "@/types/nutrition";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import {deleteDay} from "@/lib/controllers/nutritionController";
+import {deleteDay} from "@/lib/controllers/nutrition";
 import {useForm} from "react-hook-form";
 
-interface ChangeNutritionProps {
+interface IProps {
     dayInfo: NutritionDay,
     token: string,
 }
 
-export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
+export default function ChangeNutrition({dayInfo, token}: IProps){
 
     const {register, handleSubmit, formState: { errors }} = useForm<NutritionFormValues>({
         defaultValues: {

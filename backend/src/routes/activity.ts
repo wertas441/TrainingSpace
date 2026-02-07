@@ -10,8 +10,8 @@ import {
     validateActivityPerformedAt,
     validateActivityTrainingId,
     validateActivityType
-} from "../lib/backendValidators/activityValidators";
-import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activityBackendTypes";
+} from "../lib/backendValidators/activity";
+import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activity";
 import {ActivityModel} from "../models/Activity";
 import {showBackendError} from "../lib/indexUtils";
 

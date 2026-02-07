@@ -6,14 +6,14 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
-import authRoutes from './routes/auth';
+import userRoutes from './routes/user';
 import goalRoutes from './routes/goal';
-import trainingRoutes from './routes/training';
-import nutritionRoutes from './routes/nutrition';
-import exercisesRoutes from './routes/exercises';
-import activityRoutes from './routes/activity';
-import settingsRoutes from './routes/settings';
-import statisticsRoutes from './routes/statistics';
+import trainingRoute from './routes/training';
+import nutritionRoute from './routes/nutrition';
+import exerciseRoute from './routes/exercise';
+import activityRoute from './routes/activity';
+import settingRoute from './routes/setting';
+import statisticRoute from './routes/statistic';
 
 import { config } from './config';
 import { testConnection, closePool } from './config/database';
@@ -45,14 +45,14 @@ app.use(express.urlencoded({ extended: true })); // Парсинг URL-encoded �
 app.use(cookieParser()); // Куки
 
 app.use('/api', apiRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/goal', goalRoutes);
-app.use('/api/nutrition', nutritionRoutes);
-app.use('/api/training', trainingRoutes);
-app.use('/api/exercises', exercisesRoutes);
-app.use('/api/activity', activityRoutes);
-app.use('/api/settings', settingsRoutes);
-app.use('/api/statistics', statisticsRoutes);
+app.use('/api/nutrition', nutritionRoute);
+app.use('/api/training', trainingRoute);
+app.use('/api/exercises', exerciseRoute);
+app.use('/api/activity', activityRoute);
+app.use('/api/settings', settingRoute);
+app.use('/api/statistics', statisticRoute);
 
 app.use((req, res) => {
     res.status(404).json({

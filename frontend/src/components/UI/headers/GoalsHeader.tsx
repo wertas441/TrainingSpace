@@ -1,7 +1,7 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {memo, useCallback, useMemo} from "react";
 import {MagnifyingGlassIcon, ClipboardDocumentCheckIcon, ClipboardDocumentListIcon} from "@heroicons/react/24/outline";
-import {HeaderMinimumProps} from "@/types/indexTypes";
+import {HeaderMinimumProps} from "@/types";
 import {usePathname, useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
 import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";

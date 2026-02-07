@@ -1,6 +1,6 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
-import type { BackendApiResponse } from "@/types/indexTypes";
-import {CompleteGoalsStructure, GoalShortyStructure, GoalsStructure} from "@/types/goalTypes";
+import type { BackendApiResponse } from "@/types";
+import {CompleteGoalsStructure, GoalShortyStructure, GoalsStructure} from "@/types/goal";
 
 export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] | undefined> {
 
@@ -9,14 +9,11 @@ export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] |
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ goals: GoalsStructure[] }>>(
-            '/goal/goals',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ goals: GoalsStructure[] }>>('/goal/goals', payload);
 
-        if (!response.data.success || !response.data.data?.goals) return undefined;
+        if (!data.success || !data.data?.goals) return undefined;
 
-        return response.data.data.goals;
+        return data.data.goals;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса списка целей");
 
@@ -31,14 +28,11 @@ export async function getCompleteGoalList(tokenValue: string):Promise<CompleteGo
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ goals: CompleteGoalsStructure[] }>>(
-            '/goal/completed-goals',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ goals: CompleteGoalsStructure[] }>>('/goal/completed-goals', payload);
 
-        if (!response.data.success || !response.data.data?.goals) return undefined;
+        if (!data.success || !data.data?.goals) return undefined;
 
-        return response.data.data.goals;
+        return data.data.goals;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса списка выполненных целей");
 
@@ -54,14 +48,11 @@ export async function getGoalShortyList(tokenValue: string):Promise<GoalShortySt
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ goals: GoalShortyStructure[] }>>(
-            '/goal/short-goals',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ goals: GoalShortyStructure[] }>>('/goal/short-goals', payload);
 
-        if (!response.data.success || !response.data.data?.goals) return [];
+        if (!data.success || !data.data?.goals) return [];
 
-        return response.data.data.goals;
+        return data.data.goals;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса короткого списка целей");
 
@@ -76,14 +67,11 @@ export async function getGoalInformation(tokenValue: string, goalId: string):Pro
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ goal: GoalsStructure }>>(
-            `/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`,
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ goal: GoalsStructure }>>(`/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`, payload);
 
-        if (!response.data.success || !response.data.data?.goal) return undefined;
+        if (!data.success || !data.data?.goal) return undefined;
 
-        return response.data.data.goal;
+        return data.data.goal;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса информации о цели");
 

@@ -1,5 +1,5 @@
 import { create, type StateCreator } from "zustand";
-import type { BackendApiResponse, UserProfileRequest } from "@/types/indexTypes";
+import type { BackendApiResponse, UserProfileRequest } from "@/types";
 import { api, getServerErrorMessage } from "@/lib";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -26,7 +26,7 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
     fetchUserData: async () => {
         try {
             const response = await api.get<BackendApiResponse<{ userData: UserProfileRequest }>>(
-                "/auth/me",
+                "/user/me",
             );
 
             if (!response.data.success || !response.data.data?.userData) return undefined;
@@ -47,7 +47,7 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
 
     logout: async () => {
         try {
-            const response = await api.post<BackendApiResponse>(`/auth/logout`);
+            const response = await api.post<BackendApiResponse>(`/user/logout`);
 
             if (!response.data.success) return;
 
@@ -62,7 +62,7 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
 
 export const useUserStore = create<UserStore>()(
     persist(userStore, {
-        name: "userStore",
+        name: "TSUserStore",
         storage: createJSONStorage(() => localStorage)
     })
 )

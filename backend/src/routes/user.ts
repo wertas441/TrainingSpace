@@ -2,11 +2,11 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { ApiResponse } from '../types';
-import { userEmailValidator, userNameValidator, userPasswordValidator } from '../lib/backendValidators/indexValidators'
+import { userEmailValidator, userNameValidator, userPasswordValidator } from '../lib/backendValidators/index'
 import { UserModel } from '../models/User';
 import { config } from '../config';
 import { authGuard } from '../middleware/authMiddleware';
-import {LoginRequest, RegisterRequest} from "../types/authBackendTypes";
+import {LoginRequest, RegisterRequest} from "../types/user";
 import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();
@@ -49,9 +49,7 @@ router.post('/registration', async (req, res) => {
 
         await UserModel.create({ email, userName, password: hashedPassword });
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {
@@ -130,9 +128,7 @@ router.post('/logout', authGuard, async (req, res) => {
 
         res.clearCookie('token');
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.json(response);
     } catch (error) {

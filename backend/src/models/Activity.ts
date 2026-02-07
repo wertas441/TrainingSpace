@@ -3,7 +3,7 @@ import {
     ActivityListFrontendStructure,
     ActivityExerciseFrontend,
     AddActivityFrontendRequest,
-} from "../types/activityBackendTypes";
+} from "../types/activity";
 
 export class ActivityModel {
 

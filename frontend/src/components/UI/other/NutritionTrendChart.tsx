@@ -9,7 +9,7 @@ import {
     Tooltip,
     Legend,
 } from "recharts";
-import {NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
+import {NutritionStatisticsGraphicResponse} from "@/types/statistic";
 
 
 interface NutritionTrendChartProps {

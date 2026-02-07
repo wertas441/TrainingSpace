@@ -16,8 +16,8 @@ import {
     validateTrainingName
 } from "@/lib/utils/validators";
 import MainPagination from "@/components/UI/other/MainPagination";
-import type {BackendApiResponse} from "@/types/indexTypes";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import type {BackendApiResponse} from "@/types";
+import {ExerciseTechniqueItem} from "@/types/exercise";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import NullElementsError from "@/components/errors/NullElementsError";
@@ -31,12 +31,7 @@ interface AddNewTrainingFormValues {
 
 export default function AddNewTraining({exercises}:{exercises: ExerciseTechniqueItem[]}){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<AddNewTrainingFormValues>({
-        defaultValues: {
-            trainingName: '',
-            trainingDescription: '',
-        }
-    })
+    const {register, handleSubmit, formState: { errors }} = useForm<AddNewTrainingFormValues>()
 
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;

@@ -11,7 +11,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {AtSymbolIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {useForm} from "react-hook-form";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 
 interface ForgotPasswordFormValues {
     email: string;
@@ -19,13 +19,10 @@ interface ForgotPasswordFormValues {
 
 export default function ForgotPassword() {
 
-    const {register, handleSubmit, formState: { errors }} = useForm<ForgotPasswordFormValues>({
-        defaultValues: {
-            email: '',
-        }
-    })
+    const {register, handleSubmit, formState: { errors }} = useForm<ForgotPasswordFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting} = usePageUtils();
+
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const onSubmit = async (values: ForgotPasswordFormValues)=> {
@@ -37,7 +34,7 @@ export default function ForgotPassword() {
         }
 
         try {
-            await api.post<BackendApiResponse>('/auth/forgot-password', payload)
+            await api.post<BackendApiResponse>('/user/forgot-password', payload)
 
             setSuccessMessage("Если указанный email зарегистрирован, мы отправили на него письмо с дальнейшими инструкциями по восстановлению пароля.");
             setIsSubmitting(false)

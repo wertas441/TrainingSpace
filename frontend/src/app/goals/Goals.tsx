@@ -4,7 +4,7 @@ import MainPagination from "@/components/UI/other/MainPagination";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {memo, useMemo, useState} from "react";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
-import {GoalsStructure} from "@/types/goalTypes";
+import {GoalsStructure} from "@/types/goal";
 import GoalItem from "@/components/elements/GoalRow";
 import NullElementsError from "@/components/errors/NullElementsError";
 

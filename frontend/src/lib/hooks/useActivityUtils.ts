@@ -1,8 +1,8 @@
-import { ExerciseSetsByExerciseId } from "@/types/activityTypes";
-import {TrainingDataStructure} from "@/types/indexTypes";
-import {getTrainingExercises} from "@/lib/controllers/activityController";
+import { ExerciseSetsByExerciseId } from "@/types/activity";
+import {TrainingDataStructure} from "@/types";
+import {getTrainingExercises} from "@/lib/controllers/activity";
 import {useEffect, useMemo, useState} from "react";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import type {ExerciseTechniqueItem} from "@/types/exercise";
 import {OptionType} from "@/components/inputs/MainMultiSelect";
 
 interface UseTrainingListProps {

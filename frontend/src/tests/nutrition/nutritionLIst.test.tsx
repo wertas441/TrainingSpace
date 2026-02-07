@@ -6,7 +6,7 @@ import {
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
-import {NutritionDay} from "@/types/nutritionTypes";
+import {NutritionDay} from "@/types/nutrition";
 import Nutrition from "@/app/nutrition/Nutrition";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({

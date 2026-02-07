@@ -1,6 +1,6 @@
-import {DifficultOptionsStructure} from "@/types/indexTypes";
-import {GoalPriority} from "@/types/goalTypes";
-import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activityTypes";
+import {DifficultOptionsStructure} from "@/types";
+import {GoalPriority} from "@/types/goal";
+import {ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activity";
 
 type ColorStylesChoices = DifficultOptionsStructure | GoalPriority | ActivityTypeStructure | ActivityDifficultyStructure;
 

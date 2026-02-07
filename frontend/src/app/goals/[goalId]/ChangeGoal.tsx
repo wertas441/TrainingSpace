@@ -1,11 +1,11 @@
 'use client'
 
 import {useCallback} from "react";
-import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goalTypes";
+import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goal";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -13,7 +13,7 @@ import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
-import {deleteGoal} from "@/lib/controllers/goalController";
+import {deleteGoal} from "@/lib/controllers/goal";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {Controller, useForm} from "react-hook-form";

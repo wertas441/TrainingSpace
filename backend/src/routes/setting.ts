@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {ChangeEmailFrontendStructure, ChangePasswordFrontendStructure} from "../types/settingsBackendTypes";
+import {ChangeEmailFrontendStructure, ChangePasswordFrontendStructure} from "../types/setting";
 import {
     validateConfirmPassword,
     validateTwoPassword, validateUserEmail,
     validateUserPassword
-} from "../lib/backendValidators/settingsValidators";
+} from "../lib/backendValidators/setting";
 import {SettingModel} from "../models/Setting";
 import {showBackendError} from "../lib/indexUtils";
 
@@ -79,13 +79,12 @@ router.post('/change-email', authGuard, async (req, res) => {
 router.post('/change-password', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: ChangePasswordFrontendStructure} = req.body;
+        const userId = (req as any).userId as number;
 
         const currentPasswordError:boolean = validateUserPassword(requestData.currentPassword);
         const newPasswordError:boolean = validateUserPassword(requestData.newPassword);
         const confirmPasswordError:boolean = validateConfirmPassword(requestData.newPassword, requestData.confirmPassword);
         const twoPasswordError:boolean = validateTwoPassword(requestData.currentPassword, requestData.newPassword);
-
-        const userId = (req as any).userId as number;
 
         if (!currentPasswordError || !newPasswordError || !confirmPasswordError || !twoPasswordError) {
             const response: ApiResponse = {
@@ -97,9 +96,7 @@ router.post('/change-password', authGuard, async (req, res) => {
 
         await SettingModel.changePassword(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
@@ -126,9 +123,5 @@ router.post('/change-password', authGuard, async (req, res) => {
         res.status(500).json(response);
     }
 });
-
-// router.delete('/delete-my-account', authGuard, async (req, res) => {
-//
-// });
 
 export default router;

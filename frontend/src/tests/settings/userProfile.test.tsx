@@ -5,7 +5,7 @@ import {
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
 import Profile from "@/app/settings/profile/Profile";
-import type {UserProfileRequest} from "@/types/indexTypes";
+import type {UserProfileRequest} from "@/types";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -26,7 +26,7 @@ describe('Пользовательский профиль', () => {
     }
 
     it('Проверка корректного получения и отображения данных', async () => {
-        render(<Profile userData={userData} />);
+        render(<Profile />);
 
         expect(await screen.findByText('13ddb945-2cbf-7bdc-adec-ce4cca33558f')).toBeInTheDocument();
         expect(await screen.findByText('testuser123')).toBeInTheDocument();

@@ -12,6 +12,7 @@
 **/.next/
 **/out/
 **/.turbo/
+.idea
 
 # Logs
 **/npm-debug.log*

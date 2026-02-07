@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {AddNewDayFrontendStructure, DayUpdateFrontendStructure} from "../types/nutritionBackendTypes";
+import {AddNewDayFrontendStructure, DayUpdateFrontendStructure} from "../types/nutrition";
 import {
     validateCalories,
     validateCarb,
@@ -10,7 +10,7 @@ import {
     validateFat,
     validateNutritionDayDate,
     validateProtein
-} from "../lib/backendValidators/nutrationValidators";
+} from "../lib/backendValidators/nutrition";
 import {NutritionModel} from "../models/Nutrition";
 import {showBackendError} from "../lib/indexUtils";
 
@@ -19,6 +19,7 @@ const router = Router();
 router.post('/day', authGuard, async (req, res) => {
     try {
         const { requestData }: {requestData: AddNewDayFrontendStructure } = req.body;
+        const userId = (req as any).userId as number;
 
         const dayNameError:boolean = validateDayName(requestData.name);
         const dayDescriptionError:boolean = validateDayDescription(requestData.description);
@@ -27,8 +28,6 @@ router.post('/day', authGuard, async (req, res) => {
         const fatError:boolean = validateFat(requestData.fat);
         const carbError:boolean = validateCarb(requestData.carb);
         const dayDateError:boolean = validateNutritionDayDate(requestData.date);
-
-        const userId = (req as any).userId as number;
 
         if (!dayNameError || !dayDescriptionError || !caloriesError || !proteinError || !fatError || !carbError || !dayDateError) {
             const response: ApiResponse = {
@@ -40,9 +39,7 @@ router.post('/day', authGuard, async (req, res) => {
 
         await NutritionModel.create(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
@@ -95,9 +92,7 @@ router.delete('/day', authGuard, async (req, res) => {
             return res.status(404).json(response);
         }
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
@@ -166,9 +161,7 @@ router.put('/day', authGuard, async (req, res) => {
 
         await NutritionModel.update(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){

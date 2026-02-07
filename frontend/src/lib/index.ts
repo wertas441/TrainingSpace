@@ -1,16 +1,14 @@
-import {BackendApiResponse} from "@/types/indexTypes";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {BackendApiResponse} from "@/types";
 import axios from "axios";
 
 export function getTokenHeaders(token: string) {
     return {Cookie: `token=${token}`};
 }
 
-const baseUrlForBackend: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002/api';
 export const showErrorMessage:boolean = true;
 
 export const api = axios.create({
-    baseURL: baseUrlForBackend,
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:3002/api',
     withCredentials: true,
     timeout: 9000,
 });
@@ -24,47 +22,6 @@ export function getServerErrorMessage(err: unknown){
     }
 
     return message;
-}
-
-export async function getExercisesList(tokenValue: string | undefined):Promise<ExerciseTechniqueItem[] | undefined>{
-    try {
-        const response = await fetch(`${baseUrlForBackend}/exercises/exercises`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Accept': 'application/json',
-                'Cookie': `token=${tokenValue}`
-            },
-        });
-
-        if (!response.ok) {
-            let errorMessage = "Ошибка получения списка упражнений.";
-            try {
-                const data = await response.json() as BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>;
-                if (data.error || data.message) {
-                    errorMessage = (data.error || data.message) as string;
-                }
-            } catch {
-                // игнорируем, оставляем дефолтное сообщение
-            }
-            console.error(errorMessage);
-
-            return undefined;
-        }
-
-        const data = await response.json() as BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>;
-
-        if (!data.success || !data.data?.exercises) {
-
-            return undefined;
-        }
-
-        return data.data.exercises;
-    } catch (error) {
-        console.error("Ошибка запроса списка упражнений:", error);
-
-        return undefined;
-    }
 }
 
 export const normalizeToYMD = (dateStr: string): string => {

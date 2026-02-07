@@ -1,8 +1,7 @@
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getTrainingInformation} from "@/lib/controllers/trainingController";
+import {getExercisesList, getTrainingInformation} from "@/lib/controllers/training";
 import ChangeTraining from "@/app/my-training/[trainingId]/ChangeTraining";
-import {getExercisesList} from "@/lib";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {

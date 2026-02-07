@@ -5,7 +5,7 @@ import {
     getMainStatisticsCardInfo,
     getNutritionGraphicInfo,
     getNutritionStatisticsCardInfo
-} from "@/lib/controllers/statisticsController";
+} from "@/lib/controllers/statistic";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {

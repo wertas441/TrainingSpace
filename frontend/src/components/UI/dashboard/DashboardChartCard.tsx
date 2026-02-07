@@ -1,6 +1,6 @@
 import {memo, useState} from "react";
 import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
-import {MetricOptionStructure, NutritionMetric, NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
+import {MetricOptionStructure, NutritionMetric, NutritionStatisticsGraphicResponse} from "@/types/statistic";
 import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
 const metricOptions: MetricOptionStructure[] = [

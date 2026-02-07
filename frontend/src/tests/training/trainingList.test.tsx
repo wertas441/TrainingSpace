@@ -6,10 +6,9 @@ import {
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
-import Goals from "@/app/goals/Goals";
 import MyTraining from "@/app/my-training/MyTraining";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import {TrainingListResponse} from "@/types/trainingTypes";
+import {ExerciseTechniqueItem} from "@/types/exercise";
+import {TrainingListResponse} from "@/types/training";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports

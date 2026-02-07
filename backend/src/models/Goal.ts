@@ -5,7 +5,7 @@ import {
     GoalListFrontendResponse,
     GoalShortyFrontendResponse,
     GoalUpdateFrontendStructure,
-} from "../types/goalBackendTypes";
+} from "../types/goal";
 
 export class GoalModel {
 

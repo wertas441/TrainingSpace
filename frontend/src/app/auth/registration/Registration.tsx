@@ -15,7 +15,7 @@ import {AtSymbolIcon, LockClosedIcon, UserIcon} from "@heroicons/react/24/outlin
 import Link from "next/link";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainHideInput from "@/components/inputs/MainHideInput";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 
 interface RegistrationFormValues {
@@ -27,14 +27,7 @@ interface RegistrationFormValues {
 
 export default function Registration(){
 
-    const {register, handleSubmit, getValues, formState: { errors }} = useForm<RegistrationFormValues>({
-        defaultValues: {
-            userName: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-        }
-    })
+    const {register, handleSubmit, getValues, formState: { errors }} = useForm<RegistrationFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
 
@@ -49,7 +42,7 @@ export default function Registration(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/auth/registration', payload)
+            await api.post<BackendApiResponse>('/user/registration', payload)
 
             router.push("/auth/login");
         } catch (err) {

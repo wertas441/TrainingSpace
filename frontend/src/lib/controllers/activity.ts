@@ -1,7 +1,7 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
-import {ActivityDataStructure} from "@/types/activityTypes";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import type {BackendApiResponse} from "@/types";
+import {ActivityDataStructure} from "@/types/activity";
+import {ExerciseTechniqueItem} from "@/types/exercise";
 
 export async function getActivityList(tokenValue: string):Promise<ActivityDataStructure[] | undefined> {
 
@@ -10,14 +10,11 @@ export async function getActivityList(tokenValue: string):Promise<ActivityDataSt
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ activity: ActivityDataStructure[] }>>(
-            '/activity/activities',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ activity: ActivityDataStructure[] }>>('/activity/activities', payload)
 
-        if (!response.data.success || !response.data.data?.activity) return undefined;
+        if (!data.success || !data.data?.activity) return undefined;
 
-        return response.data.data.activity;
+        return data.data.activity;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса листа активностей");
 
@@ -28,13 +25,11 @@ export async function getActivityList(tokenValue: string):Promise<ActivityDataSt
 // Упражнения, привязанные к конкретной тренировке
 export async function getTrainingExercises(trainingId: number): Promise<ExerciseTechniqueItem[]> {
     try {
-        const resp = await api.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>(
-            `/training/${trainingId}/exercises`
-        );
+        const { data } = await api.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>(`/training/${trainingId}/exercises`);
 
-        if (!resp.data.success || !resp.data.data?.exercises) return [];
+        if (!data.success || !data.data?.exercises) return [];
 
-        return resp.data.data.exercises;
+        return data.data.exercises;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса упражнений тренировки");
 
@@ -49,14 +44,12 @@ export async function getActivityInformation(tokenValue: string, activityId: str
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ activity: ActivityDataStructure }>>(
-            `/activity/about-my-activity?activityId=${encodeURIComponent(activityId)}`,
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ activity: ActivityDataStructure }>>(
+            `/activity/about-my-activity?activityId=${encodeURIComponent(activityId)}`, payload);
 
-        if (!response.data.success || !response.data.data?.activity) return undefined;
+        if (!data.success || !data.data?.activity) return undefined;
 
-        return response.data.data.activity;
+        return data.data.activity;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса информации активностей");
 

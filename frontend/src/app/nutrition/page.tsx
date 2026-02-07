@@ -1,7 +1,7 @@
 import Nutrition from "@/app/nutrition/Nutrition";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getDayList} from "@/lib/controllers/nutritionController";
+import {getDayList} from "@/lib/controllers/nutrition";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {

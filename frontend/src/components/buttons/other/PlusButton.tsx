@@ -1,6 +1,6 @@
 import {memo, useMemo} from "react";
 import {PlusIcon} from "@heroicons/react/16/solid";
-import {BasicIconButtonProps} from "@/types/indexTypes";
+import {BasicIconButtonProps} from "@/types";
 import {iconDarkColorTheme} from "@/styles";
 
 function PlusButton({onClick, className = ''}:BasicIconButtonProps) {

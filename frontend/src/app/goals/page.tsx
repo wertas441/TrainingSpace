@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Goals from "@/app/goals/Goals";
-import {getGoalList} from "@/lib/controllers/goalController";
+import {getGoalList} from "@/lib/controllers/goal";
 import {cookies} from "next/headers";
 import ErrorState from "@/components/errors/ErrorState";
 

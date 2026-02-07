@@ -3,7 +3,7 @@ import {
     AddNewDayFrontendStructure,
     DayListFrontendStructure,
     DayUpdateFrontendStructure,
-} from "../types/nutritionBackendTypes";
+} from "../types/nutrition";
 
 export class NutritionModel {
 

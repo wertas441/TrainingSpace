@@ -1,8 +1,8 @@
 import {PlusIcon} from "@heroicons/react/16/solid";
 import {TrashIcon} from "@heroicons/react/24/outline";
-import type {TrainingDataStructure} from "@/types/indexTypes";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import type {ExerciseSetsByExerciseId} from "@/types/activityTypes";
+import type {TrainingDataStructure} from "@/types";
+import type {ExerciseTechniqueItem} from "@/types/exercise";
+import type {ExerciseSetsByExerciseId} from "@/types/activity";
 import {Dispatch, JSX, SetStateAction, useMemo} from "react";
 import {iconDarkColorTheme, secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 

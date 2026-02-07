@@ -1,6 +1,6 @@
 import {Dispatch, SetStateAction, useCallback, useMemo, useState} from "react";
 import {OptionType} from "@/components/inputs/MainMultiSelect";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseTechniqueItem} from "@/types/exercise";
 
 interface UseTrainingUtilsProps {
     exercises: ExerciseTechniqueItem[];
