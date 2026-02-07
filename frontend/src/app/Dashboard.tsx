@@ -5,16 +5,16 @@ import DashboardCalendarCard from "@/components/UI/dashboard/DashboardCalendarCa
 import DashboardQuickActionsCard from "@/components/UI/dashboard/DashboardQuickActionsCard";
 import DashboardChartCard from "@/components/UI/dashboard/DashboardChartCard";
 import DashboardGoalsCard from "@/components/UI/dashboard/DashboardGoalsCard";
-import {GoalShortyStructure} from "@/types/goalTypes";
-import {NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
+import {GoalShortyStructure} from "@/types/goal";
+import {NutritionStatisticsGraphicResponse} from "@/types/statistic";
 import {getUserData, useUserStore} from "@/lib/store/userStore";
 
-interface DashboardProps {
+interface IProps {
     goalsShortyList: GoalShortyStructure[],
     nutritionGraphicData: NutritionStatisticsGraphicResponse[],
 }
 
-export default function Dashboard({goalsShortyList, nutritionGraphicData}: DashboardProps) {
+export default function Dashboard({goalsShortyList, nutritionGraphicData}: IProps) {
 
     const userData = useUserStore(getUserData)
 
@@ -27,7 +27,9 @@ export default function Dashboard({goalsShortyList, nutritionGraphicData}: Dashb
 
                 <section className="grid gap-4 lg:gap-6 grid-cols-1 lg:grid-cols-3">
                     <DashboardStopwatchCard />
+
                     <DashboardCalendarCard />
+
                     <DashboardQuickActionsCard />
                 </section>
 

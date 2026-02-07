@@ -1,11 +1,11 @@
 import {Router} from 'express';
 import {authGuard} from '../middleware/authMiddleware';
-import {StatisticsModel} from "../models/Statistics";
+import {StatisticsModel} from "../models/Statistic";
 import {
     MainStatisticsBackendResponse,
     NutritionGraphicBackendResponse,
     NutritionStatisticsBackendResponse
-} from "../types/statisticsBackendTypes";
+} from "../types/statistic";
 import {ApiResponse} from "../types";
 import {showBackendError} from "../lib/indexUtils";
 

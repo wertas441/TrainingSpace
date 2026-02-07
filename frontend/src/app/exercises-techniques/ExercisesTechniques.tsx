@@ -5,16 +5,18 @@ import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import ExerciseRow from "@/components/elements/ExerciseRow";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import {ExerciseDifficultFilter} from "@/types/indexTypes";
+import {ExerciseTechniqueItem} from "@/types/exercise";
+import {ExerciseDifficultFilter} from "@/types";
 import NullElementsError from "@/components/errors/NullElementsError";
 
 function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
     const [searchName, setSearchName] = useState<string>('');
     const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
+
     const [difficultFilter, setDifficultFilter] = useState<ExerciseDifficultFilter>(null);
     const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
+
     const itemsPerPage:number = 10;
 
     const toggleFilterWindow = useCallback(() => {

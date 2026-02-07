@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import {
     ChangeEmailFrontendStructure,
     ChangePasswordFrontendStructure,
-} from "../types/settingsBackendTypes";
+} from "../types/setting";
 
 export class SettingModel {
 

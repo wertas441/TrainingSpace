@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {AddNewDayFrontendStructure, DayUpdateFrontendStructure} from "../types/nutritionBackendTypes";
+import {AddNewDayFrontendStructure, DayUpdateFrontendStructure} from "../types/nutrition";
 import {
     validateCalories,
     validateCarb,
@@ -10,7 +10,7 @@ import {
     validateFat,
     validateNutritionDayDate,
     validateProtein
-} from "../lib/backendValidators/nutrationValidators";
+} from "../lib/backendValidators/nutrition";
 import {NutritionModel} from "../models/Nutrition";
 import {showBackendError} from "../lib/indexUtils";
 

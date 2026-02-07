@@ -16,9 +16,9 @@ import {
 } from "@/lib/utils/validators";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import MainInput from "@/components/inputs/MainInput";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
-import {NutritionFormValues} from "@/types/nutritionTypes";
+import {NutritionFormValues} from "@/types/nutrition";
 
 export default function AddNutrition(){
 

@@ -15,7 +15,7 @@ import {LockClosedIcon, CheckIcon} from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 
 interface ChangePasswordFormValues {
     currentPassword: string;
@@ -25,13 +25,7 @@ interface ChangePasswordFormValues {
 
 export default function ChangePassword(){
 
-    const {register, handleSubmit, getValues, formState: { errors }} = useForm<ChangePasswordFormValues>({
-        defaultValues: {
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: '',
-        }
-    })
+    const {register, handleSubmit, getValues, formState: { errors }} = useForm<ChangePasswordFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 

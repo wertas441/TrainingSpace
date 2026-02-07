@@ -1,6 +1,6 @@
 'use client'
 
-import {ActivityDataStructure, ActivityDifficultyFilter, ActivityTypeFilter} from "@/types/activityTypes";
+import {ActivityDataStructure, ActivityDifficultyFilter, ActivityTypeFilter} from "@/types/activity";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";

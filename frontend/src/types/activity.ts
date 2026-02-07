@@ -1,4 +1,4 @@
-import {HeaderMinimumProps} from "@/types/indexTypes";
+import {HeaderMinimumProps} from "@/types";
 
 export type ActivityTypeStructure = 'Силовая' | 'Кардио' | 'Комбинированный';
 

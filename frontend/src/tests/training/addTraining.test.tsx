@@ -8,7 +8,7 @@ import {
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
 import AddNewTraining from "@/app/my-training/add/AddNewTraining";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseTechniqueItem} from "@/types/exercise";
 import { mockAxiosInstance } from '@/tests/utils/mockAxios';
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({

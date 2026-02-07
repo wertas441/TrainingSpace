@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {ChangeEmailFrontendStructure, ChangePasswordFrontendStructure} from "../types/settingsBackendTypes";
+import {ChangeEmailFrontendStructure, ChangePasswordFrontendStructure} from "../types/setting";
 import {
     validateConfirmPassword,
     validateTwoPassword, validateUserEmail,
     validateUserPassword
-} from "../lib/backendValidators/settingsValidators";
+} from "../lib/backendValidators/setting";
 import {SettingModel} from "../models/Setting";
 import {showBackendError} from "../lib/indexUtils";
 

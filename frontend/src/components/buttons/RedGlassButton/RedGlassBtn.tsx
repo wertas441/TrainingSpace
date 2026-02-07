@@ -1,5 +1,5 @@
 import {memo} from "react";
-import {SimpleButtonProps} from "@/types/indexTypes";
+import {SimpleButtonProps} from "@/types";
 
 function RedGlassBtn({label, onClick, className = '', disabled = false, type = "button"}: SimpleButtonProps ) {
 

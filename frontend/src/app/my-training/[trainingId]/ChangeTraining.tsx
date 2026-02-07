@@ -1,14 +1,14 @@
 'use client'
 
-import {TrainingListResponse} from "@/types/trainingTypes";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {TrainingListResponse} from "@/types/training";
+import type {ExerciseTechniqueItem} from "@/types/exercise";
 import {useCallback, useEffect, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
-import {BackendApiResponse} from "@/types/indexTypes";
+import {BackendApiResponse} from "@/types";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
@@ -18,13 +18,13 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import {deleteTraining} from "@/lib/controllers/trainingController";
+import {deleteTraining} from "@/lib/controllers/training";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import {secondDarkColorTheme} from "@/styles";
 import {useForm} from "react-hook-form";
 
-interface ChangeTrainingProps {
+interface IProps {
     trainingInfo: TrainingListResponse,
     token: string,
     exercises: ExerciseTechniqueItem[],
@@ -35,7 +35,7 @@ interface ChangeTrainingFormValues {
     trainingDescription: string;
 }
 
-export default function ChangeTraining({ trainingInfo, token, exercises }: ChangeTrainingProps) {
+export default function ChangeTraining({ trainingInfo, token, exercises }: IProps) {
 
     const {register, handleSubmit, formState: { errors }} = useForm<ChangeTrainingFormValues>({
         defaultValues: {

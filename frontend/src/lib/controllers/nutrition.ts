@@ -1,6 +1,6 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
-import {NutritionDay} from "@/types/nutritionTypes";
+import type {BackendApiResponse} from "@/types";
+import {NutritionDay} from "@/types/nutrition";
 
 export async function getDayList(tokenValue: string):Promise<NutritionDay[] | undefined> {
 

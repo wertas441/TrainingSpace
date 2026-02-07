@@ -1,6 +1,6 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
-import type { BackendApiResponse } from "@/types/indexTypes";
-import {CompleteGoalsStructure, GoalShortyStructure, GoalsStructure} from "@/types/goalTypes";
+import type { BackendApiResponse } from "@/types";
+import {CompleteGoalsStructure, GoalShortyStructure, GoalsStructure} from "@/types/goal";
 
 export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] | undefined> {
 

@@ -1,7 +1,7 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
-import {ActivityDataStructure} from "@/types/activityTypes";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import type {BackendApiResponse} from "@/types";
+import {ActivityDataStructure} from "@/types/activity";
+import {ExerciseTechniqueItem} from "@/types/exercise";
 
 export async function getActivityList(tokenValue: string):Promise<ActivityDataStructure[] | undefined> {
 

@@ -6,9 +6,8 @@ import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
+import type {BackendApiResponse, TrainingDataStructure} from "@/types";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activityTypes";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
@@ -21,6 +20,7 @@ import {
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";
+import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activity";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
@@ -32,12 +32,9 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
         defaultValues: {
-            activityName: '',
-            activityDescription: '',
             activityDate: initialDate,
             activityType: 'Силовая',
             activityDifficulty: 'Средняя',
-            trainingId: '',
         }
     })
 

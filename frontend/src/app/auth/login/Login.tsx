@@ -10,7 +10,7 @@ import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 import {makeInitUserData, useUserStore} from "@/lib/store/userStore";
 
@@ -22,13 +22,7 @@ interface LoginFormValues {
 
 export default function Login(){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<LoginFormValues>({
-        defaultValues: {
-            userName: '',
-            password: '',
-            rememberMe: false,
-        }
-    })
+    const {register, handleSubmit, formState: { errors }} = useForm<LoginFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
     const initUserData = useUserStore(makeInitUserData)
@@ -44,7 +38,7 @@ export default function Login(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/auth/login', payload)
+            await api.post<BackendApiResponse>('/user/login', payload)
 
             await initUserData();
             const userData = useUserStore.getState().userData;

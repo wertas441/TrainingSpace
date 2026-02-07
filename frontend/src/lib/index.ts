@@ -1,5 +1,5 @@
-import {BackendApiResponse} from "@/types/indexTypes";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {BackendApiResponse} from "@/types";
+import type {ExerciseTechniqueItem} from "@/types/exercise";
 import axios from "axios";
 
 export function getTokenHeaders(token: string) {

@@ -1,6 +1,6 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
-import {TrainingListResponse} from "@/types/trainingTypes";
+import type {BackendApiResponse} from "@/types";
+import {TrainingListResponse} from "@/types/training";
 
 export async function getTrainingList(tokenValue: string):Promise<TrainingListResponse[] | undefined> {
 

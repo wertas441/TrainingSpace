@@ -1,7 +1,7 @@
 import {memo} from "react";
 import Link from "next/link";
 import {ChevronRightIcon, SparklesIcon} from "@heroicons/react/24/outline";
-import {GoalShortyStructure} from "@/types/goalTypes";
+import {GoalShortyStructure} from "@/types/goal";
 import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
 import {secondDarkColorTheme} from "@/styles";
 

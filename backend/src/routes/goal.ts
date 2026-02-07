@@ -4,8 +4,8 @@ import { ApiResponse } from "../types";
 import {
     AddNewGoalFrontendStructure,
     GoalUpdateFrontendStructure
-} from "../types/goalBackendTypes";
-import { validateGoalDescription, validateGoalName, validateGoalPriority } from "../lib/backendValidators/goalValidators";
+} from "../types/goal";
+import { validateGoalDescription, validateGoalName, validateGoalPriority } from "../lib/backendValidators/goal";
 import { GoalModel } from "../models/Goal";
 import {showBackendError} from "../lib/indexUtils";
 

@@ -2,11 +2,11 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { ApiResponse } from '../types';
-import { userEmailValidator, userNameValidator, userPasswordValidator } from '../lib/backendValidators/indexValidators'
+import { userEmailValidator, userNameValidator, userPasswordValidator } from '../lib/backendValidators/index'
 import { UserModel } from '../models/User';
 import { config } from '../config';
 import { authGuard } from '../middleware/authMiddleware';
-import {LoginRequest, RegisterRequest} from "../types/authBackendTypes";
+import {LoginRequest, RegisterRequest} from "../types/user";
 import {showBackendError} from "../lib/indexUtils";
 
 const router = Router();

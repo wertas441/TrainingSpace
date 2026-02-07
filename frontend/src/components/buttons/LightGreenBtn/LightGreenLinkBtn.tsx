@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {BasicLinkBtnProps} from "@/types/indexTypes";
+import {BasicLinkBtnProps} from "@/types";
 
 export default function LightGreenLinkBtn({label, href = '/', className = ''}: BasicLinkBtnProps) {
 

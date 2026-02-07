@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import MyActivity from "@/app/my-activity/MyActivity";
 import {cookies} from "next/headers";
-import {getActivityList} from "@/lib/controllers/activityController";
+import {getActivityList} from "@/lib/controllers/activity";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {

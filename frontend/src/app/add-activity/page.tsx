@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import {cookies} from "next/headers";
-import {getTrainingList} from "@/lib/controllers/trainingController";
+import {getTrainingList} from "@/lib/controllers/training";
 import AddActivity from "@/app/add-activity/AddActivity";
 import ErrorState from "@/components/errors/ErrorState";
 

@@ -1,10 +1,10 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import {
     MainStatisticsCardResponse,
     NutritionStatisticsCardResponse,
     NutritionStatisticsGraphicResponse
-} from "@/types/statisticsTypes";
+} from "@/types/statistic";
 
 export async function getMainStatisticsCardInfo(tokenValue: string):Promise<MainStatisticsCardResponse | undefined> {
 

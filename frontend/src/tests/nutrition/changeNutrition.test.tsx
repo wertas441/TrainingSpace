@@ -8,7 +8,7 @@ import {
 } from '@/tests/utils/mockUsePageUtils';
 import {replaceMock} from '@/tests/utils/mockNextNavigation';
 import ChangeNutrition from "@/app/nutrition/[nutritionId]/ChangeNutrition";
-import {NutritionDay} from "@/types/nutritionTypes";
+import {NutritionDay} from "@/types/nutrition";
 import {mockAxiosInstance} from "@/tests/utils/mockAxios";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({

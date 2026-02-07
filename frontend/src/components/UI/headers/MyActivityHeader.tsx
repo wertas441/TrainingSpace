@@ -7,7 +7,7 @@ import {
     ActivityDifficultyStructure,
     ActivityHeaderProps,
     ActivityTypeStructure
-} from "@/types/activityTypes";
+} from "@/types/activity";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {secondDarkColorTheme} from "@/styles";

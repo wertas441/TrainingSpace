@@ -6,7 +6,7 @@ import {
     LockClosedIcon,
     UserCircleIcon
 } from "@heroicons/react/24/outline";
-import {SettingsMenuItemsStructure} from "@/types/indexTypes";
+import {SettingsMenuItemsStructure} from "@/types";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";

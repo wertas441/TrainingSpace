@@ -1,8 +1,8 @@
 import {CalendarDaysIcon, ChevronDownIcon, ChevronUpIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback, useMemo, useState} from "react";
-import {ActivityDataStructure} from "@/types/activityTypes";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import {getTrainingExercises} from "@/lib/controllers/activityController";
+import {ActivityDataStructure} from "@/types/activity";
+import {ExerciseTechniqueItem} from "@/types/exercise";
+import {getTrainingExercises} from "@/lib/controllers/activity";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/styles";

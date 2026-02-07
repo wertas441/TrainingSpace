@@ -1,5 +1,5 @@
 import { create, type StateCreator } from "zustand";
-import type { BackendApiResponse, UserProfileRequest } from "@/types/indexTypes";
+import type { BackendApiResponse, UserProfileRequest } from "@/types";
 import { api, getServerErrorMessage } from "@/lib";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -26,7 +26,7 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
     fetchUserData: async () => {
         try {
             const response = await api.get<BackendApiResponse<{ userData: UserProfileRequest }>>(
-                "/auth/me",
+                "/user/me",
             );
 
             if (!response.data.success || !response.data.data?.userData) return undefined;

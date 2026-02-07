@@ -1,8 +1,7 @@
 import {mainInputClasses} from "@/styles";
 import {memo} from "react";
-import {MainInputProps} from "@/types/indexTypes";
+import {MainInputProps} from "@/types";
 import InputError from "@/components/errors/InputError";
-
 
 function MainInput(
     {

@@ -1,10 +1,10 @@
-import {GoalsStructure} from "@/types/goalTypes";
+import {GoalsStructure} from "@/types/goal";
 import {memo, useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import CheckButton from "@/components/buttons/other/CheckButton";
 import {getColorStyles, secondDarkColorTheme} from "@/styles";
-import {completeGoal} from "@/lib/controllers/goalController";
+import {completeGoal} from "@/lib/controllers/goal";
 
 interface GoalRowProps extends GoalsStructure{
     token: string;

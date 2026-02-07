@@ -4,12 +4,12 @@ import {ApiResponse} from "../types";
 import {
     AddTrainingFrontendStructure,
     TrainingUpdateFrontendStructure
-} from "../types/trainingBackendTypes";
+} from "../types/training";
 import {
     validateTrainingDescription,
     validateTrainingExercises,
     validateTrainingName
-} from "../lib/backendValidators/trainingValidators";
+} from "../lib/backendValidators/training";
 import {TrainingModel} from "../models/Training";
 import {ExerciseModel} from "../models/Exercise";
 import {showBackendError} from "../lib/indexUtils";

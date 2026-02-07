@@ -10,7 +10,7 @@ import {
     NutritionMetric,
     NutritionStatisticsCardResponse,
     NutritionStatisticsGraphicResponse
-} from "@/types/statisticsTypes";
+} from "@/types/statistic";
 import {
     CalendarDaysIcon,
     FlagIcon,
@@ -23,7 +23,7 @@ import {
 import {ChartBarIcon} from "@heroicons/react/24/solid";
 import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
-interface StatisticsProps {
+interface IProps {
     mainCardData: MainStatisticsCardResponse;
     nutritionCardData: NutritionStatisticsCardResponse;
     nutritionGraphicData?: NutritionStatisticsGraphicResponse[];
@@ -36,7 +36,7 @@ const metricOptions: MetricOptionStructure[] = [
     {id: 'carb', label: 'Углеводы'},
 ] as const;
 
-function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: StatisticsProps) {
+function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: IProps) {
 
     const [selectedMetric, setSelectedMetric] = useState<NutritionMetric>('calories');
 

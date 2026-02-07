@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import ChangeNutrition from "@/app/nutrition/[nutritionId]/ChangeNutrition";
-import {getDayInformation} from "@/lib/controllers/nutritionController";
+import {getDayInformation} from "@/lib/controllers/nutrition";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {

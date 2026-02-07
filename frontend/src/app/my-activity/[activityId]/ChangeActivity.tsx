@@ -10,13 +10,13 @@ import {
     ActivityDifficultyStructure, ActivityFormValues,
     ActivityTypeStructure,
     ExerciseSetsByExerciseId
-} from "@/types/activityTypes";
+} from "@/types/activity";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
-import {deleteActivity} from "@/lib/controllers/activityController";
+import type {BackendApiResponse, TrainingDataStructure} from "@/types";
+import {deleteActivity} from "@/lib/controllers/activity";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
@@ -31,7 +31,7 @@ import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";
 
-interface ChangeActivityProps {
+interface IProps {
     activityInfo: ActivityDataStructure,
     myTrainings: TrainingDataStructure[];
     token: string;
@@ -40,7 +40,7 @@ interface ChangeActivityProps {
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
 
-export default function ChangeActivity({activityInfo, myTrainings, token}: ChangeActivityProps){
+export default function ChangeActivity({activityInfo, myTrainings, token}: IProps){
 
     const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
         defaultValues: {

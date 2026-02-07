@@ -3,7 +3,7 @@ import {
     AddTrainingFrontendStructure,
     TrainingListFrontendStructure,
     TrainingUpdateFrontendStructure
-} from "../types/trainingBackendTypes";
+} from "../types/training";
 
 export class TrainingModel {
 

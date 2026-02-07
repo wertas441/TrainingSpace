@@ -1,7 +1,7 @@
 /// USER VALIDATOR
 
-import {GoalPriority} from "@/types/goalTypes";
-import {ExerciseSetsByExerciseId} from "@/types/activityTypes";
+import {GoalPriority} from "@/types/goal";
+import {ExerciseSetsByExerciseId} from "@/types/activity";
 
 export const validateUserName = (userName: string): string | null => {
     if(!userName.trim()){
