@@ -25,12 +25,12 @@ import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import {deleteDay} from "@/lib/controllers/nutritionController";
 import {useForm} from "react-hook-form";
 
-interface ChangeNutritionProps {
+interface IProps {
     dayInfo: NutritionDay,
     token: string,
 }
 
-export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
+export default function ChangeNutrition({dayInfo, token}: IProps){
 
     const {register, handleSubmit, formState: { errors }} = useForm<NutritionFormValues>({
         defaultValues: {
@@ -45,6 +45,7 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
     })
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
     const onSubmit = async (values: NutritionFormValues)=> {
@@ -52,16 +53,14 @@ export default function ChangeNutrition({dayInfo, token}: ChangeNutritionProps){
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                publicId: dayInfo.publicId,
-                name: values.dayName,
-                description: values.dayDescription,
-                date: values.dayDate,
-                calories: parseInt(values.calories, 10),
-                protein: parseInt(values.protein, 10),
-                fat: parseInt(values.fat, 10),
-                carb: parseInt(values.carb, 10),
-            }
+            publicId: dayInfo.publicId,
+            name: values.dayName,
+            description: values.dayDescription,
+            date: values.dayDate,
+            calories: parseInt(values.calories, 10),
+            protein: parseInt(values.protein, 10),
+            fat: parseInt(values.fat, 10),
+            carb: parseInt(values.carb, 10),
         }
 
         try {

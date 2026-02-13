@@ -31,7 +31,7 @@ import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";
 
-interface ChangeActivityProps {
+interface IProps {
     activityInfo: ActivityDataStructure,
     myTrainings: TrainingDataStructure[];
     token: string;
@@ -40,7 +40,7 @@ interface ChangeActivityProps {
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
 
-export default function ChangeActivity({activityInfo, myTrainings, token}: ChangeActivityProps){
+export default function ChangeActivity({activityInfo, myTrainings, token}: IProps){
 
     const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
         defaultValues: {
@@ -54,7 +54,9 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
     })
 
     const trainingId = watch('trainingId')
+
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+
     const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
 
     const {
@@ -165,18 +167,16 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: Chang
         }, []);
 
         const payload = {
-            requestData: {
-                id: activityInfo.id,
-                publicId: activityInfo.publicId,
-                activityId: activityInfo.publicId,
-                name: values.activityName,
-                description: values.activityDescription,
-                activityDate: values.activityDate,
-                type: values.activityType,
-                difficulty: values.activityDifficulty,
-                trainingId: Number(values.trainingId),
-                exercises: exercisesPayload,
-            }
+            id: activityInfo.id,
+            publicId: activityInfo.publicId,
+            activityId: activityInfo.publicId,
+            name: values.activityName,
+            description: values.activityDescription,
+            activityDate: values.activityDate,
+            type: values.activityType,
+            difficulty: values.activityDifficulty,
+            trainingId: Number(values.trainingId),
+            exercises: exercisesPayload,
         }
 
         try {

@@ -3,7 +3,7 @@ import {
     ActivityTypeStructure,
     ActivityExerciseRequest,
     ActivityExerciseFrontend
-} from "../../types/activityBackendTypes";
+} from "../../types/activity";
 
 export const validateActivityName = (name: string): boolean => {
     if(!name.trim()){

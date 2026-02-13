@@ -10,16 +10,17 @@ import {
     validateActivityPerformedAt,
     validateActivityTrainingId,
     validateActivityType
-} from "../lib/backendValidators/activityValidators";
-import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activityBackendTypes";
+} from "../lib/backendValidators/activity";
+import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activity";
 import {ActivityModel} from "../models/Activity";
-import {showBackendError} from "../lib/indexUtils";
+import {showBackendError} from "../lib";
 
 const router = Router();
 
 router.post('/activity', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: AddActivityFrontendRequest} = req.body;
+        const requestData: AddActivityFrontendRequest = req.body;
+        const userId:number = (req as any).userId;
 
         const activityNameError:boolean = validateActivityName(requestData.activityName);
         const activityDescriptionError:boolean = validateActivityDescription(requestData.description);
@@ -28,8 +29,6 @@ router.post('/activity', authGuard, async (req, res) => {
         const activityTrainingIdError:boolean = validateActivityTrainingId(requestData.trainingId);
         const activityPerformedError:boolean = validateActivityPerformedAt(requestData.performedAt);
         const activityExercisesError:boolean = validateActivityExercisesCreate(requestData.exercises);
-
-        const userId = (req as any).userId as number;
 
         if (!activityNameError
             || !activityDescriptionError
@@ -48,9 +47,7 @@ router.post('/activity', authGuard, async (req, res) => {
 
         await ActivityModel.create(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {
@@ -62,7 +59,7 @@ router.post('/activity', authGuard, async (req, res) => {
 
 router.get('/activities', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const activity = await ActivityModel.getList(userId);
 
         const response: ApiResponse = {
@@ -80,7 +77,7 @@ router.get('/activities', authGuard, async (req, res) => {
 
 router.get('/about-my-activity', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const activityPublicId = String(req.query.activityId || '').trim();
 
         if (!activityPublicId) {
@@ -103,7 +100,6 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting activity information',
             data: { activity }
         };
 
@@ -119,7 +115,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
 router.delete('/activity', authGuard, async (req, res) => {
     try {
         const { activityId } = req.body;
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
 
         if (!activityId) {
             const response: ApiResponse = {
@@ -139,9 +135,7 @@ router.delete('/activity', authGuard, async (req, res) => {
             return res.status(404).json(response);
         }
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
@@ -153,7 +147,8 @@ router.delete('/activity', authGuard, async (req, res) => {
 
 router.put('/activity', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: ActivityListFrontendStructure} = req.body;
+        const requestData: ActivityListFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
 
         const activityNameError:boolean = validateActivityName(requestData.name);
         const activityDescriptionError:boolean = validateActivityDescription(requestData.description);
@@ -162,8 +157,6 @@ router.put('/activity', authGuard, async (req, res) => {
         const activityTrainingIdError:boolean = validateActivityTrainingId(requestData.trainingId);
         const activityPerformedError:boolean = validateActivityPerformedAt(requestData.activityDate);
         const activityExercisesError:boolean = validateActivityExercisesUpdate(requestData.exercises);
-
-        const userId = (req as any).userId as number;
 
         if (!activityNameError
             || !activityDescriptionError
@@ -182,9 +175,7 @@ router.put('/activity', authGuard, async (req, res) => {
 
         await ActivityModel.update(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {

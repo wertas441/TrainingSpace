@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {authGuard} from "../middleware/authMiddleware";
 import {ApiResponse} from "../types";
 import {ExerciseModel} from "../models/Exercise";
-import {showBackendError} from "../lib/indexUtils";
+import {showBackendError} from "../lib";
 
 const router = Router();
 
@@ -12,7 +12,6 @@ router.get('/exercises', authGuard, async (req, res) => {
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting list of exercises',
             data: { exercises }
         };
 

@@ -4,27 +4,26 @@ import {ApiResponse} from "../types";
 import {
     AddTrainingFrontendStructure,
     TrainingUpdateFrontendStructure
-} from "../types/trainingBackendTypes";
+} from "../types/training";
 import {
     validateTrainingDescription,
     validateTrainingExercises,
     validateTrainingName
-} from "../lib/backendValidators/trainingValidators";
+} from "../lib/backendValidators/training";
 import {TrainingModel} from "../models/Training";
 import {ExerciseModel} from "../models/Exercise";
-import {showBackendError} from "../lib/indexUtils";
+import {showBackendError} from "../lib";
 
 const router = Router();
 
 router.post('/training', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: AddTrainingFrontendStructure} = req.body;
+        const requestData: AddTrainingFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
 
         const trainingNameError:boolean = validateTrainingName(requestData.name);
         const trainingDescriptionError:boolean = validateTrainingDescription(requestData.description);
         const exercisesError:boolean = validateTrainingExercises(requestData.exercises);
-
-        const userId = (req as any).userId as number;
 
         if (!trainingNameError || !trainingDescriptionError || !exercisesError) {
             const response: ApiResponse = {
@@ -36,9 +35,7 @@ router.post('/training', authGuard, async (req, res) => {
 
         await TrainingModel.create(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = {success: true};
 
         res.status(200).json(response);
     } catch (error) {
@@ -50,12 +47,11 @@ router.post('/training', authGuard, async (req, res) => {
 
 router.get('/trainings', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const trainings = await TrainingModel.getList(userId);
 
         const response: ApiResponse = {
             success: true,
-            message: 'success of getting list of trainings',
             data: { trainings }
         };
 
@@ -80,7 +76,7 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const exercises = await ExerciseModel.getByTrainingId(trainingId, userId);
 
         const response: ApiResponse = {
@@ -98,7 +94,7 @@ router.get('/:id/exercises', authGuard, async (req, res) => {
 
 router.get('/about-my-training', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const trainingPublicId = String(req.query.trainingId || '').trim();
 
         if (!trainingPublicId) {
@@ -135,7 +131,7 @@ router.get('/about-my-training', authGuard, async (req, res) => {
 router.delete('/training', authGuard, async (req, res) => {
     try {
         const { trainingId } = req.body;
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
 
         const trainingPublicId = String(trainingId || '').trim();
 
@@ -157,9 +153,7 @@ router.delete('/training', authGuard, async (req, res) => {
             return res.status(404).json(response);
         }
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = {success: true};
 
         res.status(200).json(response);
     } catch (error){
@@ -171,8 +165,8 @@ router.delete('/training', authGuard, async (req, res) => {
 
 router.put('/training', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: TrainingUpdateFrontendStructure} = req.body;
-        const userId = (req as any).userId as number;
+        const requestData: TrainingUpdateFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
 
         const trainingNameError:boolean = validateTrainingName(requestData.name);
         const trainingDescriptionError:boolean = validateTrainingDescription(requestData.description);

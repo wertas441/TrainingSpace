@@ -1,4 +1,4 @@
-import {GoalPriority} from "../../types/goalBackendTypes";
+import {GoalPriority} from "../../types/goal";
 
 export const validateGoalName = (goalName: string): boolean => {
     if(!goalName.trim()){

@@ -4,22 +4,21 @@ import { ApiResponse } from "../types";
 import {
     AddNewGoalFrontendStructure,
     GoalUpdateFrontendStructure
-} from "../types/goalBackendTypes";
-import { validateGoalDescription, validateGoalName, validateGoalPriority } from "../lib/backendValidators/goalValidators";
+} from "../types/goal";
+import { validateGoalDescription, validateGoalName, validateGoalPriority } from "../lib/backendValidators/goal";
 import { GoalModel } from "../models/Goal";
-import {showBackendError} from "../lib/indexUtils";
+import {showBackendError} from "../lib";
 
 const router = Router();
 
 router.post('/goal', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: AddNewGoalFrontendStructure} = req.body;
+        const requestData: AddNewGoalFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
 
         const goalNameError:boolean = validateGoalName(requestData.name);
         const goalDescriptionError:boolean = validateGoalDescription(requestData.description);
         const goalPriorityError:boolean = validateGoalPriority(requestData.priority);
-
-        const userId = (req as any).userId as number;
 
         if (!goalNameError || !goalDescriptionError || !goalPriorityError) {
             const response: ApiResponse = {
@@ -31,9 +30,7 @@ router.post('/goal', authGuard, async (req, res) => {
 
         await GoalModel.create(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
@@ -45,7 +42,7 @@ router.post('/goal', authGuard, async (req, res) => {
 
 router.get('/goals', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const goals = await GoalModel.getList(userId);
         
         const response: ApiResponse = {
@@ -63,7 +60,7 @@ router.get('/goals', authGuard, async (req, res) => {
 
 router.get('/short-goals', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const goals = await GoalModel.getShortyList(userId);
 
         const response: ApiResponse = {
@@ -82,7 +79,7 @@ router.get('/short-goals', authGuard, async (req, res) => {
 router.delete('/goal', authGuard, async (req, res) => {
     try {
         const { goalId } = req.body;
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
 
         const goalPublicId = String(goalId || '').trim();
 
@@ -104,9 +101,7 @@ router.delete('/goal', authGuard, async (req, res) => {
             return res.status(404).json(response);
         }
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
@@ -118,7 +113,7 @@ router.delete('/goal', authGuard, async (req, res) => {
 
 router.get('/about-my-goal', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const goalPublicId = String(req.query.goalId || '').trim();
 
         if (!goalPublicId) {
@@ -155,8 +150,8 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
 
 router.put('/goal', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: GoalUpdateFrontendStructure} = req.body;
-        const userId = (req as any).userId as number;
+        const requestData: GoalUpdateFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
 
         const goalPublicId = String(requestData.goalId || '').trim();
 
@@ -182,9 +177,7 @@ router.put('/goal', authGuard, async (req, res) => {
 
         await GoalModel.update(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {
@@ -197,7 +190,7 @@ router.put('/goal', authGuard, async (req, res) => {
 router.put('/complete-goal', authGuard, async (req, res) => {
     try {
         const { goalId } = req.body;
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
 
         if (!goalId) {
             const response: ApiResponse = {
@@ -209,9 +202,7 @@ router.put('/complete-goal', authGuard, async (req, res) => {
 
         await GoalModel.complete(userId, goalId);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {
@@ -223,7 +214,7 @@ router.put('/complete-goal', authGuard, async (req, res) => {
 
 router.get('/completed-goals', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const goals = await GoalModel.getCompleteList(userId);
 
         const response: ApiResponse = {

@@ -36,7 +36,7 @@ export default function ChangeEmail(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/settings/change-email', payload)
+            await api.post<BackendApiResponse>('/user/change-email', payload)
 
             changeEmail(values.newEmail)
             router.push("/settings/profile");

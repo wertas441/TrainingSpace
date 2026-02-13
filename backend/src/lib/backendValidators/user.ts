@@ -1,3 +1,33 @@
+
+export const validateUserName = (userName:string): boolean => {
+    if(!userName.trim()){
+        return false;
+    }
+
+    if(userName.length < 3){
+        return false;
+    }
+
+    if(userName.length > 15){
+        return false;
+    }
+
+    const userNameRegex = /^[a-zA-Z0-9!@#$%^&*.]+$/;
+    if(!userNameRegex.test(userName)) {
+        return false;
+    }
+
+    return true;
+}
+
+export const validateUserEmail = (email: string): boolean => {
+    if (!email.trim()){
+        return false;
+    }
+
+    return true;
+};
+
 export const validateUserPassword = (password: string):boolean => {
     if (!password.trim()){
         return false;
@@ -40,10 +70,3 @@ export const validateTwoPassword = (currentPassword:string, newPassword:string):
 }
 
 
-export const validateUserEmail = (email: string): boolean => {
-    if (!email.trim()){
-        return false;
-    }
-
-    return true;
-};

@@ -6,13 +6,12 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
-import authRoutes from './routes/auth';
+import userRoutes from './routes/user';
 import goalRoutes from './routes/goal';
 import trainingRoutes from './routes/training';
 import nutritionRoutes from './routes/nutrition';
 import exercisesRoutes from './routes/exercises';
 import activityRoutes from './routes/activity';
-import settingsRoutes from './routes/settings';
 import statisticsRoutes from './routes/statistics';
 
 import { config } from './config';
@@ -45,13 +44,12 @@ app.use(express.urlencoded({ extended: true })); // Парсинг URL-encoded �
 app.use(cookieParser()); // Куки
 
 app.use('/api', apiRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/goal', goalRoutes);
 app.use('/api/nutrition', nutritionRoutes);
 app.use('/api/training', trainingRoutes);
 app.use('/api/exercises', exercisesRoutes);
 app.use('/api/activity', activityRoutes);
-app.use('/api/settings', settingsRoutes);
 app.use('/api/statistics', statisticsRoutes);
 
 app.use((req, res) => {

@@ -94,12 +94,10 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                trainingId: trainingInfo.publicId,
-                name: values.trainingName,
-                description: values.trainingDescription,
-                exercises: selectedExerciseIds,
-            }
+            trainingId: trainingInfo.publicId,
+            name: values.trainingName,
+            description: values.trainingDescription,
+            exercises: selectedExerciseIds,
         }
 
         try {

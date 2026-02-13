@@ -33,11 +33,9 @@ export default function AddGoal() {
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                name: values.goalName,
-                description: values.goalDescription,
-                priority: values.goalPriority,
-            }
+            name: values.goalName,
+            description: values.goalDescription,
+            priority: values.goalPriority,
         }
 
         try {

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
-import {AddNewDayFrontendStructure, DayUpdateFrontendStructure} from "../types/nutritionBackendTypes";
+import {AddNewDayFrontendStructure, DayUpdateFrontendStructure} from "../types/nutrition";
 import {
     validateCalories,
     validateCarb,
@@ -10,15 +10,16 @@ import {
     validateFat,
     validateNutritionDayDate,
     validateProtein
-} from "../lib/backendValidators/nutrationValidators";
+} from "../lib/backendValidators/nutrition";
 import {NutritionModel} from "../models/Nutrition";
-import {showBackendError} from "../lib/indexUtils";
+import {showBackendError} from "../lib";
 
 const router = Router();
 
 router.post('/day', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: AddNewDayFrontendStructure } = req.body;
+        const requestData: AddNewDayFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
 
         const dayNameError:boolean = validateDayName(requestData.name);
         const dayDescriptionError:boolean = validateDayDescription(requestData.description);
@@ -27,8 +28,6 @@ router.post('/day', authGuard, async (req, res) => {
         const fatError:boolean = validateFat(requestData.fat);
         const carbError:boolean = validateCarb(requestData.carb);
         const dayDateError:boolean = validateNutritionDayDate(requestData.date);
-
-        const userId = (req as any).userId as number;
 
         if (!dayNameError || !dayDescriptionError || !caloriesError || !proteinError || !fatError || !carbError || !dayDateError) {
             const response: ApiResponse = {
@@ -40,9 +39,7 @@ router.post('/day', authGuard, async (req, res) => {
 
         await NutritionModel.create(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = {success: true};
 
         res.status(200).json(response);
     } catch (error){
@@ -54,7 +51,7 @@ router.post('/day', authGuard, async (req, res) => {
 
 router.get('/days', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const days = await NutritionModel.getList(userId);
 
         const response: ApiResponse = {
@@ -73,7 +70,7 @@ router.get('/days', authGuard, async (req, res) => {
 router.delete('/day', authGuard, async (req, res) => {
     try {
         const { dayId } = req.body;
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
 
         const dayPublicId = String(dayId || '').trim();
 
@@ -95,9 +92,7 @@ router.delete('/day', authGuard, async (req, res) => {
             return res.status(404).json(response);
         }
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = {success: true};
 
         res.status(200).json(response);
     } catch (error){
@@ -109,7 +104,7 @@ router.delete('/day', authGuard, async (req, res) => {
 
 router.get('/about-my-day', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const dayPublicId = String(req.query.dayId || '').trim();
 
         if (!dayPublicId) {
@@ -145,7 +140,7 @@ router.get('/about-my-day', authGuard, async (req, res) => {
 
 router.put('/day', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: DayUpdateFrontendStructure} = req.body;
+        const requestData: DayUpdateFrontendStructure = req.body;
         const userId = (req as any).userId as number;
 
         const dayNameError:boolean = validateDayName(requestData.name);
@@ -166,9 +161,7 @@ router.put('/day', authGuard, async (req, res) => {
 
         await NutritionModel.update(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = {success: true};
 
         res.status(200).json(response);
     } catch (error){

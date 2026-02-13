@@ -40,7 +40,7 @@ export default function ChangePassword(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/settings/change-password', payload)
+            await api.post<BackendApiResponse>('/user/change-password', payload)
 
             router.push("/settings/profile");
         } catch (err) {

@@ -3,7 +3,7 @@ import {
     MainStatisticsBackendResponse,
     NutritionGraphicBackendResponse,
     NutritionStatisticsBackendResponse
-} from "../types/statisticsBackendTypes";
+} from "../types/statistics";
 
 export class StatisticsModel {
 

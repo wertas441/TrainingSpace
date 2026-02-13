@@ -18,14 +18,14 @@ import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {Controller, useForm} from "react-hook-form";
 
-interface ChangeGoalProps {
+interface IProps {
     goalInfo: GoalsStructure;
     token: string;
 }
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
-export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
+export function ChangeGoal({goalInfo, token}: IProps) {
 
     const {register, handleSubmit, control, formState: { errors }} = useForm<GoalFormValues>({
         defaultValues: {
@@ -43,12 +43,11 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                goalId: goalInfo.publicId,
-                name: values.goalName,
-                description: values.goalDescription,
-                priority: values.goalPriority,
-            }
+            goalId: goalInfo.publicId,
+            name: values.goalName,
+            description: values.goalDescription,
+            priority: values.goalPriority,
+
         }
 
         try {
