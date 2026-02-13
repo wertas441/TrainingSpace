@@ -38,7 +38,7 @@ export default function Login(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/auth/login', payload)
+            await api.post<BackendApiResponse>('/user/login', payload)
 
             await initUserData();
             const userData = useUserStore.getState().userData;

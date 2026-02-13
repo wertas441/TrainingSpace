@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import {ChangeGoal} from "@/app/goals/[goalId]/ChangeGoal";
 import { cookies } from "next/headers";
-import { getGoalInformation } from "@/lib/controllers/goalController";
+import { getGoalInformation } from "@/lib/controllers/goal";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {

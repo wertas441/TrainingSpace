@@ -1,8 +1,8 @@
 import Dashboard from "@/app/Dashboard";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getGoalShortyList} from "@/lib/controllers/goalController";
-import {getNutritionGraphicInfo} from "@/lib/controllers/statisticsController";
+import {getGoalShortyList} from "@/lib/controllers/goal";
+import {getNutritionGraphicInfo} from "@/lib/controllers/statistic";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {

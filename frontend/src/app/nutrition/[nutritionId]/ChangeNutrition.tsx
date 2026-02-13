@@ -22,7 +22,7 @@ import {NutritionDay, NutritionFormValues} from "@/types/nutrition";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import {deleteDay} from "@/lib/controllers/nutritionController";
+import {deleteDay} from "@/lib/controllers/nutrition";
 import {useForm} from "react-hook-form";
 
 interface IProps {

@@ -13,7 +13,7 @@ import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
-import {deleteGoal} from "@/lib/controllers/goalController";
+import {deleteGoal} from "@/lib/controllers/goal";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {Controller, useForm} from "react-hook-form";

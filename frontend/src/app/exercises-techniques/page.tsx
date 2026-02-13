@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import ExercisesTechniques from "@/app/exercises-techniques/ExercisesTechniques";
-import {getExercisesList} from "@/lib";
 import {cookies} from "next/headers";
 import ErrorState from "@/components/errors/ErrorState";
+import {getExercisesList} from "@/lib/controllers/training";
 
 export const metadata: Metadata = {
     title: "Техника выполнения упражнений | TrainingSpace",

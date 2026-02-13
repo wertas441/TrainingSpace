@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
 import userRoutes from './routes/user';
+import userRoutes from './routes/user';
 import goalRoutes from './routes/goal';
 import trainingRoutes from './routes/training';
 import nutritionRoutes from './routes/nutrition';
@@ -44,6 +45,7 @@ app.use(express.urlencoded({ extended: true })); // Парсинг URL-encoded �
 app.use(cookieParser()); // Куки
 
 app.use('/api', apiRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/goal', goalRoutes);
 app.use('/api/nutrition', nutritionRoutes);

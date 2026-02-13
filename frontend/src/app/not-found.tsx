@@ -53,6 +53,7 @@ export default function NotFound () {
 
                     <div className="pointer-events-none absolute inset-0 -z-10 opacity-60">
                         <div className="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-emerald-200/40 blur-3xl" />
+
                         <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-emerald-300/30 blur-3xl" />
                     </div>
                 </div>

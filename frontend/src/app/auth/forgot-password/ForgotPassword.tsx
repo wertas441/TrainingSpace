@@ -22,6 +22,7 @@ export default function ForgotPassword() {
     const {register, handleSubmit, formState: { errors }} = useForm<ForgotPasswordFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting} = usePageUtils();
+
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const onSubmit = async (values: ForgotPasswordFormValues)=> {
@@ -33,7 +34,7 @@ export default function ForgotPassword() {
         }
 
         try {
-            await api.post<BackendApiResponse>('/auth/forgot-password', payload)
+            await api.post<BackendApiResponse>('/user/forgot-password', payload)
 
             setSuccessMessage("Если указанный email зарегистрирован, мы отправили на него письмо с дальнейшими инструкциями по восстановлению пароля.");
             setIsSubmitting(false)

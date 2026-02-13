@@ -42,7 +42,7 @@ export default function Registration(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/auth/registration', payload)
+            await api.post<BackendApiResponse>('/user/registration', payload)
 
             router.push("/auth/login");
         } catch (err) {

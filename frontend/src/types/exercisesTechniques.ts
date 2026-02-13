@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:frontend/src/types/exercisesTechniques.ts
 import {DifficultOptionsStructure, ExerciseDifficultFilter, HeaderMinimumProps} from "@/types/index";
+========
+import {DifficultOptionsStructure, ExerciseDifficultFilter, HeaderMinimumProps} from "@/types";
+>>>>>>>> a8d18cb486c8bae35cf872bec4a79e755b5cfa62:frontend/src/types/exercise.ts
 
 export interface ExerciseTechniqueItem {
     id: number;

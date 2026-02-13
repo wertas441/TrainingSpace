@@ -1,8 +1,8 @@
 import AddNewTraining from "@/app/my-training/add/AddNewTraining";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getExercisesList} from "@/lib";
 import ErrorState from "@/components/errors/ErrorState";
+import {getExercisesList} from "@/lib/controllers/training";
 
 export const metadata: Metadata = {
     title: 'Добавить новую тренировку | TrainingSpace',
