@@ -9,12 +9,12 @@ import {TrainingDataStructure} from "@/types/indexTypes";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
 import NullElementsError from "@/components/errors/NullElementsError";
 
-interface MyTrainingProps {
+interface IProps {
     trainingList: TrainingDataStructure[],
     exercises: ExerciseTechniqueItem[],
 }
 
-export default function MyTraining({trainingList, exercises}: MyTrainingProps) {
+export default function MyTraining({trainingList, exercises}: IProps) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;

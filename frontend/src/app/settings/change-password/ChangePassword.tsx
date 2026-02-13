@@ -25,13 +25,7 @@ interface ChangePasswordFormValues {
 
 export default function ChangePassword(){
 
-    const {register, handleSubmit, getValues, formState: { errors }} = useForm<ChangePasswordFormValues>({
-        defaultValues: {
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: '',
-        }
-    })
+    const {register, handleSubmit, getValues, formState: { errors }} = useForm<ChangePasswordFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
 
@@ -56,7 +50,6 @@ export default function ChangePassword(){
             if (showErrorMessage) console.error('change password error:', err);
 
             setIsSubmitting(false);
-
         }
     }
 

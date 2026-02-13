@@ -21,12 +21,7 @@ interface ChangeEmailFormValues {
 
 export default function ChangeEmail(){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<ChangeEmailFormValues>({
-        defaultValues: {
-            newEmail: '',
-            currentPassword: '',
-        }
-    })
+    const {register, handleSubmit, formState: { errors }} = useForm<ChangeEmailFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
     const changeEmail = useUserStore((s) => s.changeEmail);
@@ -52,7 +47,6 @@ export default function ChangeEmail(){
             if (showErrorMessage) console.error('change email error:', err);
 
             setIsSubmitting(false);
-
         }
     }
 

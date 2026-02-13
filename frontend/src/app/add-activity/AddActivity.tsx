@@ -32,12 +32,9 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
         defaultValues: {
-            activityName: '',
-            activityDescription: '',
             activityDate: initialDate,
             activityType: 'Силовая',
             activityDifficulty: 'Средняя',
-            trainingId: '',
         }
     })
 

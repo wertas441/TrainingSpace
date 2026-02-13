@@ -16,7 +16,6 @@ interface ChangeGoalPageProps {
 }
 
 export default async function ChangeGoalPage({ params }: ChangeGoalPageProps){
-
     const { goalId } = await params;
 
     const tokenValue = (await cookies()).get('token')?.value;

@@ -9,12 +9,12 @@ import {GoalShortyStructure} from "@/types/goalTypes";
 import {NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
 import {getUserData, useUserStore} from "@/lib/store/userStore";
 
-interface DashboardProps {
+interface IProps {
     goalsShortyList: GoalShortyStructure[],
     nutritionGraphicData: NutritionStatisticsGraphicResponse[],
 }
 
-export default function Dashboard({goalsShortyList, nutritionGraphicData}: DashboardProps) {
+export default function Dashboard({goalsShortyList, nutritionGraphicData}: IProps) {
 
     const userData = useUserStore(getUserData)
 

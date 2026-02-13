@@ -17,6 +17,7 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 		if (segments.length === 0) {
 			return '/';
 		}
+
 		return segments[0];
 	}, [pathname]);
 

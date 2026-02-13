@@ -8,12 +8,12 @@ import {GoalsStructure} from "@/types/goalTypes";
 import GoalItem from "@/components/elements/GoalRow";
 import NullElementsError from "@/components/errors/NullElementsError";
 
-interface GoalsProps {
+interface IProps {
     clientGoals: GoalsStructure[],
     token: string;
 }
 
-function Goals({clientGoals, token}: GoalsProps) {
+function Goals({clientGoals, token}: IProps) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;

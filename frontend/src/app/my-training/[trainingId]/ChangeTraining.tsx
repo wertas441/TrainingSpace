@@ -24,7 +24,7 @@ import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import {secondDarkColorTheme} from "@/styles";
 import {useForm} from "react-hook-form";
 
-interface ChangeTrainingProps {
+interface IProps {
     trainingInfo: TrainingListResponse,
     token: string,
     exercises: ExerciseTechniqueItem[],
@@ -35,7 +35,7 @@ interface ChangeTrainingFormValues {
     trainingDescription: string;
 }
 
-export default function ChangeTraining({ trainingInfo, token, exercises }: ChangeTrainingProps) {
+export default function ChangeTraining({ trainingInfo, token, exercises }: IProps) {
 
     const {register, handleSubmit, formState: { errors }} = useForm<ChangeTrainingFormValues>({
         defaultValues: {

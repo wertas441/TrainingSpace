@@ -27,14 +27,7 @@ interface RegistrationFormValues {
 
 export default function Registration(){
 
-    const {register, handleSubmit, getValues, formState: { errors }} = useForm<RegistrationFormValues>({
-        defaultValues: {
-            userName: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-        }
-    })
+    const {register, handleSubmit, getValues, formState: { errors }} = useForm<RegistrationFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
 

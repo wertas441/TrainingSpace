@@ -27,12 +27,6 @@ export default function AddNutrition(){
 
     const {register, handleSubmit, formState: { errors }} = useForm<NutritionFormValues>({
         defaultValues: {
-            dayName: '',
-            dayDescription: '',
-            calories: '',
-            protein: '',
-            fat: '',
-            carb: '',
             dayDate: initialDate,
         }
     })

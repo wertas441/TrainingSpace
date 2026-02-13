@@ -22,13 +22,7 @@ interface LoginFormValues {
 
 export default function Login(){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<LoginFormValues>({
-        defaultValues: {
-            userName: '',
-            password: '',
-            rememberMe: false,
-        }
-    })
+    const {register, handleSubmit, formState: { errors }} = useForm<LoginFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
     const initUserData = useUserStore(makeInitUserData)

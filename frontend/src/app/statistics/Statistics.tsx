@@ -23,7 +23,7 @@ import {
 import {ChartBarIcon} from "@heroicons/react/24/solid";
 import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
-interface StatisticsProps {
+interface IProps {
     mainCardData: MainStatisticsCardResponse;
     nutritionCardData: NutritionStatisticsCardResponse;
     nutritionGraphicData?: NutritionStatisticsGraphicResponse[];
@@ -36,7 +36,7 @@ const metricOptions: MetricOptionStructure[] = [
     {id: 'carb', label: 'Углеводы'},
 ] as const;
 
-function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: StatisticsProps) {
+function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: IProps) {
 
     const [selectedMetric, setSelectedMetric] = useState<NutritionMetric>('calories');
 
@@ -141,6 +141,7 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: Sta
                             <h2 className="text-lg font-semibold text-emerald-500">
                                 Динамика калорий и БЖУ
                             </h2>
+
                             <p className="text-xs text-gray-500">
                                 Как меняется ваше потребление калорий, белков, жиров и углеводов по дням.
                             </p>

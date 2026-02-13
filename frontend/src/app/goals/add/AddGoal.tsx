@@ -22,8 +22,6 @@ export default function AddGoal() {
 
     const {register, handleSubmit, control, formState: { errors }} = useForm<GoalFormValues>({
         defaultValues: {
-            goalName: '',
-            goalDescription: '',
             goalPriority: 'Средний',
         }
     })

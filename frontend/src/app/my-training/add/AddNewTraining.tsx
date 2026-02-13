@@ -31,12 +31,7 @@ interface AddNewTrainingFormValues {
 
 export default function AddNewTraining({exercises}:{exercises: ExerciseTechniqueItem[]}){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<AddNewTrainingFormValues>({
-        defaultValues: {
-            trainingName: '',
-            trainingDescription: '',
-        }
-    })
+    const {register, handleSubmit, formState: { errors }} = useForm<AddNewTrainingFormValues>()
 
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;

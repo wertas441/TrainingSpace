@@ -19,11 +19,7 @@ interface ForgotPasswordFormValues {
 
 export default function ForgotPassword() {
 
-    const {register, handleSubmit, formState: { errors }} = useForm<ForgotPasswordFormValues>({
-        defaultValues: {
-            email: '',
-        }
-    })
+    const {register, handleSubmit, formState: { errors }} = useForm<ForgotPasswordFormValues>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting} = usePageUtils();
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
