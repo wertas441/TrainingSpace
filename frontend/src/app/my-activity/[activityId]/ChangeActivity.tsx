@@ -16,7 +16,7 @@ import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityIt
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types";
-import {deleteActivity} from "@/lib/controllers/activityController";
+import {deleteActivity} from "@/lib/controllers/activity";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";

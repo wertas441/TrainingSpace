@@ -7,7 +7,6 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
 import userRoutes from './routes/user';
-import userRoutes from './routes/user';
 import goalRoutes from './routes/goal';
 import trainingRoutes from './routes/training';
 import nutritionRoutes from './routes/nutrition';

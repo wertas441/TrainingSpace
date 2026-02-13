@@ -1,8 +1,9 @@
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getExercisesList, getTrainingInformation} from "@/lib/controllers/training";
+import {getTrainingInformation} from "@/lib/controllers/training";
 import ChangeTraining from "@/app/my-training/[trainingId]/ChangeTraining";
 import ErrorState from "@/components/errors/ErrorState";
+import {getExercisesList} from "@/lib";
 
 export const metadata: Metadata = {
     title: "Изменение тренировки | TrainingSpace",

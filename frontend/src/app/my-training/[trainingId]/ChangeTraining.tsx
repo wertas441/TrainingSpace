@@ -18,7 +18,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import {deleteTraining} from "@/lib/controllers/trainingController";
+import {deleteTraining} from "@/lib/controllers/training";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import {secondDarkColorTheme} from "@/styles";
