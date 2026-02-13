@@ -1,13 +1,13 @@
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 
-interface SelectExerciseUiProps {
+interface IProps {
     selectedExerciseIds: number[];
     exercisesError: string | null;
     exercises: ExerciseTechniqueItem[];
     handleToggleExercise: (exerciseId: number) => void;
 }
 
-export default function SelectExerciseUi({selectedExerciseIds, exercisesError, exercises, handleToggleExercise}: SelectExerciseUiProps){
+export default function SelectExerciseUi({selectedExerciseIds, exercisesError, exercises, handleToggleExercise}: IProps){
 
     return (
         <div className="mt-2">

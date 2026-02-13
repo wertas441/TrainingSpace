@@ -1,15 +1,15 @@
 import {memo, useMemo} from "react";
 import {PlusCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {getColorStyles} from "@/styles";
 
-interface SelectableExerciseRowProps {
+interface IProps {
     exercise: ExerciseTechniqueItem;
     selected: boolean;
     onToggle: (id: number) => void;
 }
 
-function SelectableExerciseRow({exercise, selected, onToggle}: SelectableExerciseRowProps) {
+function SelectableExerciseRow({exercise, selected, onToggle}: IProps) {
 
     const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`;
 

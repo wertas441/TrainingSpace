@@ -1,12 +1,12 @@
 import {PlusIcon} from "@heroicons/react/16/solid";
 import {TrashIcon} from "@heroicons/react/24/outline";
-import type {TrainingDataStructure} from "@/types/indexTypes";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
-import type {ExerciseSetsByExerciseId} from "@/types/activityTypes";
+import type {TrainingDataStructure} from "@/types";
+import type {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
+import type {ExerciseSetsByExerciseId} from "@/types/activity";
 import {Dispatch, JSX, SetStateAction, useMemo} from "react";
 import {iconDarkColorTheme, secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
-interface AddTrainingActivityItemProps {
+interface IProps {
     selectedTraining: TrainingDataStructure;
     exerciseSets: ExerciseSetsByExerciseId;
     trainingExercises: ExerciseTechniqueItem[];
@@ -19,7 +19,7 @@ export default function AddTrainingActivityItem(
         exerciseSets,
         trainingExercises,
         setExerciseSets,
-	}:AddTrainingActivityItemProps): JSX.Element{
+	}:IProps): JSX.Element{
 
     const TrashIconComponent = useMemo(() => <TrashIcon className="w-5 h-5 w-full" />, [])
     const PlusIconComponent = useMemo(() => <PlusIcon className="w-5 h-5 w-full" />, [])

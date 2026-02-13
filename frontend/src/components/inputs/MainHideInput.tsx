@@ -1,7 +1,7 @@
 import {memo, useState} from "react";
 import {EyeIcon, EyeSlashIcon} from "@heroicons/react/24/outline";
 import {mainInputClasses} from "@/styles";
-import {MainInputProps} from "@/types/indexTypes";
+import {MainInputProps} from "@/types";
 import InputError from "@/components/errors/InputError";
 
 function MainHideInput(

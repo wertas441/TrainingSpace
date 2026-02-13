@@ -1,13 +1,13 @@
 import {memo} from "react";
 import {secondDarkColorTheme} from "@/styles";
 
-interface CompleteGoalRowProps {
+interface IProps {
     name: string;
     description: string;
     achieve_at: string;
 }
 
-function CompleteGoalRow({name, description, achieve_at}: CompleteGoalRowProps){
+function CompleteGoalRow({name, description, achieve_at}: IProps){
 
     return (
         <div className={`${secondDarkColorTheme} w-full rounded-lg border border-emerald-100 p-4 shadow-sm transition-all duration-300 ease-out opacity-100 hover:shadow-md`}>

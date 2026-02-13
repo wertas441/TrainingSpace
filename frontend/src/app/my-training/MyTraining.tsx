@@ -5,8 +5,8 @@ import MyTrainingHeader from "@/components/UI/headers/MyTrainingHeader";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {useEffect, useMemo, useState} from "react";
 import MyTrainingRow from "@/components/elements/MyTrainingRow";
-import {TrainingDataStructure} from "@/types/indexTypes";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {TrainingDataStructure} from "@/types";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import NullElementsError from "@/components/errors/NullElementsError";
 
 interface IProps {

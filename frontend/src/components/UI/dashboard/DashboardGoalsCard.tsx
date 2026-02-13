@@ -1,15 +1,11 @@
 import {memo} from "react";
 import Link from "next/link";
 import {ChevronRightIcon, SparklesIcon} from "@heroicons/react/24/outline";
-import {GoalShortyStructure} from "@/types/goalTypes";
+import {GoalShortyStructure} from "@/types/goal";
 import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
 import {secondDarkColorTheme} from "@/styles";
 
-interface DashboardGoalsCardProps {
-    goalsShortyList: GoalShortyStructure[];
-}
-
-function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
+function DashboardGoalsCard({goalsShortyList}: {goalsShortyList: GoalShortyStructure[]}) {
 
     const hasGoals = goalsShortyList && goalsShortyList.length > 0;
     const visibleGoals = hasGoals ? goalsShortyList.slice(0, 6) : [];

@@ -4,14 +4,14 @@ import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators";
+import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators/user";
 import {useMemo} from "react";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, AtSymbolIcon} from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import {useUserStore} from "@/lib/store/userStore";
 
 interface ChangeEmailFormValues {

@@ -7,9 +7,9 @@ import {
     setServerErrorMock,
 } from '@/tests/utils/mockUsePageUtils';
 import {replaceMock} from '@/tests/utils/mockNextNavigation';
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import ChangeTraining from "@/app/my-training/[trainingId]/ChangeTraining";
-import {TrainingListResponse} from "@/types/trainingTypes";
+import {TrainingListResponse} from "@/types/training";
 import { mockAxiosInstance } from '@/tests/utils/mockAxios';
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({

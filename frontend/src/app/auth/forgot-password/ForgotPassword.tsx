@@ -2,7 +2,7 @@
 
 import {useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateUserEmail} from "@/lib/utils/validators";
+import {validateUserEmail} from "@/lib/utils/validators/user";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -11,7 +11,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {AtSymbolIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {useForm} from "react-hook-form";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 
 interface ForgotPasswordFormValues {
     email: string;

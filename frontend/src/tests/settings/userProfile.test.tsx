@@ -5,7 +5,7 @@ import {
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
 import Profile from "@/app/settings/profile/Profile";
-import type {UserProfileRequest} from "@/types/indexTypes";
+import type {UserProfileRequest} from "@/types";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports

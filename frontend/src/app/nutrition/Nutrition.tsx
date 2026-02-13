@@ -1,7 +1,7 @@
 'use client'
 
 import NutritionHeader from "@/components/UI/headers/NutritionHeader";
-import {NutritionDay} from "@/types/nutritionTypes";
+import {NutritionDay} from "@/types/nutrition";
 import NutritionDayItem from "@/components/elements/NutritionDayRow";
 import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";

@@ -14,10 +14,10 @@ import {
     validateTrainingDescription,
     validateTrainingExercises,
     validateTrainingName
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/training";
 import MainPagination from "@/components/UI/other/MainPagination";
-import type {BackendApiResponse} from "@/types/indexTypes";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import type {BackendApiResponse} from "@/types";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import NullElementsError from "@/components/errors/NullElementsError";

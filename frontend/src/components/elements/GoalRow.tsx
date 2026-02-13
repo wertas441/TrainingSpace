@@ -1,4 +1,4 @@
-import {GoalsStructure} from "@/types/goalTypes";
+import {GoalsStructure} from "@/types/goal";
 import {memo, useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
@@ -6,11 +6,11 @@ import CheckButton from "@/components/buttons/other/CheckButton";
 import {getColorStyles, secondDarkColorTheme} from "@/styles";
 import {completeGoal} from "@/lib/controllers/goalController";
 
-interface GoalRowProps extends GoalsStructure{
+interface IProps extends GoalsStructure{
     token: string;
 }
 
-function GoalRow({publicId, name, description, priority, token}: GoalRowProps ) {
+function GoalRow({publicId, name, description, priority, token}: IProps ) {
 
     const [isCompleting, setIsCompleting] = useState<boolean>(false);
     const [isHidden, setIsHidden] = useState<boolean>(false);

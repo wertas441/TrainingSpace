@@ -6,7 +6,7 @@ import {
     validateUserEmail,
     validateUserName,
     validateUserPassword
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/user";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -15,7 +15,7 @@ import {AtSymbolIcon, LockClosedIcon, UserIcon} from "@heroicons/react/24/outlin
 import Link from "next/link";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainHideInput from "@/components/inputs/MainHideInput";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 
 interface RegistrationFormValues {

@@ -1,13 +1,13 @@
 import {ElementType} from "react";
 import {thirdDarkColorTheme} from "@/styles";
 
-interface InformationPageBlockProps {
+interface IProps {
     label: string;
     text: string;
     icon: ElementType;
 }
 
-export default function InformationPageBlock({label, text, icon}: InformationPageBlockProps) {
+export default function InformationPageBlock({label, text, icon}: IProps) {
 
     const IconComponent = icon;
 

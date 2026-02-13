@@ -6,7 +6,7 @@ import {
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
-import {GoalsStructure} from "@/types/goalTypes";
+import {GoalsStructure} from "@/types/goal";
 import Goals from "@/app/goals/Goals";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({

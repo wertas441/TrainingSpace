@@ -3,7 +3,7 @@ import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {useRouter} from "next/navigation";
 import {secondDarkColorTheme} from "@/styles";
 
-interface MyTrainingRowProps {
+interface IProps {
     id: number;
     publicId: string;
     name: string;
@@ -11,7 +11,7 @@ interface MyTrainingRowProps {
     exercises: string[];
 }
 
-function MyTrainingRow({publicId, name, description, exercises}: MyTrainingRowProps ){
+function MyTrainingRow({publicId, name, description, exercises}: IProps){
 
     const router = useRouter();
     const trainingChangeRoute = useCallback(() => router.push(`/my-training/${publicId}`), [publicId, router])

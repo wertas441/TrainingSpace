@@ -1,4 +1,4 @@
-import {DifficultOptionsStructure, ExerciseDifficultFilter, HeaderMinimumProps} from "@/types/indexTypes";
+import {DifficultOptionsStructure, ExerciseDifficultFilter, HeaderMinimumProps} from "@/types/index";
 
 export interface ExerciseTechniqueItem {
     id: number;

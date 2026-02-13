@@ -1,4 +1,4 @@
-import {InputsStructure} from "@/types/indexTypes";
+import {InputsStructure} from "@/types";
 import {memo, ReactNode} from "react";
 import {thirdDarkColorTheme} from "@/styles";
 

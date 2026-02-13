@@ -6,7 +6,7 @@ import {
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import ExercisesTechniques from "@/app/exercises-techniques/ExercisesTechniques";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({

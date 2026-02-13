@@ -1,11 +1,11 @@
 'use client'
 
 import {useCallback} from "react";
-import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goalTypes";
+import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goal";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators";
+import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators/goal";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";

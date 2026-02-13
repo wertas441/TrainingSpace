@@ -2,7 +2,7 @@ import FilterInput from "@/components/inputs/FilterInput";
 import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
-import {NutritionHeaderProps} from "@/types/nutritionTypes";
+import {NutritionHeaderProps} from "@/types/nutrition";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";

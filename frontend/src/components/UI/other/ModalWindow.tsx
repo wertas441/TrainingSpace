@@ -3,7 +3,7 @@ import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGre
 import {memo, Ref} from "react";
 import {secondDarkColorTheme} from "@/styles";
 
-interface ModalWindowProps {
+interface IProps {
     isExiting: boolean;
     modalRef: Ref<HTMLDivElement | null>;
     windowLabel: string;
@@ -31,7 +31,7 @@ function ModalWindow(
         confirmFunction,
         isProcess,
         isRendered,
-    }: ModalWindowProps) {
+    }: IProps) {
 
     if (!isRendered) {
         return null;

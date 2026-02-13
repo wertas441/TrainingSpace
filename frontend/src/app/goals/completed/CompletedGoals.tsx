@@ -5,7 +5,7 @@ import {usePagination} from "@/lib/hooks/usePagination";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
 import MainPagination from "@/components/UI/other/MainPagination";
 import CompleteGoalRow from "@/components/elements/CompleteGoalRow";
-import {CompleteGoalsStructure} from "@/types/goalTypes";
+import {CompleteGoalsStructure} from "@/types/goal";
 import NullElementsError from "@/components/errors/NullElementsError";
 
 export default function CompletedGoals({completeList}: {completeList: CompleteGoalsStructure[]}){

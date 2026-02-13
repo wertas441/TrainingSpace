@@ -10,7 +10,7 @@ import {
     NutritionMetric,
     NutritionStatisticsCardResponse,
     NutritionStatisticsGraphicResponse
-} from "@/types/statisticsTypes";
+} from "@/types/statistics";
 import {
     CalendarDaysIcon,
     FlagIcon,

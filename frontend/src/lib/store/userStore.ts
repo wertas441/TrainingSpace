@@ -1,5 +1,5 @@
 import { create, type StateCreator } from "zustand";
-import type { BackendApiResponse, UserProfileRequest } from "@/types/indexTypes";
+import type { BackendApiResponse, UserProfileRequest } from "@/types";
 import { api, getServerErrorMessage } from "@/lib";
 import { createJSONStorage, persist } from "zustand/middleware";
 

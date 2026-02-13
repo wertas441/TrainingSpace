@@ -1,5 +1,5 @@
 import {memo, useMemo} from "react";
-import {BasicIconButtonProps} from "@/types/indexTypes";
+import {BasicIconButtonProps} from "@/types";
 import {CheckIcon} from "@heroicons/react/24/outline";
 import {iconDarkColorTheme} from "@/styles";
 

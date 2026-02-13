@@ -1,6 +1,6 @@
 'use client'
 
-import {GoalFormValues, GoalPriority} from "@/types/goalTypes";
+import {GoalFormValues, GoalPriority} from "@/types/goal";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -12,8 +12,8 @@ import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {
     validateGoalDescription,
     validateGoalName,
-} from "@/lib/utils/validators";
-import type {BackendApiResponse} from "@/types/indexTypes";
+} from "@/lib/utils/validators/goal";
+import type {BackendApiResponse} from "@/types";
 import {Controller, useForm} from "react-hook-form";
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;

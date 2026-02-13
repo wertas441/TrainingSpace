@@ -10,12 +10,12 @@ import {
     ActivityDifficultyStructure, ActivityFormValues,
     ActivityTypeStructure,
     ExerciseSetsByExerciseId
-} from "@/types/activityTypes";
+} from "@/types/activity";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
+import type {BackendApiResponse, TrainingDataStructure} from "@/types";
 import {deleteActivity} from "@/lib/controllers/activityController";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
@@ -26,7 +26,7 @@ import {
     validateActivityDescription,
     validateActivityName,
     validateActivitySets,
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/activity";
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";

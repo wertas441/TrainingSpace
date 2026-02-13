@@ -1,12 +1,12 @@
 import {ElementType} from "react";
 
-interface NutritionInfoProps{
+interface IProps{
     label: string;
     icon: ElementType;
     value: number;
 }
 
-export default function NutritionInfo({label, icon, value}:NutritionInfoProps){
+export default function NutritionInfo({label, icon, value}:IProps){
 
     const IconComponent = icon;
 

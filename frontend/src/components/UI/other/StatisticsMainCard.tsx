@@ -1,7 +1,7 @@
 import {ElementType, memo, ReactNode} from "react";
 import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
 
-interface StatisticsMainCardProps {
+interface IProps {
     label: string;
     value: number | string;
     unit?: string;
@@ -18,7 +18,7 @@ function StatisticsMainCard(
         description,
         icon: Icon,
         children,
-    }: StatisticsMainCardProps) {
+    }: IProps) {
 
     return (
         <div className={`${secondDarkColorTheme} flex flex-col h-full rounded-2xl border border-emerald-100 shadow-sm p-5 gap-4`}>

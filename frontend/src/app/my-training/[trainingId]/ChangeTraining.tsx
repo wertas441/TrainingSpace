@@ -1,14 +1,14 @@
 'use client'
 
-import {TrainingListResponse} from "@/types/trainingTypes";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {TrainingListResponse} from "@/types/training";
+import type {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {useCallback, useEffect, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
-import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators";
+import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators/training";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
-import {BackendApiResponse} from "@/types/indexTypes";
+import {BackendApiResponse} from "@/types";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";

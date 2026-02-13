@@ -2,20 +2,18 @@ import { memo } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import {secondDarkColorTheme} from "@/styles";
 
-interface ErrorStateProps {
-    /** Заголовок сообщения об ошибке */
+interface IProps {
     title?: string;
-    /** Описание/подсказка для пользователя */
     description?: string;
-    /** Центрирование блока по высоте (для страниц) */
     fullHeight?: boolean;
 }
 
-function ErrorState({
-    title = "Не удалось загрузить данные",
-    description = "Похоже, возникла проблема с сервером или подключением к интернету. Попробуйте обновить страницу чуть позже.",
-    fullHeight = true,
-}: ErrorStateProps) {
+function ErrorState(
+    {
+        title = "Не удалось загрузить данные",
+        description = "Похоже, возникла проблема с сервером или подключением к интернету. Попробуйте обновить страницу чуть позже.",
+        fullHeight = true,
+    }: IProps) {
 
     return (
         <div className={`w-full ${fullHeight ? "min-h-[60vh] flex items-center justify-center" : ""}`}>

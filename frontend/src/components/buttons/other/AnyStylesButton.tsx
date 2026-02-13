@@ -1,5 +1,5 @@
 import {ComponentType, memo, SVGProps, useMemo} from "react";
-import {BasicIconButtonProps} from "@/types/indexTypes";
+import {BasicIconButtonProps} from "@/types";
 import {iconDarkColorTheme} from "@/styles";
 
 interface AnyStylesButtonProps extends BasicIconButtonProps {

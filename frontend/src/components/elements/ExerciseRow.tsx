@@ -1,5 +1,5 @@
 import {memo} from "react";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {getColorStyles, secondDarkColorTheme} from "@/styles";
 
 function ExerciseRow({id, name, description, partOfTheBody, difficulty}: ExerciseTechniqueItem) {

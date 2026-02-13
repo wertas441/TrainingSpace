@@ -12,7 +12,7 @@ import {
 import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";
 import {firstDarkColorTheme} from "@/styles";
 
-interface SideBarProps {
+interface IProps {
 	activePage: string;
 	isOpen: boolean;
 	onClose: () => void;
@@ -75,7 +75,7 @@ const mainSideBarItems = [
     },
 ] as const;
 
-export default function MainSideBar({ activePage, isOpen = false, onClose }: SideBarProps) {
+export default function MainSideBar({ activePage, isOpen = false, onClose }: IProps) {
 
     // Блокируем прокрутку страницы при открытом сайдбаре на мобильных устройствах
     useEffect(() => {

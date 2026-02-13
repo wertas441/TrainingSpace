@@ -1,13 +1,13 @@
 import {ComponentType, memo, SVGProps} from "react";
 import {iconDarkColorTheme} from "@/styles";
 
-interface SettingsHeaderProps {
+interface IProps {
     label: string;
     text: string;
     IconComponent?: ComponentType<SVGProps<SVGSVGElement>>;
 }
 
-function SettingsHeader({label, text, IconComponent}: SettingsHeaderProps){
+function SettingsHeader({label, text, IconComponent}: IProps){
 
     return (
         <div className={`dark:bg-stone-900 dark:border-neutral-700 dark:text-white border-b border-emerald-50 

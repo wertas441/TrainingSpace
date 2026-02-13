@@ -1,6 +1,6 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
-import type {BackendApiResponse} from "@/types/indexTypes";
-import {TrainingListResponse} from "@/types/trainingTypes";
+import type {BackendApiResponse} from "@/types";
+import {TrainingListResponse} from "@/types/training";
 
 export async function getTrainingList(tokenValue: string):Promise<TrainingListResponse[] | undefined> {
 
@@ -9,14 +9,11 @@ export async function getTrainingList(tokenValue: string):Promise<TrainingListRe
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ trainings: TrainingListResponse[] }>>(
-            '/training/trainings',
-            payload
-        );
+        const { data } = await api.get<BackendApiResponse<{ trainings: TrainingListResponse[] }>>('/training/trainings', payload);
 
-        if (!response.data.success || !response.data.data?.trainings) return undefined;
+        if (!data.success || !data.data?.trainings) return undefined;
 
-        return response.data.data.trainings;
+        return data.data.trainings;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса листа тренировок");
 
@@ -31,14 +28,14 @@ export async function getTrainingInformation(tokenValue: string, trainingId: str
     }
 
     try {
-        const response = await api.get<BackendApiResponse<{ training: TrainingListResponse }>>(
+        const { data } = await api.get<BackendApiResponse<{ training: TrainingListResponse }>>(
             `/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`,
             payload
         );
 
-        if (!response.data.success || !response.data.data?.training) return undefined;
+        if (!data.success || !data.data?.training) return undefined;
 
-        return response.data.data.training;
+        return data.data.training;
     } catch (err) {
         console.error(getServerErrorMessage(err) || "Ошибка запроса информации о тренировке");
 

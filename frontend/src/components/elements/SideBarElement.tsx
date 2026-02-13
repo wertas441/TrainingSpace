@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {ComponentType, memo, SVGProps} from "react";
 
-interface SideBarElementProps {
+interface IProps {
 	label: string;
 	icon: ComponentType<SVGProps<SVGSVGElement>>;
 	link: string;
@@ -10,7 +10,7 @@ interface SideBarElementProps {
     onClick: () => void;
 }
 
-function SideBarElement({ label, icon: Icon, link, className = '', active, onClick }: SideBarElementProps) {
+function SideBarElement({ label, icon: Icon, link, className = '', active, onClick }: IProps) {
 
 	const baseItemClasses: string = 'group flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-all duration-200 dark:text-white';
 	const activeClass: string = `${baseItemClasses} text-emerald-900 bg-emerald-50 ring-1 ring-inset ring-emerald-200 dark:ring-0 dark:text-white dark:bg-emerald-600`;

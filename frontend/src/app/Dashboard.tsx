@@ -5,8 +5,8 @@ import DashboardCalendarCard from "@/components/UI/dashboard/DashboardCalendarCa
 import DashboardQuickActionsCard from "@/components/UI/dashboard/DashboardQuickActionsCard";
 import DashboardChartCard from "@/components/UI/dashboard/DashboardChartCard";
 import DashboardGoalsCard from "@/components/UI/dashboard/DashboardGoalsCard";
-import {GoalShortyStructure} from "@/types/goalTypes";
-import {NutritionStatisticsGraphicResponse} from "@/types/statisticsTypes";
+import {GoalShortyStructure} from "@/types/goal";
+import {NutritionStatisticsGraphicResponse} from "@/types/statistics";
 import {getUserData, useUserStore} from "@/lib/store/userStore";
 
 interface IProps {

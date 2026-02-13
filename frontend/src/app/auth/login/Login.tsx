@@ -3,14 +3,14 @@
 import {useMemo} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
-import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
+import {validateUserName, validateUserPassword} from "@/lib/utils/validators/user";
 import MainInput from "@/components/inputs/MainInput";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 import {makeInitUserData, useUserStore} from "@/lib/store/userStore";
 

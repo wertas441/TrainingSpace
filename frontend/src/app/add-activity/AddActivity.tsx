@@ -6,9 +6,9 @@ import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse, TrainingDataStructure} from "@/types/indexTypes";
+import type {BackendApiResponse, TrainingDataStructure} from "@/types";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activityTypes";
+import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activity";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
@@ -17,7 +17,7 @@ import {
     validateActivityDescription,
     validateActivityName,
     validateActivitySets,
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/activity";
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";

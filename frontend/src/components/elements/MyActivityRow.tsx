@@ -1,17 +1,14 @@
 import {CalendarDaysIcon, ChevronDownIcon, ChevronUpIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback, useMemo, useState} from "react";
-import {ActivityDataStructure} from "@/types/activityTypes";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniquesTypes";
+import {ActivityDataStructure} from "@/types/activity";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {getTrainingExercises} from "@/lib/controllers/activityController";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/styles";
 
-interface MyActivityRowProps {
-    activity: ActivityDataStructure;
-}
 
-function MyActivityRow({activity}: MyActivityRowProps){
+function MyActivityRow({activity}: {activity: ActivityDataStructure}){
 
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [isLoadingExercises, setIsLoadingExercises] = useState<boolean>(false);

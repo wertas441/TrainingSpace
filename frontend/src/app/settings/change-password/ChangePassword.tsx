@@ -4,7 +4,7 @@ import MainHideInput from "@/components/inputs/MainHideInput";
 import {
     validateConfirmPassword, validateNewPassword,
     validateUserPassword
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/user";
 import {useMemo} from "react";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
@@ -15,7 +15,7 @@ import {LockClosedIcon, CheckIcon} from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
-import type {BackendApiResponse} from "@/types/indexTypes";
+import type {BackendApiResponse} from "@/types";
 
 interface ChangePasswordFormValues {
     currentPassword: string;

@@ -1,5 +1,5 @@
 import {memo} from "react";
-import {BasicLinkBtnProps} from "@/types/indexTypes";
+import {BasicLinkBtnProps} from "@/types";
 import Link from "next/link";
 
 function LightGreenGlassLinkBtn({label , href = '/', className = '',}: BasicLinkBtnProps ) {
