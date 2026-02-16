@@ -14,9 +14,11 @@ export default function SelectExerciseUi({selectedExerciseIds, exercisesError, e
             <div className="text-sm font-medium text-emerald-900 dark:text-white mb-2">
                 Выбранные упражнения ({selectedExerciseIds.length})
             </div>
+
             {exercisesError && (
                 <div className="mb-2 text-sm text-rose-600">{exercisesError}</div>
             )}
+
             {selectedExerciseIds.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                     {selectedExerciseIds.map(id => {

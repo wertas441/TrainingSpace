@@ -26,7 +26,7 @@ export default function AddGoal() {
         }
     })
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils()
 
     const onSubmit = async (values: GoalFormValues)=> {
         setServerError(null);
@@ -59,6 +59,7 @@ export default function AddGoal() {
                     <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white">
                         Добавить цель
                     </h2>
+
                     <p className="text-center text-gray-600 dark:text-gray-300">
                         Добавьте цель в свой список и стремитесь ее выполнить
                     </p>
@@ -67,7 +68,6 @@ export default function AddGoal() {
                 <ServerError message={serverError} />
 
                 <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-
                     <MainInput
                         id={'goalName'}
                         label={'Название цели'}

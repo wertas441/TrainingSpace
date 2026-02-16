@@ -47,8 +47,8 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
-    const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow();
 
     const initialSelectedExerciseIds = trainingInfo.exercises;
 

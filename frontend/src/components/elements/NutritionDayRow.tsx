@@ -1,15 +1,13 @@
 import {CalendarDaysIcon, FireIcon, BeakerIcon, ScaleIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 import {NutritionDay} from "@/types/nutrition";
-import {memo, useCallback, useMemo} from "react";
+import {memo, useMemo} from "react";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
-import {useRouter} from "next/navigation";
 import NutritionInfo from "@/components/elements/NutritionInfo";
 import {secondDarkColorTheme} from "@/styles";
-
+import {usePageUtils} from "@/lib/hooks/usePageUtils";
 
 function NutritionDayRow({publicId, name, date, description, calories, protein, fat, carb }: NutritionDay) {
 
-    const router = useRouter();
     const informationElements = useMemo(() =>[
         {
             label: 'Ккал',
@@ -33,17 +31,21 @@ function NutritionDayRow({publicId, name, date, description, calories, protein, 
         },
     ], [calories, carb, fat, protein])
 
+    const { goToPage } = usePageUtils();
+
 	return (
 		<div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm hover:shadow-md transition`}>
 			<div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 items-center">
 				<div className="md:col-span-2">
 					<div className="flex items-center gap-2">
 						<h3 className="text-lg font-semibold text-gray-900 dark:text-white">{name}</h3>
+
 						<span className="inline-flex items-center gap-1 text-sm text-gray-600 dark:text-white">
 							<CalendarDaysIcon className="w-4 h-4" />
                             {date}
 						</span>
 					</div>
+
 					{description && (
 						<p className="mt-2 text-sm text-gray-600 dark:text-emerald-500">
 							{description}
@@ -62,9 +64,10 @@ function NutritionDayRow({publicId, name, date, description, calories, protein, 
                             />
                         ))}
 					</div>
+
                     <div className="flex items-center mt-5 md:mt-0 ">
                         <ChangeButton
-                            onClick={useCallback(() => router.push(`/nutrition/${publicId}`), [publicId, router])}
+                            onClick={() => goToPage(`/nutrition/${publicId}`)}
                             className={`w-full`}
                         />
                     </div>

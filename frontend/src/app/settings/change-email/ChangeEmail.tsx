@@ -21,9 +21,9 @@ interface ChangeEmailFormValues {
 
 export default function ChangeEmail(){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<ChangeEmailFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<ChangeEmailFormValues>()
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
     const changeEmail = useUserStore((s) => s.changeEmail);
 
     const onSubmit = async (values: ChangeEmailFormValues)=> {

@@ -35,8 +35,8 @@ export function ChangeGoal({goalInfo, token}: IProps) {
         }
     })
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
-    const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils()
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow()
 
     const onSubmit = async (values: GoalFormValues)=> {
         setServerError(null);
@@ -69,9 +69,11 @@ export function ChangeGoal({goalInfo, token}: IProps) {
 
         try {
             await deleteGoal(token, goalInfo.publicId);
+
             router.replace("/goals");
         } catch (error) {
             console.error("delete goal error:", error);
+
             setServerError("Не удалось удалить цель. Попробуйте ещё раз позже.");
         }
     }, [goalInfo.publicId, router, setServerError, token])
@@ -123,6 +125,7 @@ export function ChangeGoal({goalInfo, token}: IProps) {
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                 disabled={isSubmitting}
                             />
+
                             <RedGlassBtn
                                 label={'Удалить цель'}
                                 onClick={toggleModalWindow}

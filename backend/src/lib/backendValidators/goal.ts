@@ -1,6 +1,22 @@
-import {GoalPriority} from "../../types/goal";
+import {AddNewGoalFrontendStructure, GoalPriority} from "../../types/goal";
 
-export const validateGoalName = (goalName: string): boolean => {
+export const validateGoalData = (goalData: AddNewGoalFrontendStructure) => {
+
+    if (!goalData) {
+        return false;
+    }
+
+    const checks = [
+        validateGoalName(goalData.name),
+        validateGoalDescription(goalData.description),
+        validateGoalPriority(goalData.priority),
+    ].flat();
+
+    return checks.every(Boolean);
+}
+
+
+const validateGoalName = (goalName: string): boolean => {
     if(!goalName.trim()){
         return false;
     }
@@ -22,7 +38,7 @@ export const validateGoalName = (goalName: string): boolean => {
     return true;
 }
 
-export const validateGoalDescription = (description: string): boolean => {
+const validateGoalDescription = (description: string): boolean => {
     if (description.length > 500) {
         return false;
     }
@@ -30,7 +46,7 @@ export const validateGoalDescription = (description: string): boolean => {
     return true;
 }
 
-export const validateGoalPriority = (priority: GoalPriority): boolean => {
+const validateGoalPriority = (priority: GoalPriority): boolean => {
     if(!priority.trim()){
         return false;
     }

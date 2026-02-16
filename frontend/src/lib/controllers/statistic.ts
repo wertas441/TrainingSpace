@@ -51,7 +51,7 @@ export async function getNutritionGraphicInfo(tokenValue: string):Promise<Nutrit
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ graphicData: NutritionStatisticsGraphicResponse[] }>>('/statistics/nutrition-graphic-info', payload);
+        const { data } = await api.get<BackendApiResponse<{ graphicData: NutritionStatisticsGraphicResponse[] }>>('/statistics/nutrition-graphic', payload);
 
         if (!data.success || !data.data?.graphicData) return [];
 

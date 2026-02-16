@@ -5,11 +5,10 @@ import {
     DayUpdateFrontendStructure,
 } from "../types/nutrition";
 
-export class NutritionModel {
+export class NutritionDayModel {
 
     static async create(userId: number, nutritionData: AddNewDayFrontendStructure) {
 
-        // Проверяем, есть ли уже запись с такой датой для этого пользователя
         const checkQuery = `
             SELECT id
             FROM nutrition
@@ -75,6 +74,7 @@ export class NutritionModel {
     }
 
     static async information(userId: number, dayPublicId: string): Promise<DayListFrontendStructure | null> {
+
         const query = `
             SELECT  id,
                     public_id AS "publicId",
@@ -95,6 +95,7 @@ export class NutritionModel {
     }
 
     static async update(userId: number, updateData: DayUpdateFrontendStructure): Promise<void> {
+
         const query = `
             UPDATE nutrition
             SET name = $1, 
@@ -127,6 +128,7 @@ export class NutritionModel {
     }
 
     static async delete(userId: number, dayPublicId: string): Promise<boolean> {
+
         const query = `
             DELETE FROM nutrition
             WHERE public_id = $1 AND user_id = $2

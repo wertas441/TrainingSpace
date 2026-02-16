@@ -63,6 +63,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const validateForm = (): boolean => {
         const setsError = validateActivitySets(exerciseSets);
+
         if (setsError) {
             setSetsError(setsError);
         } else {
@@ -136,6 +137,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                 <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     <div className="space-y-2 text-center">
                         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">Добавить активность</h1>
+
                         <p className="text-sm text-gray-500 dark:text-gray-300">Выберите тренировку и введите подходы по упражнениям</p>
                     </div>
 

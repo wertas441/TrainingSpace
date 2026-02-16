@@ -10,9 +10,7 @@ export const metadata: Metadata = {
 }
 
 interface ChangeGoalPageProps {
-    params: Promise<{
-        goalId: string;
-    }>
+    params: Promise<{ goalId: string }>
 }
 
 export default async function ChangeGoalPage({ params }: ChangeGoalPageProps){

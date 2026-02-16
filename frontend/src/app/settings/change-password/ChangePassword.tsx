@@ -25,9 +25,9 @@ interface ChangePasswordFormValues {
 
 export default function ChangePassword(){
 
-    const {register, handleSubmit, getValues, formState: { errors }} = useForm<ChangePasswordFormValues>()
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<ChangePasswordFormValues>()
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router}  = usePageUtils();
 
     const onSubmit = async (values: ChangePasswordFormValues)=> {
         setServerError(null);

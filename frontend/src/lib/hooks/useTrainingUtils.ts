@@ -2,21 +2,25 @@ import {Dispatch, SetStateAction, useCallback, useMemo, useState} from "react";
 import {OptionType} from "@/components/inputs/MainMultiSelect";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 
-interface UseTrainingUtilsProps {
+interface IProps {
     exercises: ExerciseTechniqueItem[];
     setExercisesError: Dispatch<SetStateAction<string | null>>;
     initialSelectedExerciseIds?: number[];
 }
 
-export function useTrainingUtils({exercises, setExercisesError, initialSelectedExerciseIds}:UseTrainingUtilsProps) {
+export function useTrainingUtils({exercises, setExercisesError, initialSelectedExerciseIds}:IProps) {
 
     const [selectedExerciseIds, setSelectedExerciseIds] = useState<number[]>(() => initialSelectedExerciseIds ?? []);
+
     const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
+
     const [searchName, setSearchName] = useState<string>('');
     
     const muscleOptions = useMemo(() => {
         const set = new Set<string>();
+
         exercises.forEach(e => e.partOfTheBody.forEach(p => set.add(p)));
+
         return Array.from(set)
             .sort((a, b) => a.localeCompare(b, 'ru'))
             .map(v => ({ value: v, label: v }));
@@ -32,15 +36,18 @@ export function useTrainingUtils({exercises, setExercisesError, initialSelectedE
 
         const base = exercises.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
+
             const matchesPart =
                 partOfBodyFilter.length === 0 ||
                 e.partOfTheBody.some(p => partOfBodyFilter.includes(p));
+
             return matchesName && matchesPart;
         });
 
         // Сначала уже добавленные в тренировку (selected), затем остальные
         return base.sort((a, b) => {
             const aSelected = selectedExerciseIds.includes(a.id);
+
             const bSelected = selectedExerciseIds.includes(b.id);
 
             if (aSelected === bSelected) {
@@ -55,11 +62,16 @@ export function useTrainingUtils({exercises, setExercisesError, initialSelectedE
         setSelectedExerciseIds(prev => {
             if (prev.includes(id)) {
                 const next = prev.filter(x => x !== id);
+
                 if (next.length > 0) setExercisesError(null);
+
                 return next;
             }
+
             const next = [...prev, id];
+
             if (next.length > 0) setExercisesError(null);
+
             return next;
         })
     }, [setExercisesError]);

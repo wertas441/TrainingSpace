@@ -21,14 +21,17 @@ export default function MyTraining({trainingList, exercises}: IProps) {
 
     const exerciseNameById = useMemo(() => {
         const map = new Map<number, string>();
+
         for (const ex of exercises) {
             map.set(ex.id, ex.name);
         }
+
         return map;
     }, [exercises]);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
+
         return trainingList.filter(e => {
             return q.length === 0 || e.name.toLowerCase().includes(q) ;
         });
@@ -43,7 +46,6 @@ export default function MyTraining({trainingList, exercises}: IProps) {
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
-    // чтобы при фильтрации не оставаться на странице, где элементов уже нет
     useEffect(() => {
         setCurrentPage(1);
     }, [searchName, setCurrentPage]);
@@ -58,18 +60,10 @@ export default function MyTraining({trainingList, exercises}: IProps) {
             <div className="grid mt-6 grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map((item) => {
-                        // Преобразуем id упражнений в имена; поддержим оба варианта:
-                        // 1) id из поля exercises.id (1..N)
-                        // 2) индекс массива exercises (0..N-1), если id не найден
                         const exerciseNames: string[] = item.exercises
                             .map((n) => {
                                 const byId = exerciseNameById.get(n);
                                 if (byId) return byId;
-                                // если n — корректный индекс
-                                if (n >= 0 && n < exercises.length) {
-                                    return exercises[n]?.name ?? null;
-                                }
-                                return null;
                             })
                             .filter((v): v is string => Boolean(v));
 
@@ -92,8 +86,6 @@ export default function MyTraining({trainingList, exercises}: IProps) {
                     } />
                 )}
             </div>
-
-
 
             {totalItems > itemsPerPage && (
                 <MainPagination

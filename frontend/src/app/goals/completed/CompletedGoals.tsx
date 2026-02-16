@@ -15,6 +15,7 @@ export default function CompletedGoals({completeList}: {completeList: CompleteGo
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
+
         return completeList.filter(e => {
             return q.length === 0 || e.name.toLowerCase().includes(q) ;
         });

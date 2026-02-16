@@ -11,14 +11,12 @@ export const metadata: Metadata = {
 }
 
 interface ChangeTrainingPageProps {
-    params: Promise<{
-        trainingId: string;
-    }>
+    params: Promise<{ trainingId: string }>
 }
 
 export default async function ChangeTrainingPage({params}: ChangeTrainingPageProps){
-
     const { trainingId } = await params;
+
     const tokenValue = (await cookies()).get('token')?.value;
 
     if (!tokenValue) {

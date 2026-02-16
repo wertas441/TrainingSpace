@@ -47,7 +47,7 @@ router.get('/nutrition-information', authGuard, async (req, res) => {
     }
 });
 
-router.get('/nutrition-graphic-info', authGuard, async (req, res) => {
+router.get('/nutrition-graphic', authGuard, async (req, res) => {
     try {
         const userId:number = (req as any).userId;
         const graphicData = await StatisticsModel.getNutritionGraphicInformation(userId);

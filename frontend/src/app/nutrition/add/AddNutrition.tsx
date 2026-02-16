@@ -68,6 +68,7 @@ export default function AddNutrition(){
                     <h2 className={`text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white`}>
                         Добавить день питания
                     </h2>
+
                     <p className="text-center text-gray-600 dark:text-gray-400">
                         Заполните данные для отслеживания
                     </p>
@@ -76,7 +77,6 @@ export default function AddNutrition(){
                 <ServerError message={serverError} />
 
                 <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-
                     <MainInput
                         id={'dayName'}
                         label={'Наименование дня'}

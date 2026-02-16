@@ -9,8 +9,8 @@ import {
 
 export class GoalModel {
 
-    // Создание новой цели
     static async create(userId: number, goalData: AddNewGoalFrontendStructure) {
+
         const query = `
             INSERT INTO goal (user_id, name, description, priority)
             VALUES ($1, $2, $3, $4)
@@ -21,8 +21,8 @@ export class GoalModel {
         await pool.query(query, values);
     }
 
-    // Список целей пользователя
     static async getList(userId: number): Promise<GoalListFrontendResponse[]> {
+
         const query = `
             SELECT id,
                    public_id AS "publicId",
@@ -40,6 +40,7 @@ export class GoalModel {
     }
 
     static async getShortyList(userId: number): Promise<GoalShortyFrontendResponse[]> {
+
         const query = `
             SELECT id,
                    public_id AS "publicId",
@@ -55,8 +56,8 @@ export class GoalModel {
         return rows as GoalShortyFrontendResponse[];
     }
 
-    // Информация по конкретной цели пользователя
     static async information(userId: number, goalPublicId: string): Promise<GoalListFrontendResponse | null> {
+
         const query = `
             SELECT id,
                    public_id AS "publicId",
@@ -72,8 +73,8 @@ export class GoalModel {
         return rows[0] ?? null;
     }
 
-    // Обновление существующей цели пользователя
     static async update(userId: number, updateData: GoalUpdateFrontendStructure): Promise<void> {
+
         const query = `
             UPDATE goal
             SET name = $1, 
@@ -97,8 +98,8 @@ export class GoalModel {
         }
     }
 
-    // Удаление цели пользователя
     static async delete(userId: number, goalPublicId: string): Promise<boolean> {
+
         const query = `
             DELETE FROM goal
             WHERE public_id = $1 AND user_id = $2
@@ -111,6 +112,7 @@ export class GoalModel {
     }
 
     static async complete(userId: number, goalPublicId: string): Promise<boolean> {
+
         const query = `
             UPDATE goal
             SET status = 1,
@@ -125,6 +127,7 @@ export class GoalModel {
     }
 
     static async getCompleteList(userId: number): Promise<CompleteGoalListFrontendResponse[]> {
+
         const query = `
             SELECT id,
                    public_id AS "publicId",

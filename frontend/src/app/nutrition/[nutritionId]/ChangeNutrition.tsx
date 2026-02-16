@@ -44,9 +44,9 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
         }
     })
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
 
-    const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow()
 
     const onSubmit = async (values: NutritionFormValues)=> {
         setServerError(null);
@@ -157,6 +157,7 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                 disabled={isSubmitting}
                             />
+
                             <RedGlassBtn
                                 label = {'Удалить день'}
                                 onClick = {toggleModalWindow}

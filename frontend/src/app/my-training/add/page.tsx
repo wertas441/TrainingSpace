@@ -33,5 +33,5 @@ export default async function AddNewTrainingPage(){
         );
     }
 
-    return <AddNewTraining exercises = {exercises} />
+    return <AddNewTraining exercises={exercises} />
 }

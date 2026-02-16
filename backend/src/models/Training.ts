@@ -7,17 +7,12 @@ import {
 
 export class TrainingModel {
 
-    /**
-     * Создание новой шаблонной тренировки:
-     * 1) вставляем запись в таблицу training
-     * 2) сохраняем связанные упражнения в training_exercises
-     */
     static async create(userId: number, trainingData: AddTrainingFrontendStructure): Promise<void> {
         const client = await pool.connect();
 
         try {
             await client.query('BEGIN');
-            // Сохраняем саму тренировку
+
             const insertTrainingQuery = `
                 INSERT INTO training (training_name, description, user_id)
                 VALUES ($1, $2, $3)
@@ -29,7 +24,6 @@ export class TrainingModel {
             const { rows } = await client.query(insertTrainingQuery, insertTrainingValues);
             const trainingId: number = rows[0]?.id;
 
-            // Если упражнений нет (что валидация не должна допустить) — просто создаём тренировку без связей
             if (trainingData.exercises.length > 0) {
                 const insertExerciseQuery = `
                     INSERT INTO training_exercises (training_id, exercise_id, order_index)
@@ -38,21 +32,6 @@ export class TrainingModel {
 
                 for (let i = 0; i < trainingData.exercises.length; i++) {
                     const exerciseId = trainingData.exercises[i];
-
-                    // Гарантируем существование упражнения в таблице exercises,
-                    // чтобы не нарушать внешние ключи. Если упражнения с таким id нет,
-                    // создаём заглушку.
-                    const existing = await client.query(
-                        'SELECT id FROM exercises WHERE id = $1',
-                        [exerciseId]
-                    );
-
-                    if (existing.rows.length === 0) {
-                        await client.query(
-                            'INSERT INTO exercises (id, exercise_name, description) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING',
-                            [exerciseId, `Exercise #${exerciseId}`, null]
-                        );
-                    }
 
                     await client.query(insertExerciseQuery, [
                         trainingId,
@@ -72,6 +51,7 @@ export class TrainingModel {
     }
 
     static async getList(userId: number): Promise<TrainingListFrontendStructure[]> {
+
         const query = `
             SELECT  t.id,
                     t.public_id AS "publicId",
@@ -117,16 +97,16 @@ export class TrainingModel {
             await client.query('BEGIN');
 
             // Получаем внутренний id по public_id
-            const { rows: trainingRows } = await client.query(
+            const { rows } = await client.query(
                 'SELECT id FROM training WHERE public_id = $1 AND user_id = $2',
                 [data.trainingId, userId]
             );
 
-            if (trainingRows.length === 0) {
+            if (rows.length === 0) {
                 throw new Error('Training not found or access denied');
             }
 
-            const trainingId: number = trainingRows[0].id;
+            const trainingId: number = rows[0].id;
 
             const updateTrainingQuery = `
                 UPDATE training
@@ -135,12 +115,7 @@ export class TrainingModel {
                 WHERE id = $3 AND user_id = $4
             `;
 
-            const { rowCount } = await client.query(updateTrainingQuery, [
-                data.name,
-                data.description,
-                trainingId,
-                userId,
-            ]);
+            const { rowCount } = await client.query(updateTrainingQuery, [data.name, data.description, trainingId, userId,]);
 
             if (!rowCount) {
                 throw new Error('Training not found or access denied');
@@ -157,19 +132,6 @@ export class TrainingModel {
 
                 for (let i = 0; i < data.exercises.length; i++) {
                     const exerciseId = data.exercises[i];
-
-                    // Гарантируем существование упражнения
-                    const existing = await client.query(
-                        'SELECT id FROM exercises WHERE id = $1',
-                        [exerciseId]
-                    );
-
-                    if (existing.rows.length === 0) {
-                        await client.query(
-                            'INSERT INTO exercises (id, exercise_name, description) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING',
-                            [exerciseId, `Exercise #${exerciseId}`, null]
-                        );
-                    }
 
                     await client.query(insertExerciseQuery, [
                         trainingId,
@@ -194,18 +156,17 @@ export class TrainingModel {
         try {
             await client.query('BEGIN');
 
-            // Получаем внутренний id по public_id
-            const { rows: trainingRows } = await client.query(
+            const { rows } = await client.query(
                 'SELECT id FROM training WHERE public_id = $1 AND user_id = $2',
                 [trainingPublicId, userId]
             );
 
-            if (trainingRows.length === 0) {
+            if (rows.length === 0) {
                 await client.query('ROLLBACK');
                 return false;
             }
 
-            const trainingId: number = trainingRows[0].id;
+            const trainingId: number = rows[0].id;
 
             // сначала удаляем связи упражнений
             await client.query('DELETE FROM training_exercises WHERE training_id = $1', [trainingId]);

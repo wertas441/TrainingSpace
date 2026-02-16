@@ -1,4 +1,21 @@
-export const validateTrainingName = (trainingName: string): boolean => {
+import {AddTrainingFrontendStructure} from "../../types/training";
+
+export const validateTrainingData = (trainingData: AddTrainingFrontendStructure) => {
+
+    if (!trainingData) {
+        return false;
+    }
+
+    const checks = [
+        validateTrainingName(trainingData.name),
+        validateTrainingDescription(trainingData.description),
+        validateTrainingExercises(trainingData.exercises),
+    ].flat();
+
+    return checks.every(Boolean);
+}
+
+const validateTrainingName = (trainingName: string): boolean => {
     if (!trainingName.trim()) {
         return false;
     }
@@ -19,7 +36,7 @@ export const validateTrainingName = (trainingName: string): boolean => {
     return true;
 }
 
-export const validateTrainingDescription = (description: string): boolean => {
+const validateTrainingDescription = (description: string): boolean => {
     // Необязательное поле
     if (!description.trim()) {
         return true;
@@ -32,7 +49,7 @@ export const validateTrainingDescription = (description: string): boolean => {
     return true;
 }
 
-export const validateTrainingExercises = (exerciseIds: number[]): boolean => {
+const validateTrainingExercises = (exerciseIds: number[]): boolean => {
 
     if (!Array.isArray(exerciseIds) || exerciseIds.length === 0) {
         return false;

@@ -31,7 +31,7 @@ interface AddNewTrainingFormValues {
 
 export default function AddNewTraining({exercises}:{exercises: ExerciseTechniqueItem[]}){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<AddNewTrainingFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<AddNewTrainingFormValues>()
 
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;
@@ -107,6 +107,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                         <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white">
                             Добавить новую тренировку
                         </h2>
+
                         <p className="text-center text-gray-600 dark:text-gray-400">
                             Заполните данные для отслеживания
                         </p>

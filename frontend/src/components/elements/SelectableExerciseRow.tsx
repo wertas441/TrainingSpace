@@ -11,8 +11,6 @@ interface IProps {
 
 function SelectableExerciseRow({exercise, selected, onToggle}: IProps) {
 
-    const badgeClasses = `inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`;
-
     return (
         <div className={`w-full dark:bg-neutral-800 dark:border-neutral-700 rounded-lg border p-4 shadow-sm hover:shadow-md transition-shadow
         ${selected ? 'border-emerald-300 ring-1 ring-emerald-200 dark:border-emerald-400 dark:ring-emerald-300' : 'border-emerald-100'} `}>
@@ -20,10 +18,12 @@ function SelectableExerciseRow({exercise, selected, onToggle}: IProps) {
                 <div className="flex-1 space-y-3">
                     <div className="flex items-center gap-2">
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{exercise.name}</h3>
-                        <span className={badgeClasses}>
+
+                        <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`}>
                             {exercise.difficulty === 'Лёгкий' ? 'Лёгкий' : exercise.difficulty === 'Средний' ? 'Средний' : 'Сложный'}
                         </span>
                     </div>
+
                     <div className="mt-2 md:mt-3 flex flex-wrap gap-2">
                         {exercise.partOfTheBody.map((part) => (
                             <span
