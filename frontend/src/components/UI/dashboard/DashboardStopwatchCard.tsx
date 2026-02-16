@@ -13,6 +13,7 @@ function DashboardStopwatchCard() {
                 <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">
                     Секундомер
                 </p>
+
                 <h2 className="text-lg dark:text-white font-semibold text-emerald-900">
                     Сессия тренировки
                 </h2>

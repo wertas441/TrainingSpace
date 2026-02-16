@@ -16,10 +16,12 @@ export default function InformationPageBlock({label, text, icon}: IProps) {
             <div className="mt-1">
                 <IconComponent className="h-6 w-6 text-emerald-500" />
             </div>
+
             <div>
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-emerald-600">
                     {label}
                 </h2>
+
                 <p className="mt-1 text-sm text-gray-600 dark:text-white">
                     {text}
                 </p>

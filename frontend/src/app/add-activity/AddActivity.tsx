@@ -21,6 +21,7 @@ import {
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";
+import {buildExercisesPayload} from "@/lib/controllers/activity";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
@@ -82,30 +83,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
         setIsSubmitting(true);
 
-        const exercisesPayload = Object.entries(exerciseSets).reduce<
-            { id: number; try: { id: number; weight: number; quantity: number }[] }[]
-        >((acc, [exId, sets]) => {
-            const validSets = (sets || []).filter(
-                (s) =>
-                    Number.isFinite(s.weight) &&
-                    s.weight > 0 &&
-                    Number.isFinite(s.quantity) &&
-                    s.quantity > 0
-            );
-
-            if (validSets.length > 0) {
-                acc.push({
-                    id: Number(exId),
-                    try: validSets.map((s) => ({
-                        id: s.id,
-                        weight: s.weight,
-                        quantity: s.quantity,
-                    })),
-                });
-            }
-
-            return acc;
-        }, []);
+        const exercisesPayload = buildExercisesPayload(exerciseSets);
 
         const payload = {
             activityName: values.activityName,

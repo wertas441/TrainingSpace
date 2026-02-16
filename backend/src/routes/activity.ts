@@ -2,16 +2,10 @@ import { Router } from 'express';
 import { authGuard } from '../middleware/authMiddleware';
 import {ApiResponse} from "../types";
 import {
-    validateActivityDescription,
-    validateActivityDifficult,
-    validateActivityExercisesCreate,
-    validateActivityExercisesUpdate,
-    validateActivityName,
-    validateActivityPerformedAt,
-    validateActivityTrainingId,
-    validateActivityType
+    validateActivityData,
+    validateUpdateActivityData,
 } from "../lib/backendValidators/activity";
-import {ActivityListFrontendStructure, AddActivityFrontendRequest} from "../types/activity";
+import {AddActivityFrontendRequest} from "../types/activity";
 import {ActivityModel} from "../models/Activity";
 import {showBackendError} from "../lib";
 
@@ -22,25 +16,12 @@ router.post('/activity', authGuard, async (req, res) => {
         const requestData: AddActivityFrontendRequest = req.body;
         const userId:number = (req as any).userId;
 
-        const activityNameError:boolean = validateActivityName(requestData.activityName);
-        const activityDescriptionError:boolean = validateActivityDescription(requestData.description);
-        const activityTypeError:boolean = validateActivityType(requestData.activityType);
-        const activityDifficultError:boolean = validateActivityDifficult(requestData.activityDifficult);
-        const activityTrainingIdError:boolean = validateActivityTrainingId(requestData.trainingId);
-        const activityPerformedError:boolean = validateActivityPerformedAt(requestData.performedAt);
-        const activityExercisesError:boolean = validateActivityExercisesCreate(requestData.exercises);
+        const validationResult = validateActivityData(requestData);
 
-        if (!activityNameError
-            || !activityDescriptionError
-            || !activityTypeError
-            || !activityDifficultError
-            || !activityTrainingIdError
-            || !activityPerformedError
-            || !activityExercisesError
-        ) {
+        if (!validationResult) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Ошибка добавления новой активности, пожалуйста проверьте введенные вами данные.'
+                error: 'Ошибка добавления новой активности, пожалуйста проверьте введенные вами данные'
             };
             return res.status(400).json(response);
         }
@@ -83,7 +64,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
         if (!activityPublicId) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Некорректный идентификатор активности.',
+                error: 'Некорректный идентификатор активности',
             };
             return res.status(400).json(response);
         }
@@ -93,7 +74,7 @@ router.get('/about-my-activity', authGuard, async (req, res) => {
         if (!activity) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Активность не найдена или у вас нет к ней доступа.',
+                error: 'Активность не найдена или у вас нет к ней доступа',
             };
             return res.status(404).json(response);
         }
@@ -120,7 +101,7 @@ router.delete('/activity', authGuard, async (req, res) => {
         if (!activityId) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Некорректный идентификатор активности.',
+                error: 'Некорректный идентификатор активности',
             };
             return res.status(400).json(response);
         }
@@ -147,25 +128,12 @@ router.delete('/activity', authGuard, async (req, res) => {
 
 router.put('/activity', authGuard, async (req, res) => {
     try {
-        const requestData: ActivityListFrontendStructure = req.body;
+        const requestData = req.body;
         const userId:number = (req as any).userId;
 
-        const activityNameError:boolean = validateActivityName(requestData.name);
-        const activityDescriptionError:boolean = validateActivityDescription(requestData.description);
-        const activityTypeError:boolean = validateActivityType(requestData.type);
-        const activityDifficultError:boolean = validateActivityDifficult(requestData.difficulty);
-        const activityTrainingIdError:boolean = validateActivityTrainingId(requestData.trainingId);
-        const activityPerformedError:boolean = validateActivityPerformedAt(requestData.activityDate);
-        const activityExercisesError:boolean = validateActivityExercisesUpdate(requestData.exercises);
+        const validationResult = validateUpdateActivityData(requestData);
 
-        if (!activityNameError
-            || !activityDescriptionError
-            || !activityTypeError
-            || !activityDifficultError
-            || !activityTrainingIdError
-            || !activityPerformedError
-            || !activityExercisesError
-        ) {
+        if (!validationResult) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Ошибка изменения активности, пожалуйста проверьте введенные вами данные.'

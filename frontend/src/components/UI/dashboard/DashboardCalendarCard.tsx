@@ -43,6 +43,7 @@ function DashboardCalendarCard() {
                     <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">
                         Календарь
                     </p>
+
                     <h2 className="text-lg font-semibold dark:text-white text-emerald-900">
                         {monthName.charAt(0).toUpperCase() + monthName.slice(1)} {year}
                     </h2>
@@ -59,22 +60,20 @@ function DashboardCalendarCard() {
                         {label}
                     </div>
                 ))}
-                {days.map((d, idx) => {
-                    const isToday = d === day;
-                    return (
-                        <div
-                            key={idx}
-                            className={`flex cursor-pointer items-center justify-center h-7 rounded-full text-[12px] 
+
+                {days.map((d, idx) => (
+                    <div
+                        key={idx}
+                        className={`flex cursor-pointer items-center justify-center h-7 rounded-full text-[12px] 
                             ${d === null
-                                ? "text-transparent"
-                                : isToday
-                                    ? "bg-emerald-500 text-white font-semibold shadow-sm"
-                                    : "text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-neutral-700 cursor-default"}`}
-                        >
-                            {d ?? "-"}
-                        </div>
-                    );
-                })}
+                            ? "text-transparent"
+                            : d === day
+                                ? "bg-emerald-500 text-white font-semibold shadow-sm"
+                                : "text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-neutral-700 cursor-default"}`}
+                    >
+                        {d ?? "-"}
+                    </div>
+                ))}
             </div>
         </div>
     );

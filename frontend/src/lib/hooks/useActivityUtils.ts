@@ -36,7 +36,9 @@ export function useActivityUtils({myTrainings, trainingId, onTrainingIdChange}: 
             setExerciseSets({});
             return;
         }
+
         const next: ExerciseSetsByExerciseId = {};
+
         training.exercises.forEach(exId => {
             next[exId] = [{ id: 1, weight: 0, quantity: 0 }];
         });

@@ -3,6 +3,10 @@ import type {BackendApiResponse} from "@/types";
 import {ActivityDataStructure} from "@/types/activity";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 
+type ExerciseSetInput = { id: number; weight: number; quantity: number };
+type ExerciseSetsMap = Record<string, ExerciseSetInput[] | undefined>;
+type ExercisePayloadItem = { id: number; try: ExerciseSetInput[] };
+
 export async function getActivityList(tokenValue: string):Promise<ActivityDataStructure[] | undefined> {
 
     const payload = {
@@ -75,3 +79,25 @@ export async function deleteActivity(tokenValue: string, activityId: string):Pro
         return;
     }
 }
+
+const isValidExerciseSet = (set: ExerciseSetInput): boolean =>
+    Number.isFinite(set.weight) &&
+    set.weight > 0 &&
+    Number.isFinite(set.quantity) &&
+    set.quantity > 0;
+
+export const buildExercisesPayload = (setsMap: ExerciseSetsMap): ExercisePayloadItem[] =>
+    Object.entries(setsMap).reduce<ExercisePayloadItem[]>((acc, [exerciseId, sets]) => {
+        const validSets = (sets ?? []).filter(isValidExerciseSet);
+
+        if (validSets.length === 0) {
+            return acc;
+        }
+
+        acc.push({
+            id: Number(exerciseId),
+            try: validSets.map(({id, weight, quantity}) => ({id, weight, quantity})),
+        });
+
+        return acc;
+    }, []);

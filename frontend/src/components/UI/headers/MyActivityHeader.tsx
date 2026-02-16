@@ -87,6 +87,7 @@ export default function MyActivityHeader(
                 >
                     <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-100 dark:border-neutral-700">
                         <h2 className="text-lg font-semibold text-emerald-800 dark:text-white">Фильтры</h2>
+
                         <XMarkButton onClick={toggleFilterWindow} />
                     </div>
                     <div className="px-5 py-4 space-y-6">
@@ -109,6 +110,7 @@ export default function MyActivityHeader(
                             alwaysSelected={false}
                         />
                     </div>
+
                     <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
                         <LightGreenGlassBtn
                             label={`Сбросить`}

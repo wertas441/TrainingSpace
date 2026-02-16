@@ -112,6 +112,7 @@ function ExercisesTechniquesHeader(
                                 <div className="mt-1.5 text-xs text-gray-500">По умолчанию показываются все группы</div>
                             </div>
                         </div>
+
                         <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
                             <LightGreenGlassBtn
                                 label={`Сбросить`}

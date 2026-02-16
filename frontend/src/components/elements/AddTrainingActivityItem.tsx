@@ -80,6 +80,7 @@ export default function AddTrainingActivityItem(
                                 <div key={s.id} className="grid grid-cols-12 items-end gap-2">
                                     <div className="col-span-12 sm:col-span-3">
                                         <label className="block mb-1 text-xs font-medium text-gray-500 dark:text-gray-300">Подход</label>
+
                                         <input
                                             value={s.id}
                                             disabled
@@ -88,6 +89,7 @@ export default function AddTrainingActivityItem(
                                     </div>
                                     <div className="col-span-6 sm:col-span-4">
                                         <label className="block mb-1 text-xs font-medium text-gray-500 dark:text-gray-300">Вес (кг)</label>
+
                                         <input
                                             type="text"
                                             value={s.weight}
@@ -97,6 +99,7 @@ export default function AddTrainingActivityItem(
                                     </div>
                                     <div className="col-span-6 sm:col-span-4">
                                         <label className="block mb-1 text-xs font-medium text-gray-500 dark:text-gray-300">Повторения</label>
+
                                         <input
                                             type="text"
                                             value={s.quantity}

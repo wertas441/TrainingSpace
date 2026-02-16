@@ -4,6 +4,7 @@ export function useModalWindow(){
 
     const [isProcess, setIsProcess] = useState<boolean>(false);
     const [isModalWindowOpen, setIsModalWindowOpen] = useState<boolean>(false);
+
     const windowModalRef = useRef<HTMLDivElement>(null);
 
     const [isRendered, setIsRendered] = useState<boolean>(false);
@@ -45,6 +46,7 @@ export function useModalWindow(){
                 window.clearTimeout(exitTimerRef.current);
                 exitTimerRef.current = null;
             }
+
             setIsRendered(true);
             setIsExiting(false);
         } else if (isRendered) {

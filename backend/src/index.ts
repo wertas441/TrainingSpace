@@ -60,10 +60,8 @@ app.use((req, res) => {
     });
 });
 
-// Обработка ошибок
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     const isDev = process.env.NODE_ENV !== 'production';
-    // Расширенное логирование в консоль
     console.error('Глобальная ошибка:', {
         path: req.originalUrl,
         method: req.method,
@@ -76,22 +74,18 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
     });
 });
 
-// Инициализация и запуск сервера
 const startServer = async () => {
     try {
-        // Тестируем подключение к базе данных
         const dbConnected = await testConnection();
         if (!dbConnected) {
             console.error('Не удалось подключиться к базе данных');
             process.exit(1);
         }
 
-        // Инициализация схемы и сидирование включаются флагами окружения
         if (shouldInit) {
             await initDatabase();
         }
 
-        // Запускаем HTTP сервер
         server = http.createServer(app);
 
         server.listen(PORT, () => {

@@ -16,10 +16,12 @@ function SettingsHeader({label, text, IconComponent}: IProps){
                 <h1 className="text-2xl sm:text-3xl font-semibold text-emerald-900 dark:text-white">
                     {label}
                 </h1>
+
                 <p className="mt-1 text-sm text-emerald-900/70 dark:text-gray-400">
                     {text}
                 </p>
             </div>
+
             {IconComponent && (
                 <div className={`hidden ${iconDarkColorTheme} sm:flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100`}>
                     <IconComponent className="h-6 w-6" />

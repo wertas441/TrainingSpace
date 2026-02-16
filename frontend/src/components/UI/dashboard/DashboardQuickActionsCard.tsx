@@ -39,35 +39,34 @@ function DashboardQuickActionsCard() {
                 <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">
                     Быстрые действия
                 </p>
+
                 <h2 className="text-lg font-semibold dark:text-white text-emerald-900">
                     Что сделаем сейчас?
                 </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1 auto-rows-fr">
-                {actions.map((action) => {
-                    const IconComponent = action.icon;
-                    return (
-                        <Link
-                            key={action.href}
-                            href={action.href}
-                            className={`${thirdDarkColorTheme} group flex h-full w-full flex-col items-center justify-center rounded-xl border border-emerald-100
+                {actions.map((action) => (
+                    <Link
+                        key={action.href}
+                        href={action.href}
+                        className={`${thirdDarkColorTheme} group flex h-full w-full flex-col items-center justify-center rounded-xl border border-emerald-100
                                 bg-emerald-50/40 px-4 py-4 hover:bg-emerald-50 hover:border-emerald-200 transition text-center
                                 dark:hover:bg-neutral-700 hover:border-emerald-200
                                 `}
-                        >
+                    >
                         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 dark:text-emerald-500
                          dark:bg-neutral-900 dark:border-neutral-800 text-white
                         shadow-sm group-hover:bg-emerald-600 dark:group-hover:bg-neutral-900 transition"
                         >
-                            <IconComponent className="h-5 w-5"/>
+                            <action.icon className="h-5 w-5"/>
                         </span>
-                            <p className="mt-2 text-sm font-semibold text-emerald-900 dark:text-white">
-                                {action.label}
-                            </p>
-                        </Link>
-                    )
-                })}
+
+                        <p className="mt-2 text-sm font-semibold text-emerald-900 dark:text-white">
+                            {action.label}
+                        </p>
+                    </Link>
+                ))}
             </div>
         </div>
     );

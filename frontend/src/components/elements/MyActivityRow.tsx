@@ -96,6 +96,7 @@ function MyActivityRow({activity}: {activity: ActivityDataStructure}){
                                 {activityHeader.difficulty}
                             </span>
                         </div>
+
                         <div className="w-full md:w-auto" onClick={(event) => event.stopPropagation()}>
                             <ChangeButton
                                 onClick={() => goToPage(`/my-activity/${activity.publicId}`)}
@@ -128,10 +129,8 @@ function MyActivityRow({activity}: {activity: ActivityDataStructure}){
                                     <div key={ex.exercisesId} className={`dark:bg-neutral-800 dark:border-neutral-600
                                     rounded-lg bg-emerald-50/60 border border-emerald-100 px-3 py-2`}>
                                         <div className="flex items-center justify-between gap-2">
-                                            <div>
-                                                <div className="text-sm font-semibold text-emerald-900 dark:text-white">
-                                                    {exerciseInfo?.name}
-                                                </div>
+                                            <div className="text-sm font-semibold text-emerald-900 dark:text-white">
+                                                {exerciseInfo?.name}
                                             </div>
                                         </div>
                                         <div className="mt-2 flex flex-wrap gap-2">

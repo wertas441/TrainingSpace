@@ -11,9 +11,7 @@ export const metadata: Metadata = {
 }
 
 interface ChangeActivityProps {
-    params: Promise<{
-        activityId: string;
-    }>
+    params: Promise<{ activityId: string }>
 }
 
 export default async function ChangeActivityPage({ params }: ChangeActivityProps){

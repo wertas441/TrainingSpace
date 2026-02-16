@@ -27,9 +27,13 @@ const CustomTooltip = ({active, payload}: any) => {
             <p className="font-semibold text-emerald-800 mb-1">
                 {item.fullDate}
             </p>
+
             <p className="text-gray-700 py-1">Калории: <span className="font-semibold">{item.calories}</span></p>
+
             <p className="text-gray-700 py-1">Белки: <span className="font-semibold">{item.protein}</span></p>
+
             <p className="text-gray-700 py-1">Жиры: <span className="font-semibold">{item.fat}</span></p>
+
             <p className="text-gray-700 py-1">Углеводы: <span className="font-semibold">{item.carb}</span></p>
         </div>
     );
@@ -47,11 +51,9 @@ function NutritionTrendChart({days, metric}: NutritionTrendChartProps) {
     const chartData = useMemo(() => {
         if (!days || days.length === 0) return [];
 
-        // сортируем по дате по возрастанию
         const sorted = [...days].sort((a, b) => a.date.localeCompare(b.date));
 
         return sorted.map((d) => {
-            // ожидаемый формат даты с бэка: YYYY-MM-DD
             const [day, month] = d.date.split("-");
             const shortLabel = `${day}.${month}`; // 31.12
 
@@ -73,8 +75,6 @@ function NutritionTrendChart({days, metric}: NutritionTrendChartProps) {
             </div>
         );
     }
-
-
 
     const {key, name, color} = metricConfig[metric];
 

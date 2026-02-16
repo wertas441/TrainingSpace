@@ -36,7 +36,6 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
             <aside className={`w-full lg:w-90`}>
                 <nav className={`${secondDarkColorTheme} space-y-2 p-3 rounded-lg border border-emerald-100 shadow-sm`}>
                     {settingsMenuItems.map((item) => {
-                        const IconComponent = item.icon;
                         const active = pathname === item.link;
                         return (
                             <Link
@@ -48,7 +47,7 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
                                         : 'text-emerald-700 border-white hover:bg-emerald-50 dark:hover:bg-neutral-800  dark:text-white dark:border-neutral-900'
                                 }`}
                             >
-                                <IconComponent className={`h-5 w-5 dark:group-hover:text-white ${!active ? 'text-emerald-600' : ''} `}/>
+                                <item.icon className={`h-5 w-5 dark:group-hover:text-white ${!active ? 'text-emerald-600' : ''} `}/>
                                 <span className="text-sm font-medium">{item.label}</span>
                             </Link>
                         )

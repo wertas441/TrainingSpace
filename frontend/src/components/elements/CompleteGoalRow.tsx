@@ -16,9 +16,11 @@ function CompleteGoalRow({name, description, achieve_at}: IProps){
                     <div className="flex items-center gap-2">
                         <h3 className={`text-lg font-semibold text-gray-800 dark:text-white`}>{name}</h3>
                     </div>
+
                     <p className={`mt-1 text-sm break-words whitespace-pre-wrap text-gray-600 dark:text-emerald-500`}>
                         {description}
                     </p>
+
                     <span className={`inline-flex text-gray-600 dark:text-white items-center pt-3 text-xs font-medium rounded-full`}>
                             Цель достигнута: {new Date(achieve_at).toLocaleDateString('ru-RU', {
                         year: 'numeric',
