@@ -13,7 +13,7 @@ import {
     validateFatGrams,
     validateProteinGrams,
     validateDayDescription,
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/nutrition";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import MainInput from "@/components/inputs/MainInput";
 import type {BackendApiResponse} from "@/types";
@@ -27,12 +27,6 @@ export default function AddNutrition(){
 
     const {register, handleSubmit, formState: { errors }} = useForm<NutritionFormValues>({
         defaultValues: {
-            dayName: '',
-            dayDescription: '',
-            calories: '',
-            protein: '',
-            fat: '',
-            carb: '',
             dayDate: initialDate,
         }
     })
@@ -44,15 +38,13 @@ export default function AddNutrition(){
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                name: values.dayName,
-                description: values.dayDescription,
-                date: values.dayDate,
-                calories: parseInt(values.calories, 10),
-                protein: parseInt(values.protein, 10),
-                fat: parseInt(values.fat, 10),
-                carb: parseInt(values.carb, 10),
-            }
+            name: values.dayName,
+            description: values.dayDescription,
+            date: values.dayDate,
+            calories: parseInt(values.calories, 10),
+            protein: parseInt(values.protein, 10),
+            fat: parseInt(values.fat, 10),
+            carb: parseInt(values.carb, 10),
         }
 
         try {
@@ -76,6 +68,7 @@ export default function AddNutrition(){
                     <h2 className={`text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white`}>
                         Добавить день питания
                     </h2>
+
                     <p className="text-center text-gray-600 dark:text-gray-400">
                         Заполните данные для отслеживания
                     </p>
@@ -84,7 +77,6 @@ export default function AddNutrition(){
                 <ServerError message={serverError} />
 
                 <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-
                     <MainInput
                         id={'dayName'}
                         label={'Наименование дня'}

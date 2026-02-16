@@ -10,7 +10,7 @@ import {
     NutritionMetric,
     NutritionStatisticsCardResponse,
     NutritionStatisticsGraphicResponse
-} from "@/types/statistic";
+} from "@/types/statistics";
 import {
     CalendarDaysIcon,
     FlagIcon,
@@ -141,6 +141,7 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: IPr
                             <h2 className="text-lg font-semibold text-emerald-500">
                                 Динамика калорий и БЖУ
                             </h2>
+
                             <p className="text-xs text-gray-500">
                                 Как меняется ваше потребление калорий, белков, жиров и углеводов по дням.
                             </p>

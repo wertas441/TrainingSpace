@@ -1,11 +1,12 @@
 import FilterInput from "@/components/inputs/FilterInput";
-import {memo, useCallback, useMemo} from "react";
+import {memo, useMemo} from "react";
 import {MagnifyingGlassIcon, ClipboardDocumentCheckIcon, ClipboardDocumentListIcon} from "@heroicons/react/24/outline";
 import {HeaderMinimumProps} from "@/types";
-import {usePathname, useRouter} from "next/navigation";
+import {usePathname} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
 import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";
 import {secondDarkColorTheme} from "@/styles";
+import {usePageUtils} from "@/lib/hooks/usePageUtils";
 
 interface GoalsHeaderProps extends HeaderMinimumProps {
     label: string;
@@ -16,10 +17,7 @@ function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
     const pathname:string = usePathname();
     const isGoalPage = pathname.endsWith("/goals");
 
-    const router = useRouter();
-    const completeGoalAction = useCallback(() => router.push(isGoalPage? '/goals/completed' : '/goals'), [isGoalPage, router])
-    const addGoalAction = useCallback(() => router.push('/goals/add'), [router])
-
+    const { goToPage } = usePageUtils();
 
     return (
         <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
@@ -43,11 +41,12 @@ function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
                     <div className="flex gap-3">
                         <AnyStylesButton
                             IconComponent={isGoalPage ? ClipboardDocumentCheckIcon : ClipboardDocumentListIcon}
-                            onClick={completeGoalAction}
+                            onClick={() => goToPage(isGoalPage? '/goals/completed' : '/goals')}
                             className="w-full"
                         />
+
                         <PlusButton
-                            onClick={addGoalAction}
+                            onClick={() => goToPage(`/goals/add`)}
                             className="w-full"
                         />
                     </div>

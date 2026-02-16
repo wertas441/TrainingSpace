@@ -65,6 +65,7 @@ export default function Profile() {
                             <div className="text-xs uppercase tracking-wide text-gray-400 ">
                                 Имя пользователя
                             </div>
+
                             <div className="text-lg sm:text-xl font-medium text-gray-900 dark:text-white">
                                 {userData.userName}
                             </div>
@@ -87,6 +88,7 @@ export default function Profile() {
                         <div className="text-xs font-medium uppercase tracking-wide text-gray-400">
                             ID пользователя
                         </div>
+
                         <div className="mt-1 text-xs md:text-sm font-mono text-gray-900 break-all dark:text-white">
                             {userData.publicId}
                         </div>
@@ -96,6 +98,7 @@ export default function Profile() {
                         <div className="text-xs font-medium uppercase tracking-wide text-gray-400">
                             Email
                         </div>
+
                         <div className="mt-1 text-xs md:text-sm font-mono text-gray-900 break-all dark:text-white">
                             {userData.email}
                         </div>

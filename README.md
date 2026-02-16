@@ -13,6 +13,11 @@ URL: https://your-training.space
 
 Репозиторий: https://github.com/wertas441/TrainingSpace
 
+Подробная документация всех endpoint'ов доступна в файле  [`API.md`](API.md).
+
+Скриншоты интерфейса по разделам доступны в файле [`SCREENSHOTS.md`](SCREENSHOTS.md).
+
+
 ---
 
 ## Стек технологий
@@ -72,23 +77,6 @@ URL: https://your-training.space
   - Страница статистики (`/stats`)
 
 ---
-
-## Скриншоты
-
-<details>
-  <summary>Click</summary>
-
-![Главное в светлой теме](./frontend/public/mainLight.png)
-![Главное в темной теме](./frontend/public/mainDark.png)
-![Мои тренировки](./frontend/public/myTrainings.png)
-![Статистика](./frontend/public/stats.png)
-![Питание](./frontend/public/nutrition.png)
-![Цели](./frontend/public/goals.png)
-![Упражнения](./frontend/public/exercises.png)
-![Профиль](./frontend/public/profile.png)
-
-</details>
-
 
 ## Запуск проекта локально
 

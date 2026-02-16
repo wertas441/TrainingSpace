@@ -1,5 +1,5 @@
 import {memo} from "react";
-import {ExerciseTechniqueItem} from "@/types/exercise";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {getColorStyles, secondDarkColorTheme} from "@/styles";
 
 function ExerciseRow({id, name, description, partOfTheBody, difficulty}: ExerciseTechniqueItem) {
@@ -10,10 +10,12 @@ function ExerciseRow({id, name, description, partOfTheBody, difficulty}: Exercis
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
                         <h3 className={`text-lg font-semibold text-gray-800 dark:text-white`}>{name}</h3>
+
                         <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(difficulty)}`}>
                             {difficulty === 'Лёгкий' ? 'Лёгкий' : difficulty === 'Средний' ? 'Средний' : 'Сложный'}
                         </span>
                     </div>
+
                     <p className="mt-1 text-sm text-gray-600 dark:text-emerald-500">
                         {description}
                     </p>

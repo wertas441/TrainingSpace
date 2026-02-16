@@ -2,12 +2,22 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { ApiResponse } from '../types';
-import { userEmailValidator, userNameValidator, userPasswordValidator } from '../lib/backendValidators/index'
-import { UserModel } from '../models/User';
 import { config } from '../config';
 import { authGuard } from '../middleware/authMiddleware';
-import {LoginRequest, RegisterRequest} from "../types/user";
-import {showBackendError} from "../lib/indexUtils";
+import {
+    ChangeEmailFrontendStructure,
+    ChangePasswordFrontendStructure,
+    LoginRequest,
+    RegisterRequest
+} from "../types/user";
+import {showBackendError} from "../lib";
+import {
+    validateConfirmPassword, validateTwoPassword,
+    validateUserEmail,
+    validateUserName,
+    validateUserPassword
+} from "../lib/backendValidators/user";
+import {UserModel} from "../models/User";
 
 const router = Router();
 
@@ -15,9 +25,9 @@ router.post('/registration', async (req, res) => {
     try {
         const { email, password, userName }: RegisterRequest = req.body;
 
-        const nameValidation = userNameValidator(userName);
-        const emailValidation = userEmailValidator(email)
-        const passwordValidation = userPasswordValidator(password);
+        const nameValidation = validateUserName(userName);
+        const emailValidation = validateUserEmail(email)
+        const passwordValidation = validateUserPassword(password);
 
         if (!emailValidation || !passwordValidation || !nameValidation) {
             const response: ApiResponse = {
@@ -49,7 +59,9 @@ router.post('/registration', async (req, res) => {
 
         await UserModel.create({ email, userName, password: hashedPassword });
 
-        const response: ApiResponse = { success: true };
+        const response: ApiResponse = {
+            success: true,
+        };
 
         res.status(200).json(response);
     } catch (error) {
@@ -63,8 +75,8 @@ router.post('/login', async (req, res) => {
     try {
         const { userName, password, rememberMe }: LoginRequest = req.body;
 
-        const userNameValidation = userNameValidator(userName)
-        const passwordValidation = userPasswordValidator(password);
+        const userNameValidation = validateUserName(userName)
+        const passwordValidation = validateUserPassword(password);
 
         if (!userNameValidation || !passwordValidation) {
             const response: ApiResponse = {
@@ -122,7 +134,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
 
         await UserModel.logout(userId);
 
@@ -135,9 +147,7 @@ router.post('/logout', authGuard, async (req, res) => {
         console.error('Ошибка корректного выхода из системы:', error);
         res.clearCookie('token');
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.json(response);
     }
@@ -146,7 +156,7 @@ router.post('/logout', authGuard, async (req, res) => {
 // Текущий пользователь по токену
 router.get('/me', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const userData = await UserModel.findById(userId);
 
         if (!userData) {
@@ -165,6 +175,116 @@ router.get('/me', authGuard, async (req, res) => {
         res.json(response);
     } catch (error) {
         const response = showBackendError(error, `Ошибка получения информации о текущем пользователе`);
+
+        res.status(500).json(response);
+    }
+});
+
+router.post('/change-email', authGuard, async (req, res) => {
+    try {
+        const requestData: ChangeEmailFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
+
+        const newEmailError:boolean = validateUserEmail(requestData.newEmail);
+        const currentPasswordError:boolean = validateUserPassword(requestData.currentPassword);
+
+        if (!newEmailError || !currentPasswordError) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Ошибка смены почты, пожалуйста проверьте введенные вами данные.'
+            };
+            return res.status(400).json(response);
+        }
+
+        await UserModel.changeEmail(userId, requestData);
+
+        const response: ApiResponse = {success: true};
+
+        res.status(200).json(response);
+    } catch (error){
+        const err: any = error;
+
+        if (err?.code === 'INVALID_CURRENT_PASSWORD') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Текущий пароль указан неверно.'
+            };
+            return res.status(400).json(response);
+        }
+
+        if (err?.code === 'USER_NOT_FOUND') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Пользователь не найден.'
+            };
+            return res.status(404).json(response);
+        }
+
+        if (err?.code === 'EMAIL_ALREADY_IN_USE') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Указанная почта уже используется другим аккаунтом.'
+            };
+            return res.status(400).json(response);
+        }
+
+        if (err?.code === 'EMAIL_SAME_AS_CURRENT') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Новый email совпадает с текущим.'
+            };
+            return res.status(400).json(response);
+        }
+
+        const response = showBackendError(error, 'Ошибка при смене почты');
+
+        res.status(500).json(response);
+    }
+});
+
+router.post('/change-password', authGuard, async (req, res) => {
+    try {
+        const requestData: ChangePasswordFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
+
+        const currentPasswordError:boolean = validateUserPassword(requestData.currentPassword);
+        const newPasswordError:boolean = validateUserPassword(requestData.newPassword);
+        const confirmPasswordError:boolean = validateConfirmPassword(requestData.newPassword, requestData.confirmPassword);
+        const twoPasswordError:boolean = validateTwoPassword(requestData.currentPassword, requestData.newPassword);
+
+        if (!currentPasswordError || !newPasswordError || !confirmPasswordError || !twoPasswordError) {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Ошибка смены пароля, пожалуйста проверьте введенные вами данные.'
+            };
+            return res.status(400).json(response);
+        }
+
+        await UserModel.changePassword(userId, requestData);
+
+        const response: ApiResponse = {success: true};
+
+        res.status(200).json(response);
+    } catch (error){
+        const err: any = error;
+
+        if (err?.code === 'INVALID_CURRENT_PASSWORD') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Текущий пароль указан неверно.'
+            };
+            return res.status(400).json(response);
+        }
+
+        if (err?.code === 'USER_NOT_FOUND') {
+            const response: ApiResponse = {
+                success: false,
+                error: 'Пользователь не найден.'
+            };
+            return res.status(404).json(response);
+        }
+
+        const response = showBackendError(error, 'Ошибка при смене пароля');
 
         res.status(500).json(response);
     }

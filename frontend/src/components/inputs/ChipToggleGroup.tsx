@@ -1,6 +1,6 @@
 import {memo} from "react";
 
-interface ChipToggleGroupProps<T extends string> {
+interface IProps<T extends string> {
     id?: string;
     label?: string;
     choices: readonly T[];
@@ -21,7 +21,7 @@ function ChipToggleGroup<T extends string>(
         className = "",
         alwaysSelected = false,
         getLabel,
-    }: ChipToggleGroupProps<T>) {
+    }: IProps<T>) {
 
     return (
         <div className="space-y-2">

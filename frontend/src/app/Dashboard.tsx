@@ -6,7 +6,7 @@ import DashboardQuickActionsCard from "@/components/UI/dashboard/DashboardQuickA
 import DashboardChartCard from "@/components/UI/dashboard/DashboardChartCard";
 import DashboardGoalsCard from "@/components/UI/dashboard/DashboardGoalsCard";
 import {GoalShortyStructure} from "@/types/goal";
-import {NutritionStatisticsGraphicResponse} from "@/types/statistic";
+import {NutritionStatisticsGraphicResponse} from "@/types/statistics";
 import {getUserData, useUserStore} from "@/lib/store/userStore";
 
 interface IProps {
@@ -27,9 +27,7 @@ export default function Dashboard({goalsShortyList, nutritionGraphicData}: IProp
 
                 <section className="grid gap-4 lg:gap-6 grid-cols-1 lg:grid-cols-3">
                     <DashboardStopwatchCard />
-
                     <DashboardCalendarCard />
-
                     <DashboardQuickActionsCard />
                 </section>
 

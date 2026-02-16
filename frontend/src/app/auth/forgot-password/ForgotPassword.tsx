@@ -2,7 +2,7 @@
 
 import {useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateUserEmail} from "@/lib/utils/validators";
+import {validateUserEmail} from "@/lib/utils/validators/user";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";

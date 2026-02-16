@@ -4,7 +4,7 @@ import MainHideInput from "@/components/inputs/MainHideInput";
 import {
     validateConfirmPassword, validateNewPassword,
     validateUserPassword
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/user";
 import {useMemo} from "react";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
@@ -25,9 +25,9 @@ interface ChangePasswordFormValues {
 
 export default function ChangePassword(){
 
-    const {register, handleSubmit, getValues, formState: { errors }} = useForm<ChangePasswordFormValues>()
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<ChangePasswordFormValues>()
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router}  = usePageUtils();
 
     const onSubmit = async (values: ChangePasswordFormValues)=> {
         setServerError(null);
@@ -40,7 +40,7 @@ export default function ChangePassword(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/settings/change-password', payload)
+            await api.post<BackendApiResponse>('/user/change-password', payload)
 
             router.push("/settings/profile");
         } catch (err) {
@@ -50,7 +50,6 @@ export default function ChangePassword(){
             if (showErrorMessage) console.error('change password error:', err);
 
             setIsSubmitting(false);
-
         }
     }
 

@@ -5,11 +5,7 @@ import {GoalShortyStructure} from "@/types/goal";
 import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
 import {secondDarkColorTheme} from "@/styles";
 
-interface DashboardGoalsCardProps {
-    goalsShortyList: GoalShortyStructure[];
-}
-
-function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
+function DashboardGoalsCard({goalsShortyList}: {goalsShortyList: GoalShortyStructure[]}) {
 
     const hasGoals = goalsShortyList && goalsShortyList.length > 0;
     const visibleGoals = hasGoals ? goalsShortyList.slice(0, 6) : [];
@@ -22,10 +18,12 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
                     <p className="text-xs uppercase tracking-wide text-emerald-500 font-semibold">
                         Цели
                     </p>
+
                     <h2 className="text-lg dark:text-white font-semibold text-emerald-900">
                         Ваши актуальные цели
                     </h2>
                 </div>
+
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 dark:text-emerald-500
                 dark:bg-neutral-800 dark:border-neutral-700 text-emerald-600 border border-emerald-100">
                     <SparklesIcon className="h-5 w-5" />
@@ -62,10 +60,7 @@ function DashboardGoalsCard({goalsShortyList}: DashboardGoalsCardProps) {
 
             {hasMore && (
                 <div className="flex justify-center">
-                    <Link
-                        href="/goals"
-                        className="inline-flex items-center text-xs font-medium text-emerald-700 hover:text-emerald-800"
-                    >
+                    <Link href="/goals" className="inline-flex items-center text-xs font-medium text-emerald-700 hover:text-emerald-800">
                         Перейти к полному списку
                     </Link>
                 </div>

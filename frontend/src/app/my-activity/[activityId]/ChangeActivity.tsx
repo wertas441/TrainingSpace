@@ -16,7 +16,7 @@ import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityIt
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types";
-import {deleteActivity} from "@/lib/controllers/activity";
+import {buildExercisesPayload, deleteActivity} from "@/lib/controllers/activity";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
@@ -26,7 +26,7 @@ import {
     validateActivityDescription,
     validateActivityName,
     validateActivitySets,
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/activity";
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";
@@ -54,8 +54,10 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
     })
 
     const trainingId = watch('trainingId')
+
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
-    const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
+
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow()
 
     const {
         handleChangeTraining,
@@ -74,7 +76,6 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
     const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(() => {
         const initial: ExerciseSetsByExerciseId = {};
 
-        // Заполняем подходы, которые уже есть у активности
         (activityInfo.exercises || []).forEach((ex) => {
             initial[ex.exercisesId] = ex.try.map((s) => ({
                 id: s.id,
@@ -83,7 +84,6 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
             }));
         });
 
-        // Добавляем "пустые" упражнения из тренировки, по которым ещё нет подходов
         const relatedTraining = myTrainings.find(
             (t) => t.id === activityInfo.trainingId
         );
@@ -120,6 +120,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
 
     const validateForm = (): boolean => {
         const setsError = validateActivitySets(exerciseSets);
+
         if (setsError) {
             setSetsError(setsError);
         } else {
@@ -138,46 +139,23 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
 
         setIsSubmitting(true);
 
-        // Оставляем только те упражнения и подходы, где вес и повторения > 0
-        const exercisesPayload = Object.entries(exerciseSets).reduce<
-            { exercisesId: number; try: { id: number; weight: number; quantity: number }[] }[]
-        >((acc, [exId, sets]) => {
-            const validSets = (sets || []).filter(
-                (s) =>
-                    Number.isFinite(s.weight) &&
-                    s.weight > 0 &&
-                    Number.isFinite(s.quantity) &&
-                    s.quantity > 0
-            );
+        const exercisesPayload = buildExercisesPayload(exerciseSets);
 
-            if (validSets.length > 0) {
-                acc.push({
-                    exercisesId: Number(exId),
-                    try: validSets.map((s) => ({
-                        id: s.id,
-                        weight: s.weight,
-                        quantity: s.quantity,
-                    })),
-                });
-            }
-
-            return acc;
-        }, []);
 
         const payload = {
-            requestData: {
-                id: activityInfo.id,
-                publicId: activityInfo.publicId,
-                activityId: activityInfo.publicId,
-                name: values.activityName,
-                description: values.activityDescription,
-                activityDate: values.activityDate,
-                type: values.activityType,
-                difficulty: values.activityDifficulty,
-                trainingId: Number(values.trainingId),
-                exercises: exercisesPayload,
-            }
+            id: activityInfo.id,
+            publicId: activityInfo.publicId,
+            activityId: activityInfo.publicId,
+            name: values.activityName,
+            description: values.activityDescription,
+            activityDate: values.activityDate,
+            type: values.activityType,
+            difficulty: values.activityDifficulty,
+            trainingId: Number(values.trainingId),
+            exercises: exercisesPayload,
         }
+
+        console.log(payload);
 
         try {
             await api.put<BackendApiResponse>('/activity/activity', payload)

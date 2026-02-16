@@ -2,7 +2,7 @@ import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
 import {thirdDarkColorTheme} from "@/styles";
 
-interface MainPaginationProps{
+interface IProps{
     currentPage: number;
     totalPages: number;
     totalItems: number;
@@ -17,7 +17,7 @@ function MainPagination(
         totalItems,
         setCurrentPage,
         itemsPerPage,
-    }:MainPaginationProps){
+    }:IProps){
 
     return (
         <>
@@ -34,6 +34,7 @@ function MainPagination(
                     >
                         <ArrowLeftIcon className={'h-4 w-4'} />
                     </button>
+
                     <div className="flex items-center gap-2">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).slice(0, 7).map(p => (
                             <button
@@ -52,6 +53,7 @@ function MainPagination(
                             <span className="px-1 text-sm text-gray-500">…</span>
                         )}
                     </div>
+
                     <button
                         type="button"
                         className={`px-3 py-1.5 text-sm  cursor-pointer rounded-md border 
@@ -74,6 +76,7 @@ function MainPagination(
                 <div className="text-center text-xs text-gray-600">
                     Показано {Math.min(currentPage * itemsPerPage, totalItems)} из {totalItems}
                 </div>
+
                 <div className="flex items-center py-3 justify-center gap-2">
                     <button
                         type="button"
@@ -83,9 +86,11 @@ function MainPagination(
                     >
                         <ArrowLeftIcon className={'h-4 w-4'} />
                     </button>
+
                     <div className="px-3 py-1 bg-white rounded-md border border-emerald-600 text-sm text-emerald-800">
                         {currentPage} / {totalPages}
                     </div>
+
                     <button
                         type="button"
                         className={`px-3 py-1.5 cursor-pointer text-sm rounded-md border ${currentPage === totalPages ? 'text-gray-300 border-gray-200 cursor-not-allowed' : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'}`}

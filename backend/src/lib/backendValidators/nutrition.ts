@@ -1,4 +1,25 @@
-export const validateDayName = (dayName: string): boolean => {
+import {AddNewDayFrontendStructure} from "../../types/nutrition";
+
+export const validateNutritionDayData = (dayData: AddNewDayFrontendStructure) => {
+
+    if (!dayData) {
+        return false;
+    }
+
+    const checks = [
+        validateDayName(dayData.name),
+        validateDayDescription(dayData.description),
+        validateCalories(dayData.calories),
+        validateProtein(dayData.protein),
+        validateFat(dayData.fat),
+        validateCarb(dayData.carb),
+        validateNutritionDayDate(dayData.date),
+    ].flat();
+
+    return checks.every(Boolean);
+}
+
+const validateDayName = (dayName: string): boolean => {
     if(!dayName.trim()){
         return false;
     }
@@ -20,7 +41,7 @@ export const validateDayName = (dayName: string): boolean => {
     return true;
 }
 
-export const validateNutritionDayDate = (dayDate: string): boolean => {
+const validateNutritionDayDate = (dayDate: string): boolean => {
     if (!dayDate.trim()) {
         return false;
     }
@@ -63,23 +84,23 @@ const validateNumberInRange = (value: number, min: number, max: number): boolean
     return true;
 }
 
-export const validateCalories = (calories: number): boolean => {
+const validateCalories = (calories: number): boolean => {
     return validateNumberInRange(calories, 1, 100000);
 }
 
-export const validateProtein = (protein: number): boolean => {
+const validateProtein = (protein: number): boolean => {
     return validateNumberInRange(protein, 1, 1000);
 }
 
-export const validateFat = (fat: number): boolean => {
+const validateFat = (fat: number): boolean => {
     return validateNumberInRange(fat, 1, 1000);
 }
 
-export const validateCarb = (carb: number): boolean => {
+const validateCarb = (carb: number): boolean => {
     return validateNumberInRange(carb, 1, 1000);
 }
 
-export const validateDayDescription = (description: string): boolean => {
+const validateDayDescription = (description: string): boolean => {
     if (description.length > 500) {
         return false;
     }

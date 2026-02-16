@@ -5,25 +5,25 @@ import {
     AddNewGoalFrontendStructure,
     GoalUpdateFrontendStructure
 } from "../types/goal";
-import { validateGoalDescription, validateGoalName, validateGoalPriority } from "../lib/backendValidators/goal";
+import {
+    validateGoalData,
+} from "../lib/backendValidators/goal";
 import { GoalModel } from "../models/Goal";
-import {showBackendError} from "../lib/indexUtils";
+import {showBackendError} from "../lib";
 
 const router = Router();
 
 router.post('/goal', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: AddNewGoalFrontendStructure} = req.body;
-        const userId = (req as any).userId as number;
+        const requestData: AddNewGoalFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
 
-        const goalNameError:boolean = validateGoalName(requestData.name);
-        const goalDescriptionError:boolean = validateGoalDescription(requestData.description);
-        const goalPriorityError:boolean = validateGoalPriority(requestData.priority);
+        const validateResult = validateGoalData(requestData);
 
-        if (!goalNameError || !goalDescriptionError || !goalPriorityError) {
+        if (!validateResult) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Ошибка добавления новой цели, пожалуйста проверьте введенные вами данные.'
+                error: 'Ошибка добавления новой цели, пожалуйста проверьте введенные вами данные'
             };
             return res.status(400).json(response);
         }
@@ -42,7 +42,7 @@ router.post('/goal', authGuard, async (req, res) => {
 
 router.get('/goals', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const goals = await GoalModel.getList(userId);
         
         const response: ApiResponse = {
@@ -60,7 +60,7 @@ router.get('/goals', authGuard, async (req, res) => {
 
 router.get('/short-goals', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const goals = await GoalModel.getShortyList(userId);
 
         const response: ApiResponse = {
@@ -79,11 +79,9 @@ router.get('/short-goals', authGuard, async (req, res) => {
 router.delete('/goal', authGuard, async (req, res) => {
     try {
         const { goalId } = req.body;
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
 
-        const goalPublicId = String(goalId || '').trim();
-
-        if (!goalPublicId) {
+        if (!goalId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор цели.',
@@ -91,19 +89,17 @@ router.delete('/goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const isDeleted = await GoalModel.delete(userId, goalPublicId);
+        const isDeleted = await GoalModel.delete(userId, goalId);
 
         if (!isDeleted) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Цель не найдена или у вас нет доступа для ее удаления.',
+                error: 'Цель не найдена или у вас нет доступа для ее удаления',
             };
             return res.status(404).json(response);
         }
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error){
@@ -115,13 +111,13 @@ router.delete('/goal', authGuard, async (req, res) => {
 
 router.get('/about-my-goal', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const goalPublicId = String(req.query.goalId || '').trim();
 
         if (!goalPublicId) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Некорректный идентификатор цели.',
+                error: 'Некорректный идентификатор цели',
             };
             return res.status(400).json(response);
         }
@@ -131,7 +127,7 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
         if (!goal) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Цель не найдена или у вас нет к ней доступа.',
+                error: 'Цель не найдена или у вас нет к ней доступа',
             };
 
             return res.status(404).json(response);
@@ -152,12 +148,10 @@ router.get('/about-my-goal', authGuard, async (req, res) => {
 
 router.put('/goal', authGuard, async (req, res) => {
     try {
-        const { requestData }: {requestData: GoalUpdateFrontendStructure} = req.body;
-        const userId = (req as any).userId as number;
+        const requestData: GoalUpdateFrontendStructure = req.body;
+        const userId:number = (req as any).userId;
 
-        const goalPublicId = String(requestData.goalId || '').trim();
-
-        if (!goalPublicId) {
+        if (!requestData.goalId) {
             const response: ApiResponse = {
                 success: false,
                 error: 'Некорректный идентификатор цели.',
@@ -165,23 +159,19 @@ router.put('/goal', authGuard, async (req, res) => {
             return res.status(400).json(response);
         }
 
-        const goalNameValid = validateGoalName(requestData.name);
-        const goalDescriptionValid = validateGoalDescription(requestData.description);
-        const goalPriorityValid = validateGoalPriority(requestData.priority);
+        const validateResult = validateGoalData(requestData);
 
-        if (!goalNameValid || !goalDescriptionValid || !goalPriorityValid) {
+        if (!validateResult) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Ошибка изменения цели, пожалуйста проверьте введенные вами данные.'
+                error: 'Ошибка изменения цели, пожалуйста проверьте введенные вами данные'
             };
             return res.status(400).json(response);
         }
 
         await GoalModel.update(userId, requestData);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {
@@ -194,21 +184,19 @@ router.put('/goal', authGuard, async (req, res) => {
 router.put('/complete-goal', authGuard, async (req, res) => {
     try {
         const { goalId } = req.body;
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
 
         if (!goalId) {
             const response: ApiResponse = {
                 success: false,
-                error: 'Некорректный идентификатор цели.',
+                error: 'Некорректный идентификатор цели',
             };
             return res.status(400).json(response);
         }
 
         await GoalModel.complete(userId, goalId);
 
-        const response: ApiResponse = {
-            success: true,
-        };
+        const response: ApiResponse = { success: true };
 
         res.status(200).json(response);
     } catch (error) {
@@ -220,7 +208,7 @@ router.put('/complete-goal', authGuard, async (req, res) => {
 
 router.get('/completed-goals', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const goals = await GoalModel.getCompleteList(userId);
 
         const response: ApiResponse = {

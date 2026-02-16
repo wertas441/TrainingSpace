@@ -2,7 +2,7 @@ import AddNewTraining from "@/app/my-training/add/AddNewTraining";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
 import ErrorState from "@/components/errors/ErrorState";
-import {getExercisesList} from "@/lib/controllers/training";
+import {getExercisesList} from "@/lib";
 
 export const metadata: Metadata = {
     title: 'Добавить новую тренировку | TrainingSpace',
@@ -33,5 +33,5 @@ export default async function AddNewTrainingPage(){
         );
     }
 
-    return <AddNewTraining exercises = {exercises} />
+    return <AddNewTraining exercises={exercises} />
 }

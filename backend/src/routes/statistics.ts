@@ -1,19 +1,19 @@
 import {Router} from 'express';
 import {authGuard} from '../middleware/authMiddleware';
-import {StatisticsModel} from "../models/Statistic";
+import {StatisticsModel} from "../models/Statistics";
 import {
     MainStatisticsBackendResponse,
     NutritionGraphicBackendResponse,
     NutritionStatisticsBackendResponse
-} from "../types/statistic";
+} from "../types/statistics";
 import {ApiResponse} from "../types";
-import {showBackendError} from "../lib/indexUtils";
+import {showBackendError} from "../lib";
 
 const router = Router();
 
 router.get('/main-information', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const mainCardsData = await StatisticsModel.getMainInformation(userId);
 
         const response: ApiResponse<{ mainCardsData: MainStatisticsBackendResponse }> = {
@@ -31,7 +31,7 @@ router.get('/main-information', authGuard, async (req, res) => {
 
 router.get('/nutrition-information', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const nutritionCardData = await StatisticsModel.getNutritionInformation(userId);
 
         const response: ApiResponse<{ nutritionCardData: NutritionStatisticsBackendResponse }> = {
@@ -47,9 +47,9 @@ router.get('/nutrition-information', authGuard, async (req, res) => {
     }
 });
 
-router.get('/nutrition-graphic-info', authGuard, async (req, res) => {
+router.get('/nutrition-graphic', authGuard, async (req, res) => {
     try {
-        const userId = (req as any).userId as number;
+        const userId:number = (req as any).userId;
         const graphicData = await StatisticsModel.getNutritionGraphicInformation(userId);
 
         const response: ApiResponse<{ graphicData: NutritionGraphicBackendResponse[] }> = {

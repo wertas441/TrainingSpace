@@ -26,6 +26,17 @@ export interface AddActivityFrontendRequest {
     exercises: ActivityExerciseRequest[];
 }
 
+export interface UpdateActivityFrontendRequest {
+    publicId: string;
+    name: string;
+    description: string;
+    type: ActivityTypeStructure;
+    difficulty: ActivityDifficultyStructure;
+    trainingId: number;
+    activityDate: string;
+    exercises: ActivityExerciseRequest[];
+}
+
 
 export interface ActivityExerciseFrontend {
     exercisesId: number;

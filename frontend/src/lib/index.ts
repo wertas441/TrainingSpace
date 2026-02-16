@@ -1,4 +1,5 @@
 import {BackendApiResponse} from "@/types";
+import type {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import axios from "axios";
 
 export function getTokenHeaders(token: string) {
@@ -22,6 +23,27 @@ export function getServerErrorMessage(err: unknown){
     }
 
     return message;
+}
+
+export async function getExercisesList(tokenValue: string):Promise<ExerciseTechniqueItem[] | undefined>{
+
+    const payload = {
+        headers: getTokenHeaders(tokenValue),
+    }
+
+    try {
+        const { data } = await api.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>('/exercises/exercises', payload);
+
+        if (!data.success || !data.data?.exercises) {
+            return undefined;
+        }
+
+        return data.data.exercises;
+    } catch (error) {
+        console.error("Ошибка запроса списка упражнений:", error);
+
+        return undefined;
+    }
 }
 
 export const normalizeToYMD = (dateStr: string): string => {

@@ -7,12 +7,14 @@ export function useModalWindowRef(isFilterWindowOpen: boolean, toggleFilterWindo
 
     useEffect(() => {
         if (!isFilterWindowOpen) return;
+
         const handleOutside = (e: MouseEvent) => {
             const target = e.target as Node;
             if (modalWindowRef.current && modalWindowRef.current.contains(target)) return;
             if (toggleBtnRef.current && toggleBtnRef.current.contains(target)) return;
             toggleFilterWindow();
         };
+
         document.addEventListener('mousedown', handleOutside);
         return () => document.removeEventListener('mousedown', handleOutside);
     }, [isFilterWindowOpen, toggleFilterWindow]);

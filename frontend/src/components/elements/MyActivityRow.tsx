@@ -1,24 +1,24 @@
 import {CalendarDaysIcon, ChevronDownIcon, ChevronUpIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback, useMemo, useState} from "react";
 import {ActivityDataStructure} from "@/types/activity";
-import {ExerciseTechniqueItem} from "@/types/exercise";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {getTrainingExercises} from "@/lib/controllers/activity";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/styles";
 
-interface MyActivityRowProps {
-    activity: ActivityDataStructure;
-}
 
-function MyActivityRow({activity}: MyActivityRowProps){
+function MyActivityRow({activity}: {activity: ActivityDataStructure}){
 
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
     const [isLoadingExercises, setIsLoadingExercises] = useState<boolean>(false);
+
     const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[] | null>(null);
+
     const [loadError, setLoadError] = useState<string | null>(null);
 
-    const {router} = usePageUtils();
+    const { goToPage }  = usePageUtils();
 
     const toggleExpanded = useCallback(async () => {
         setIsExpanded((prev) => !prev);
@@ -27,10 +27,12 @@ function MyActivityRow({activity}: MyActivityRowProps){
             try {
                 setIsLoadingExercises(true);
                 setLoadError(null);
+
                 const data = await getTrainingExercises(activity.trainingId);
                 setTrainingExercises(data);
             } catch (e) {
                 console.error('Ошибка загрузки упражнений тренировки:', e);
+
                 setLoadError('Не удалось загрузить упражнения тренировки');
             } finally {
                 setIsLoadingExercises(false);
@@ -48,12 +50,9 @@ function MyActivityRow({activity}: MyActivityRowProps){
         };
     }, [activity.name, activity.activityDate, activity.description, activity.type, activity.difficulty]);
 
-    const handleEditClick = useCallback(() => {
-        router.push(`/my-activity/${activity.publicId}`);
-    }, [router, activity.publicId]);
-
     return (
-        <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition cursor-pointer`}
+        <div
+            className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition cursor-pointer`}
             onClick={toggleExpanded}
         >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 items-start md:items-center">
@@ -61,7 +60,7 @@ function MyActivityRow({activity}: MyActivityRowProps){
                     <div className={`${iconDarkColorTheme} border rounded-full p-1.5 sm:p-2 border-emerald-200 flex items-center justify-center`}>
                         {isExpanded ? (
                             <ChevronDownIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-                            ) : (
+                        ) : (
                             <ChevronUpIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                         )}
                     </div>
@@ -69,11 +68,13 @@ function MyActivityRow({activity}: MyActivityRowProps){
                     <div className="">
                         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                             <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{activityHeader.name}</h3>
-                            <span className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-600 dark:text-white">
-							<CalendarDaysIcon className="w-4 h-4" />
+
+                             <span className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-600 dark:text-white">
+							    <CalendarDaysIcon className="w-4 h-4" />
                                 {activityHeader.date}
-						</span>
+						    </span>
                         </div>
+
                         {activityHeader.description && (
                             <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-emerald-500">
                                 {activityHeader.description}
@@ -89,17 +90,16 @@ function MyActivityRow({activity}: MyActivityRowProps){
                                 lg:text-base font-medium border ${getColorStyles(activityHeader.type)}`}>
                                 {activityHeader.type}
                             </span>
-                        <span className={`inline-flex items-center rounded-full  px-2.5 py-1 text-xs sm:text-sm lg:text-base
+
+                            <span className={`inline-flex items-center rounded-full  px-2.5 py-1 text-xs sm:text-sm lg:text-base
                             font-medium border ${getColorStyles(activityHeader.difficulty)}`}>
                                 {activityHeader.difficulty}
                             </span>
                         </div>
-                        <div
-                            className="w-full md:w-auto "
-                            onClick={(event) => event.stopPropagation()}
-                        >
+
+                        <div className="w-full md:w-auto" onClick={(event) => event.stopPropagation()}>
                             <ChangeButton
-                                onClick={handleEditClick}
+                                onClick={() => goToPage(`/my-activity/${activity.publicId}`)}
                                 className={`w-full`}
                             />
                         </div>
@@ -129,10 +129,8 @@ function MyActivityRow({activity}: MyActivityRowProps){
                                     <div key={ex.exercisesId} className={`dark:bg-neutral-800 dark:border-neutral-600
                                     rounded-lg bg-emerald-50/60 border border-emerald-100 px-3 py-2`}>
                                         <div className="flex items-center justify-between gap-2">
-                                            <div>
-                                                <div className="text-sm font-semibold text-emerald-900 dark:text-white">
-                                                    {exerciseInfo?.name ?? `Упражнение #${ex.exercisesId}`}
-                                                </div>
+                                            <div className="text-sm font-semibold text-emerald-900 dark:text-white">
+                                                {exerciseInfo?.name}
                                             </div>
                                         </div>
                                         <div className="mt-2 flex flex-wrap gap-2">

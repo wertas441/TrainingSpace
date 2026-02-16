@@ -1,26 +1,6 @@
 import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import {TrainingListResponse} from "@/types/training";
-import {ExerciseTechniqueItem} from "@/types/exercise";
-
-export async function getExercisesList(tokenValue: string):Promise<ExerciseTechniqueItem[] | undefined>{
-
-    const payload = {
-        headers: getTokenHeaders(tokenValue),
-    }
-
-    try {
-        const { data } = await api.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>('/exercises/exercises', payload);
-
-        if (!data.success || !data.data?.exercises) return undefined;
-
-        return data.data.exercises;
-    } catch (error) {
-        console.error(getServerErrorMessage(error) || "Ошибка запроса листа тренировок");
-
-        return undefined;
-    }
-}
 
 export async function getTrainingList(tokenValue: string):Promise<TrainingListResponse[] | undefined> {
 
@@ -49,7 +29,9 @@ export async function getTrainingInformation(tokenValue: string, trainingId: str
 
     try {
         const { data } = await api.get<BackendApiResponse<{ training: TrainingListResponse }>>(
-            `/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`, payload);
+            `/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`,
+            payload
+        );
 
         if (!data.success || !data.data?.training) return undefined;
 

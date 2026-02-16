@@ -8,12 +8,11 @@ import cookieParser from 'cookie-parser';
 import apiRoutes from './routes';
 import userRoutes from './routes/user';
 import goalRoutes from './routes/goal';
-import trainingRoute from './routes/training';
-import nutritionRoute from './routes/nutrition';
-import exerciseRoute from './routes/exercise';
-import activityRoute from './routes/activity';
-import settingRoute from './routes/setting';
-import statisticRoute from './routes/statistic';
+import trainingRoutes from './routes/training';
+import nutritionRoutes from './routes/nutrition';
+import exercisesRoutes from './routes/exercises';
+import activityRoutes from './routes/activity';
+import statisticsRoutes from './routes/statistics';
 
 import { config } from './config';
 import { testConnection, closePool } from './config/database';
@@ -46,13 +45,13 @@ app.use(cookieParser()); // Куки
 
 app.use('/api', apiRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/goal', goalRoutes);
-app.use('/api/nutrition', nutritionRoute);
-app.use('/api/training', trainingRoute);
-app.use('/api/exercises', exerciseRoute);
-app.use('/api/activity', activityRoute);
-app.use('/api/settings', settingRoute);
-app.use('/api/statistics', statisticRoute);
+app.use('/api/nutrition', nutritionRoutes);
+app.use('/api/training', trainingRoutes);
+app.use('/api/exercises', exercisesRoutes);
+app.use('/api/activity', activityRoutes);
+app.use('/api/statistics', statisticsRoutes);
 
 app.use((req, res) => {
     res.status(404).json({
@@ -61,10 +60,8 @@ app.use((req, res) => {
     });
 });
 
-// Обработка ошибок
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     const isDev = process.env.NODE_ENV !== 'production';
-    // Расширенное логирование в консоль
     console.error('Глобальная ошибка:', {
         path: req.originalUrl,
         method: req.method,
@@ -77,22 +74,18 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
     });
 });
 
-// Инициализация и запуск сервера
 const startServer = async () => {
     try {
-        // Тестируем подключение к базе данных
         const dbConnected = await testConnection();
         if (!dbConnected) {
             console.error('Не удалось подключиться к базе данных');
             process.exit(1);
         }
 
-        // Инициализация схемы и сидирование включаются флагами окружения
         if (shouldInit) {
             await initDatabase();
         }
 
-        // Запускаем HTTP сервер
         server = http.createServer(app);
 
         server.listen(PORT, () => {

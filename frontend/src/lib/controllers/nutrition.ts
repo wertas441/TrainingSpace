@@ -29,7 +29,9 @@ export async function getDayInformation(tokenValue: string, dayId: string):Promi
 
     try {
         const { data } = await api.get<BackendApiResponse<{ day: NutritionDay }>>(
-            `/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`, payload);
+            `/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`,
+            payload
+        );
 
         if (!data.success || !data.data?.day) return undefined;
 

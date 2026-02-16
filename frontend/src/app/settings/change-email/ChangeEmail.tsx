@@ -4,7 +4,7 @@ import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators";
+import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators/user";
 import {useMemo} from "react";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, AtSymbolIcon} from "@heroicons/react/24/outline";
@@ -21,9 +21,9 @@ interface ChangeEmailFormValues {
 
 export default function ChangeEmail(){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<ChangeEmailFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<ChangeEmailFormValues>()
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
     const changeEmail = useUserStore((s) => s.changeEmail);
 
     const onSubmit = async (values: ChangeEmailFormValues)=> {
@@ -36,7 +36,7 @@ export default function ChangeEmail(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/settings/change-email', payload)
+            await api.post<BackendApiResponse>('/user/change-email', payload)
 
             changeEmail(values.newEmail)
             router.push("/settings/profile");
@@ -47,7 +47,6 @@ export default function ChangeEmail(){
             if (showErrorMessage) console.error('change email error:', err);
 
             setIsSubmitting(false);
-
         }
     }
 

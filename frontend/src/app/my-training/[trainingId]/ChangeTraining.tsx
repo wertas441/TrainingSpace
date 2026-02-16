@@ -1,12 +1,12 @@
 'use client'
 
 import {TrainingListResponse} from "@/types/training";
-import type {ExerciseTechniqueItem} from "@/types/exercise";
+import type {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {useCallback, useEffect, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
-import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators";
+import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators/training";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {BackendApiResponse} from "@/types";
 import ServerError from "@/components/errors/ServerError";
@@ -47,8 +47,8 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
-    const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow();
 
     const initialSelectedExerciseIds = trainingInfo.exercises;
 
@@ -94,12 +94,10 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                trainingId: trainingInfo.publicId,
-                name: values.trainingName,
-                description: values.trainingDescription,
-                exercises: selectedExerciseIds,
-            }
+            trainingId: trainingInfo.publicId,
+            name: values.trainingName,
+            description: values.trainingDescription,
+            exercises: selectedExerciseIds,
         }
 
         try {

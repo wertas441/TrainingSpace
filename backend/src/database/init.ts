@@ -15,6 +15,7 @@ export const initDatabase = async (): Promise<void> => {
 
         await seedExercises();
 
+
         console.log('База данных успешно инициализирована и заполнена упражнениями');
     } catch (error) {
         console.error('Ошибка при инициализации базы данных:', error);

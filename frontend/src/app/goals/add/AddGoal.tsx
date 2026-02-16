@@ -12,7 +12,7 @@ import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {
     validateGoalDescription,
     validateGoalName,
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/goal";
 import type {BackendApiResponse} from "@/types";
 import {Controller, useForm} from "react-hook-form";
 
@@ -26,18 +26,16 @@ export default function AddGoal() {
         }
     })
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils()
 
     const onSubmit = async (values: GoalFormValues)=> {
         setServerError(null);
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                name: values.goalName,
-                description: values.goalDescription,
-                priority: values.goalPriority,
-            }
+            name: values.goalName,
+            description: values.goalDescription,
+            priority: values.goalPriority,
         }
 
         try {
@@ -61,6 +59,7 @@ export default function AddGoal() {
                     <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white">
                         Добавить цель
                     </h2>
+
                     <p className="text-center text-gray-600 dark:text-gray-300">
                         Добавьте цель в свой список и стремитесь ее выполнить
                     </p>
@@ -69,7 +68,6 @@ export default function AddGoal() {
                 <ServerError message={serverError} />
 
                 <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-
                     <MainInput
                         id={'goalName'}
                         label={'Название цели'}

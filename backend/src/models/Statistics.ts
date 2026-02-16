@@ -3,11 +3,12 @@ import {
     MainStatisticsBackendResponse,
     NutritionGraphicBackendResponse,
     NutritionStatisticsBackendResponse
-} from "../types/statistic";
+} from "../types/statistics";
 
 export class StatisticsModel {
 
     static async getMainInformation(userId: number): Promise<MainStatisticsBackendResponse> {
+
         const query = `
             SELECT (
                     SELECT COUNT(DISTINCT day_date)
@@ -60,6 +61,7 @@ export class StatisticsModel {
     }
 
     static async getNutritionGraphicInformation(userId: number): Promise<NutritionGraphicBackendResponse[]> {
+
         const query = `
             SELECT  to_char(day_date::date, 'DD-MM-YYYY') AS date,
                     SUM(calories) AS calories,

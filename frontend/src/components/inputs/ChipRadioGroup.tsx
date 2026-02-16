@@ -1,6 +1,6 @@
 import {memo} from "react";
 
-interface ChipRadioGroupProps<T extends string> {
+interface IProps<T extends string> {
     id: string;
     label: string;
     choices: T[];
@@ -17,7 +17,7 @@ function ChipRadioGroup<T extends string>(
         value,
         onChange,
         className = "",
-    }: ChipRadioGroupProps<T>) {
+    }: IProps<T>) {
 
     return (
         <div className="space-y-2">

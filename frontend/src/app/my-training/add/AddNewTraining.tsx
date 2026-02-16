@@ -14,10 +14,10 @@ import {
     validateTrainingDescription,
     validateTrainingExercises,
     validateTrainingName
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/training";
 import MainPagination from "@/components/UI/other/MainPagination";
 import type {BackendApiResponse} from "@/types";
-import {ExerciseTechniqueItem} from "@/types/exercise";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import NullElementsError from "@/components/errors/NullElementsError";
@@ -31,7 +31,7 @@ interface AddNewTrainingFormValues {
 
 export default function AddNewTraining({exercises}:{exercises: ExerciseTechniqueItem[]}){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<AddNewTrainingFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<AddNewTrainingFormValues>()
 
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;
@@ -80,11 +80,9 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                name: values.trainingName,
-                description: values.trainingDescription,
-                exercises: selectedExerciseIds,
-            }
+            name: values.trainingName,
+            description: values.trainingDescription,
+            exercises: selectedExerciseIds,
         }
 
         try {
@@ -109,6 +107,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                         <h2 className="text-2xl pb-2 font-semibold text-center text-gray-900 dark:text-white">
                             Добавить новую тренировку
                         </h2>
+
                         <p className="text-center text-gray-600 dark:text-gray-400">
                             Заполните данные для отслеживания
                         </p>

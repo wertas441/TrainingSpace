@@ -1,8 +1,9 @@
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getExercisesList, getTrainingInformation} from "@/lib/controllers/training";
+import {getTrainingInformation} from "@/lib/controllers/training";
 import ChangeTraining from "@/app/my-training/[trainingId]/ChangeTraining";
 import ErrorState from "@/components/errors/ErrorState";
+import {getExercisesList} from "@/lib";
 
 export const metadata: Metadata = {
     title: "Изменение тренировки | TrainingSpace",
@@ -10,14 +11,12 @@ export const metadata: Metadata = {
 }
 
 interface ChangeTrainingPageProps {
-    params: Promise<{
-        trainingId: string;
-    }>
+    params: Promise<{ trainingId: string }>
 }
 
 export default async function ChangeTrainingPage({params}: ChangeTrainingPageProps){
-
     const { trainingId } = await params;
+
     const tokenValue = (await cookies()).get('token')?.value;
 
     if (!tokenValue) {

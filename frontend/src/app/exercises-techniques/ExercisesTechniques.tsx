@@ -5,30 +5,34 @@ import {memo, useCallback, useEffect, useMemo, useState} from "react";
 import ExerciseRow from "@/components/elements/ExerciseRow";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
-import {ExerciseTechniqueItem} from "@/types/exercise";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {ExerciseDifficultFilter} from "@/types";
 import NullElementsError from "@/components/errors/NullElementsError";
 
 function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
     const [searchName, setSearchName] = useState<string>('');
-    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
 
+    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
     const [difficultFilter, setDifficultFilter] = useState<ExerciseDifficultFilter>(null);
     const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
 
     const itemsPerPage:number = 10;
 
     const toggleFilterWindow = useCallback(() => {
-        setIsFilterWindowOpen(!isFilterWindowOpen);
-    }, [isFilterWindowOpen]);
+        setIsFilterWindowOpen(prevState => !prevState);
+    }, []);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
+
         return exercises.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
+
             const matchesDifficulty = difficultFilter === null || e.difficulty === difficultFilter;
+
             const matchesPart = partOfBodyFilter.length === 0 || e.partOfTheBody.some(p => partOfBodyFilter.includes(p));
+
             return matchesName && matchesDifficulty && matchesPart;
         });
     }, [searchName, exercises, difficultFilter, partOfBodyFilter]);

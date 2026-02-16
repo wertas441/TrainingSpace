@@ -3,7 +3,7 @@
 import {useMemo} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import Link from "next/link";
-import {validateUserName, validateUserPassword} from "@/lib/utils/validators";
+import {validateUserName, validateUserPassword} from "@/lib/utils/validators/user";
 import MainInput from "@/components/inputs/MainInput";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";

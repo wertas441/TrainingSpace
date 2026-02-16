@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import MyTraining from "@/app/my-training/MyTraining";
 import {cookies} from "next/headers";
-import {getExercisesList, getTrainingList} from "@/lib/controllers/training";
+import {getTrainingList} from "@/lib/controllers/training";
 import ErrorState from "@/components/errors/ErrorState";
+import {getExercisesList} from "@/lib";
 
 export const metadata: Metadata = {
     title: 'Мои тренировки | TrainingSpace',

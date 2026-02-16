@@ -8,6 +8,7 @@ import ServerError from "@/components/errors/ServerError";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
+import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activity";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
@@ -16,11 +17,11 @@ import {
     validateActivityDescription,
     validateActivityName,
     validateActivitySets,
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/activity";
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";
-import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activity";
+import {buildExercisesPayload} from "@/lib/controllers/activity";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
@@ -63,6 +64,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
     const validateForm = (): boolean => {
         const setsError = validateActivitySets(exerciseSets);
+
         if (setsError) {
             setSetsError(setsError);
         } else {
@@ -81,41 +83,16 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
 
         setIsSubmitting(true);
 
-        const exercisesPayload = Object.entries(exerciseSets).reduce<
-            { id: number; try: { id: number; weight: number; quantity: number }[] }[]
-        >((acc, [exId, sets]) => {
-            const validSets = (sets || []).filter(
-                (s) =>
-                    Number.isFinite(s.weight) &&
-                    s.weight > 0 &&
-                    Number.isFinite(s.quantity) &&
-                    s.quantity > 0
-            );
-
-            if (validSets.length > 0) {
-                acc.push({
-                    id: Number(exId),
-                    try: validSets.map((s) => ({
-                        id: s.id,
-                        weight: s.weight,
-                        quantity: s.quantity,
-                    })),
-                });
-            }
-
-            return acc;
-        }, []);
+        const exercisesPayload = buildExercisesPayload(exerciseSets);
 
         const payload = {
-            requestData: {
-                activityName: values.activityName,
-                description: values.activityDescription,
-                performedAt: values.activityDate,
-                activityType: values.activityType,
-                activityDifficult: values.activityDifficulty,
-                trainingId: Number(values.trainingId),
-                exercises: exercisesPayload,
-            }
+            activityName: values.activityName,
+            description: values.activityDescription,
+            performedAt: values.activityDate,
+            activityType: values.activityType,
+            activityDifficult: values.activityDifficulty,
+            trainingId: Number(values.trainingId),
+            exercises: exercisesPayload,
         }
 
         try {
@@ -138,6 +115,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
                 <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     <div className="space-y-2 text-center">
                         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">Добавить активность</h1>
+
                         <p className="text-sm text-gray-500 dark:text-gray-300">Выберите тренировку и введите подходы по упражнениям</p>
                     </div>
 

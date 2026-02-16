@@ -14,9 +14,11 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 
 	const activeContext: string = useMemo(() => {
 		const segments = pathname.split('/').filter(Boolean);
+
 		if (segments.length === 0) {
 			return '/';
 		}
+
 		return segments[0];
 	}, [pathname]);
 

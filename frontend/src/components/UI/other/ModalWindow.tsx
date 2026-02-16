@@ -3,7 +3,7 @@ import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGre
 import {memo, Ref} from "react";
 import {secondDarkColorTheme} from "@/styles";
 
-interface ModalWindowProps {
+interface IProps {
     isExiting: boolean;
     modalRef: Ref<HTMLDivElement | null>;
     windowLabel: string;
@@ -31,7 +31,7 @@ function ModalWindow(
         confirmFunction,
         isProcess,
         isRendered,
-    }: ModalWindowProps) {
+    }: IProps) {
 
     if (!isRendered) {
         return null;
@@ -51,6 +51,7 @@ function ModalWindow(
                 <h3 id="delete-modal-title" className="text-lg font-semibold leading-6 text-gray-900 dark:text-white">
                     {windowLabel}
                 </h3>
+
                 <div className="mt-3">
                     <p id="delete-modal-description" className="text-sm text-gray-600 dark:text-gray-400">
                         {windowText}

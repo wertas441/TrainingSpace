@@ -33,9 +33,11 @@ export default function NotFound () {
                             bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ">
                                 Ошибка 404
                             </span>
+
                             <h1 className="mt-4 text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
                                 Страница не найдена
                             </h1>
+
                             <p className="mt-3 text-gray-600 dark:text-gray-300">
                                 Похоже, вы перешли по несуществующей ссылке или страница была
                                 перемещена. Проверьте адрес или вернитесь на главную.

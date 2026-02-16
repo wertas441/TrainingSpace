@@ -8,18 +8,19 @@ import {GoalsStructure} from "@/types/goal";
 import GoalItem from "@/components/elements/GoalRow";
 import NullElementsError from "@/components/errors/NullElementsError";
 
-interface GoalsProps {
+interface IProps {
     clientGoals: GoalsStructure[],
     token: string;
 }
 
-function Goals({clientGoals, token}: GoalsProps) {
+function Goals({clientGoals, token}: IProps) {
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
+
         return clientGoals.filter(e => {
             return q.length === 0 || e.name.toLowerCase().includes(q) ;
         });

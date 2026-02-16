@@ -2,7 +2,7 @@ import {mainInputClasses} from "@/styles";
 import {memo, TextareaHTMLAttributes} from "react";
 import InputError from "@/components/errors/InputError";
 
-export interface TextAreaInputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface IProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     id: string;
     label: string;
     error?: string;
@@ -17,7 +17,7 @@ function MainTextarea(
         placeholder,
         error,
         ...rest
-    }: TextAreaInputProps) {
+    }: IProps) {
 
     return (
         <div>

@@ -12,7 +12,7 @@ import {
 import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";
 import {firstDarkColorTheme} from "@/styles";
 
-interface SideBarProps {
+interface IProps {
 	activePage: string;
 	isOpen: boolean;
 	onClose: () => void;
@@ -75,7 +75,7 @@ const mainSideBarItems = [
     },
 ] as const;
 
-export default function MainSideBar({ activePage, isOpen = false, onClose }: SideBarProps) {
+export default function MainSideBar({ activePage, isOpen = false, onClose }: IProps) {
 
     // Блокируем прокрутку страницы при открытом сайдбаре на мобильных устройствах
     useEffect(() => {
@@ -98,29 +98,18 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: Sid
 	return (
 		<>
 			{isOpen && (
-				<div
-					className="fixed inset-0 bg-black/30 backdrop-blur-[1px] lg:hidden z-40"
-					aria-hidden="true"
-					onClick={onClose}
-				/>
+                <div className="fixed inset-0 bg-black/30 backdrop-blur-[1px] lg:hidden z-40" aria-hidden="true" onClick={onClose}/>
 			)}
 
-			<aside
-				className={`${firstDarkColorTheme}
-				fixed lg:static top-0 left-0 h-full lg:h-auto 
-				w-72 border-r border-emerald-100 px-4 pt-2 bg-white
-				transform transition-transform duration-300 ease-in-out z-50
-				${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
-			`}
+			<aside className={`${firstDarkColorTheme}	fixed lg:static top-0 left-0 h-full lg:h-auto w-72 border-r border-emerald-100 px-4 pt-2 bg-white
+			    transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
 				aria-label="Боковая навигация"
 			>
 
                 <div className="lg:hidden flex justify-between items-center pb-5 ">
                     <h1 className={`text-2xl pt-1 font-semibold text-emerald-800 dark:text-white`}>TrainingSpace</h1>
-                    <AnyStylesButton
-                        onClick={onClose}
-                        IconComponent={XMarkIcon}
-                    />
+
+                    <AnyStylesButton onClick={onClose} IconComponent={XMarkIcon}/>
                 </div>
 
 				<nav className="mt-6 list-none space-y-5 ">

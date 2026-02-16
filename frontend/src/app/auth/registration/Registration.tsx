@@ -6,7 +6,7 @@ import {
     validateUserEmail,
     validateUserName,
     validateUserPassword
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/user";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";

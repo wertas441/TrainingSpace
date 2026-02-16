@@ -3,7 +3,6 @@ import {ExerciseListFrontendStructure} from "../types";
 
 export class ExerciseModel {
 
-    // Список всех упражнений
     static async getList(): Promise<ExerciseListFrontendStructure[]> {
         const query = `
             SELECT
@@ -25,7 +24,7 @@ export class ExerciseModel {
 
         const { rows } = await pool.query(query);
 
-        return rows.map((row: any) => ({
+        return rows.map((row) => ({
             id: row.id as number,
             name: row.name as string,
             description: row.description as string,
@@ -34,7 +33,6 @@ export class ExerciseModel {
         }));
     }
 
-    // Упражнения, привязанные к конкретной тренировке пользователя
     static async getByTrainingId(trainingId: number, userId: number): Promise<ExerciseListFrontendStructure[]> {
         const query = `
             SELECT
@@ -59,7 +57,7 @@ export class ExerciseModel {
 
         const { rows } = await pool.query(query, [trainingId, userId]);
 
-        return rows.map((row: any) => ({
+        return rows.map((row) => ({
             id: row.id as number,
             name: row.name as string,
             description: row.description as string,

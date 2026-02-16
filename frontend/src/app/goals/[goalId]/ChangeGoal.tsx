@@ -3,7 +3,7 @@
 import {useCallback} from "react";
 import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goal";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators";
+import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators/goal";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
@@ -18,14 +18,14 @@ import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {Controller, useForm} from "react-hook-form";
 
-interface ChangeGoalProps {
+interface IProps {
     goalInfo: GoalsStructure;
     token: string;
 }
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
-export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
+export function ChangeGoal({goalInfo, token}: IProps) {
 
     const {register, handleSubmit, control, formState: { errors }} = useForm<GoalFormValues>({
         defaultValues: {
@@ -35,20 +35,19 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
         }
     })
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
-    const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils()
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow()
 
     const onSubmit = async (values: GoalFormValues)=> {
         setServerError(null);
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                goalId: goalInfo.publicId,
-                name: values.goalName,
-                description: values.goalDescription,
-                priority: values.goalPriority,
-            }
+            goalId: goalInfo.publicId,
+            name: values.goalName,
+            description: values.goalDescription,
+            priority: values.goalPriority,
+
         }
 
         try {
@@ -70,9 +69,11 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
 
         try {
             await deleteGoal(token, goalInfo.publicId);
+
             router.replace("/goals");
         } catch (error) {
             console.error("delete goal error:", error);
+
             setServerError("Не удалось удалить цель. Попробуйте ещё раз позже.");
         }
     }, [goalInfo.publicId, router, setServerError, token])
@@ -124,6 +125,7 @@ export function ChangeGoal({goalInfo, token}: ChangeGoalProps) {
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                 disabled={isSubmitting}
                             />
+
                             <RedGlassBtn
                                 label={'Удалить цель'}
                                 onClick={toggleModalWindow}

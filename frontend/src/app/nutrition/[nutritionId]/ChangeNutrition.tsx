@@ -9,7 +9,7 @@ import {
     validateDayName,
     validateFatGrams,
     validateProteinGrams
-} from "@/lib/utils/validators";
+} from "@/lib/utils/validators/nutrition";
 import {useCallback} from "react";
 import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
 import type {BackendApiResponse} from "@/types";
@@ -44,24 +44,23 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
         }
     })
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
-    const {isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef} = useModalWindow()
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow()
 
     const onSubmit = async (values: NutritionFormValues)=> {
         setServerError(null);
         setIsSubmitting(true);
 
         const payload = {
-            requestData: {
-                publicId: dayInfo.publicId,
-                name: values.dayName,
-                description: values.dayDescription,
-                date: values.dayDate,
-                calories: parseInt(values.calories, 10),
-                protein: parseInt(values.protein, 10),
-                fat: parseInt(values.fat, 10),
-                carb: parseInt(values.carb, 10),
-            }
+            publicId: dayInfo.publicId,
+            name: values.dayName,
+            description: values.dayDescription,
+            date: values.dayDate,
+            calories: parseInt(values.calories, 10),
+            protein: parseInt(values.protein, 10),
+            fat: parseInt(values.fat, 10),
+            carb: parseInt(values.carb, 10),
         }
 
         try {
@@ -158,6 +157,7 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                 disabled={isSubmitting}
                             />
+
                             <RedGlassBtn
                                 label = {'Удалить день'}
                                 onClick = {toggleModalWindow}
