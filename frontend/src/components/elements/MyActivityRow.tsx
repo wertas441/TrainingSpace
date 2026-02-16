@@ -11,11 +11,14 @@ import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/styles
 function MyActivityRow({activity}: {activity: ActivityDataStructure}){
 
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
     const [isLoadingExercises, setIsLoadingExercises] = useState<boolean>(false);
+
     const [trainingExercises, setTrainingExercises] = useState<ExerciseTechniqueItem[] | null>(null);
+
     const [loadError, setLoadError] = useState<string | null>(null);
 
-    const {router} = usePageUtils();
+    const { goToPage }  = usePageUtils();
 
     const toggleExpanded = useCallback(async () => {
         setIsExpanded((prev) => !prev);
@@ -24,10 +27,12 @@ function MyActivityRow({activity}: {activity: ActivityDataStructure}){
             try {
                 setIsLoadingExercises(true);
                 setLoadError(null);
+
                 const data = await getTrainingExercises(activity.trainingId);
                 setTrainingExercises(data);
             } catch (e) {
                 console.error('Ошибка загрузки упражнений тренировки:', e);
+
                 setLoadError('Не удалось загрузить упражнения тренировки');
             } finally {
                 setIsLoadingExercises(false);
@@ -45,12 +50,9 @@ function MyActivityRow({activity}: {activity: ActivityDataStructure}){
         };
     }, [activity.name, activity.activityDate, activity.description, activity.type, activity.difficulty]);
 
-    const handleEditClick = useCallback(() => {
-        router.push(`/my-activity/${activity.publicId}`);
-    }, [router, activity.publicId]);
-
     return (
-        <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition cursor-pointer`}
+        <div
+            className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition cursor-pointer`}
             onClick={toggleExpanded}
         >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 items-start md:items-center">
@@ -58,7 +60,7 @@ function MyActivityRow({activity}: {activity: ActivityDataStructure}){
                     <div className={`${iconDarkColorTheme} border rounded-full p-1.5 sm:p-2 border-emerald-200 flex items-center justify-center`}>
                         {isExpanded ? (
                             <ChevronDownIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-                            ) : (
+                        ) : (
                             <ChevronUpIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                         )}
                     </div>
@@ -66,11 +68,13 @@ function MyActivityRow({activity}: {activity: ActivityDataStructure}){
                     <div className="">
                         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                             <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{activityHeader.name}</h3>
-                            <span className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-600 dark:text-white">
-							<CalendarDaysIcon className="w-4 h-4" />
+
+                             <span className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-600 dark:text-white">
+							    <CalendarDaysIcon className="w-4 h-4" />
                                 {activityHeader.date}
-						</span>
+						    </span>
                         </div>
+
                         {activityHeader.description && (
                             <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-emerald-500">
                                 {activityHeader.description}
@@ -86,17 +90,15 @@ function MyActivityRow({activity}: {activity: ActivityDataStructure}){
                                 lg:text-base font-medium border ${getColorStyles(activityHeader.type)}`}>
                                 {activityHeader.type}
                             </span>
-                        <span className={`inline-flex items-center rounded-full  px-2.5 py-1 text-xs sm:text-sm lg:text-base
+
+                            <span className={`inline-flex items-center rounded-full  px-2.5 py-1 text-xs sm:text-sm lg:text-base
                             font-medium border ${getColorStyles(activityHeader.difficulty)}`}>
                                 {activityHeader.difficulty}
                             </span>
                         </div>
-                        <div
-                            className="w-full md:w-auto "
-                            onClick={(event) => event.stopPropagation()}
-                        >
+                        <div className="w-full md:w-auto" onClick={(event) => event.stopPropagation()}>
                             <ChangeButton
-                                onClick={handleEditClick}
+                                onClick={() => goToPage(`/my-activity/${activity.publicId}`)}
                                 className={`w-full`}
                             />
                         </div>
@@ -128,7 +130,7 @@ function MyActivityRow({activity}: {activity: ActivityDataStructure}){
                                         <div className="flex items-center justify-between gap-2">
                                             <div>
                                                 <div className="text-sm font-semibold text-emerald-900 dark:text-white">
-                                                    {exerciseInfo?.name ?? `Упражнение #${ex.exercisesId}`}
+                                                    {exerciseInfo?.name}
                                                 </div>
                                             </div>
                                         </div>

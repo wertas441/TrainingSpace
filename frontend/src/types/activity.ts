@@ -29,6 +29,7 @@ export interface ActivityDataStructure {
     trainingId: number;
     exercises: {
         exercisesId: number;
+        name: string;
         try: {
             id: number;
             weight: number;
