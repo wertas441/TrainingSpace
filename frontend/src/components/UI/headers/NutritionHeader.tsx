@@ -93,6 +93,7 @@ function NutritionHeader() {
                             <h2 className="text-lg font-semibold text-emerald-800 dark:text-white">Фильтры</h2>
                             <XMarkButton onClick={toggleFilterWindow} />
                         </div>
+
                         <div className="px-5 py-4 space-y-6">
                             <div className="flex flex-col gap-6 md:flex-row">
                                 <div>
@@ -103,21 +104,16 @@ function NutritionHeader() {
                                             label="От"
                                             placeholder="0"
                                             value={caloriesMin}
-                                            onChange={(v) => {
-                                                const s = String(v);
-                                                setFilter("caloriesMin", s.trim() === '' ? Number.NaN : Number(s));
-                                            }}
+                                            onChange={(v) => setFilter("caloriesMin", String(v))}
                                             error={null}
                                         />
+
                                         <FilterInput
                                             id="calories-max"
                                             label="До"
                                             placeholder="5000"
-                                            value={Number.isFinite(caloriesMax) ? caloriesMax : ''}
-                                            onChange={(v) => {
-                                                const s = String(v);
-                                                setFilter("caloriesMax", s.trim() === '' ? Number.NaN : Number(s));
-                                            }}
+                                            value={caloriesMax}
+                                            onChange={(v) => setFilter("caloriesMax", String(v))}
                                             error={null}
                                         />
                                     </div>
@@ -130,22 +126,17 @@ function NutritionHeader() {
                                             id="protein-min"
                                             label="От"
                                             placeholder="0"
-                                            value={Number.isFinite(proteinMin) ? proteinMin : ''}
-                                            onChange={(v) => {
-                                                const s = String(v);
-                                                setFilter("proteinMin", s.trim() === '' ? Number.NaN : Number(s));
-                                            }}
+                                            value={proteinMin}
+                                            onChange={(v) => setFilter("proteinMin", String(v))}
                                             error={null}
                                         />
+
                                         <FilterInput
                                             id="protein-max"
                                             label="До"
                                             placeholder="300"
-                                            value={Number.isFinite(proteinMax) ? proteinMax : ''}
-                                            onChange={(v) => {
-                                                const s = String(v);
-                                                setFilter("proteinMax", s.trim() === '' ? Number.NaN : Number(s));
-                                            }}
+                                            value={proteinMax}
+                                            onChange={(v) => setFilter("proteinMax", String(v))}
                                             error={null}
                                         />
                                     </div>
@@ -160,22 +151,17 @@ function NutritionHeader() {
                                             id="fat-min"
                                             label="От"
                                             placeholder="0"
-                                            value={Number.isFinite(fatMin) ? fatMin : ''}
-                                            onChange={(v) => {
-                                                const s = String(v);
-                                                setFilter("fatMin", s.trim() === '' ? Number.NaN : Number(s));
-                                            }}
+                                            value={fatMin}
+                                            onChange={(v) => setFilter("fatMin", String(v))}
                                             error={null}
                                         />
+
                                         <FilterInput
                                             id="fat-max"
                                             label="До"
                                             placeholder="200"
-                                            value={Number.isFinite(fatMax) ? fatMax : ''}
-                                            onChange={(v) => {
-                                                const s = String(v);
-                                                setFilter("fatMax", s.trim() === '' ? Number.NaN : Number(s));
-                                            }}
+                                            value={fatMax}
+                                            onChange={(v) => setFilter("fatMax", String(v))}
                                             error={null}
                                         />
                                     </div>
@@ -188,28 +174,24 @@ function NutritionHeader() {
                                             id="carb-min"
                                             label="От"
                                             placeholder="0"
-                                            value={Number.isFinite(carbMin) ? carbMin : ''}
-                                            onChange={(v) => {
-                                                const s = String(v);
-                                                setFilter("carbMin", s.trim() === '' ? Number.NaN : Number(s));
-                                            }}
+                                            value={carbMin}
+                                            onChange={(v) => setFilter("carbMin", String(v))}
                                             error={null}
                                         />
+
                                         <FilterInput
                                             id="carb-max"
                                             label="До"
                                             placeholder="400"
-                                            value={Number.isFinite(carbMax) ? carbMax : ''}
-                                            onChange={(v) => {
-                                                const s = String(v);
-                                                setFilter("carbMax", s.trim() === '' ? Number.NaN : Number(s));
-                                            }}
+                                            value={carbMax}
+                                            onChange={(v) => setFilter("carbMax", String(v))}
                                             error={null}
                                         />
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
                             <LightGreenGlassBtn
                                 label={`Сбросить`}

@@ -35,6 +35,7 @@ function ExercisesTechniquesHeader(
 
     const muscleOptions = useMemo(() => {
         const set = new Set<string>();
+
         exercises.forEach(e => e.partOfTheBody.forEach(p => set.add(p)));
         return Array.from(set)
             .sort((a, b) => a.localeCompare(b, 'ru'))
