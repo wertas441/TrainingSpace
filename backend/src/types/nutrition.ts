@@ -3,10 +3,10 @@ export interface AddNewDayFrontendStructure {
     name: string;
     description: string;
     date: string;
-    calories: number;
-    protein: number;
-    fat: number;
-    carb: number;
+    calories: string;
+    protein: string;
+    fat: string;
+    carb: string;
 }
 
 export interface DayListFrontendStructure extends AddNewDayFrontendStructure {

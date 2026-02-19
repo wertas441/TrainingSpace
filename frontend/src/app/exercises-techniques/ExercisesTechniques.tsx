@@ -19,9 +19,7 @@ function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
     const itemsPerPage:number = 10;
 
-    const toggleFilterWindow = useCallback(() => {
-        setIsFilterWindowOpen(prevState => !prevState);
-    }, []);
+    const toggleFilterWindow = useCallback(() => setIsFilterWindowOpen(prevState => !prevState), []);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();

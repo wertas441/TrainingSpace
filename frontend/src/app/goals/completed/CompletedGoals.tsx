@@ -11,6 +11,7 @@ import NullElementsError from "@/components/errors/NullElementsError";
 export default function CompletedGoals({completeList}: {completeList: CompleteGoalsStructure[]}){
 
     const [searchName, setSearchName] = useState<string>('');
+
     const itemsPerPage:number = 10;
 
     const filteredList = useMemo(() => {
