@@ -3,30 +3,31 @@
 import NutritionHeader from "@/components/UI/headers/NutritionHeader";
 import {NutritionDay} from "@/types/nutrition";
 import NutritionDayItem from "@/components/elements/NutritionDayRow";
-import {memo, useCallback, useEffect, useMemo, useState} from "react";
+import {memo, useEffect, useMemo} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
 import NullElementsError from "@/components/errors/NullElementsError";
 import {normalizeToYMD} from "@/lib";
+import {NutritionFiltersProvider, useNutritionFilters} from "@/app/nutrition/NutritionFiltersContext";
 
-function Nutrition({userDays}: {userDays: NutritionDay[]}) {
+function NutritionContent({userDays}: {userDays: NutritionDay[]}) {
 
-    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
-    const [searchName, setSearchName] = useState<string>('');
-    const [searchDate, setSearchDate] = useState<string>('');
-    const [caloriesMin, setCaloriesMin] = useState<number>(Number.NaN);
-    const [caloriesMax, setCaloriesMax] = useState<number>(Number.NaN);
-    const [proteinMin, setProteinMin] = useState<number>(Number.NaN);
-    const [proteinMax, setProteinMax] = useState<number>(Number.NaN);
-    const [fatMin, setFatMin] = useState<number>(Number.NaN);
-    const [fatMax, setFatMax] = useState<number>(Number.NaN);
-    const [carbMin, setCarbMin] = useState<number>(Number.NaN);
-    const [carbMax, setCarbMax] = useState<number>(Number.NaN);
+    const { filters } = useNutritionFilters();
+
+    const {
+        searchName,
+        searchDate,
+        caloriesMin,
+        caloriesMax,
+        proteinMin,
+        proteinMax,
+        fatMin,
+        fatMax,
+        carbMin,
+        carbMax
+    } = filters;
+
     const itemsPerPage:number = 10;
-
-    const toggleFilterWindow = useCallback(() => {
-        setIsFilterWindowOpen(!isFilterWindowOpen);
-    }, [isFilterWindowOpen]);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
@@ -85,47 +86,9 @@ function Nutrition({userDays}: {userDays: NutritionDay[]}) {
         setCurrentPage
     ]);
 
-    const handleResetFilters = useCallback(() => {
-        setSearchName('');
-        setSearchDate('');
-        setCaloriesMin(Number.NaN);
-        setCaloriesMax(Number.NaN);
-        setProteinMin(Number.NaN);
-        setProteinMax(Number.NaN);
-        setFatMin(Number.NaN);
-        setFatMax(Number.NaN);
-        setCarbMin(Number.NaN);
-        setCarbMax(Number.NaN);
-    }, []);
-
-
     return (
         <div className="space-y-4" ref={listTopRef} >
-            <NutritionHeader
-                searchName={searchName}
-                onSearchNameChange={setSearchName}
-                searchDate={searchDate}
-                onSearchDateChange={setSearchDate}
-                caloriesMin={caloriesMin}
-                onCaloriesMinChange={setCaloriesMin}
-                caloriesMax={caloriesMax}
-                onCaloriesMaxChange={setCaloriesMax}
-                proteinMin={proteinMin}
-                onProteinMinChange={setProteinMin}
-                proteinMax={proteinMax}
-                onProteinMaxChange={setProteinMax}
-                fatMin={fatMin}
-                onFatMinChange={setFatMin}
-                fatMax={fatMax}
-                onFatMaxChange={setFatMax}
-                carbMin={carbMin}
-                onCarbMinChange={setCarbMin}
-                carbMax={carbMax}
-                onCarbMaxChange={setCarbMax}
-                isFilterWindowOpen={isFilterWindowOpen}
-                toggleFilterWindow={toggleFilterWindow}
-                onResetFilters={handleResetFilters}
-            />
+            <NutritionHeader />
             <div className="grid mt-6 grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
@@ -163,6 +126,14 @@ function Nutrition({userDays}: {userDays: NutritionDay[]}) {
             )}
         </div>
     )
+}
+
+function Nutrition({userDays}: {userDays: NutritionDay[]}) {
+    return (
+        <NutritionFiltersProvider>
+            <NutritionContent userDays={userDays} />
+        </NutritionFiltersProvider>
+    );
 }
 
 export default memo(Nutrition);

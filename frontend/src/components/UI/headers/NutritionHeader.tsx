@@ -1,46 +1,41 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {memo, useCallback} from "react";
+import {memo, useCallback, useState} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
-import {NutritionHeaderProps} from "@/types/nutrition";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
-import {useRouter} from "next/navigation";
 import PlusButton from "@/components/buttons/other/PlusButton";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {secondDarkColorTheme} from "@/styles";
 import XMarkButton from "@/components/buttons/other/XMarkButton";
+import {useNutritionFilters} from "@/app/nutrition/NutritionFiltersContext";
+import {usePageUtils} from "@/lib/hooks/usePageUtils";
 
-function NutritionHeader(
-    {
+function NutritionHeader() {
+
+    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
+
+    const { filters, setFilter, resetFilters } = useNutritionFilters();
+
+    const {
         searchName,
-        onSearchNameChange,
         searchDate,
-        onSearchDateChange,
         caloriesMin,
-        onCaloriesMinChange,
         caloriesMax,
-        onCaloriesMaxChange,
         proteinMin,
-        onProteinMinChange,
         proteinMax,
-        onProteinMaxChange,
         fatMin,
-        onFatMinChange,
         fatMax,
-        onFatMaxChange,
         carbMin,
-        onCarbMinChange,
-        carbMax,
-        onCarbMaxChange,
-        isFilterWindowOpen,
-        toggleFilterWindow,
-        onResetFilters,
-    }: NutritionHeaderProps) {
+        carbMax
+    } = filters;
+
+    const toggleFilterWindow = useCallback(() => {
+        setIsFilterWindowOpen((prev) => !prev);
+    }, []);
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
 
-    const router = useRouter();
-    const plusButtonAction = useCallback(() => router.push('/nutrition/add'), [router])
+    const { goToPage } = usePageUtils();
 
     return (
         <div className={`${secondDarkColorTheme} relative w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
@@ -56,7 +51,7 @@ function NutritionHeader(
                                 id="nutrition-search-name"
                                 placeholder="Поиск по названию дня..."
                                 value={searchName}
-                                onChange={(v) => onSearchNameChange(String(v))}
+                                onChange={(v) => setFilter("searchName", String(v))}
                                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                                 error={null}
                             />
@@ -68,7 +63,7 @@ function NutritionHeader(
                                 type="date"
                                 placeholder="Дата"
                                 value={searchDate}
-                                onChange={(v) => onSearchDateChange(String(v))}
+                                onChange={(v) => setFilter("searchDate", String(v))}
                                 icon={<CalendarIcon className="h-5 w-5" />}
                                 error={null}
                             />
@@ -77,9 +72,10 @@ function NutritionHeader(
 
                     <div className="flex flex-row justify-end gap-2">
                         <PlusButton
-                            onClick={plusButtonAction}
+                            onClick={() => goToPage('/nutrition/add')}
                             className={`w-full`}
                         />
+
                         <BarsButton
                             onClick={toggleFilterWindow}
                             ref={toggleBtnRef}
@@ -109,7 +105,7 @@ function NutritionHeader(
                                             value={Number.isFinite(caloriesMin) ? caloriesMin : ''}
                                             onChange={(v) => {
                                                 const s = String(v);
-                                                onCaloriesMinChange(s.trim() === '' ? Number.NaN : Number(s));
+                                                setFilter("caloriesMin", s.trim() === '' ? Number.NaN : Number(s));
                                             }}
                                             error={null}
                                         />
@@ -120,7 +116,7 @@ function NutritionHeader(
                                             value={Number.isFinite(caloriesMax) ? caloriesMax : ''}
                                             onChange={(v) => {
                                                 const s = String(v);
-                                                onCaloriesMaxChange(s.trim() === '' ? Number.NaN : Number(s));
+                                                setFilter("caloriesMax", s.trim() === '' ? Number.NaN : Number(s));
                                             }}
                                             error={null}
                                         />
@@ -137,7 +133,7 @@ function NutritionHeader(
                                             value={Number.isFinite(proteinMin) ? proteinMin : ''}
                                             onChange={(v) => {
                                                 const s = String(v);
-                                                onProteinMinChange(s.trim() === '' ? Number.NaN : Number(s));
+                                                setFilter("proteinMin", s.trim() === '' ? Number.NaN : Number(s));
                                             }}
                                             error={null}
                                         />
@@ -148,7 +144,7 @@ function NutritionHeader(
                                             value={Number.isFinite(proteinMax) ? proteinMax : ''}
                                             onChange={(v) => {
                                                 const s = String(v);
-                                                onProteinMaxChange(s.trim() === '' ? Number.NaN : Number(s));
+                                                setFilter("proteinMax", s.trim() === '' ? Number.NaN : Number(s));
                                             }}
                                             error={null}
                                         />
@@ -167,7 +163,7 @@ function NutritionHeader(
                                             value={Number.isFinite(fatMin) ? fatMin : ''}
                                             onChange={(v) => {
                                                 const s = String(v);
-                                                onFatMinChange(s.trim() === '' ? Number.NaN : Number(s));
+                                                setFilter("fatMin", s.trim() === '' ? Number.NaN : Number(s));
                                             }}
                                             error={null}
                                         />
@@ -178,7 +174,7 @@ function NutritionHeader(
                                             value={Number.isFinite(fatMax) ? fatMax : ''}
                                             onChange={(v) => {
                                                 const s = String(v);
-                                                onFatMaxChange(s.trim() === '' ? Number.NaN : Number(s));
+                                                setFilter("fatMax", s.trim() === '' ? Number.NaN : Number(s));
                                             }}
                                             error={null}
                                         />
@@ -195,7 +191,7 @@ function NutritionHeader(
                                             value={Number.isFinite(carbMin) ? carbMin : ''}
                                             onChange={(v) => {
                                                 const s = String(v);
-                                                onCarbMinChange(s.trim() === '' ? Number.NaN : Number(s));
+                                                setFilter("carbMin", s.trim() === '' ? Number.NaN : Number(s));
                                             }}
                                             error={null}
                                         />
@@ -206,7 +202,7 @@ function NutritionHeader(
                                             value={Number.isFinite(carbMax) ? carbMax : ''}
                                             onChange={(v) => {
                                                 const s = String(v);
-                                                onCarbMaxChange(s.trim() === '' ? Number.NaN : Number(s));
+                                                setFilter("carbMax", s.trim() === '' ? Number.NaN : Number(s));
                                             }}
                                             error={null}
                                         />
@@ -217,7 +213,7 @@ function NutritionHeader(
                         <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
                             <LightGreenGlassBtn
                                 label={`Сбросить`}
-                                onClick={onResetFilters}
+                                onClick={resetFilters}
                             />
                         </div>
                     </div>

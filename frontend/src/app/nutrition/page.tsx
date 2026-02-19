@@ -33,5 +33,5 @@ export default async function NutritionPage(){
         );
     }
 
-    return <Nutrition userDays = {daysList} />
+    return <Nutrition userDays={daysList} />
 }
