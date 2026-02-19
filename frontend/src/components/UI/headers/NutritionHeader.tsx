@@ -102,7 +102,7 @@ function NutritionHeader() {
                                             id="calories-min"
                                             label="От"
                                             placeholder="0"
-                                            value={Number.isFinite(caloriesMin) ? caloriesMin : ''}
+                                            value={caloriesMin}
                                             onChange={(v) => {
                                                 const s = String(v);
                                                 setFilter("caloriesMin", s.trim() === '' ? Number.NaN : Number(s));

@@ -5,10 +5,10 @@ export interface NutritionDay {
     name: string;
     date: string;
     description?: string;
-    calories: number;
-    protein: number;
-    fat: number;
-    carb: number;
+    calories: string;
+    protein: string;
+    fat: string;
+    carb: string;
 }
 
 export interface NutritionFormValues {

@@ -41,10 +41,10 @@ export class NutritionDayModel {
             userId,
             nutritionData.name,
             nutritionData.description,
-            nutritionData.calories,
-            nutritionData.protein,
-            nutritionData.fat,
-            nutritionData.carb,
+            Number(nutritionData.calories),
+            Number(nutritionData.protein),
+            Number(nutritionData.fat),
+            Number(nutritionData.carb),
             nutritionData.date,
         ];
 

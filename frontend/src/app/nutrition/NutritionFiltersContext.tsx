@@ -5,27 +5,27 @@ import {createContext, ReactNode, useCallback, useContext, useMemo, useState} fr
 export interface NutritionFilters {
     searchName: string;
     searchDate: string;
-    caloriesMin: number;
-    caloriesMax: number;
-    proteinMin: number;
-    proteinMax: number;
-    fatMin: number;
-    fatMax: number;
-    carbMin: number;
-    carbMax: number;
+    caloriesMin: string;
+    caloriesMax: string;
+    proteinMin: string;
+    proteinMax: string;
+    fatMin: string;
+    fatMax: string;
+    carbMin: string;
+    carbMax: string;
 }
 
 const initialNutritionFilters: NutritionFilters = {
     searchName: "",
     searchDate: "",
-    caloriesMin: Number.NaN,
-    caloriesMax: Number.NaN,
-    proteinMin: Number.NaN,
-    proteinMax: Number.NaN,
-    fatMin: Number.NaN,
-    fatMax: Number.NaN,
-    carbMin: Number.NaN,
-    carbMax: Number.NaN,
+    caloriesMin: "",
+    caloriesMax: "",
+    proteinMin: "",
+    proteinMax: "",
+    fatMin: "",
+    fatMax: "",
+    carbMin: "",
+    carbMax: "",
 };
 
 interface NutritionFiltersContextValue {

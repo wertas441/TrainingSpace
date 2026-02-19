@@ -31,42 +31,23 @@ function NutritionContent({userDays}: {userDays: NutritionDay[]}) {
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
-        const isSet = (n: number) => Number.isFinite(n);
-        const cMin = isSet(caloriesMin) ? caloriesMin : undefined;
-        const cMax = isSet(caloriesMax) ? caloriesMax : undefined;
-        const pMin = isSet(proteinMin) ? proteinMin : undefined;
-        const pMax = isSet(proteinMax) ? proteinMax : undefined;
-        const fMin = isSet(fatMin) ? fatMin : undefined;
-        const fMax = isSet(fatMax) ? fatMax : undefined;
-        const cbMin = isSet(carbMin) ? carbMin : undefined;
-        const cbMax = isSet(carbMax) ? carbMax : undefined;
 
         return userDays.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
             const matchesData = searchDate === '' || normalizeToYMD(e.date) === searchDate;
-            const byCaloriesMin = cMin === undefined || e.calories >= cMin;
-            const byCaloriesMax = cMax === undefined || e.calories <= cMax;
-            const byProteinMin = pMin === undefined || e.protein >= pMin;
-            const byProteinMax = pMax === undefined || e.protein <= pMax;
-            const byFatMin = fMin === undefined || e.fat >= fMin;
-            const byFatMax = fMax === undefined || e.fat <= fMax;
-            const byCarbMin = cbMin === undefined || e.carb >= cbMin;
-            const byCarbMax = cbMax === undefined || e.carb <= cbMax;
+            const byCaloriesMin = caloriesMin === '' || e.calories >= caloriesMin;
+            const byCaloriesMax = caloriesMax === '' || e.calories <= caloriesMax;
+            const byProteinMin = proteinMin === '' || e.protein >= proteinMin;
+            const byProteinMax = proteinMax === '' || e.protein <= proteinMax;
+            const byFatMin = fatMin === '' || e.fat >= fatMin;
+            const byFatMax = fatMax === '' || e.fat <= fatMax;
+            const byCarbMin = carbMin === '' || e.carb >= carbMin;
+            const byCarbMax = carbMax === '' || e.carb <= carbMax;
 
-            return matchesName
-                && matchesData
-                && byCaloriesMin && byCaloriesMax
-                && byProteinMin && byProteinMax
-                && byFatMin && byFatMax
-                && byCarbMin && byCarbMax;
+            return matchesName && matchesData && byCaloriesMin && byCaloriesMax && byProteinMin && byProteinMax
+                && byFatMin && byFatMax && byCarbMin && byCarbMax;
         });
-    }, [
-        searchName, userDays, searchDate,
-        caloriesMin, caloriesMax,
-        proteinMin, proteinMax,
-        fatMin, fatMax,
-        carbMin, carbMax
-    ]);
+    }, [searchName, userDays, searchDate, caloriesMin, caloriesMax, proteinMin, proteinMax, fatMin, fatMax, carbMin, carbMax]);
 
     const {
         currentPage,
@@ -129,6 +110,7 @@ function NutritionContent({userDays}: {userDays: NutritionDay[]}) {
 }
 
 function Nutrition({userDays}: {userDays: NutritionDay[]}) {
+
     return (
         <NutritionFiltersProvider>
             <NutritionContent userDays={userDays} />

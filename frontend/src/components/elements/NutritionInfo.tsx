@@ -3,7 +3,7 @@ import {ElementType} from "react";
 interface IProps{
     label: string;
     icon: ElementType;
-    value: number;
+    value: string;
 }
 
 export default function NutritionInfo({label, icon, value}:IProps){

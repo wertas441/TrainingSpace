@@ -70,33 +70,36 @@ const validateNutritionDayDate = (dayDate: string): boolean => {
     return true;
 }
 
-const validateNumberInRange = (value: number, min: number, max: number): boolean => {
-    if (value == 0) {
+const validateNumberInRange = (value: string, min: number, max: number): boolean => {
+
+    const numberValue = parseInt(value);
+
+    if (numberValue == 0) {
         return false;
     }
 
-    if (value < min) {
+    if (numberValue < min) {
         return false;
     }
-    if (value > max) {
+    if (numberValue > max) {
         return false;
     }
     return true;
 }
 
-const validateCalories = (calories: number): boolean => {
+const validateCalories = (calories: string): boolean => {
     return validateNumberInRange(calories, 1, 100000);
 }
 
-const validateProtein = (protein: number): boolean => {
+const validateProtein = (protein: string): boolean => {
     return validateNumberInRange(protein, 1, 1000);
 }
 
-const validateFat = (fat: number): boolean => {
+const validateFat = (fat: string): boolean => {
     return validateNumberInRange(fat, 1, 1000);
 }
 
-const validateCarb = (carb: number): boolean => {
+const validateCarb = (carb: string): boolean => {
     return validateNumberInRange(carb, 1, 1000);
 }
 
