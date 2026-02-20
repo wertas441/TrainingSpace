@@ -25,18 +25,11 @@ export function getServerErrorMessage(err: unknown){
     return message;
 }
 
-export async function getExercisesList(tokenValue: string):Promise<ExerciseTechniqueItem[] | undefined>{
-
-    const payload = {
-        headers: getTokenHeaders(tokenValue),
-    }
-
+export async function getExercisesList():Promise<ExerciseTechniqueItem[] | undefined>{
     try {
-        const { data } = await api.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>('/exercises/exercises', payload);
+        const { data } = await api.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>('/exercises/exercises');
 
-        if (!data.success || !data.data?.exercises) {
-            return undefined;
-        }
+        if (!data.success || !data.data?.exercises) return undefined;
 
         return data.data.exercises;
     } catch (error) {

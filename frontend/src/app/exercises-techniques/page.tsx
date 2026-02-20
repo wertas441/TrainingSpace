@@ -22,7 +22,7 @@ export default async function ExercisesTechniquesPage(){
         );
     }
 
-    const exercises = await getExercisesList(tokenValue);
+    const exercises = await getExercisesList();
 
     if (!exercises) {
         return (
