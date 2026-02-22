@@ -8,15 +8,19 @@ import {
     validateUserPassword
 } from "@/lib/utils/validators/user";
 import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import {AtSymbolIcon, LockClosedIcon, UserIcon} from "@heroicons/react/24/outline";
+import {
+    AtSymbolIcon,
+    LockClosedIcon,
+    UserIcon
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainHideInput from "@/components/inputs/MainHideInput";
 import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
+import RegisterHalfCard from "@/components/UI/UiContex/RegisterHalfCard";
 
 interface RegistrationFormValues {
     userName: string;
@@ -56,68 +60,81 @@ export default function Registration(){
     }
 
     return (
-        <BlockPageContext>
-            <div className="space-y-6">
-                <div>
-                    <h2 className="text-2xl pb-2 font-bold text-center text-gray-900 dark:text-white">
-                        TrainingSpace
-                    </h2>
-                    <p className="text-center text-gray-600 dark:text-gray-400">
-                        Введите данные для регистрации нового аккаунта
-                    </p>
-                </div>
+        <main className="min-h-screen bg-white dark:bg-neutral-950">
+            <div className="grid min-h-screen lg:grid-cols-2">
+                <section className="flex items-center justify-center px-6 py-10 sm:px-10 lg:px-16">
+                    <div className="w-full max-w-md space-y-6">
+                        <div>
+                            <h1 className="pt-1 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                Создайте аккаунт в TrainingSpace
+                            </h1>
 
-                <ServerError message={serverError} />
+                            <p className="pt-2 text-sm text-gray-600 dark:text-gray-400">
+                                Начните с персонального профиля и получите удобную систему для тренировок, целей и прогресса
+                            </p>
+                        </div>
 
-                <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+                        <ServerError message={serverError} />
 
-                    <MainInput
-                        id={'userName'}
-                        label={'Имя пользователя'}
-                        icon={<UserIcon className="h-5 w-5" />}
-                        error={errors.userName?.message}
-                        {...register('userName', {validate: (value) => validateUserName(value) || true})}
-                    />
+                        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
 
-                    <MainInput
-                        id={'email'}
-                        type="email"
-                        label={'Email'}
-                        icon={<AtSymbolIcon className="h-5 w-5" />}
-                        error={errors.email?.message}
-                        {...register('email', {validate: (value) => validateUserEmail(value) || true})}
-                    />
+                            <MainInput
+                                id={'userName'}
+                                label={'Имя пользователя'}
+                                icon={<UserIcon className="h-5 w-5" />}
+                                error={errors.userName?.message}
+                                {...register('userName', {validate: (value) => validateUserName(value) || true})}
+                            />
 
-                    <MainHideInput
-                        id={'password'}
-                        icon={<LockClosedIcon className="h-5 w-5" />}
-                        label={'Пароль'}
-                        error={errors.password?.message}
-                        {...register('password', {validate: (value) => validateUserPassword(value) || true})}
-                    />
+                            <MainInput
+                                id={'email'}
+                                type="email"
+                                label={'Email'}
+                                icon={<AtSymbolIcon className="h-5 w-5" />}
+                                error={errors.email?.message}
+                                {...register('email', {validate: (value) => validateUserEmail(value) || true})}
+                            />
 
-                    <MainInput
-                        id={'confirmPassword'}
-                        type={'password'}
-                        label={'Подтверждение пароля'}
-                        icon={<LockClosedIcon className="h-5 w-5" />}
-                        error={errors.confirmPassword?.message}
-                        {...register('confirmPassword', {
-                            validate: (value) =>
-                                validateConfirmPassword(getValues("password"), value) || true,
-                        })}
-                    />
+                            <MainHideInput
+                                id={'password'}
+                                icon={<LockClosedIcon className="h-5 w-5" />}
+                                label={'Пароль'}
+                                error={errors.password?.message}
+                                {...register('password', {validate: (value) => validateUserPassword(value) || true})}
+                            />
 
-                    <LightGreenSubmitBtn
-                        label={!isSubmitting ? 'Зарегистрироваться' : 'Регистрация...'}
-                        disabled={isSubmitting}
-                    />
-                </form>
+                            <MainInput
+                                id={'confirmPassword'}
+                                type={'password'}
+                                label={'Подтверждение пароля'}
+                                icon={<LockClosedIcon className="h-5 w-5" />}
+                                error={errors.confirmPassword?.message}
+                                {...register('confirmPassword', {
+                                    validate: (value) =>
+                                        validateConfirmPassword(getValues("password"), value) || true,
+                                })}
+                            />
 
-                <div className="mt-4 text-sm text-gray-700 dark:text-gray-400 text-center">
-                    Уже есть аккаунт? <Link href="/auth/login" className={`font-medium textLinks`}>Авторизуетесь</Link>
-                </div>
+                            <div className="mt-7">
+                                <LightGreenSubmitBtn
+                                    label={!isSubmitting ? 'Зарегистрироваться' : 'Регистрация...'}
+                                    disabled={isSubmitting}
+                                    className="py-2.5"
+                                />
+                            </div>
+                        </form>
+
+                        <div className="mt-4 text-sm text-gray-700 dark:text-gray-400 text-center">
+                            Уже есть аккаунт?{" "}
+                            <Link href="/auth/login" className="font-medium textLinks">
+                                Войти
+                            </Link>
+                        </div>
+                    </div>
+                </section>
+
+                <RegisterHalfCard />
             </div>
-        </BlockPageContext>
+        </main>
     );
 }

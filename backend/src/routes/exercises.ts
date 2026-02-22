@@ -6,7 +6,7 @@ import {showBackendError} from "../lib";
 
 const router = Router();
 
-router.get('/exercises', authGuard, async (req, res) => {
+router.get('/exercises', async (req, res) => {
     try {
         const exercises = await ExerciseModel.getList();
 
