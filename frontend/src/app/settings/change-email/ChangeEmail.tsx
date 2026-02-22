@@ -6,7 +6,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators/user";
 import {useMemo} from "react";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {LockClosedIcon, AtSymbolIcon} from "@heroicons/react/24/outline";
 import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
@@ -36,7 +36,7 @@ export default function ChangeEmail(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/user/change-email', payload)
+            await serverApi.post<BackendApiResponse>('/user/change-email', payload)
 
             changeEmail(values.newEmail)
             router.push("/settings/profile");

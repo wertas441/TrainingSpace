@@ -1,4 +1,4 @@
-import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
+import {serverApi, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import {NutritionDay} from "@/types/nutrition";
 
@@ -9,7 +9,7 @@ export async function getDayList(tokenValue: string):Promise<NutritionDay[] | un
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ days: NutritionDay[] }>>('/nutrition/days', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ days: NutritionDay[] }>>('/nutrition/days', payload);
 
         if (!data.success || !data.data?.days) return undefined;
 
@@ -28,7 +28,7 @@ export async function getDayInformation(tokenValue: string, dayId: string):Promi
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ day: NutritionDay }>>(
+        const { data } = await serverApi.get<BackendApiResponse<{ day: NutritionDay }>>(
             `/nutrition/about-my-day?dayId=${encodeURIComponent(dayId)}`,
             payload
         );
@@ -51,7 +51,7 @@ export async function deleteDay(tokenValue: string, dayId: string):Promise<void>
     }
 
     try {
-        await api.delete<BackendApiResponse>(`/nutrition/day`, payload);
+        await serverApi.delete<BackendApiResponse>(`/nutrition/day`, payload);
 
         return;
     } catch (err) {

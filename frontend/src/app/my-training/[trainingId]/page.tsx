@@ -29,7 +29,7 @@ export default async function ChangeTrainingPage({params}: ChangeTrainingPagePro
     }
 
     const trainingInfo = await getTrainingInformation(tokenValue, trainingId);
-    const exercises = await getExercisesList(tokenValue);
+    const exercises = await getExercisesList();
 
     if (!trainingInfo || !exercises) {
         return (

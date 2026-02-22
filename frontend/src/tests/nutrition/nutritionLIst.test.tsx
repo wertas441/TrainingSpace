@@ -25,10 +25,10 @@ describe('Список дней во вкладке "Питание"', () => {
     const testName = 'Крутой день';
     const testDate = '27.02.2025';
     const testDescription = 'fqfwefwefwewegewgwegwegweg'
-    const testCalories = 2320;
-    const testProtein = 135;
-    const testFat = 70;
-    const testCarb = 250;
+    const testCalories = '2320';
+    const testProtein = '135';
+    const testFat = '70';
+    const testCarb = '250';
 
     const testData: NutritionDay[] = [
         {

@@ -89,10 +89,7 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: IPr
         const previousOverflow = body.style.overflow;
         body.style.overflow = "hidden";
 
-        // При закрытии сайдбара или размонтировании возвращаем предыдущее значение
-        return () => {
-            body.style.overflow = previousOverflow;
-        };
+        return () => {body.style.overflow = previousOverflow};
     }, [isOpen]);
 
 	return (
@@ -107,12 +104,12 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: IPr
 			>
 
                 <div className="lg:hidden flex justify-between items-center pb-5 ">
-                    <h1 className={`text-2xl pt-1 font-semibold text-emerald-800 dark:text-white`}>TrainingSpace</h1>
+                    <h1 className={`text-2xl font-semibold text-emerald-800 dark:text-white`}>TrainingSpace</h1>
 
-                    <AnyStylesButton onClick={onClose} IconComponent={XMarkIcon}/>
+                    <AnyStylesButton onClick={onClose} IconComponent={XMarkIcon} className={`!mt-1.5`}/>
                 </div>
 
-				<nav className="mt-6 list-none space-y-5 ">
+				<nav className="mt-4 list-none space-y-5 ">
 					{mainSideBarItems.map((item, index) => (
 						<SideBarElement
 							key={index}

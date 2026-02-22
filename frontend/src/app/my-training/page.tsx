@@ -24,7 +24,7 @@ export default async function MyTrainingPage() {
     }
 
     const clientTrainings = await getTrainingList(tokenValue)
-    const exercises = await getExercisesList(tokenValue);
+    const exercises = await getExercisesList();
 
     if (!clientTrainings || !exercises) {
         return (
