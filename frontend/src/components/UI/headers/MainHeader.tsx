@@ -1,10 +1,10 @@
 import {Bars3Icon, MoonIcon, SunIcon} from "@heroicons/react/24/outline";
-import {useTheme} from "@/lib/utils/ThemeProvider";
 import {firstDarkColorTheme} from "@/styles";
+import {useThemeStore} from "@/lib/store/themeStore";
 
 export default function MainHeader({ onToggleSidebar }: {onToggleSidebar?: () => void }) {
 
-    const { theme, toggleTheme } = useTheme();
+    const { theme, toggleTheme } = useThemeStore();
 
 	return (
 		<header className={`${firstDarkColorTheme} sticky top-0 z-40 border-b border-emerald-100 px-2`}>
