@@ -6,7 +6,7 @@ import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
@@ -86,7 +86,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
         }
 
         try {
-            await api.post<BackendApiResponse>('/training/training', payload)
+            await serverApi.post<BackendApiResponse>('/training/training', payload)
 
             router.push("/my-training");
         } catch (err) {

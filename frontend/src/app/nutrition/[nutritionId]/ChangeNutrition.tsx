@@ -11,7 +11,7 @@ import {
     validateProteinGrams
 } from "@/lib/utils/validators/nutrition";
 import {useCallback} from "react";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -64,7 +64,7 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
         }
 
         try {
-            await api.put<BackendApiResponse>('/nutrition/day', payload)
+            await serverApi.put<BackendApiResponse>('/nutrition/day', payload)
 
             router.replace("/nutrition");
         } catch (err) {

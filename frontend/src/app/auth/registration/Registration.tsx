@@ -7,7 +7,7 @@ import {
     validateUserName,
     validateUserPassword
 } from "@/lib/utils/validators/user";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -42,7 +42,7 @@ export default function Registration(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/user/registration', payload)
+            await serverApi.post<BackendApiResponse>('/user/registration', payload)
 
             router.push("/auth/login");
         } catch (err) {

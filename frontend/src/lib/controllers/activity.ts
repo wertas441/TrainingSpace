@@ -1,4 +1,4 @@
-import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
+import {serverApi, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import {ActivityDataStructure} from "@/types/activity";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
@@ -14,7 +14,7 @@ export async function getActivityList(tokenValue: string):Promise<ActivityDataSt
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ activity: ActivityDataStructure[] }>>('/activity/activities', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ activity: ActivityDataStructure[] }>>('/activity/activities', payload);
 
         if (!data.success || !data.data?.activity) return undefined;
 
@@ -28,7 +28,7 @@ export async function getActivityList(tokenValue: string):Promise<ActivityDataSt
 
 export async function getTrainingExercises(trainingId: number): Promise<ExerciseTechniqueItem[]> {
     try {
-        const { data } = await api.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>(`/training/${trainingId}/exercises`);
+        const { data } = await serverApi.get<BackendApiResponse<{ exercises: ExerciseTechniqueItem[] }>>(`/training/${trainingId}/exercises`);
 
         if (!data.success || !data.data?.exercises) return [];
 
@@ -47,7 +47,7 @@ export async function getActivityInformation(tokenValue: string, activityId: str
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ activity: ActivityDataStructure }>>(
+        const { data } = await serverApi.get<BackendApiResponse<{ activity: ActivityDataStructure }>>(
             `/activity/about-my-activity?activityId=${encodeURIComponent(activityId)}`,
             payload
         );
@@ -70,7 +70,7 @@ export async function deleteActivity(tokenValue: string, activityId: string):Pro
     }
 
     try {
-        await api.delete<BackendApiResponse>(`/activity/activity`, payload);
+        await serverApi.delete<BackendApiResponse>(`/activity/activity`, payload);
 
         return;
     } catch (err) {
