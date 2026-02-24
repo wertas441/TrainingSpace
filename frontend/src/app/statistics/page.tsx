@@ -26,9 +26,11 @@ export default async function StatisticsPage() {
         );
     }
 
-    const mainCardData = await getMainStatisticsCardInfo(tokenValue);
-    const nutritionCardData = await getNutritionStatisticsCardInfo(tokenValue);
-    const nutritionGraphicData = await getNutritionGraphicInfo(tokenValue);
+    const [mainCardData, nutritionCardData, nutritionGraphicData] = await Promise.all([
+        getMainStatisticsCardInfo(tokenValue),
+        getNutritionStatisticsCardInfo(tokenValue),
+        getNutritionGraphicInfo(tokenValue),
+    ]);
 
     if (!mainCardData || !nutritionGraphicData || !nutritionCardData) {
         return (

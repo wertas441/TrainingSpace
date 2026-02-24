@@ -28,8 +28,10 @@ export default async function ChangeTrainingPage({params}: ChangeTrainingPagePro
         );
     }
 
-    const trainingInfo = await getTrainingInformation(tokenValue, trainingId);
-    const exercises = await getExercisesList();
+    const [trainingInfo, exercises] = await Promise.all([
+        getTrainingInformation(tokenValue, trainingId),
+        getExercisesList(),
+    ])
 
     if (!trainingInfo || !exercises) {
         return (
@@ -40,5 +42,5 @@ export default async function ChangeTrainingPage({params}: ChangeTrainingPagePro
         );
     }
 
-    return <ChangeTraining trainingInfo = {trainingInfo} token = {tokenValue} exercises = {exercises}  />
+    return <ChangeTraining trainingInfo={trainingInfo} token={tokenValue} exercises={exercises}  />
 }
