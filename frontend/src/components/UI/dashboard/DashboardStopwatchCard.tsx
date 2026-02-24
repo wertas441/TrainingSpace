@@ -5,7 +5,7 @@ import {secondDarkColorTheme} from "@/styles";
 
 function DashboardStopwatchCard() {
 
-    const {seconds, isRunning, toggle, formatTime, reset} = useStopwatch();
+    const { seconds, isRunning, toggle, formatTime, reset } = useStopwatch();
 
     return (
         <div className={`${secondDarkColorTheme} flex flex-col justify-between h-full rounded-2xl border border-emerald-100 shadow-sm p-5 gap-4`}>
@@ -52,8 +52,9 @@ function DashboardStopwatchCard() {
                 <button
                     type="button"
                     onClick={reset}
-                    className="inline-flex cursor-pointer items-center justify-center rounded-full px-4 py-2 text-xs font-medium
-                     text-emerald-700 dark:text-white dark:hover:bg-neutral-700 border border-emerald-200 dark:bg-neutral-800 dark:border-neutral-700 hover:bg-emerald-50 transition"
+                    className={`inline-flex cursor-pointer items-center justify-center rounded-full px-4 py-2 text-xs font-medium
+                        text-emerald-700 dark:text-white dark:hover:bg-neutral-700 border border-emerald-200 dark:bg-neutral-800 
+                        dark:border-neutral-700 hover:bg-emerald-50 transition`}
                 >
                     <ArrowPathIcon className="h-4 w-4 mr-1.5" />
                     Сброс
