@@ -3,7 +3,7 @@
 import Select from "react-select";
 import {memo} from "react";
 import InputError from "@/components/errors/InputError";
-import {useTheme} from "@/lib/utils/ThemeProvider";
+ import {useThemeStore} from "@/lib/store/themeStore";
 
 export type OptionType = { value: string; label: string };
 
@@ -32,7 +32,7 @@ function MainMultiSelect(
         isMulti = true,
     }: MainMultiSelectProps) {
 
-    const {theme} = useTheme();
+    const { theme } = useThemeStore();
     const isDark = theme === 'dark';
 
     return (

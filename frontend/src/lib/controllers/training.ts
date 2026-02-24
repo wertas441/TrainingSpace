@@ -1,4 +1,4 @@
-import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
+import {serverApi, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import {TrainingListResponse} from "@/types/training";
 
@@ -9,7 +9,7 @@ export async function getTrainingList(tokenValue: string):Promise<TrainingListRe
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ trainings: TrainingListResponse[] }>>('/training/trainings', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ trainings: TrainingListResponse[] }>>('/training/trainings', payload);
 
         if (!data.success || !data.data?.trainings) return undefined;
 
@@ -28,7 +28,7 @@ export async function getTrainingInformation(tokenValue: string, trainingId: str
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ training: TrainingListResponse }>>(
+        const { data } = await serverApi.get<BackendApiResponse<{ training: TrainingListResponse }>>(
             `/training/about-my-training?trainingId=${encodeURIComponent(trainingId)}`,
             payload
         );
@@ -51,7 +51,7 @@ export async function deleteTraining(tokenValue: string, trainingId: string):Pro
     }
 
     try {
-        await api.delete<BackendApiResponse>(`/training/training`, payload);
+        await serverApi.delete<BackendApiResponse>(`/training/training`, payload);
 
         return;
     } catch (err) {

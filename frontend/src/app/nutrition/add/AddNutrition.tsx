@@ -4,7 +4,7 @@ import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {
     validateCalories,
     validateCarbGrams,
@@ -48,7 +48,7 @@ export default function AddNutrition(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/nutrition/day', payload)
+            await serverApi.post<BackendApiResponse>('/nutrition/day', payload)
 
             router.push("/nutrition");
         } catch (err) {

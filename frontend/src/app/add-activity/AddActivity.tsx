@@ -5,7 +5,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activity";
@@ -96,7 +96,7 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         }
 
         try {
-            await api.post<BackendApiResponse>('/activity/activity', payload)
+            await serverApi.post<BackendApiResponse>('/activity/activity', payload)
 
             router.push("/my-activity");
         } catch (err) {

@@ -4,7 +4,7 @@ import {useCallback} from "react";
 import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goal";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators/goal";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
@@ -51,7 +51,7 @@ export function ChangeGoal({goalInfo, token}: IProps) {
         }
 
         try {
-            await api.put<BackendApiResponse>('/goal/goal', payload)
+            await serverApi.put<BackendApiResponse>('/goal/goal', payload)
 
             router.replace("/goals");
         } catch (err) {

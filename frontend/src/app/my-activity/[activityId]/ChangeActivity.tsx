@@ -17,7 +17,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import type {BackendApiResponse, TrainingDataStructure} from "@/types";
 import {buildExercisesPayload, deleteActivity} from "@/lib/controllers/activity";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
@@ -158,7 +158,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
         console.log(payload);
 
         try {
-            await api.put<BackendApiResponse>('/activity/activity', payload)
+            await serverApi.put<BackendApiResponse>('/activity/activity', payload)
 
             router.replace("/my-activity");
         } catch (err) {

@@ -1,4 +1,4 @@
-import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
+import {serverApi, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type { BackendApiResponse } from "@/types";
 import {CompleteGoalsStructure, GoalShortyStructure, GoalsStructure} from "@/types/goal";
 
@@ -9,7 +9,7 @@ export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] |
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ goals: GoalsStructure[] }>>('/goal/goals', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ goals: GoalsStructure[] }>>('/goal/goals', payload);
 
         if (!data.success || !data.data?.goals) return undefined;
 
@@ -28,7 +28,7 @@ export async function getCompleteGoalList(tokenValue: string):Promise<CompleteGo
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ goals: CompleteGoalsStructure[] }>>('/goal/completed-goals', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ goals: CompleteGoalsStructure[] }>>('/goal/completed-goals', payload);
 
         if (!data.success || !data.data?.goals) return undefined;
 
@@ -48,7 +48,7 @@ export async function getGoalShortyList(tokenValue: string):Promise<GoalShortySt
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ goals: GoalShortyStructure[] }>>('/goal/short-goals', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ goals: GoalShortyStructure[] }>>('/goal/short-goals', payload);
 
         if (!data.success || !data.data?.goals) return [];
 
@@ -67,7 +67,7 @@ export async function getGoalInformation(tokenValue: string, goalId: string):Pro
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ goal: GoalsStructure }>>(`/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`, payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ goal: GoalsStructure }>>(`/goal/about-my-goal?goalId=${encodeURIComponent(goalId)}`, payload);
 
         if (!data.success || !data.data?.goal) return undefined;
 
@@ -87,7 +87,7 @@ export async function deleteGoal(tokenValue: string, goalId: string):Promise<voi
     };
 
     try {
-        await api.delete<BackendApiResponse>(`/goal/goal`, payload);
+        await serverApi.delete<BackendApiResponse>(`/goal/goal`, payload);
 
         return;
     } catch (err) {
@@ -104,7 +104,7 @@ export async function completeGoal(tokenValue: string, goalId: string):Promise<v
     };
 
     try {
-        await api.put<BackendApiResponse>(`/goal/complete-goal`, { goalId }, config);
+        await serverApi.put<BackendApiResponse>(`/goal/complete-goal`, { goalId }, config);
 
         return;
     } catch (err) {

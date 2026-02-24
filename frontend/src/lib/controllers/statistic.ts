@@ -1,4 +1,4 @@
-import {api, getServerErrorMessage, getTokenHeaders} from "@/lib";
+import {serverApi, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import {
     MainStatisticsCardResponse,
@@ -13,7 +13,7 @@ export async function getMainStatisticsCardInfo(tokenValue: string):Promise<Main
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ mainCardsData: MainStatisticsCardResponse }>>('/statistics/main-information', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ mainCardsData: MainStatisticsCardResponse }>>('/statistics/main-information', payload);
 
         if (!data.success || !data.data?.mainCardsData) return undefined;
 
@@ -32,7 +32,7 @@ export async function getNutritionStatisticsCardInfo(tokenValue: string):Promise
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ nutritionCardData: NutritionStatisticsCardResponse }>>('/statistics/nutrition-information', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ nutritionCardData: NutritionStatisticsCardResponse }>>('/statistics/nutrition-information', payload);
 
         if (!data.success || !data.data?.nutritionCardData) return undefined;
 
@@ -51,7 +51,7 @@ export async function getNutritionGraphicInfo(tokenValue: string):Promise<Nutrit
     }
 
     try {
-        const { data } = await api.get<BackendApiResponse<{ graphicData: NutritionStatisticsGraphicResponse[] }>>('/statistics/nutrition-graphic', payload);
+        const { data } = await serverApi.get<BackendApiResponse<{ graphicData: NutritionStatisticsGraphicResponse[] }>>('/statistics/nutrition-graphic', payload);
 
         if (!data.success || !data.data?.graphicData) return [];
 

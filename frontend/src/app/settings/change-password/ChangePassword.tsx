@@ -6,7 +6,7 @@ import {
     validateUserPassword
 } from "@/lib/utils/validators/user";
 import {useMemo} from "react";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -40,7 +40,7 @@ export default function ChangePassword(){
         }
 
         try {
-            await api.post<BackendApiResponse>('/user/change-password', payload)
+            await serverApi.post<BackendApiResponse>('/user/change-password', payload)
 
             router.push("/settings/profile");
         } catch (err) {

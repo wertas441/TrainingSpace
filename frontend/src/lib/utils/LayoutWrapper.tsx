@@ -10,6 +10,7 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 
 	const pathname: string = usePathname();
 	const isAuthPage: boolean = pathname.startsWith('/auth');
+
 	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
 	const activeContext: string = useMemo(() => {
@@ -22,9 +23,7 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 		return segments[0];
 	}, [pathname]);
 
-	const toggleSidebar = useCallback(() => {
-		setIsSidebarOpen(prev => !prev);
-	}, []);
+	const toggleSidebar = useCallback(() => setIsSidebarOpen(prev => !prev), []);
 
 	return (
 		<div className={`${firstDarkColorTheme} min-h-screen flex overflow-x-hidden`}>
@@ -41,7 +40,8 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
                             onClose={toggleSidebar}
                         />
 					)}
-					<main className="flex-1 p-4 relative overflow-x-hidden">
+
+					<main className={`flex-1 ${!isAuthPage ? 'p-4 relative overflow-x-hidden' : '' }`}>
 						{children}
 					</main>
 				</div>

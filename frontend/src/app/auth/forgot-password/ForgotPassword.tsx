@@ -3,7 +3,7 @@
 import {useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateUserEmail} from "@/lib/utils/validators/user";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -34,7 +34,7 @@ export default function ForgotPassword() {
         }
 
         try {
-            await api.post<BackendApiResponse>('/user/forgot-password', payload)
+            await serverApi.post<BackendApiResponse>('/user/forgot-password', payload)
 
             setSuccessMessage("Если указанный email зарегистрирован, мы отправили на него письмо с дальнейшими инструкциями по восстановлению пароля.");
             setIsSubmitting(false)

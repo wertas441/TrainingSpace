@@ -8,7 +8,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import MainTextarea from "@/components/inputs/MainTextarea";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {
     validateGoalDescription,
     validateGoalName,
@@ -39,7 +39,7 @@ export default function AddGoal() {
         }
 
         try {
-            await api.post<BackendApiResponse>('/goal/goal', payload)
+            await serverApi.post<BackendApiResponse>('/goal/goal', payload)
 
             router.push("/goals");
         } catch (err) {

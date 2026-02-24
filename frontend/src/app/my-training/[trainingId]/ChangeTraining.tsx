@@ -7,7 +7,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators/training";
-import {api, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {BackendApiResponse} from "@/types";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -101,7 +101,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
         }
 
         try {
-            await api.put<BackendApiResponse>('/training/training', payload)
+            await serverApi.put<BackendApiResponse>('/training/training', payload)
 
             router.replace("/my-training");
         } catch (err) {
