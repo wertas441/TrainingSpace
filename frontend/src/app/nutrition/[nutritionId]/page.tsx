@@ -15,6 +15,7 @@ interface ChangeNutritionPageProps {
 
 export default async function ChangeNutritionPage({ params }: ChangeNutritionPageProps){
     const { nutritionId } = await params;
+
     const tokenValue = (await cookies()).get('token')?.value;
 
     if (!tokenValue) {

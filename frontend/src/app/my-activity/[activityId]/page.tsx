@@ -29,8 +29,10 @@ export default async function ChangeActivityPage({ params }: ChangeActivityProps
         );
     }
 
-    const activityInfo = await getActivityInformation(tokenValue, activityId);
-    const trainings = await getTrainingList(tokenValue);
+    const [activityInfo, trainings] = await Promise.all([
+        getActivityInformation(tokenValue, activityId),
+        getTrainingList(tokenValue),
+    ])
 
     if (!activityInfo || !trainings) {
         return (

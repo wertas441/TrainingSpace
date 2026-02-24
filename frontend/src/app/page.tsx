@@ -23,10 +23,12 @@ export default async function Home() {
         );
     }
 
-    const goalsShortyList = await getGoalShortyList(tokenValue);
-    const nutritionGraphicData = await getNutritionGraphicInfo(tokenValue);
+    const [goalsResult, nutritionResult] = await Promise.all([
+        getGoalShortyList(tokenValue),
+        getNutritionGraphicInfo(tokenValue),
+    ]);
 
-    if (!nutritionGraphicData || !goalsShortyList) {
+    if (!goalsResult || !nutritionResult) {
         return (
             <ErrorState
                 title="Не удалось загрузить главную страницу"
@@ -35,5 +37,5 @@ export default async function Home() {
         );
     }
 
-    return <Dashboard goalsShortyList={goalsShortyList}  nutritionGraphicData={nutritionGraphicData} />
+    return <Dashboard goalsShortyList={goalsResult}  nutritionGraphicData={nutritionResult} />
 }

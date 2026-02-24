@@ -23,8 +23,10 @@ export default async function MyTrainingPage() {
         );
     }
 
-    const clientTrainings = await getTrainingList(tokenValue)
-    const exercises = await getExercisesList();
+    const [clientTrainings, exercises] = await Promise.all([
+        getTrainingList(tokenValue),
+        getExercisesList(),
+    ])
 
     if (!clientTrainings || !exercises) {
         return (
