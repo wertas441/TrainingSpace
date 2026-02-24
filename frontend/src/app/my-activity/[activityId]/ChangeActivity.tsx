@@ -30,6 +30,7 @@ import {
 import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";
+import DropDownContent from "@/components/UI/UiContex/DropDownContent";
 
 interface IProps {
     activityInfo: ActivityDataStructure,
@@ -192,91 +193,96 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
 
                         <ServerError message={serverError} />
 
-                        <MainInput
-                            id="activityName"
-                            label="Название активности"
-                            placeholder={`Тренировка в бассейне`}
-                            error={errors.activityName?.message}
-                            {...register('activityName', {validate: (value) => validateActivityName(value) || true})}
-                        />
-
-                        <MainInput
-                            id={'activityDate'}
-                            type={'date'}
-                            label="Дата активности"
-                            error={errors.activityDate?.message}
-                            {...register('activityDate', {validate: (value) => validateActivityDate(value) || true})}
-                        />
-
-                        <MainTextarea
-                            id="activityDescription"
-                            label="Описание"
-                            placeholder="Опционально: комментарий к сессии"
-                            error={errors.activityDescription?.message}
-                            {...register('activityDescription', {validate: (value) => validateActivityDescription(value) || true})}
-                        />
-
-                        <Controller
-                            control={control}
-                            name="activityType"
-                            render={({field}) => (
-                                <ChipRadioGroup<ActivityTypeStructure>
-                                    id="activityType"
-                                    label={`Тип`}
-                                    choices={activityTypeChoices}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            control={control}
-                            name="activityDifficulty"
-                            render={({field}) => (
-                                <ChipRadioGroup<ActivityDifficultyStructure>
-                                    id="activityDifficulty"
-                                    label={'Сложность'}
-                                    choices={activityDifficultyChoices}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                />
-                            )}
-                        />
-
-                        <MainMultiSelect
-                            id="trainingId"
-                            label="Тренировка"
-                            options={trainingOptions}
-                            value={selectedTrainingOption}
-                            onChange={(vals) => handleTrainingSelect(vals[0]?.value ?? '')}
-                            placeholder="Выберите тренировку"
-                            isMulti={false}
-                            noOptionsMessage={() => 'Нет тренировок'}
-                            error={undefined}
-                        />
-
-                        {setsErrors && (
-                            <p className=" pl-1 text-xs text-red-500">{setsErrors}</p>
-                        )}
-
-                        {selectedTraining && (
-                            <AddTrainingActivityItem
-                                selectedTraining={selectedTraining}
-                                exerciseSets={exerciseSets}
-                                trainingExercises={trainingExercises}
-                                setExerciseSets={setExerciseSets}
+                        <DropDownContent label={`Основная информация`} defaultOpen={true}>
+                            <MainInput
+                                id="activityName"
+                                label="Название активности"
+                                placeholder={`Тренировка в бассейне`}
+                                error={errors.activityName?.message}
+                                {...register('activityName', {validate: (value) => validateActivityName(value) || true})}
                             />
-                        )}
+
+                            <MainInput
+                                id={'activityDate'}
+                                type={'date'}
+                                label="Дата активности"
+                                error={errors.activityDate?.message}
+                                {...register('activityDate', {validate: (value) => validateActivityDate(value) || true})}
+                            />
+
+                            <MainTextarea
+                                id="activityDescription"
+                                label="Описание"
+                                placeholder="Опционально: комментарий к сессии"
+                                error={errors.activityDescription?.message}
+                                {...register('activityDescription', {validate: (value) => validateActivityDescription(value) || true})}
+                            />
+
+                            <Controller
+                                control={control}
+                                name="activityType"
+                                render={({field}) => (
+                                    <ChipRadioGroup<ActivityTypeStructure>
+                                        id="activityType"
+                                        label={`Тип`}
+                                        choices={activityTypeChoices}
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                control={control}
+                                name="activityDifficulty"
+                                render={({field}) => (
+                                    <ChipRadioGroup<ActivityDifficultyStructure>
+                                        id="activityDifficulty"
+                                        label={'Сложность'}
+                                        choices={activityDifficultyChoices}
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                    />
+                                )}
+                            />
+                        </DropDownContent>
+
+                        <DropDownContent label={`Тренировка и подходы`}>
+                            <MainMultiSelect
+                                id="trainingId"
+                                label="Тренировка"
+                                options={trainingOptions}
+                                value={selectedTrainingOption}
+                                onChange={(vals) => handleTrainingSelect(vals[0]?.value ?? '')}
+                                placeholder="Выберите тренировку"
+                                isMulti={false}
+                                noOptionsMessage={() => 'Нет тренировок'}
+                                error={undefined}
+                            />
+
+                            {setsErrors && (
+                                <p className=" pl-1 text-xs text-red-500">{setsErrors}</p>
+                            )}
+
+                            {selectedTraining && (
+                                <AddTrainingActivityItem
+                                    selectedTraining={selectedTraining}
+                                    exerciseSets={exerciseSets}
+                                    trainingExercises={trainingExercises}
+                                    setExerciseSets={setExerciseSets}
+                                />
+                            )}
+                        </DropDownContent>
 
                         <div className="mt-10 flex items-center gap-x-8">
                             <LightGreenSubmitBtn
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
                                 disabled={isSubmitting}
                             />
+
                             <RedGlassBtn
-                                label = {'Удалить активность'}
-                                onClick = {toggleModalWindow}
+                                label={'Удалить активность'}
+                                onClick={toggleModalWindow}
                             />
                         </div>
                     </form>

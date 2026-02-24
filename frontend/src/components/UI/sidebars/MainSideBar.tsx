@@ -98,7 +98,7 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: IPr
                 <div className="fixed inset-0 bg-black/30 backdrop-blur-[1px] lg:hidden z-40" aria-hidden="true" onClick={onClose}/>
 			)}
 
-			<aside className={`${firstDarkColorTheme}	fixed lg:static top-0 left-0 h-full lg:h-auto w-72 border-r border-emerald-100 px-4 pt-2 bg-white
+			<aside className={`${firstDarkColorTheme} fixed lg:static top-0 left-0 h-full lg:h-auto w-72 border-r border-emerald-100 px-4 pt-2 bg-white
 			    transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
 				aria-label="Боковая навигация"
 			>
