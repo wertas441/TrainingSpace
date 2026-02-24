@@ -17,7 +17,7 @@ function SelectableExerciseRow({exercise, selected, onToggle}: IProps) {
             <div className="flex flex-col space-y-2 gap-3 md:flex-row md:items-start md:justify-between">
                 <div className="flex-1 space-y-3">
                     <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{exercise.name}</h3>
+                        <h3 className="text-md md:text-lg font-semibold text-gray-800 dark:text-white">{exercise.name}</h3>
 
                         <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`}>
                             {exercise.difficulty === 'Лёгкий' ? 'Лёгкий' : exercise.difficulty === 'Средний' ? 'Средний' : 'Сложный'}
@@ -28,7 +28,8 @@ function SelectableExerciseRow({exercise, selected, onToggle}: IProps) {
                         {exercise.partOfTheBody.map((part) => (
                             <span
                                 key={part}
-                                className="px-2 py-0.5 text-xs border rounded-full border-gray-200 text-gray-700 bg-gray-50 dark:text-white dark:bg-emerald-800 dark:border-emerald-700"
+                                className="px-2 py-0.5 text-xs border rounded-full border-gray-200 text-gray-700 bg-gray-50 dark:text-white
+                                 dark:bg-emerald-800 dark:border-emerald-700"
                             >
                                 {part}
                             </span>

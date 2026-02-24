@@ -149,11 +149,8 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
 
 
                             <DropDownContent label={`Упражнения`} >
-                                <div
-                                    ref={listTopRef}
-                                    className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4 dark:border-neutral-700 dark:bg-neutral-800/70"
-                                >
-                                    <div className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+
+                                    <div ref={listTopRef} className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-200">
                                         Подбор упражнений
                                     </div>
 
@@ -176,9 +173,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                                             error={undefined}
                                         />
                                     </div>
-                                </div>
 
-                                <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4 dark:border-neutral-700 dark:bg-neutral-800/70">
                                     <div className="mb-3 flex items-center justify-between gap-3">
                                         <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
                                             Список упражнений
@@ -215,7 +210,6 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                                             />
                                         </div>
                                     )}
-                                </div>
                             </DropDownContent>
 
                             <SelectExerciseUi

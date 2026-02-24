@@ -280,10 +280,7 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
                                 disabled={isSubmitting}
                             />
 
-                            <RedGlassBtn
-                                label={'Удалить активность'}
-                                onClick={toggleModalWindow}
-                            />
+                            <RedGlassBtn label={'Удалить'} onClick={toggleModalWindow} />
                         </div>
                     </form>
                 </div>

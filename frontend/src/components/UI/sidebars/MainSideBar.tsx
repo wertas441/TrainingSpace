@@ -103,10 +103,10 @@ export default function MainSideBar({ activePage, isOpen = false, onClose }: IPr
 				aria-label="Боковая навигация"
 			>
 
-                <div className="lg:hidden flex justify-between items-center pb-5 ">
+                <div className="lg:hidden flex justify-between items-center pb-5 mt-2 ">
                     <h1 className={`text-2xl font-semibold text-emerald-800 dark:text-white`}>TrainingSpace</h1>
 
-                    <AnyStylesButton onClick={onClose} IconComponent={XMarkIcon} className={`!mt-1.5`}/>
+                    <AnyStylesButton onClick={onClose} IconComponent={XMarkIcon} />
                 </div>
 
 				<nav className="mt-4 list-none space-y-5 ">

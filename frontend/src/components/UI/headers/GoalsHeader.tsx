@@ -43,6 +43,7 @@ function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
                             IconComponent={isGoalPage ? ClipboardDocumentCheckIcon : ClipboardDocumentListIcon}
                             onClick={() => goToPage(isGoalPage? '/goals/completed' : '/goals')}
                             className="w-full"
+                            border={true}
                         />
 
                         <PlusButton
