@@ -26,7 +26,7 @@ export default function DropDownContent(
 
     return (
         <section
-            className={`rounded-2xl border border-emerald-100 dark:border-neutral-700 bg-white dark:bg-neutral-900/95 dark:ring-0 shadow-sm shadow-black/20 backdrop-blur
+            className={`rounded-2xl border border-emerald-100 dark:border-neutral-700 bg-white dark:bg-neutral-900/95 dark:ring-0 backdrop-blur
             ${open ? 'ring-2 ring-emerald-400/15' : ''} ${className}`}
         >
             <button

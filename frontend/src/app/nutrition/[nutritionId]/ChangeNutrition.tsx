@@ -92,57 +92,66 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
     return (
         <>
             <BlockPageContext>
-                <div className="space-y-6">
-                    <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
-                        Изменение дня
-                    </h2>
+                <div className="relative z-10 space-y-6">
+                    <h1 className="text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
+                        Изменить день питания
+                    </h1>
 
                     <ServerError message={serverError} />
 
-                    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-
+                    <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                         <MainInput
                             id={'dayName'}
                             label={'Наименование дня'}
+                            placeholder={'Например: День с упором на белок'}
                             error={errors.dayName?.message}
                             {...register('dayName', {validate: (value) => validateDayName(value) || true})}
                         />
 
-                        <MainInput
-                            id={'calories'}
-                            label={'Калории (ккал)'}
-                            error={errors.calories?.message}
-                            {...register('calories', {validate: (value) => validateCalories(value) || true})}
-                        />
+                        <div className="grid gap-4 sm:grid-cols-2">
+                            <MainInput
+                                id={'calories'}
+                                label={'Калории (ккал)'}
+                                error={errors.calories?.message}
+                                {...register('calories', {validate: (value) => validateCalories(value) || true})}
+                            />
 
-                        <MainInput
-                            id={'protein'}
-                            label={'Белки (г)'}
-                            error={errors.protein?.message}
-                            {...register('protein', {validate: (value) => validateProteinGrams(value) || true})}
-                        />
+                            <MainInput
+                                id={'dayDate'}
+                                type={'date'}
+                                label={'Дата'}
+                                error={errors.dayDate?.message}
+                                {...register('dayDate', {validate: (value) => validateDayDate(value) || true})}
+                            />
+                        </div>
 
-                        <MainInput
-                            id={'fat'}
-                            label={'Жиры (г)'}
-                            error={errors.fat?.message}
-                            {...register('fat', {validate: (value) => validateFatGrams(value) || true})}
-                        />
+                        <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4 dark:border-neutral-700 dark:bg-neutral-800/70">
+                            <p className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+                                Макроэлементы
+                            </p>
+                            <div className="grid gap-4 sm:grid-cols-3">
+                                <MainInput
+                                    id={'protein'}
+                                    label={'Белки (г)'}
+                                    error={errors.protein?.message}
+                                    {...register('protein', {validate: (value) => validateProteinGrams(value) || true})}
+                                />
 
-                        <MainInput
-                            id={'carb'}
-                            label={'Углеводы (г)'}
-                            error={errors.carb?.message}
-                            {...register('carb', {validate: (value) => validateCarbGrams(value) || true})}
-                        />
+                                <MainInput
+                                    id={'fat'}
+                                    label={'Жиры (г)'}
+                                    error={errors.fat?.message}
+                                    {...register('fat', {validate: (value) => validateFatGrams(value) || true})}
+                                />
 
-                        <MainInput
-                            id={'dayDate'}
-                            type={'date'}
-                            label={'Дата'}
-                            error={errors.dayDate?.message}
-                            {...register('dayDate', {validate: (value) => validateDayDate(value) || true})}
-                        />
+                                <MainInput
+                                    id={'carb'}
+                                    label={'Углеводы (г)'}
+                                    error={errors.carb?.message}
+                                    {...register('carb', {validate: (value) => validateCarbGrams(value) || true})}
+                                />
+                            </div>
+                        </div>
 
                         <MainTextarea
                             id={'dayDescription'}
@@ -152,17 +161,11 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
                             {...register('dayDescription', {validate: (value) => validateDayDescription(value) || true})}
                         />
 
-                        <div className="mt-8 flex items-center gap-x-8">
-                            <LightGreenSubmitBtn
-                                label={!isSubmitting ? 'Изменить' : 'Процесс...'}
-                                disabled={isSubmitting}
-                            />
-
-                            <RedGlassBtn
-                                label = {'Удалить день'}
-                                onClick = {toggleModalWindow}
-                            />
-                        </div>
+                        <LightGreenSubmitBtn
+                            label={!isSubmitting ? 'Изменить' : 'Изменение...'}
+                            disabled={isSubmitting}
+                            className="mt-2 py-2.5"
+                        />
                     </form>
                 </div>
             </BlockPageContext>
