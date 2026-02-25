@@ -1,25 +1,21 @@
 'use client'
 
 import ExercisesTechniquesHeader from "@/components/UI/headers/ExercisesTechniquesHeader";
-import {memo, useCallback, useEffect, useMemo, useState} from "react";
+import {memo, useEffect, useMemo} from "react";
 import ExerciseRow from "@/components/elements/ExerciseRow";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
-import {ExerciseDifficultFilter} from "@/types";
 import NullElementsError from "@/components/errors/NullElementsError";
+import {useExerciseStore} from "@/lib/store/exerciseStore";
 
 function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
-    const [searchName, setSearchName] = useState<string>('');
-
-    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
-    const [difficultFilter, setDifficultFilter] = useState<ExerciseDifficultFilter>(null);
-    const [partOfBodyFilter, setPartOfBodyFilter] = useState<string[]>([]);
+    const searchName = useExerciseStore(s => s.searchName)
+    const difficultFilter = useExerciseStore(s => s.difficultFilter)
+    const partOfBodyFilter = useExerciseStore(s => s.partOfBodyFilter)
 
     const itemsPerPage:number = 10;
-
-    const toggleFilterWindow = useCallback(() => setIsFilterWindowOpen(prevState => !prevState), []);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
@@ -50,17 +46,8 @@ function ExercisesTechniques({exercises}:{exercises: ExerciseTechniqueItem[]}) {
 
     return (
         <div className="space-y-4" ref={listTopRef} >
-            <ExercisesTechniquesHeader
-                searchName={searchName}
-                setSearchName={setSearchName}
-                isFilterWindowOpen={isFilterWindowOpen}
-                toggleFilterWindow={toggleFilterWindow}
-                difficultFilter={difficultFilter}
-                setDifficultFilter={setDifficultFilter}
-                partOfBodyFilter={partOfBodyFilter}
-                setPartOfBodyFilter={setPartOfBodyFilter}
-                exercises={exercises}
-            />
+            <ExercisesTechniquesHeader exercises={exercises} />
+
             <div className="grid grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map(ex => (
