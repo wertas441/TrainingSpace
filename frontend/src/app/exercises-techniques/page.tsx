@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import ExercisesTechniques from "@/app/exercises-techniques/ExercisesTechniques";
 import {cookies} from "next/headers";
 import ErrorState from "@/components/errors/ErrorState";
-import {getExercisesList} from "@/lib";
 
 export const metadata: Metadata = {
     title: "Техника выполнения упражнений | TrainingSpace",
@@ -22,16 +21,5 @@ export default async function ExercisesTechniquesPage(){
         );
     }
 
-    const exercises = await getExercisesList();
-
-    if (!exercises) {
-        return (
-            <ErrorState
-                title="Не удалось загрузить список упражнений"
-                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
-            />
-        );
-    }
-
-    return <ExercisesTechniques exercises = {exercises} />
+    return <ExercisesTechniques />
 }

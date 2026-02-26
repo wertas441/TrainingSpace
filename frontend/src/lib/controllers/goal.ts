@@ -1,6 +1,12 @@
 import {serverApi, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type { BackendApiResponse } from "@/types";
-import {CompleteGoalsStructure, GoalShortyStructure, GoalsStructure} from "@/types/goal";
+import {CompleteGoalsStructure, GoalPriority, GoalShortyStructure, GoalsStructure} from "@/types/goal";
+
+interface CreateGoalPayload {
+    name: string;
+    description: string;
+    priority: GoalPriority;
+}
 
 export async function getGoalList(tokenValue: string):Promise<GoalsStructure[] | undefined> {
 
@@ -97,6 +103,22 @@ export async function deleteGoal(tokenValue: string, goalId: string):Promise<voi
     }
 }
 
+export async function createGoal(payload: CreateGoalPayload):Promise<void> {
+    try {
+        const {data} = await serverApi.post<BackendApiResponse>('/goal/goal', payload);
+
+        if (!data.success) {
+            throw new Error(data.message || 'Не удалось создать цель');
+        }
+
+        return;
+    } catch (err) {
+        const message = getServerErrorMessage(err) || "Ошибка добавления цели";
+        console.error(message);
+        throw new Error(message);
+    }
+}
+
 export async function completeGoal(tokenValue: string, goalId: string):Promise<void> {
 
     const config = {
@@ -104,13 +126,17 @@ export async function completeGoal(tokenValue: string, goalId: string):Promise<v
     };
 
     try {
-        await serverApi.put<BackendApiResponse>(`/goal/complete-goal`, { goalId }, config);
+        const {data} = await serverApi.put<BackendApiResponse>(`/goal/complete-goal`, { goalId }, config);
+
+        if (!data.success) {
+            throw new Error(data.message || 'Не удалось отметить цель как выполненную');
+        }
 
         return;
     } catch (err) {
-        console.error(getServerErrorMessage(err) || "Ошибка запроса о выполнении цели");
-
-        return;
+        const message = getServerErrorMessage(err) || "Ошибка запроса о выполнении цели";
+        console.error(message);
+        throw new Error(message);
     }
 }
 

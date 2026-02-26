@@ -5,6 +5,7 @@ import {usePathname} from "next/navigation";
 import MainHeader from "@/components/UI/headers/MainHeader";
 import MainSideBar from "@/components/UI/sidebars/MainSideBar";
 import {firstDarkColorTheme} from "@/styles";
+import QueryProvider from "@/lib/utils/QueryProvider";
 
 export default function LayoutWrapper({children}: {children: ReactNode}):ReactElement {
 
@@ -26,26 +27,28 @@ export default function LayoutWrapper({children}: {children: ReactNode}):ReactEl
 	const toggleSidebar = useCallback(() => setIsSidebarOpen(prev => !prev), []);
 
 	return (
-		<div className={`${firstDarkColorTheme} min-h-screen flex overflow-x-hidden`}>
-			<div className="flex-1 flex flex-col overflow-x-hidden">
-				{!isAuthPage && (
-					<MainHeader onToggleSidebar={toggleSidebar} />
-				)}
+        <QueryProvider>
+            <div className={`${firstDarkColorTheme} min-h-screen flex overflow-x-hidden`}>
+                <div className="flex-1 flex flex-col overflow-x-hidden">
+                    {!isAuthPage && (
+                        <MainHeader onToggleSidebar={toggleSidebar} />
+                    )}
 
-				<div className="flex flex-1 relative overflow-x-hidden">
-					{!isAuthPage && (
-						<MainSideBar
-                            activePage={activeContext}
-                            isOpen={isSidebarOpen}
-                            onClose={toggleSidebar}
-                        />
-					)}
+                    <div className="flex flex-1 relative overflow-x-hidden">
+                        {!isAuthPage && (
+                            <MainSideBar
+                                activePage={activeContext}
+                                isOpen={isSidebarOpen}
+                                onClose={toggleSidebar}
+                            />
+                        )}
 
-					<main className={`flex-1 ${!isAuthPage ? 'p-4 relative overflow-x-hidden' : '' }`}>
-						{children}
-					</main>
-				</div>
-			</div>
-		</div>
+                        <main className={`flex-1 ${!isAuthPage ? 'p-4 relative overflow-x-hidden' : '' }`}>
+                            {children}
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </QueryProvider>
 	)
 }

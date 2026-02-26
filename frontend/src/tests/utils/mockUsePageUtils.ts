@@ -14,6 +14,7 @@ type UsePageUtils = {
 	isSubmitting: boolean;
 	setIsSubmitting: (v: boolean) => void;
 	router: Router;
+	goToPage: (path: string) => void;
 };
 
 export const setServerErrorMock = jest.fn();
@@ -31,6 +32,7 @@ const defaultUsePageUtils: UsePageUtils = {
 		back: backMock,
 		forward: forwardMock,
 	},
+	goToPage: pushMock,
 };
 
 let overrides: Partial<UsePageUtils> = {};

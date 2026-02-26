@@ -31,6 +31,7 @@ function ErrorState(
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     {description}
                 </p>
+
             </div>
         </div>
     );

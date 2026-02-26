@@ -3,8 +3,8 @@ import {memo, useCallback, useState} from "react";
 import ChangeButton from "@/components/buttons/other/ChangeButton";
 import CheckButton from "@/components/buttons/other/CheckButton";
 import {getColorStyles, secondDarkColorTheme} from "@/styles";
-import {completeGoal} from "@/lib/controllers/goal";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
+import {useCompleteGoalMutation} from "@/lib/hooks/mutations/goal";
 
 interface IProps extends GoalsStructure{
     token: string;
@@ -16,27 +16,26 @@ function GoalRow({publicId, name, description, priority, token}: IProps ) {
 
     const [isHidden, setIsHidden] = useState<boolean>(false);
 
-    const { router, goToPage } = usePageUtils();
+    const { goToPage } = usePageUtils();
+    const {mutate: completeGoalMutate, isPending: isCompletingPending} = useCompleteGoalMutation(token);
 
     const handleCompleteClick = useCallback(() => {
-        if (isCompleting) return;
-
+        if (isCompleting || isCompletingPending) return;
         setIsCompleting(true);
 
-        completeGoal(token, publicId)
-            .then(() => {
-                // Даем анимации выполниться перед скрытием и обновлением списка
+        completeGoalMutate(publicId, {
+            onSuccess: () => {
+                // Даем анимации завершения отработать перед удалением карточки из списка
                 setTimeout(() => {
                     setIsHidden(true);
-                    router.refresh();
                 }, 300);
-            })
-            .catch((error) => {
+            },
+            onError: (error) => {
                 console.error('Ошибка при выполнении цели', error);
-
                 setIsCompleting(false);
-            });
-    }, [token, publicId, router, isCompleting]);
+            },
+        });
+    }, [isCompleting, isCompletingPending, completeGoalMutate, publicId]);
 
     if (isHidden) {
         return null;
@@ -64,7 +63,7 @@ function GoalRow({publicId, name, description, priority, token}: IProps ) {
                     <CheckButton
                         onClick={handleCompleteClick}
                         className={'w-full'}
-                        disabled={isCompleting}
+                        disabled={isCompleting || isCompletingPending}
                     />
 
                     <ChangeButton

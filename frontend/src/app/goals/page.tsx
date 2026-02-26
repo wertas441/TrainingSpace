@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Goals from "@/app/goals/Goals";
-import {getGoalList} from "@/lib/controllers/goal";
 import {cookies} from "next/headers";
 import ErrorState from "@/components/errors/ErrorState";
 
@@ -22,16 +21,5 @@ export default async function GoalsPage(){
         );
     }
 
-    const goalsList = await getGoalList(tokenValue);
-
-    if (!goalsList) {
-        return (
-            <ErrorState
-                title="Не удалось загрузить список целей"
-                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
-            />
-        );
-    }
-
-    return <Goals clientGoals={goalsList} token={tokenValue} />
+    return <Goals token={tokenValue} />
 }

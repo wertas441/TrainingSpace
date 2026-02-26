@@ -9,6 +9,7 @@ import {
 import {pushMock} from '@/tests/utils/mockNextNavigation';
 import AddGoal from "@/app/goals/add/AddGoal";
 import { mockAxiosInstance } from '@/tests/utils/mockAxios';
+import QueryProvider from "@/lib/utils/QueryProvider";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -22,7 +23,11 @@ describe('Добавить новую цель', () => {
     });
 
     it('Проверка работоспособности валидации', async () => {
-        render(<AddGoal />);
+        render(
+            <QueryProvider>
+                <AddGoal />
+            </QueryProvider>
+        );
 
         const submitButton = screen.getByRole('button', { name: 'Добавить' });
         await userEvent.click(submitButton);
@@ -33,7 +38,11 @@ describe('Добавить новую цель', () => {
     it('Не успешная отправка формы из-за backend', async () => {
         mockAxiosInstance.post.mockRejectedValue(new Error('Network error'));
 
-        render(<AddGoal />);
+        render(
+            <QueryProvider>
+                <AddGoal />
+            </QueryProvider>
+        );
 
         await userEvent.type(screen.getByLabelText('Название цели'), 'пожать 100кг');
         await userEvent.type(screen.getByLabelText('Описание'), 'фыыфацйайай');
@@ -54,7 +63,11 @@ describe('Добавить новую цель', () => {
     it('Успешная отправка формы', async () => {
         mockAxiosInstance.post.mockResolvedValue({ data: { success: true } });
 
-        render(<AddGoal />);
+        render(
+            <QueryProvider>
+                <AddGoal />
+            </QueryProvider>
+        );
 
         await userEvent.type(screen.getByLabelText('Название цели'), 'пожать 100кг');
         await userEvent.type(screen.getByLabelText('Описание'), 'фыыфацйайай');
