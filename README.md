@@ -26,6 +26,7 @@ URL: https://your-training.space
   - Next.js 16 (App Router)
   - React 19
   - TypeScript
+  - TanStack Query
   - Zustand
   - Tailwind CSS 4 + SCSS
   - Jest + Testing Library
