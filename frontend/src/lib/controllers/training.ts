@@ -2,6 +2,24 @@ import {serverApi, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types";
 import {TrainingListResponse} from "@/types/training";
 
+interface CreateTrainingPayload {
+    name: string;
+    description: string;
+    exercises: number[];
+}
+
+interface UpdateTrainingPayload {
+    trainingId: string;
+    name: string;
+    description: string;
+    exercises: number[];
+}
+
+interface DeleteTrainingPayload {
+    tokenValue: string;
+    trainingId: string;
+}
+
 export async function getTrainingList(tokenValue: string):Promise<TrainingListResponse[] | undefined> {
 
     const payload = {
@@ -43,20 +61,52 @@ export async function getTrainingInformation(tokenValue: string, trainingId: str
     }
 }
 
-export async function deleteTraining(tokenValue: string, trainingId: string):Promise<void> {
-
-    const payload = {
-        headers: getTokenHeaders(tokenValue),
-        data: { trainingId },
-    }
-
+export async function createTraining(payload: CreateTrainingPayload):Promise<void> {
     try {
-        await serverApi.delete<BackendApiResponse>(`/training/training`, payload);
+        const { data } = await serverApi.post<BackendApiResponse>('/training/training', payload);
+
+        if (!data.success) throw new Error(data.message || 'Не удалось создать тренировку');
 
         return;
     } catch (err) {
-        console.error(getServerErrorMessage(err) || "Ошибка удаления тренировки");
+        const message = getServerErrorMessage(err) || "Ошибка создания тренировки";
+
+        console.error(message);
+        throw new Error(message);
+    }
+}
+
+export async function updateTraining(payload: UpdateTrainingPayload):Promise<void> {
+    try {
+        const { data } = await serverApi.put<BackendApiResponse>('/training/training', payload);
+
+        if (!data.success) throw new Error(data.message || 'Не удалось обновить тренировку');
 
         return;
+    } catch (err) {
+        const message = getServerErrorMessage(err) || "Ошибка обновления тренировки";
+
+        console.error(message);
+        throw new Error(message);
+    }
+}
+
+export async function deleteTraining(payload: DeleteTrainingPayload):Promise<void> {
+
+    const requestConfig = {
+        headers: getTokenHeaders(payload.tokenValue),
+        data: { trainingId: payload.trainingId },
+    }
+
+    try {
+        const {data} = await serverApi.delete<BackendApiResponse>(`/training/training`, requestConfig);
+
+        if (!data.success) throw new Error(data.message || "Не удалось удалить тренировку");
+
+        return;
+    } catch (err) {
+        const message = getServerErrorMessage(err) || "Ошибка удаления тренировки";
+        console.error(message);
+        throw new Error(message);
     }
 }

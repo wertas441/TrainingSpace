@@ -8,10 +8,17 @@ import {
 import {pushMock} from '@/tests/utils/mockNextNavigation';
 import {GoalsStructure} from "@/types/goal";
 import Goals from "@/app/goals/Goals";
+import QueryProvider from "@/lib/utils/QueryProvider";
+import useGoals from "@/lib/hooks/data/goal";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     ...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
+}));
+
+jest.mock('@/lib/hooks/data/goal', () => ({
+    __esModule: true,
+    default: jest.fn(),
 }));
 
 describe('Список целей во вкладке "Цели"', () => {
@@ -45,7 +52,20 @@ describe('Список целей во вкладке "Цели"', () => {
     ]
 
     it('Проверка корректного вывода данных списка', async () => {
-        render(<Goals clientGoals={clientGoalsFakeData} token={'test-token'} />);
+        (useGoals as jest.Mock).mockReturnValue({
+            goals: clientGoalsFakeData,
+            isLoading: false,
+            error: null,
+            isError: false,
+            refetch: jest.fn(),
+            isFetching: false,
+        });
+
+        render(
+            <QueryProvider>
+                <Goals token={'test-token'} />
+            </QueryProvider>
+        );
 
         expect(await screen.findByText('Купить яйца')).toBeInTheDocument();
         expect(await screen.findByText('Надо пожать сотку и купить ящик')).toBeInTheDocument();
@@ -57,13 +77,39 @@ describe('Список целей во вкладке "Цели"', () => {
     });
 
     it('Отсутствие данных в списке, потому что пользователь еще не добавлял цель', async () => {
-        render(<Goals clientGoals={[]} token={'test-token'} />);
+        (useGoals as jest.Mock).mockReturnValue({
+            goals: [],
+            isLoading: false,
+            error: null,
+            isError: false,
+            refetch: jest.fn(),
+            isFetching: false,
+        });
+
+        render(
+            <QueryProvider>
+                <Goals token={'test-token'} />
+            </QueryProvider>
+        );
 
         expect(await screen.findByText('У вас пока нет активных целей. Нажмите «Добавить цель», чтобы создать первую.')).toBeInTheDocument();
     });
 
     it('Успешный переход к странице изменения цели', async () => {
-        render(<Goals clientGoals={clientGoalsFakeData} token={'test-token'} />);
+        (useGoals as jest.Mock).mockReturnValue({
+            goals: clientGoalsFakeData,
+            isLoading: false,
+            error: null,
+            isError: false,
+            refetch: jest.fn(),
+            isFetching: false,
+        });
+
+        render(
+            <QueryProvider>
+                <Goals token={'test-token'} />
+            </QueryProvider>
+        );
 
         const buttons = await screen.findAllByRole('button');
         const changeButton = buttons[buttons.length - 1];

@@ -7,8 +7,7 @@ import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators/training";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import {BackendApiResponse} from "@/types";
+import {showErrorMessage} from "@/lib";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
@@ -18,12 +17,12 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import {deleteTraining} from "@/lib/controllers/training";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import {secondDarkColorTheme} from "@/styles";
 import {useForm} from "react-hook-form";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
+import {useDeleteTrainingMutation, useUpdateTrainingMutation} from "@/lib/hooks/mutations/training";
 
 interface IProps {
     trainingInfo: TrainingListResponse,
@@ -45,11 +44,15 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
         }
     })
 
+    const { serverError, setServerError, isSubmitting, router } = usePageUtils();
+
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow();
+
+    const updateTrainingMutation = useUpdateTrainingMutation();
+    const deleteTrainingMutation = useDeleteTrainingMutation();
+
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;
-
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
-    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow();
 
     const initialSelectedExerciseIds = trainingInfo.exercises;
 
@@ -74,9 +77,7 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchName, partOfBodyFilter, setCurrentPage]);
+    useEffect(() => setCurrentPage(1), [searchName, partOfBodyFilter, setCurrentPage]);
 
     const validateForm = (): boolean => {
         const exercisesValidationError = validateTrainingExercises(selectedExerciseIds);
@@ -85,14 +86,12 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
         return !(exercisesValidationError);
     }
 
-    const onSubmit = async (values: ChangeTrainingFormValues)=> {
+    const onSubmit = (values: ChangeTrainingFormValues)=> {
         setServerError(null);
 
         if (!validateForm()) {
             return;
         }
-
-        setIsSubmitting(true);
 
         const payload = {
             trainingId: trainingInfo.publicId,
@@ -101,33 +100,37 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
             exercises: selectedExerciseIds,
         }
 
-        try {
-            await serverApi.put<BackendApiResponse>('/training/training', payload)
+        updateTrainingMutation.mutate(payload, {
+            onSuccess: () => router.replace("/my-training"),
 
-            router.replace("/my-training");
-        } catch (err) {
-            const message:string = getServerErrorMessage(err);
+            onError: (err: unknown) => {
+                const message = err instanceof Error ? err.message : "Не удалось изменить тренировку. Попробуйте ещё раз.";
 
-            setServerError(message);
-            if (showErrorMessage) console.error('change training error:', err);
-
-            setIsSubmitting(false);
-        }
+                setServerError(message);
+                if (showErrorMessage) console.error('change training error:', err);
+            },
+        });
     }
 
     const deleteTrainingBtn = useCallback(async () => {
         setServerError(null);
 
-        try {
-            await deleteTraining(token, trainingInfo.publicId);
-
-            router.replace("/my-training");
-        } catch (error) {
-            console.error("delete training error:", error);
-
-            setServerError("Не удалось удалить тренировку. Попробуйте ещё раз позже.");
+        const payload = {
+            tokenValue: token,
+            trainingId: trainingInfo.publicId,
         }
-    }, [trainingInfo, router, setServerError, token]);
+
+        deleteTrainingMutation.mutate(payload, {
+            onSuccess: () => router.replace("/my-training"),
+
+            onError: (err: unknown) => {
+                console.error("delete training error:", err);
+
+                setServerError("Не удалось удалить тренировку. Попробуйте ещё раз позже.");
+            },
+        });
+
+    }, [trainingInfo.publicId, router, setServerError, token, deleteTrainingMutation]);
 
     return (
         <>

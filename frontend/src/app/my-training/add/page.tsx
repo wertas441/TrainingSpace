@@ -2,7 +2,6 @@ import AddNewTraining from "@/app/my-training/add/AddNewTraining";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
 import ErrorState from "@/components/errors/ErrorState";
-import {getExercisesList} from "@/lib";
 
 export const metadata: Metadata = {
     title: 'Добавить новую тренировку | TrainingSpace',
@@ -22,16 +21,5 @@ export default async function AddNewTrainingPage(){
         );
     }
 
-    const exercises = await getExercisesList();
-
-    if (!exercises) {
-        return (
-            <ErrorState
-                title="Не удалось загрузить страницу добавления тренировки"
-                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
-            />
-        );
-    }
-
-    return <AddNewTraining exercises={exercises} />
+    return <AddNewTraining />
 }

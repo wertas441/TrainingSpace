@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import MyTraining from "@/app/my-training/MyTraining";
 import {cookies} from "next/headers";
-import {getTrainingList} from "@/lib/controllers/training";
 import ErrorState from "@/components/errors/ErrorState";
-import {getExercisesList} from "@/lib";
 
 export const metadata: Metadata = {
     title: 'Мои тренировки | TrainingSpace',
@@ -23,19 +21,5 @@ export default async function MyTrainingPage() {
         );
     }
 
-    const [clientTrainings, exercises] = await Promise.all([
-        getTrainingList(tokenValue),
-        getExercisesList(),
-    ])
-
-    if (!clientTrainings || !exercises) {
-        return (
-            <ErrorState
-                title="Не удалось загрузить список тренировок"
-                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
-            />
-        );
-    }
-
-    return <MyTraining trainingList={clientTrainings} exercises={exercises} />
+    return <MyTraining token={tokenValue} />
 }

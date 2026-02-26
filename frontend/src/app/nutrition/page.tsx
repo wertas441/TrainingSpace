@@ -1,7 +1,6 @@
 import Nutrition from "@/app/nutrition/Nutrition";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getDayList} from "@/lib/controllers/nutrition";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
@@ -22,16 +21,5 @@ export default async function NutritionPage(){
         );
     }
 
-    const daysList = await getDayList(tokenValue);
-
-    if (!daysList) {
-        return (
-            <ErrorState
-                title="Не удалось загрузить список питания"
-                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
-            />
-        );
-    }
-
-    return <Nutrition userDays={daysList} />
+    return <Nutrition token={tokenValue} />
 }

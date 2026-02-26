@@ -2,7 +2,6 @@ import {Metadata} from "next";
 import CompletedGoals from "@/app/goals/completed/CompletedGoals";
 import {cookies} from "next/headers";
 import ErrorState from "@/components/errors/ErrorState";
-import {getCompleteGoalList} from "@/lib/controllers/goal";
 
 export const metadata: Metadata = {
     title: 'Выполненные цели | TrainingSpace',
@@ -22,16 +21,5 @@ export default async function CompletedGoalsPage() {
         );
     }
 
-    const completeList = await getCompleteGoalList(tokenValue);
-
-    if (!completeList) {
-        return (
-            <ErrorState
-                title="Не удалось загрузить список выполненных целей"
-                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
-            />
-        );
-    }
-
-    return <CompletedGoals completeList={completeList} />
+    return <CompletedGoals token={tokenValue} />
 }

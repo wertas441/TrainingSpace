@@ -1,12 +1,12 @@
 'use client'
 
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {showErrorMessage} from "@/lib";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {usePagination} from "@/lib/hooks/usePagination";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
@@ -16,8 +16,6 @@ import {
     validateTrainingName
 } from "@/lib/utils/validators/training";
 import MainPagination from "@/components/UI/other/MainPagination";
-import type {BackendApiResponse} from "@/types";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
 import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
 import NullElementsError from "@/components/errors/NullElementsError";
@@ -31,20 +29,28 @@ import {
 } from "@heroicons/react/24/outline";
 import {useForm} from "react-hook-form";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
+import {useCreateTrainingMutation} from "@/lib/hooks/mutations/training";
+import {useExerciseList} from "@/lib/hooks/data/exercise";
 
 interface AddNewTrainingFormValues {
     trainingName: string;
     trainingDescription: string;
 }
 
-export default function AddNewTraining({exercises}:{exercises: ExerciseTechniqueItem[]}){
+export default function AddNewTraining() {
 
     const { register, handleSubmit, formState: { errors } } = useForm<AddNewTrainingFormValues>()
+
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+
+    const { exercises: exerciseList } = useExerciseList();
+
+    const exercises = useMemo(() => exerciseList ?? [], [exerciseList]);
 
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const createTrainingMutation = useCreateTrainingMutation()
 
     const {
         partOfBodyFilter,
@@ -67,9 +73,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchName, partOfBodyFilter, setCurrentPage]);
+    useEffect(() => setCurrentPage(1), [searchName, partOfBodyFilter, setCurrentPage]);
 
     const validateForm = (): boolean => {
         const exercisesValidationError = validateTrainingExercises(selectedExerciseIds);
@@ -93,18 +97,16 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
             exercises: selectedExerciseIds,
         }
 
-        try {
-            await serverApi.post<BackendApiResponse>('/training/training', payload)
+        createTrainingMutation.mutate(payload, {
+            onSuccess: () => router.push("/my-training"),
 
-            router.push("/my-training");
-        } catch (err) {
-            const message:string = getServerErrorMessage(err);
+            onError: (err) => {
+                const message = err instanceof Error ? err.message : "Не удалось добавить тренировку. Попробуйте ещё раз.";
 
-            setServerError(message);
-            if (showErrorMessage) console.error('add new training error:', err);
-
-            setIsSubmitting(false);
-        }
+                setServerError(message);
+                if (showErrorMessage) console.error('add new training error:', err);
+            },
+        });
     }
 
     return (
@@ -126,8 +128,6 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
 
                         <ServerError message={serverError} />
 
-
-
                         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                             <DropDownContent label={`Основная информация`} defaultOpen={true}>
                                 <MainInput
@@ -146,7 +146,6 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                                     {...register('trainingDescription', {validate: (value) => validateTrainingDescription(value) || true})}
                                 />
                             </DropDownContent>
-
 
                             <DropDownContent label={`Упражнения`} >
 
@@ -273,6 +272,7 @@ export default function AddNewTraining({exercises}:{exercises: ExerciseTechnique
                         <div className="rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
                             <div className="flex items-center gap-2 text-sm text-emerald-50/95">
                                 <FireIcon className="h-5 w-5 shrink-0" />
+
                                 <span>Хороший шаблон делает тренировки стабильными и проще в исполнении.</span>
                             </div>
                         </div>

@@ -7,7 +7,7 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import MainTextarea from "@/components/inputs/MainTextarea";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {showErrorMessage} from "@/lib";
 import {
     ChartBarSquareIcon,
     ClipboardDocumentCheckIcon,
@@ -18,9 +18,9 @@ import {
     validateGoalDescription,
     validateGoalName,
 } from "@/lib/utils/validators/goal";
-import type {BackendApiResponse} from "@/types";
 import {Controller, useForm} from "react-hook-form";
 import HalfContentRow from "@/components/elements/HalfContentRow";
+import {useCreateGoalMutation} from "@/lib/hooks/mutations/goal";
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
@@ -32,11 +32,11 @@ export default function AddGoal() {
         }
     })
 
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils()
+    const { serverError, setServerError, router } = usePageUtils()
+    const createGoalMutation = useCreateGoalMutation();
 
-    const onSubmit = async (values: GoalFormValues)=> {
+    const onSubmit = (values: GoalFormValues)=> {
         setServerError(null);
-        setIsSubmitting(true);
 
         const payload = {
             name: values.goalName,
@@ -44,18 +44,16 @@ export default function AddGoal() {
             priority: values.goalPriority,
         }
 
-        try {
-            await serverApi.post<BackendApiResponse>('/goal/goal', payload)
+        createGoalMutation.mutate(payload, {
+            onSuccess: () => router.push("/goals"),
 
-            router.push("/goals");
-        } catch (err) {
-            const message:string = getServerErrorMessage(err);
+            onError: (err) => {
+                const message = err instanceof Error ? err.message : "Не удалось добавить цель. Попробуйте ещё раз.";
 
-            setServerError(message);
-            if (showErrorMessage) console.error('add goal error:', err);
-
-            setIsSubmitting(false);
-        }
+                setServerError(message);
+                if (showErrorMessage) console.error('add goal error:', err);
+            },
+        });
     }
 
     return (
@@ -109,8 +107,8 @@ export default function AddGoal() {
                                 />
 
                             <LightGreenSubmitBtn
-                                label={!isSubmitting ? 'Добавить' : 'Добавляем...'}
-                                disabled={isSubmitting}
+                                label={!createGoalMutation.isPending ? 'Добавить' : 'Добавляем...'}
+                                disabled={createGoalMutation.isPending}
                                 className={'mt-10 py-2.5'}
                             />
                         </form>

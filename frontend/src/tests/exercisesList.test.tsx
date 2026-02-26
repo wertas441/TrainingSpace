@@ -1,13 +1,10 @@
 import {render, screen} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    buildUsePageUtilsMock,
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
-import {pushMock} from '@/tests/utils/mockNextNavigation';
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import ExercisesTechniques from "@/app/exercises-techniques/ExercisesTechniques";
+import QueryProvider from "@/lib/utils/QueryProvider";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -31,7 +28,11 @@ describe('Список упражнений', () => {
     ];
 
     it('Проверка корректного вывода данных списка', async () => {
-        render(<ExercisesTechniques exercises={exercisesData}  />);
+        render(
+            <QueryProvider>
+                <ExercisesTechniques initialExercises={exercisesData} />
+            </QueryProvider>
+        );
 
         expect(await screen.findByText('Жим штанги лёжа')).toBeInTheDocument();
         expect(await screen.findByText('Средний')).toBeInTheDocument();
