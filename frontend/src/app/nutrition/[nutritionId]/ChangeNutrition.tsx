@@ -11,19 +11,19 @@ import {
     validateProteinGrams
 } from "@/lib/utils/validators/nutrition";
 import {useCallback} from "react";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse} from "@/types";
+import {showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {NutritionDay, NutritionFormValues} from "@/types/nutrition";
-import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import {deleteDay} from "@/lib/controllers/nutrition";
 import {useForm} from "react-hook-form";
+import {useDeleteDayMutation, useUpdateDayMutation} from "@/lib/hooks/mutations/nutrition";
+import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
 
 interface IProps {
     dayInfo: NutritionDay,
@@ -32,7 +32,7 @@ interface IProps {
 
 export default function ChangeNutrition({dayInfo, token}: IProps){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<NutritionFormValues>({
+    const { register, handleSubmit, formState: { errors } } = useForm<NutritionFormValues>({
         defaultValues: {
             dayName: dayInfo.name,
             dayDescription: dayInfo.description,
@@ -45,8 +45,10 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
     })
 
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow();
 
-    const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow()
+    const updateDayMutation = useUpdateDayMutation();
+    const deleteDayMutation = useDeleteDayMutation();
 
     const onSubmit = async (values: NutritionFormValues)=> {
         setServerError(null);
@@ -63,31 +65,37 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
             carb: parseInt(values.carb, 10),
         }
 
-        try {
-            await serverApi.put<BackendApiResponse>('/nutrition/day', payload)
+        updateDayMutation.mutate(payload, {
+            onSuccess: () => router.replace("/nutrition"),
 
-            router.replace("/nutrition");
-        } catch (err) {
-            const message:string = getServerErrorMessage(err);
+            onError: (err: unknown) => {
+                const message = err instanceof Error ? err.message : "Не удалось изменить день. Попробуйте ещё раз.";
 
-            setServerError(message);
-            if (showErrorMessage) console.error('change nutrition day error:', err);
-
-            setIsSubmitting(false);
-        }
+                setServerError(message);
+                if (showErrorMessage) console.error('change day error:', err);
+            },
+        });
     }
 
     const deleteDayBtn = useCallback(async () => {
         setServerError(null);
 
-        try {
-            await deleteDay(token, dayInfo.publicId);
-            router.replace("/nutrition");
-        } catch (error) {
-            console.error("delete day error:", error);
-            setServerError("Не удалось удалить день. Попробуйте ещё раз позже.");
+        const payload = {
+            tokenValue: token,
+            dayId: dayInfo.publicId,
         }
-    }, [dayInfo.publicId, router, setServerError, token])
+
+        deleteDayMutation.mutate(payload, {
+            onSuccess: () => router.replace("/nutrition"),
+
+            onError: (err: unknown) => {
+                console.error("delete day error:", err);
+
+                setServerError("Не удалось удалить день. Попробуйте ещё раз позже.");
+            },
+        });
+    }, [setServerError, token, dayInfo.publicId, deleteDayMutation, router])
+
 
     return (
         <>
@@ -161,11 +169,17 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
                             {...register('dayDescription', {validate: (value) => validateDayDescription(value) || true})}
                         />
 
-                        <LightGreenSubmitBtn
-                            label={!isSubmitting ? 'Изменить' : 'Изменение...'}
-                            disabled={isSubmitting}
-                            className="mt-2 py-2.5"
-                        />
+                        <div className="mt-8 md:flex flex-row space-y-4 md:space-y-0  items-center gap-x-8">
+                            <LightGreenSubmitBtn
+                                label={!isSubmitting ? 'Изменить' : 'Изменение...'}
+                                disabled={isSubmitting}
+                            />
+
+                            <RedGlassBtn
+                                label={'Удалить день'}
+                                onClick={toggleModalWindow}
+                            />
+                        </div>
                     </form>
                 </div>
             </BlockPageContext>

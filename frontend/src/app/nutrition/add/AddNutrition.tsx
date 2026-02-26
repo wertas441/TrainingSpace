@@ -3,7 +3,7 @@
 import ServerError from "@/components/errors/ServerError";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {showErrorMessage} from "@/lib";
 import {
     CalendarDaysIcon,
     ChartBarSquareIcon,
@@ -22,10 +22,10 @@ import {
 } from "@/lib/utils/validators/nutrition";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import MainInput from "@/components/inputs/MainInput";
-import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 import {NutritionFormValues} from "@/types/nutrition";
 import HalfContentRow from "@/components/elements/HalfContentRow";
+import {useCreateDayMutation} from "@/lib/hooks/mutations/nutrition";
 
 export default function AddNutrition(){
 
@@ -38,7 +38,9 @@ export default function AddNutrition(){
         }
     })
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+
+    const createDayMutation = useCreateDayMutation()
 
     const onSubmit = async (values: NutritionFormValues)=> {
         setServerError(null);
@@ -54,18 +56,16 @@ export default function AddNutrition(){
             carb: parseInt(values.carb, 10),
         }
 
-        try {
-            await serverApi.post<BackendApiResponse>('/nutrition/day', payload)
+        createDayMutation.mutate(payload, {
+            onSuccess: () => router.push("/nutrition"),
 
-            router.push("/nutrition");
-        } catch (err) {
-            const message:string = getServerErrorMessage(err);
+            onError: (err) => {
+                const message = err instanceof Error ? err.message : "Не удалось добавить день. Попробуйте ещё раз.";
 
-            setServerError(message);
-            if (showErrorMessage) console.error('add new nutrition day error:', err);
-
-            setIsSubmitting(false);
-        }
+                setServerError(message);
+                if (showErrorMessage) console.error('add day error:', err);
+            },
+        });
     }
 
     return (

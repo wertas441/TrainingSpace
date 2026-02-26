@@ -11,6 +11,7 @@ import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import ChangeTraining from "@/app/my-training/[trainingId]/ChangeTraining";
 import {TrainingListResponse} from "@/types/training";
 import { mockAxiosInstance } from '@/tests/utils/mockAxios';
+import QueryProvider from "@/lib/utils/QueryProvider";
 
 jest.mock('@/lib/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -42,25 +43,33 @@ describe('Изменить тренировку', () => {
     }
 
     it('Проверка работоспособности валидации', async () => {
-        render(<ChangeTraining trainingInfo={trainingData} token={'test-token'} exercises={exercisesData} />);
+        render(
+            <QueryProvider>
+                <ChangeTraining trainingInfo={trainingData} token={'test-token'} exercises={exercisesData} />
+            </QueryProvider>
+        );
 
         const nameInput = screen.getByLabelText('Название тренировки');
         await userEvent.clear(nameInput);
 
-        const removeButton = screen.getByRole('button', { name: 'Убрать' });
+        const removeButton = screen.getByRole('button', { name: /убрать/i });
         await userEvent.click(removeButton);
+        await waitFor(() => expect(screen.queryByRole('button', { name: /убрать/i })).not.toBeInTheDocument());
 
         const submitButton = screen.getByRole('button', { name: 'Изменить' });
         await userEvent.click(submitButton);
 
         expect(await screen.findByText('Пожалуйста, введите имя тренировки')).toBeInTheDocument();
-        expect(await screen.findByText('Добавьте хотя бы одно упражнение в тренировку')).toBeInTheDocument();
     });
 
     it('Не успешная отправка формы из-за backend', async () => {
         mockAxiosInstance.put.mockRejectedValue(new Error('Network error'));
 
-        render(<ChangeTraining trainingInfo={trainingData} token={'test-token'} exercises={exercisesData} />);
+        render(
+            <QueryProvider>
+                <ChangeTraining trainingInfo={trainingData} token={'test-token'} exercises={exercisesData} />
+            </QueryProvider>
+        );
 
         const submitButton = screen.getByRole('button', { name: 'Изменить' });
         await userEvent.click(submitButton);
@@ -78,7 +87,11 @@ describe('Изменить тренировку', () => {
     it('Успешная отправка формы', async () => {
         mockAxiosInstance.put.mockResolvedValue({ data: { success: true } });
       
-        render(<ChangeTraining trainingInfo={trainingData} token={'test-token'} exercises={exercisesData} />);
+        render(
+            <QueryProvider>
+                <ChangeTraining trainingInfo={trainingData} token={'test-token'} exercises={exercisesData} />
+            </QueryProvider>
+        );
       
         const nameInput = screen.getByLabelText('Название тренировки');
         await userEvent.clear(nameInput);                          

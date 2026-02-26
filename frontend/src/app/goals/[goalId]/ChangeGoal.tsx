@@ -4,8 +4,7 @@ import {useCallback} from "react";
 import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goal";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators/goal";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse} from "@/types";
+import {showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
@@ -17,6 +16,7 @@ import {deleteGoal} from "@/lib/controllers/goal";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {Controller, useForm} from "react-hook-form";
+import {useDeleteGoalMutation, useUpdateGoalMutation} from "@/lib/hooks/mutations/goal";
 
 interface IProps {
     goalInfo: GoalsStructure;
@@ -35,48 +35,53 @@ export function ChangeGoal({goalInfo, token}: IProps) {
         }
     })
 
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils()
+    const { serverError, setServerError, isSubmitting, router } = usePageUtils()
+
     const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow()
 
-    const onSubmit = async (values: GoalFormValues)=> {
+    const updateGoalMutation = useUpdateGoalMutation();
+    const deleteGoalMutation = useDeleteGoalMutation();
+
+    const onSubmit = (values: GoalFormValues)=> {
         setServerError(null);
-        setIsSubmitting(true);
 
         const payload = {
             goalId: goalInfo.publicId,
             name: values.goalName,
             description: values.goalDescription,
             priority: values.goalPriority,
-
         }
 
-        try {
-            await serverApi.put<BackendApiResponse>('/goal/goal', payload)
+        updateGoalMutation.mutate(payload, {
+            onSuccess: () => router.replace("/goals"),
 
-            router.replace("/goals");
-        } catch (err) {
-            const message:string = getServerErrorMessage(err);
+            onError: (err: unknown) => {
+                const message = err instanceof Error ? err.message : "Не удалось изменить цель. Попробуйте ещё раз.";
 
-            setServerError(message);
-            if (showErrorMessage) console.error('change goal error:', err);
-
-            setIsSubmitting(false);
-        }
+                setServerError(message);
+                if (showErrorMessage) console.error('change goal error:', err);
+            },
+        });
     }
 
     const deleteGoalBtn = useCallback(async () => {
         setServerError(null);
 
-        try {
-            await deleteGoal(token, goalInfo.publicId);
-
-            router.replace("/goals");
-        } catch (error) {
-            console.error("delete goal error:", error);
-
-            setServerError("Не удалось удалить цель. Попробуйте ещё раз позже.");
+        const payload = {
+            tokenValue: token,
+            goalId: goalInfo.publicId,
         }
-    }, [goalInfo.publicId, router, setServerError, token])
+
+        deleteGoalMutation.mutate(payload, {
+            onSuccess: () => router.replace("/goals"),
+
+            onError: (err: unknown) => {
+                console.error("delete goal error:", err);
+
+                setServerError("Не удалось удалить цель. Попробуйте ещё раз позже.");
+            },
+        });
+    }, [deleteGoalMutation, goalInfo.publicId, router, setServerError, token])
 
     return (
         <>
@@ -122,8 +127,8 @@ export function ChangeGoal({goalInfo, token}: IProps) {
 
                         <div className="mt-8 md:flex flex-row space-y-4 md:space-y-0  items-center gap-x-8">
                             <LightGreenSubmitBtn
-                                label={!isSubmitting ? 'Изменить' : 'Процесс...'}
-                                disabled={isSubmitting}
+                                label={!updateGoalMutation.isPending ? 'Изменить' : 'Процесс...'}
+                                disabled={isSubmitting || updateGoalMutation.isPending}
                             />
 
                             <RedGlassBtn

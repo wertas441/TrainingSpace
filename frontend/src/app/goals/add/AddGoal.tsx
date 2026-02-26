@@ -45,13 +45,11 @@ export default function AddGoal() {
         }
 
         createGoalMutation.mutate(payload, {
-            onSuccess: () => {
-                router.push("/goals");
-            },
+            onSuccess: () => router.push("/goals"),
+
             onError: (err) => {
-                const message = err instanceof Error
-                    ? err.message
-                    : "Не удалось добавить цель. Попробуйте ещё раз.";
+                const message = err instanceof Error ? err.message : "Не удалось добавить цель. Попробуйте ещё раз.";
+
                 setServerError(message);
                 if (showErrorMessage) console.error('add goal error:', err);
             },

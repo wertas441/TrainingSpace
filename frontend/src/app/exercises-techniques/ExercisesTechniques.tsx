@@ -14,21 +14,14 @@ import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGre
 
 function ExercisesTechniques() {
 
-    const {
-        exercises,
-        isLoading,
-        isError,
-        error,
-        refetch,
-        isFetching,
-    } = useExerciseList();
+    const { exercises, isLoading, isError, error, refetch, isFetching } = useExerciseList();
 
     const searchName = useExerciseStore(s => s.searchName)
     const difficultFilter = useExerciseStore(s => s.difficultFilter)
     const partOfBodyFilter = useExerciseStore(s => s.partOfBodyFilter)
 
     const itemsPerPage:number = 10;
-    const sourceExercises = exercises ?? [];
+    const sourceExercises = useMemo(() => exercises ?? [], [exercises]);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
@@ -53,9 +46,7 @@ function ExercisesTechniques() {
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchName, difficultFilter, partOfBodyFilter, setCurrentPage]);
+    useEffect(() => setCurrentPage(1), [searchName, difficultFilter, partOfBodyFilter, setCurrentPage]);
 
     return (
         <div className="space-y-4" ref={listTopRef} >
