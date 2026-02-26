@@ -37,18 +37,6 @@ export interface ActivityDataStructure {
     }[];
 }
 
-export interface ActivityHeaderProps extends HeaderMinimumProps {
-    searchDate: string;
-    setSearchDate: (newValue: string) => void;
-    isFilterWindowOpen: boolean;
-    toggleFilterWindow: () => void;
-    difficultFilter: ActivityDifficultyFilter,
-    setDifficultFilter: (newValue: ActivityDifficultyFilter) => void;
-    typeFilter: ActivityTypeFilter,
-    setTypeFilter: (newValue: ActivityTypeFilter) => void;
-}
-
-
 interface ExerciseSetsStructure {
     id: number;
     weight: number;

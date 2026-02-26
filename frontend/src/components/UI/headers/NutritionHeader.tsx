@@ -1,37 +1,33 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {memo, useCallback, useState} from "react";
+import {memo} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import PlusButton from "@/components/buttons/other/PlusButton";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {secondDarkColorTheme} from "@/styles";
 import XMarkButton from "@/components/buttons/other/XMarkButton";
-import {useNutritionFilters} from "@/app/nutrition/NutritionFiltersContext";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
+import {useNutritionStore} from "@/lib/store/nutritionStore";
 
 function NutritionHeader() {
 
-    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
+    const searchName = useNutritionStore(s => s.searchName);
+    const searchDate = useNutritionStore(s => s.searchDate);
+    const caloriesMin = useNutritionStore(s => s.caloriesMin);
+    const caloriesMax = useNutritionStore(s => s.caloriesMax);
+    const proteinMin = useNutritionStore(s => s.proteinMin);
+    const proteinMax = useNutritionStore(s => s.proteinMax);
+    const fatMin = useNutritionStore(s => s.fatMin);
+    const fatMax = useNutritionStore(s => s.fatMax);
+    const carbMin = useNutritionStore(s => s.carbMin);
+    const carbMax = useNutritionStore(s => s.carbMax);
 
-    const { filters, setFilter, resetFilters } = useNutritionFilters();
+    const setFilterData = useNutritionStore(s => s.setFilterData);
 
-    const {
-        searchName,
-        searchDate,
-        caloriesMin,
-        caloriesMax,
-        proteinMin,
-        proteinMax,
-        fatMin,
-        fatMax,
-        carbMin,
-        carbMax
-    } = filters;
-
-    const toggleFilterWindow = useCallback(() => {
-        setIsFilterWindowOpen((prev) => !prev);
-    }, []);
+    const isFilterWindowOpen = useNutritionStore(s => s.isFilterWindowOpen);
+    const toggleFilterWindow = useNutritionStore(s => s.toggleFilterWindow);
+    const resetFilters = useNutritionStore(s => s.resetFilters);
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
 
@@ -51,7 +47,7 @@ function NutritionHeader() {
                                 id="nutrition-search-name"
                                 placeholder="Поиск по названию дня..."
                                 value={searchName}
-                                onChange={(v) => setFilter("searchName", String(v))}
+                                onChange={(v) => setFilterData("searchName", v)}
                                 icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                                 error={null}
                             />
@@ -63,7 +59,7 @@ function NutritionHeader() {
                                 type="date"
                                 placeholder="Дата"
                                 value={searchDate}
-                                onChange={(v) => setFilter("searchDate", String(v))}
+                                onChange={(v) => setFilterData("searchDate", v)}
                                 icon={<CalendarIcon className="h-5 w-5" />}
                                 error={null}
                             />
@@ -86,7 +82,7 @@ function NutritionHeader() {
 
                 {isFilterWindowOpen && (
                     <div ref={modalWindowRef}
-                        className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[560px] 
+                         className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[560px] 
                         rounded-xl shadow-lg border border-emerald-100`}
                     >
                         <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-100 dark:border-neutral-700">
@@ -104,7 +100,7 @@ function NutritionHeader() {
                                             label="От"
                                             placeholder="0"
                                             value={caloriesMin}
-                                            onChange={(v) => setFilter("caloriesMin", String(v))}
+                                            onChange={(v) => setFilterData("caloriesMin", v)}
                                             error={null}
                                         />
 
@@ -113,7 +109,7 @@ function NutritionHeader() {
                                             label="До"
                                             placeholder="5000"
                                             value={caloriesMax}
-                                            onChange={(v) => setFilter("caloriesMax", String(v))}
+                                            onChange={(v) => setFilterData("caloriesMax", v)}
                                             error={null}
                                         />
                                     </div>
@@ -127,7 +123,7 @@ function NutritionHeader() {
                                             label="От"
                                             placeholder="0"
                                             value={proteinMin}
-                                            onChange={(v) => setFilter("proteinMin", String(v))}
+                                            onChange={(v) => setFilterData("proteinMin", v)}
                                             error={null}
                                         />
 
@@ -136,7 +132,7 @@ function NutritionHeader() {
                                             label="До"
                                             placeholder="300"
                                             value={proteinMax}
-                                            onChange={(v) => setFilter("proteinMax", String(v))}
+                                            onChange={(v) => setFilterData("proteinMax", v)}
                                             error={null}
                                         />
                                     </div>
@@ -152,7 +148,7 @@ function NutritionHeader() {
                                             label="От"
                                             placeholder="0"
                                             value={fatMin}
-                                            onChange={(v) => setFilter("fatMin", String(v))}
+                                            onChange={(v) => setFilterData("fatMin", v)}
                                             error={null}
                                         />
 
@@ -161,7 +157,7 @@ function NutritionHeader() {
                                             label="До"
                                             placeholder="200"
                                             value={fatMax}
-                                            onChange={(v) => setFilter("fatMax", String(v))}
+                                            onChange={(v) => setFilterData("fatMax", v)}
                                             error={null}
                                         />
                                     </div>
@@ -175,7 +171,7 @@ function NutritionHeader() {
                                             label="От"
                                             placeholder="0"
                                             value={carbMin}
-                                            onChange={(v) => setFilter("carbMin", String(v))}
+                                            onChange={(v) => setFilterData("carbMin", v)}
                                             error={null}
                                         />
 
@@ -184,7 +180,7 @@ function NutritionHeader() {
                                             label="До"
                                             placeholder="400"
                                             value={carbMax}
-                                            onChange={(v) => setFilter("carbMax", String(v))}
+                                            onChange={(v) => setFilterData("carbMax", v)}
                                             error={null}
                                         />
                                     </div>

@@ -2,7 +2,7 @@ import {InputsStructure} from "@/types";
 import {memo, ReactNode} from "react";
 import {thirdDarkColorTheme} from "@/styles";
 
-interface FilterInputProps extends InputsStructure<string | number> {
+interface FilterInputProps extends InputsStructure {
     type?: string;
     icon?: ReactNode;
 }

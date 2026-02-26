@@ -1,43 +1,41 @@
 import FilterInput from "@/components/inputs/FilterInput";
-import {useCallback, useMemo} from "react";
+import {useMemo} from "react";
 import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {
     ActivityDifficultyStructure,
-    ActivityHeaderProps,
     ActivityTypeStructure
 } from "@/types/activity";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {secondDarkColorTheme} from "@/styles";
 import XMarkButton from "@/components/buttons/other/XMarkButton";
+import {useActivityStore} from "@/lib/store/activityStore";
 
 const difficultOptions: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
 const typeOptions: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 
-export default function MyActivityHeader(
-    {
-        searchName,
-        setSearchName,
-        searchDate,
-        setSearchDate,
-        isFilterWindowOpen,
-        toggleFilterWindow,
-        difficultFilter,
-        setDifficultFilter,
-        typeFilter,
-        setTypeFilter,
-    }: ActivityHeaderProps){
+export default function MyActivityHeader(){
+
+    const searchName = useActivityStore(s => s.searchName);
+    const setSearchName = useActivityStore(s => s.setSearchName);
+
+    const searchDate = useActivityStore(s => s.searchDate);
+    const setSearchDate = useActivityStore(s => s.setSearchDate);
+
+    const difficultFilter = useActivityStore(s => s.difficultFilter);
+    const setDifficultFilter = useActivityStore(s => s.setDifficultFilter);
+
+    const typeFilter = useActivityStore(s => s.typeFilter);
+    const setTypeFilter = useActivityStore(s => s.setTypeFilter);
+
+    const isFilterWindowOpen = useActivityStore(s => s.isFilterWindowOpen);
+    const toggleFilterWindow = useActivityStore(s => s.toggleFilterWindow);
+
+    const handleReset = useActivityStore(s => s.resetFilters)
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
-
-    const handleReset = useCallback(() => {
-        setDifficultFilter(null);
-        setTypeFilter(null);
-        setSearchDate('');
-        setSearchName('');
-    }, [setDifficultFilter, setSearchDate, setSearchName, setTypeFilter]) ;
 
     return (
         <div className={`${secondDarkColorTheme} relative w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
@@ -52,7 +50,7 @@ export default function MyActivityHeader(
                             id="training-search-name"
                             placeholder="Поиск по названию активности..."
                             value={searchName}
-                            onChange={(v) => setSearchName(String(v))}
+                            onChange={setSearchName}
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5" />, [])}
                             error={null}
                         />
@@ -64,7 +62,7 @@ export default function MyActivityHeader(
                             type="date"
                             placeholder="Дата"
                             value={searchDate}
-                            onChange={(v) => setSearchDate(String(v))}
+                            onChange={setSearchDate}
                             icon={<CalendarIcon className="h-5 w-5" />}
                             error={null}
                         />

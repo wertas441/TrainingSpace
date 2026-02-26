@@ -1,10 +1,10 @@
 import {ElementType, InputHTMLAttributes, ReactNode} from "react";
 
-export interface InputsStructure<T extends string | number> {
+export interface InputsStructure {
     id: string;
     label?: string;
-    value: T;
-    onChange: (newValue: T ) => void;
+    value: string;
+    onChange: (newValue: string) => void;
     required?: boolean;
     placeholder?: string;
     error: string | null;

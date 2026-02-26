@@ -3,29 +3,26 @@
 import NutritionHeader from "@/components/UI/headers/NutritionHeader";
 import {NutritionDay} from "@/types/nutrition";
 import NutritionDayItem from "@/components/elements/NutritionDayRow";
-import {memo, useEffect, useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
 import NullElementsError from "@/components/errors/NullElementsError";
 import {normalizeToYMD} from "@/lib";
-import {NutritionFiltersProvider, useNutritionFilters} from "@/app/nutrition/NutritionFiltersContext";
+import {useNutritionStore} from "@/lib/store/nutritionStore";
 
-function NutritionContent({userDays}: {userDays: NutritionDay[]}) {
+export default function Nutrition({userDays}: {userDays: NutritionDay[]}) {
 
-    const { filters } = useNutritionFilters();
+    const searchName = useNutritionStore(s => s.searchName);
+    const searchDate = useNutritionStore(s => s.searchDate);
+    const caloriesMin = useNutritionStore(s => s.caloriesMin);
+    const caloriesMax = useNutritionStore(s => s.caloriesMax);
+    const proteinMin = useNutritionStore(s => s.proteinMin);
+    const proteinMax = useNutritionStore(s => s.proteinMax);
+    const fatMin = useNutritionStore(s => s.fatMin);
+    const fatMax = useNutritionStore(s => s.fatMax);
+    const carbMin = useNutritionStore(s => s.carbMin);
+    const carbMax = useNutritionStore(s => s.carbMax);
 
-    const {
-        searchName,
-        searchDate,
-        caloriesMin,
-        caloriesMax,
-        proteinMin,
-        proteinMax,
-        fatMin,
-        fatMax,
-        carbMin,
-        carbMax
-    } = filters;
 
     const itemsPerPage:number = 10;
 
@@ -70,21 +67,22 @@ function NutritionContent({userDays}: {userDays: NutritionDay[]}) {
     return (
         <div className="space-y-4" ref={listTopRef} >
             <NutritionHeader />
+
             <div className="grid mt-6 grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (
                     paginatedList.map(item => (
-                        <NutritionDayItem
-                            key={item.publicId}
-                            id={item.id}
-                            publicId={item.publicId}
-                            name={item.name}
-                            date={item.date}
-                            description={item.description}
-                            calories={item.calories}
-                            protein={item.protein}
-                            fat={item.fat}
-                            carb={item.carb}
-                        />
+                            <NutritionDayItem
+                                key={item.publicId}
+                                id={item.id}
+                                publicId={item.publicId}
+                                name={item.name}
+                                date={item.date}
+                                description={item.description}
+                                calories={item.calories}
+                                protein={item.protein}
+                                fat={item.fat}
+                                carb={item.carb}
+                            />
                         )
                     )
                 ) : (
@@ -108,14 +106,3 @@ function NutritionContent({userDays}: {userDays: NutritionDay[]}) {
         </div>
     )
 }
-
-function Nutrition({userDays}: {userDays: NutritionDay[]}) {
-
-    return (
-        <NutritionFiltersProvider>
-            <NutritionContent userDays={userDays} />
-        </NutritionFiltersProvider>
-    );
-}
-
-export default memo(Nutrition);

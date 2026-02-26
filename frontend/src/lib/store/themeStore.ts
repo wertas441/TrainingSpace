@@ -1,5 +1,3 @@
-'use client'
-
 import {create, type StateCreator} from 'zustand';
 import {createJSONStorage, persist} from 'zustand/middleware';
 
@@ -31,6 +29,7 @@ const themeStore: StateCreator<ThemeStore> = (set) => ({
     toggleTheme: () => set((state) => {
         const nextTheme = state.theme === 'light' ? 'dark' : 'light';
         applyThemeClass(nextTheme);
+
         return {theme: nextTheme};
     }),
 

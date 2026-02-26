@@ -3,13 +3,14 @@ import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback, useMemo} from "react";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
-import {ExercisesTechniquesHeaderProps} from "@/types/exercisesTechniques";
+import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import BarsButton from "@/components/buttons/other/BarsButton";
 import {DifficultOptionsStructure} from "@/types";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 import {secondDarkColorTheme} from "@/styles";
 import XMarkButton from "@/components/buttons/other/XMarkButton";
+import {useExerciseStore} from "@/lib/store/exerciseStore";
 
 interface ValueOptions {
     value: string;
@@ -18,18 +19,21 @@ interface ValueOptions {
 
 const difficultOptions: DifficultOptionsStructure[] =  ['Лёгкий', 'Средний', 'Сложный'] as const;
 
-function ExercisesTechniquesHeader(
-    {
-        searchName,
-        setSearchName,
-        isFilterWindowOpen,
-        toggleFilterWindow,
-        difficultFilter,
-        setDifficultFilter,
-        partOfBodyFilter,
-        setPartOfBodyFilter,
-        exercises,
-    }: ExercisesTechniquesHeaderProps){
+function ExercisesTechniquesHeader({exercises}: {exercises: ExerciseTechniqueItem[]}){
+
+    const searchName = useExerciseStore(s => s.searchName);
+    const setSearchName = useExerciseStore(s => s.setSearchName);
+
+    const difficultFilter = useExerciseStore(s => s.difficultFilter);
+    const setDifficultFilter = useExerciseStore(s => s.setDifficultFilter);
+
+    const partOfBodyFilter = useExerciseStore(s => s.partOfBodyFilter);
+    const setPartOfBodyFilter = useExerciseStore(s => s.setPartOfBodyFilter);
+
+    const toggleFilterWindow = useExerciseStore(s => s.toggleFilterWindow);
+    const isFilterWindowOpen = useExerciseStore(s => s.isFilterWindowOpen);
+
+    const handleReset = useExerciseStore(s => s.resetFilters)
 
     const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
 
@@ -51,11 +55,6 @@ function ExercisesTechniquesHeader(
         setPartOfBodyFilter(vals.map(v => v.value));
     }, [setPartOfBodyFilter]) ;
 
-    const handleReset = useCallback(() => {
-        setDifficultFilter(null);
-        setPartOfBodyFilter([]);
-    }, [setDifficultFilter, setPartOfBodyFilter]) ;
-
     return (
         <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm relative`}>
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -68,7 +67,7 @@ function ExercisesTechniquesHeader(
                         <FilterInput
                             id="exercise-search"
                             value={searchName}
-                            onChange={(v) => setSearchName(String(v))}
+                            onChange={setSearchName}
                             placeholder="Поиск по названию упражнения..."
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4" />, [])}
                             error={null}
@@ -115,10 +114,7 @@ function ExercisesTechniquesHeader(
                         </div>
 
                         <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
-                            <LightGreenGlassBtn
-                                label={`Сбросить`}
-                                onClick={handleReset}
-                            />
+                            <LightGreenGlassBtn label={`Сбросить`} onClick={handleReset} />
                         </div>
                     </div>
                 )}
