@@ -25,14 +25,13 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
 
     fetchUserData: async () => {
         try {
-            const response = await serverApi.get<BackendApiResponse<{ userData: UserProfileRequest }>>(
-                "/user/me",
-            );
+            const { data } = await serverApi.get<BackendApiResponse<{ userData: UserProfileRequest }>>("/user/me",);
 
-            if (!response.data.success || !response.data.data?.userData) return undefined;
+            if (!data.success || !data.data?.userData) return undefined;
 
-            const userData = response.data.data.userData;
+            const userData = data.data.userData;
             set({userData});
+
             return userData;
         } catch (err) {
             console.error(getServerErrorMessage(err) || "Ошибка запроса информации об аккаунте");
@@ -40,16 +39,15 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
         }
     },
 
-    changeEmail: (email) =>
-        set((s) => ({
-            userData: s.userData ? { ...s.userData, email } : s.userData,
-        })),
+    changeEmail: (email) => set((s) => ({
+        userData: s.userData ? { ...s.userData, email } : s.userData,
+    })),
 
     logout: async () => {
         try {
-            const response = await clientApi.post<BackendApiResponse>(`/user/logout`);
+            const { data } = await clientApi.post<BackendApiResponse>(`/user/logout`);
 
-            if (!response.data.success) return;
+            if (!data.success) return;
 
             set({userData: null});
             return;

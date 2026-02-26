@@ -15,11 +15,16 @@ interface ExerciseStore {
     resetFilters: () => void;
 }
 
-const exerciseStore: StateCreator<ExerciseStore> = (set) => ({
+const initialData = {
     searchName: '',
-    isFilterWindowOpen: false,
     difficultFilter: null,
     partOfBodyFilter: [],
+}
+
+const exerciseStore: StateCreator<ExerciseStore> = (set) => ({
+    ...initialData,
+
+    isFilterWindowOpen: false,
 
     setSearchName: (searchName) => set({ searchName }),
 
@@ -29,11 +34,7 @@ const exerciseStore: StateCreator<ExerciseStore> = (set) => ({
 
     toggleFilterWindow: () => set((state) => ({ isFilterWindowOpen: !state.isFilterWindowOpen })),
 
-    resetFilters: () => set({
-        searchName: '',
-        difficultFilter: null,
-        partOfBodyFilter: [],
-    }),
+    resetFilters: () => set({...initialData}),
 })
 
 export const useExerciseStore = create<ExerciseStore>()(exerciseStore)

@@ -1,28 +1,23 @@
 'use client'
 
-import {ActivityDataStructure, ActivityDifficultyFilter, ActivityTypeFilter} from "@/types/activity";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {ActivityDataStructure} from "@/types/activity";
+import {useEffect, useMemo} from "react";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
 import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
 import MyActivityRow from "@/components/elements/MyActivityRow";
 import NullElementsError from "@/components/errors/NullElementsError";
 import {normalizeToYMD} from "@/lib";
+import {useActivityStore} from "@/lib/store/activityStore";
 
 export default function MyActivity({clientActivity}:{clientActivity: ActivityDataStructure[]; }) {
 
-    const [searchName, setSearchName] = useState<string>('');
-    const [searchDate, setSearchDate] = useState<string>('');
-
-    const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
-    const [difficultFilter, setDifficultFilter] = useState<ActivityDifficultyFilter>(null);
-    const [typeFilter, setTypeFilter] = useState<ActivityTypeFilter>(null);
+    const searchName = useActivityStore(s => s.searchName);
+    const searchDate = useActivityStore(s => s.searchDate);
+    const difficultFilter = useActivityStore(s => s.difficultFilter);
+    const typeFilter = useActivityStore(s => s.typeFilter);
 
     const itemsPerPage:number = 10;
-
-    const toggleFilterWindow = useCallback(() => {
-        setIsFilterWindowOpen(!isFilterWindowOpen);
-    }, [isFilterWindowOpen]);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
@@ -53,25 +48,11 @@ export default function MyActivity({clientActivity}:{clientActivity: ActivityDat
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchName, searchDate, difficultFilter, typeFilter, setCurrentPage]);
-
+    useEffect(() => setCurrentPage(1), [searchName, searchDate, difficultFilter, typeFilter, setCurrentPage]);
 
     return (
         <div className="space-y-4" ref={listTopRef} >
-            <MyActivityHeader
-                searchName={searchName}
-                setSearchName={setSearchName}
-                searchDate={searchDate}
-                setSearchDate={setSearchDate}
-                isFilterWindowOpen={isFilterWindowOpen}
-                toggleFilterWindow={toggleFilterWindow}
-                difficultFilter={difficultFilter}
-                setDifficultFilter={setDifficultFilter}
-                typeFilter={typeFilter}
-                setTypeFilter={setTypeFilter}
-            />
+            <MyActivityHeader />
 
             <div className="grid mt-6 grid-cols-1 gap-3">
                 {filteredList.length > 0 ? (

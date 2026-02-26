@@ -67,7 +67,7 @@ function ExercisesTechniquesHeader({exercises}: {exercises: ExerciseTechniqueIte
                         <FilterInput
                             id="exercise-search"
                             value={searchName}
-                            onChange={(v) => setSearchName(String(v))}
+                            onChange={setSearchName}
                             placeholder="Поиск по названию упражнения..."
                             icon={useMemo(() => <MagnifyingGlassIcon className="h-4 w-4" />, [])}
                             error={null}

@@ -7,7 +7,6 @@ import ChangeButton from "@/components/buttons/other/ChangeButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/styles";
 
-
 function MyActivityRow({activity}: {activity: ActivityDataStructure}){
 
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
