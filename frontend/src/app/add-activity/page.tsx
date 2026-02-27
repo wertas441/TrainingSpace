@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import {cookies} from "next/headers";
-import {getTrainingList} from "@/lib/controllers/training";
 import AddActivity from "@/app/add-activity/AddActivity";
 import ErrorState from "@/components/errors/ErrorState";
 
@@ -22,16 +21,5 @@ export default async function AddActivityPage(){
         );
     }
 
-    const trainings = await getTrainingList(tokenValue);
-
-    if (!trainings) {
-        return (
-            <ErrorState
-                title="Не удалось загрузить страницу добавления активности"
-                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
-            />
-        );
-    }
-
-    return <AddActivity myTrainings = {trainings} />
+    return <AddActivity token={tokenValue} />
 }

@@ -1,11 +1,38 @@
 import {serverApi, getServerErrorMessage, getTokenHeaders} from "@/lib";
 import type {BackendApiResponse} from "@/types";
-import {ActivityDataStructure} from "@/types/activity";
+import {ActivityDataStructure, ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activity";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 
 type ExerciseSetInput = { id: number; weight: number; quantity: number };
 type ExerciseSetsMap = Record<string, ExerciseSetInput[] | undefined>;
 type ExercisePayloadItem = { id: number; try: ExerciseSetInput[] };
+
+
+interface CreateActivityPayload {
+    activityName: string;
+    performedAt: string;
+    activityType: ActivityTypeStructure;
+    activityDifficult: ActivityDifficultyStructure;
+    trainingId: number;
+    exercises: ExercisePayloadItem;
+}
+
+interface UpdateActivityPayload {
+    id: string;
+    publicId: string;
+    name: string;
+    description: string;
+    activityDate: string;
+    type: ActivityTypeStructure;
+    difficulty: ActivityDifficultyStructure;
+    trainingId: number;
+    exercises: ExercisePayloadItem;
+}
+
+interface DeleteActivityPayload {
+    tokenValue: string;
+    activityId: string;
+}
 
 export async function getActivityList(tokenValue: string):Promise<ActivityDataStructure[] | undefined> {
 
@@ -62,23 +89,58 @@ export async function getActivityInformation(tokenValue: string, activityId: str
     }
 }
 
-export async function deleteActivity(tokenValue: string, activityId: string):Promise<void> {
-
-    const payload = {
-        headers: getTokenHeaders(tokenValue),
-        data: { activityId },
-    }
-
+export async function createActivity(payload: CreateActivityPayload):Promise<void> {
     try {
-        await serverApi.delete<BackendApiResponse>(`/activity/activity`, payload);
+        const { data } = await serverApi.post<BackendApiResponse>('/activity/activity', payload);
+
+        if (!data.success) throw new Error(data.message || 'Не удалось добавить активность');
 
         return;
     } catch (err) {
-        console.error(getServerErrorMessage(err) || "Ошибка удаления активности");
+        const message = getServerErrorMessage(err) || "Ошибка добавления активности";
 
-        return;
+        console.error(message);
+        throw new Error(message);
     }
 }
+
+export async function updateActivity(payload: UpdateActivityPayload):Promise<void> {
+    try {
+        const { data } = await serverApi.put<BackendApiResponse>('/activity/activity', payload);
+
+        if (!data.success) throw new Error(data.message || 'Не удалось обновить активность');
+
+        return;
+    } catch (err) {
+        const message = getServerErrorMessage(err) || "Ошибка изменения активности";
+
+        console.error(message);
+        throw new Error(message);
+    }
+}
+
+
+export async function deleteActivity(payload: DeleteActivityPayload):Promise<void> {
+
+    const requestConfig = {
+        headers: getTokenHeaders(payload.tokenValue),
+        data: { activityId: payload.activityId },
+    }
+
+    try {
+        const { data } = await serverApi.delete<BackendApiResponse>(`/activity/activity`, requestConfig);
+
+        if (!data.success) throw new Error(data.message || "Не удалось удалить активность");
+
+        return;
+    } catch (err) {
+        const message = getServerErrorMessage(err) || "Ошибка удаления активности";
+
+        console.error(message);
+        throw new Error(message);
+    }
+}
+
 
 const isValidExerciseSet = (set: ExerciseSetInput): boolean =>
     Number.isFinite(set.weight) &&
