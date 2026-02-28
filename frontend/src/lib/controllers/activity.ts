@@ -3,22 +3,31 @@ import type {BackendApiResponse} from "@/types";
 import {ActivityDataStructure, ActivityDifficultyStructure, ActivityTypeStructure} from "@/types/activity";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 
-type ExerciseSetInput = { id: number; weight: number; quantity: number };
-type ExerciseSetsMap = Record<string, ExerciseSetInput[] | undefined>;
-type ExercisePayloadItem = { id: number; try: ExerciseSetInput[] };
+interface ExerciseSetInput {
+    id: number;
+    weight: number;
+    quantity: number
+}
 
+type ExerciseSetsMap = Record<string, ExerciseSetInput[] | undefined>;
+
+interface ExercisePayloadItem {
+    id: number;
+    try: ExerciseSetInput[]
+}
 
 interface CreateActivityPayload {
     activityName: string;
+    description: string;
     performedAt: string;
     activityType: ActivityTypeStructure;
     activityDifficult: ActivityDifficultyStructure;
     trainingId: number;
-    exercises: ExercisePayloadItem;
+    exercises: ExercisePayloadItem[];
 }
 
 interface UpdateActivityPayload {
-    id: string;
+    id: number;
     publicId: string;
     name: string;
     description: string;
@@ -26,7 +35,7 @@ interface UpdateActivityPayload {
     type: ActivityTypeStructure;
     difficulty: ActivityDifficultyStructure;
     trainingId: number;
-    exercises: ExercisePayloadItem;
+    exercises: ExercisePayloadItem[];
 }
 
 interface DeleteActivityPayload {

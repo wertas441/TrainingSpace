@@ -28,7 +28,7 @@ export default async function ChangeActivityPage({ params }: ChangeActivityProps
         );
     }
 
-    const activityInfo = getActivityInformation(tokenValue, activityId);
+    const activityInfo = await getActivityInformation(tokenValue, activityId);
 
     if (!activityInfo) {
         return (

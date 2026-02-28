@@ -32,7 +32,6 @@ import {Controller, useForm} from "react-hook-form";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
 import {
     useDeleteActivityMutation,
-    useDeleteAсtivityMutation,
     useUpdateActivityMutation
 } from "@/lib/hooks/mutations/activity";
 import {useTrainings} from "@/lib/hooks/data/training";
@@ -82,7 +81,6 @@ export default function ChangeActivity({activityInfo, token}: IProps){
         trainingId,
         onTrainingIdChange: (val) => setValue('trainingId', val, { shouldDirty: true, shouldValidate: true }),
     });
-
 
     const [setsErrors, setSetsError] = useState<string  | null>(null)
     const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(() => {
@@ -181,7 +179,7 @@ export default function ChangeActivity({activityInfo, token}: IProps){
 
         const payload = {
             tokenValue: token,
-            goalId: activityInfo.publicId,
+            activityId: activityInfo.publicId,
         }
 
         deleteActivityMutation.mutate(payload, {
