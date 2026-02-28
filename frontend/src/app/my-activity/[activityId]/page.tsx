@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import ChangeActivity from "@/app/my-activity/[activityId]/ChangeActivity";
 import {getActivityInformation} from "@/lib/controllers/activity";
-import {getTrainingList} from "@/lib/controllers/training";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
@@ -29,12 +28,9 @@ export default async function ChangeActivityPage({ params }: ChangeActivityProps
         );
     }
 
-    const [activityInfo, trainings] = await Promise.all([
-        getActivityInformation(tokenValue, activityId),
-        getTrainingList(tokenValue),
-    ])
+    const activityInfo = await getActivityInformation(tokenValue, activityId);
 
-    if (!activityInfo || !trainings) {
+    if (!activityInfo) {
         return (
             <ErrorState
                 title="Не удалось загрузить информацию об активности"
@@ -43,5 +39,5 @@ export default async function ChangeActivityPage({ params }: ChangeActivityProps
         );
     }
 
-    return <ChangeActivity activityInfo={activityInfo} myTrainings={trainings} token={tokenValue} />
+    return <ChangeActivity activityInfo={activityInfo} token={tokenValue} />
 }

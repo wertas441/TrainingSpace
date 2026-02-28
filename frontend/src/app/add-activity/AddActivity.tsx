@@ -1,12 +1,12 @@
 'use client'
 
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
 import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse, TrainingDataStructure} from "@/types";
+import type {BackendApiResponse} from "@/types";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activity";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
@@ -29,11 +29,13 @@ import {
 import {Controller, useForm} from "react-hook-form";
 import {buildExercisesPayload} from "@/lib/controllers/activity";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
+import {useTrainings} from "@/lib/hooks/data/training";
+import {useCreateActivityMutation} from "@/lib/hooks/mutations/activity";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
 
-export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStructure[]; }) {
+export default function AddActivity({token} : {token: string}) {
 
     const today = new Date();
     const initialDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -46,9 +48,16 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
         }
     })
 
-    const trainingId = watch('trainingId')
+    const { trainings } = useTrainings(token);
+
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+
     const [setsErrors, setSetsError] = useState<string  | null>(null)
+
+    const trainingId = watch('trainingId')
+
+    const myTrainings = useMemo(() => trainings ?? [], [trainings])
+    const createActivityMutation = useCreateActivityMutation();
 
     const {
         exerciseSets,
@@ -102,18 +111,16 @@ export default function AddActivity({myTrainings}: {myTrainings: TrainingDataStr
             exercises: exercisesPayload,
         }
 
-        try {
-            await serverApi.post<BackendApiResponse>('/activity/activity', payload)
+        createActivityMutation.mutate(payload, {
+            onSuccess: () => router.push("/my-activity"),
 
-            router.push("/my-activity");
-        } catch (err) {
-            const message:string = getServerErrorMessage(err);
+            onError: (err) => {
+                const message = err instanceof Error ? err.message : "Не удалось добавить активность. Попробуйте ещё раз.";
 
-            setServerError(message);
-            if (showErrorMessage) console.error('add activity error:', err);
-
-            setIsSubmitting(false);
-        }
+                setServerError(message);
+                if (showErrorMessage) console.error('add activity error:', err);
+            },
+        });
     }
 
     return (

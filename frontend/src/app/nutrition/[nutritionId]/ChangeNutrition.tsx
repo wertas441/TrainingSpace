@@ -20,7 +20,6 @@ import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSu
 import {NutritionDay, NutritionFormValues} from "@/types/nutrition";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import {deleteDay} from "@/lib/controllers/nutrition";
 import {useForm} from "react-hook-form";
 import {useDeleteDayMutation, useUpdateDayMutation} from "@/lib/hooks/mutations/nutrition";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";

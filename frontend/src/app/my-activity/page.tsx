@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import MyActivity from "@/app/my-activity/MyActivity";
 import {cookies} from "next/headers";
-import {getActivityList} from "@/lib/controllers/activity";
 import ErrorState from "@/components/errors/ErrorState";
 
 export const metadata: Metadata = {
@@ -22,16 +21,5 @@ export default async function MyActivityPage(){
         );
     }
 
-    const clientActivity = await getActivityList(tokenValue)
-
-    if (!clientActivity) {
-        return (
-            <ErrorState
-                title="Не удалось загрузить список активности"
-                description="Проверьте подключение к интернету или попробуйте обновить страницу чуть позже."
-            />
-        );
-    }
-
-    return <MyActivity clientActivity = {clientActivity} />
+    return <MyActivity token={tokenValue} />
 }

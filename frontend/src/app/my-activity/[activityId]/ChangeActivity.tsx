@@ -2,7 +2,7 @@
 
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import {useCallback, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import {
@@ -15,9 +15,8 @@ import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import type {BackendApiResponse, TrainingDataStructure} from "@/types";
-import {buildExercisesPayload, deleteActivity} from "@/lib/controllers/activity";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {buildExercisesPayload} from "@/lib/controllers/activity";
+import {showErrorMessage} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
@@ -31,17 +30,21 @@ import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
 import {secondDarkColorTheme} from "@/styles";
 import {Controller, useForm} from "react-hook-form";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
+import {
+    useDeleteActivityMutation,
+    useUpdateActivityMutation
+} from "@/lib/hooks/mutations/activity";
+import {useTrainings} from "@/lib/hooks/data/training";
 
 interface IProps {
     activityInfo: ActivityDataStructure,
-    myTrainings: TrainingDataStructure[];
     token: string;
 }
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
 
-export default function ChangeActivity({activityInfo, myTrainings, token}: IProps){
+export default function ChangeActivity({activityInfo, token}: IProps){
 
     const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
         defaultValues: {
@@ -54,11 +57,18 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
         }
     })
 
-    const trainingId = watch('trainingId')
+    const { trainings } = useTrainings(token);
+
+    const myTrainings = useMemo(() => trainings ?? [], [trainings]);
 
     const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
 
     const { isRendered, isProcess, isExiting, toggleModalWindow, windowModalRef } = useModalWindow()
+
+    const updateActivityMutation = useUpdateActivityMutation();
+    const deleteActivityMutation = useDeleteActivityMutation();
+
+    const trainingId = watch('trainingId');
 
     const {
         handleChangeTraining,
@@ -71,7 +81,6 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
         trainingId,
         onTrainingIdChange: (val) => setValue('trainingId', val, { shouldDirty: true, shouldValidate: true }),
     });
-
 
     const [setsErrors, setSetsError] = useState<string  | null>(null)
     const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(() => {
@@ -134,14 +143,11 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
     const onSubmit = async (values: ActivityFormValues)=> {
         setServerError(null);
 
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         setIsSubmitting(true);
 
         const exercisesPayload = buildExercisesPayload(exerciseSets);
-
 
         const payload = {
             id: activityInfo.id,
@@ -156,33 +162,36 @@ export default function ChangeActivity({activityInfo, myTrainings, token}: IProp
             exercises: exercisesPayload,
         }
 
-        console.log(payload);
+        updateActivityMutation.mutate(payload, {
+            onSuccess: () => router.replace("/my-activity"),
 
-        try {
-            await serverApi.put<BackendApiResponse>('/activity/activity', payload)
+            onError: (err: unknown) => {
+                const message = err instanceof Error ? err.message : "Не удалось изменить активность. Попробуйте ещё раз.";
 
-            router.replace("/my-activity");
-        } catch (err) {
-            const message:string = getServerErrorMessage(err);
-
-            setServerError(message);
-            if (showErrorMessage) console.error('change activity error:', err);
-
-            setIsSubmitting(false);
-        }
+                setServerError(message);
+                if (showErrorMessage) console.error('change activity error:', err);
+            },
+        });
     }
 
     const deleteActivityBtn = useCallback(async () => {
         setServerError(null);
 
-        try {
-            await deleteActivity(token, activityInfo.publicId);
-            router.replace("/my-activity");
-        } catch (error) {
-            console.error("delete activity error:", error);
-            setServerError("Не удалось удалить активность. Попробуйте ещё раз позже.");
+        const payload = {
+            tokenValue: token,
+            activityId: activityInfo.publicId,
         }
-    }, [activityInfo.publicId, router, setServerError, token])
+
+        deleteActivityMutation.mutate(payload, {
+            onSuccess: () => router.replace("/my-activity"),
+
+            onError: (err: unknown) => {
+                console.error("delete activity error:", err);
+
+                setServerError("Не удалось удалить активность. Попробуйте ещё раз позже.");
+            },
+        });
+    }, [activityInfo.publicId, deleteActivityMutation, router, setServerError, token])
 
     return (
         <>
