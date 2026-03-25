@@ -2,14 +2,17 @@ import {memo} from "react";
 import Link from "next/link";
 import {ChevronRightIcon, SparklesIcon} from "@heroicons/react/24/outline";
 import {GoalShortyStructure} from "@/types/goal";
-import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
 import {secondDarkColorTheme} from "@/styles";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import {usePageUtils} from "@/lib/hooks/usePageUtils";
 
 function DashboardGoalsCard({goalsShortyList}: {goalsShortyList: GoalShortyStructure[]}) {
 
     const hasGoals = goalsShortyList && goalsShortyList.length > 0;
     const visibleGoals = hasGoals ? goalsShortyList.slice(0, 6) : [];
     const hasMore = hasGoals && goalsShortyList.length > 6;
+
+    const { goToPage } = usePageUtils();
 
     return (
         <div className={`${secondDarkColorTheme} flex flex-col h-full rounded-2xl border border-emerald-100 shadow-sm p-5 gap-4`}>
@@ -50,9 +53,9 @@ function DashboardGoalsCard({goalsShortyList}: {goalsShortyList: GoalShortyStruc
                     </ul>
                 ) : (
                     <div className="flex text-center px-10 items-center mt-5 md:mt-30 ">
-                        <LightGreenLinkBtn
+                        <LightGreenBtn
                             label={`Добавить первую цель`}
-                            href={`/goals/add`}
+                            onClick={() => goToPage(`goals/add`)}
                         />
                     </div>
                 )}

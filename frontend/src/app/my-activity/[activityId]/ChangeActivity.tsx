@@ -13,13 +13,12 @@ import {
 } from "@/types/activity";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {buildExercisesPayload} from "@/lib/controllers/activity";
 import {showErrorMessage} from "@/lib";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
+import RedGlassBtn from "@/components/buttons/RedGlassBtn";
 import {
     validateActivityDate,
     validateActivityDescription,
@@ -35,6 +34,7 @@ import {
     useUpdateActivityMutation
 } from "@/lib/hooks/mutations/activity";
 import {useTrainings} from "@/lib/hooks/data/training";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface IProps {
     activityInfo: ActivityDataStructure,
@@ -150,7 +150,7 @@ export default function ChangeActivity({activityInfo, token}: IProps){
         const exercisesPayload = buildExercisesPayload(exerciseSets);
 
         const payload = {
-            id: String(activityInfo.id),
+            id: activityInfo.id,
             publicId: activityInfo.publicId,
             activityId: activityInfo.publicId,
             name: values.name,
@@ -284,8 +284,9 @@ export default function ChangeActivity({activityInfo, token}: IProps){
                         </DropDownContent>
 
                         <div className="mt-10 flex items-center gap-x-8">
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
                                 label={!isSubmitting ? 'Изменить' : 'Процесс...'}
+                                type={`submit`}
                                 disabled={isSubmitting}
                             />
 

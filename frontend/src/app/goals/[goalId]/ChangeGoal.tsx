@@ -10,12 +10,12 @@ import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
+import RedGlassBtn from "@/components/buttons/RedGlassBtn";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {Controller, useForm} from "react-hook-form";
 import {useDeleteGoalMutation, useUpdateGoalMutation} from "@/lib/hooks/mutations/goal";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface IProps {
     goalInfo: GoalsStructure;
@@ -26,7 +26,7 @@ const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', '
 
 export default function ChangeGoal({goalInfo, token}: IProps) {
 
-    const {register, handleSubmit, control, formState: { errors }} = useForm<GoalForm>({
+    const { register, handleSubmit, control, formState: { errors } } = useForm<GoalForm>({
         defaultValues: {
             name: goalInfo.name,
             description: goalInfo.description,
@@ -125,8 +125,9 @@ export default function ChangeGoal({goalInfo, token}: IProps) {
                         />
 
                         <div className="mt-8 md:flex flex-row space-y-4 md:space-y-0  items-center gap-x-8">
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
                                 label={!updateGoalMutation.isPending ? 'Изменить' : 'Процесс...'}
+                                type={`submit`}
                                 disabled={isSubmitting || updateGoalMutation.isPending}
                             />
 

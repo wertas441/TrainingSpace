@@ -20,23 +20,21 @@ export function useStopwatch() {
 
     useEffect(() => {
         if (!isRunning) return;
+
         const interval = setInterval(() => {
             setSeconds((prev) => prev + 1);
         }, 1000);
+
         return () => clearInterval(interval);
     }, [isRunning]);
 
     const toggle = () => setIsRunning((prev) => !prev);
+
     const reset = () => {
         setSeconds(0);
+
         setIsRunning(false);
     };
 
-    return {
-        seconds,
-        isRunning,
-        toggle,
-        reset,
-        formatTime
-    };
+    return { seconds, isRunning, toggle, reset, formatTime }
 }

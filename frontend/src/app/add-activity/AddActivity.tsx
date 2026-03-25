@@ -3,7 +3,6 @@
 import {useMemo, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
 import {showErrorMessage} from "@/lib";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
@@ -30,6 +29,7 @@ import {buildExercisesPayload} from "@/lib/controllers/activity";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
 import {useTrainings} from "@/lib/hooks/data/training";
 import {useCreateActivityMutation} from "@/lib/hooks/mutations/activity";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
@@ -226,8 +226,9 @@ export default function AddActivity({token} : {token: string}) {
                             </p>
                         )}
 
-                        <LightGreenSubmitBtn
+                        <LightGreenBtn
                             label={!isSubmitting ? "Сохранить активность" : 'Сохранение...' }
+                            type={`submit`}
                             disabled={isSubmitting}
                             className="py-2.5"
                         />

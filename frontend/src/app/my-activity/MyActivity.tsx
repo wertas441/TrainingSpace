@@ -11,7 +11,7 @@ import {useActivityStore} from "@/lib/store/activityStore";
 import {useActivity} from "@/lib/hooks/data/activity";
 import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
 export default function MyActivity({token}:{token: string}) {
 

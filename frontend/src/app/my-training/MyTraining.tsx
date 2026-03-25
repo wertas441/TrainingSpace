@@ -10,7 +10,7 @@ import {useTrainings} from "@/lib/hooks/data/training";
 import {useExerciseList} from "@/lib/hooks/data/exercise";
 import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
 export default function MyTraining({token}: {token: string}) {
 

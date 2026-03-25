@@ -50,9 +50,11 @@ const userStore: StateCreator<UserStore> = (set, get) => ({
             if (!data.success) return;
 
             set({userData: null});
+
             return;
         } catch (err) {
             console.error(getServerErrorMessage(err) || "Ошибка выхода");
+
             return;
         }
     },

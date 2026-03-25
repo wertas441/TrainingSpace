@@ -1,5 +1,4 @@
 import Image from "next/image";
-import LightGreenLinkBtn from "@/components/buttons/LightGreenBtn/LightGreenLinkBtn";
 import {secondDarkColorTheme} from "@/styles";
 import {Metadata} from "next";
 
@@ -14,20 +13,7 @@ export default function NotFound () {
         <div className="w-full flex items-center justify-center py-10">
             <div className="w-full max-w-4xl">
                 <div className={`${secondDarkColorTheme} relative overflow-hidden rounded-2xl border border-emerald-100 backdrop-blur shadow-lg`}>
-                    <div className="grid gap-8 p-6 sm:p-10 md:grid-cols-2">
-                        <div className="flex items-center justify-center">
-                            <div className="relative w-full  max-w-[340px] aspect-[4/3]">
-                                <Image
-                                    src="/window.svg"
-                                    alt="Иллюстрация - страница не найдена"
-                                    fill
-                                    sizes="(max-width: 768px) 80vw, 40vw"
-                                    className="object-contain drop-shadow-sm"
-                                    priority
-                                />
-                            </div>
-                        </div>
-
+                    <div className="grid gap-8 p-6 sm:p-10 md:grid-cols-`">
                         <div className="flex flex-col justify-center">
                             <span className="inline-flex w-fit items-center rounded-full border border-emerald-200
                             bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ">
@@ -40,16 +26,8 @@ export default function NotFound () {
 
                             <p className="mt-3 text-gray-600 dark:text-gray-300">
                                 Похоже, вы перешли по несуществующей ссылке или страница была
-                                перемещена. Проверьте адрес или вернитесь на главную.
+                                перемещена.
                             </p>
-
-                            <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                                <LightGreenLinkBtn
-                                    label="На главную"
-                                    href="/"
-                                    className="w-auto text-center px-6"
-                                />
-                            </div>
                         </div>
                     </div>
 

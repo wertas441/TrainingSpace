@@ -3,7 +3,7 @@ import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback, useMemo} from "react";
 import {HeaderMinimumProps} from "@/types";
 import {useRouter} from "next/navigation";
-import PlusButton from "@/components/buttons/other/PlusButton";
+import PlusButton from "@/components/buttons/PlusButton";
 import {secondDarkColorTheme} from "@/styles";
 
 function MyTrainingHeader({searchName, setSearchName}:HeaderMinimumProps) {

@@ -34,6 +34,7 @@ export function useActivityUtils({myTrainings, trainingId, onTrainingIdChange}: 
     const initSetsForTraining = (training?: TrainingDataStructure) => {
         if (!training) {
             setExerciseSets({});
+
             return;
         }
 

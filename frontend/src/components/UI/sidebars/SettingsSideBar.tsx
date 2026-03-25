@@ -69,7 +69,6 @@ export default function SettingsSideBar({pathname}: {pathname: string}) {
                 modalRef={windowModalRef}
                 windowLabel={'Подтверждение выхода'}
                 windowText={`Вы действительно хотите удалить выйти из своего пользовательского аккаунта? Это действие необратимо.`}
-                cancelButtonLabel={'Остаться'}
                 cancelFunction={toggleModalWindow}
                 confirmButtonLabel={'Выйти'}
                 confirmFunction={logOutButton}

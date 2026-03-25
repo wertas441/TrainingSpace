@@ -9,7 +9,6 @@ import {useMemo} from "react";
 import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ServerError from "@/components/errors/ServerError";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainInput from "@/components/inputs/MainInput";
 import {
     CheckCircleIcon,
@@ -22,6 +21,7 @@ import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
 import type {BackendApiResponse} from "@/types";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface ChangePasswordForm {
     currentPassword: string;
@@ -104,9 +104,10 @@ export default function ChangePassword(){
                             />
 
                             <div className="pt-2">
-                                <LightGreenSubmitBtn
+                                <LightGreenBtn
                                     label={!isSubmitting ? 'Сменить пароль' : 'Сохраняем...'}
                                     disabled={isSubmitting}
+                                    type={`submit`}
                                     className="py-2.5"
                                 />
                             </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import {memo, useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import StatisticsHeader from "@/components/UI/headers/StatisticsHeader";
 import StatisticsMainCard from "@/components/UI/other/StatisticsMainCard";
 import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";

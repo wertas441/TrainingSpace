@@ -10,7 +10,7 @@ import {useExerciseStore} from "@/lib/store/exerciseStore";
 import {useExerciseList} from "@/lib/hooks/data/exercise";
 import ErrorState from "@/components/errors/ErrorState";
 import Spinner from "@/components/UI/other/Spinner";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
 export default function ExercisesTechniques() {
 

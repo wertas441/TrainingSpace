@@ -21,7 +21,6 @@ export function usePagination<T>(filteredList: T[], itemsPerPage: number){
 
     // Клэмпим текущую страницу, если фильтры уменьшили кол-во страниц
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCurrentPage(prev => Math.min(prev, totalPages));
     }, [totalPages]);
 
@@ -32,7 +31,6 @@ export function usePagination<T>(filteredList: T[], itemsPerPage: number){
 
         return filteredList.slice(start, end);
     }, [currentPage, itemsPerPage, filteredList]);
-
 
     return {
         currentPage,

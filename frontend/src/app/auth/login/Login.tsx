@@ -6,7 +6,6 @@ import Link from "next/link";
 import {validateUserName, validateUserPassword} from "@/lib/utils/validators/user";
 import MainInput from "@/components/inputs/MainInput";
 import ServerError from "@/components/errors/ServerError";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {
     LockClosedIcon,
@@ -16,6 +15,7 @@ import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 import {makeInitUserData, useUserStore} from "@/lib/store/userStore";
 import LoginHalfCard from "@/components/UI/UiContex/LoginHalfCard";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface LoginForm {
     userName: string;
@@ -119,8 +119,9 @@ export default function Login(){
                             </div>
 
                             <div className="mt-7">
-                                <LightGreenSubmitBtn
+                                <LightGreenBtn
                                     label={!isSubmitting ? 'Войти' : 'Вход...'}
+                                    type={`submit`}
                                     disabled={isSubmitting}
                                     className="py-2.5"
                                 />

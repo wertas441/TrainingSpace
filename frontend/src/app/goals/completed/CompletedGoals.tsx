@@ -9,7 +9,7 @@ import NullElementsError from "@/components/errors/NullElementsError";
 import { useCompletedGoals } from "@/lib/hooks/data/goal";
 import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
 export default function CompletedGoals({token}: {token: string}){
 

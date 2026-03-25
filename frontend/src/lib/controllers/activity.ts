@@ -150,22 +150,23 @@ export async function deleteActivity(payload: DeleteActivityPayload):Promise<voi
     }
 }
 
-
 const isValidExerciseSet = (set: ExerciseSetInput): boolean => {
     return Number.isFinite(set.weight) && set.weight > 0 && Number.isFinite(set.quantity) && set.quantity > 0;
 }
 
+export const buildExercisesPayload = (setsMap: ExerciseSetsMap): ExercisePayloadItem[] => {
+    const setsArr = Object.entries(setsMap);
 
-export const buildExercisesPayload = (setsMap: ExerciseSetsMap): ExercisePayloadItem[] =>
-    Object.entries(setsMap).reduce<ExercisePayloadItem[]>((acc, [exerciseId, sets]) => {
+    return setsArr.reduce<ExercisePayloadItem[]>((arr, [exerciseId, sets]) => {
         const validSets = (sets ?? []).filter(isValidExerciseSet);
 
-        if (validSets.length === 0) return acc;
+        if (validSets.length === 0) return arr;
 
-        acc.push({
+        arr.push({
             id: Number(exerciseId),
             try: validSets.map(({id, weight, quantity}) => ({id, weight, quantity})),
         });
 
-        return acc;
-    }, []);
+        return arr
+    }, [])
+}

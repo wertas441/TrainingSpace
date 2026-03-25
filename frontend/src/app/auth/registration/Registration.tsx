@@ -16,11 +16,11 @@ import {
     UserIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainHideInput from "@/components/inputs/MainHideInput";
 import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 import RegisterHalfCard from "@/components/UI/UiContex/RegisterHalfCard";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface RegistrationForm {
     userName: string;
@@ -116,9 +116,10 @@ export default function Registration(){
                             />
 
                             <div className="mt-7">
-                                <LightGreenSubmitBtn
+                                <LightGreenBtn
                                     label={!isSubmitting ? 'Зарегистрироваться' : 'Регистрация...'}
                                     disabled={isSubmitting}
+                                    type={`submit`}
                                     className="py-2.5"
                                 />
                             </div>

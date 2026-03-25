@@ -13,8 +13,7 @@ import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
 import MainPagination from "@/components/UI/other/MainPagination";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
+import RedGlassBtn from "@/components/buttons/RedGlassBtn";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
@@ -23,6 +22,7 @@ import {secondDarkColorTheme} from "@/styles";
 import {useForm} from "react-hook-form";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
 import {useDeleteTrainingMutation, useUpdateTrainingMutation} from "@/lib/hooks/mutations/training";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface IProps {
     trainingInfo: TrainingListResponse,
@@ -214,8 +214,9 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
                             />
 
                             <div className="mt-10 flex-row md:flex space-y-4 md:space-y-0 items-center gap-x-8">
-                                <LightGreenSubmitBtn
+                                <LightGreenBtn
                                     label={!isSubmitting ? 'Изменить' : 'Процесс...'}
+                                    type={`submit`}
                                     disabled={isSubmitting}
                                 />
 

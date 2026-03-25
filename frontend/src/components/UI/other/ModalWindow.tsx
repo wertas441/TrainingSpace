@@ -1,5 +1,5 @@
-import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import RedGlassBtn from "@/components/buttons/RedGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 import {memo, Ref} from "react";
 import {secondDarkColorTheme} from "@/styles";
 

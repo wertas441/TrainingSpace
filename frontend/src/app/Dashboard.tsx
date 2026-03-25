@@ -27,7 +27,9 @@ export default function Dashboard({goalsShortyList, nutritionGraphicData}: IProp
 
                 <section className="grid gap-4 lg:gap-6 grid-cols-1 lg:grid-cols-3">
                     <DashboardStopwatchCard />
+
                     <DashboardCalendarCard />
+
                     <DashboardQuickActionsCard />
                 </section>
 

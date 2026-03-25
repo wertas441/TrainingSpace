@@ -4,7 +4,6 @@ import {useEffect, useMemo, useState} from "react";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {showErrorMessage} from "@/lib";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
@@ -32,6 +31,7 @@ import DropDownContent from "@/components/UI/UiContex/DropDownContent";
 import {useCreateTrainingMutation} from "@/lib/hooks/mutations/training";
 import {useExerciseList} from "@/lib/hooks/data/exercise";
 import {TrainingForm} from "@/types/training";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 export default function AddNewTraining() {
 
@@ -212,8 +212,9 @@ export default function AddNewTraining() {
                                 handleToggleExercise={handleToggleExercise}
                             />
 
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
                                 label={!isSubmitting ? 'Добавить тренировку' : 'Добавление...'}
+                                type={`submit`}
                                 disabled={isSubmitting}
                                 className="py-2.5"
                             />

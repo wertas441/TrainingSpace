@@ -2,7 +2,6 @@
 
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators/user";
 import {useMemo} from "react";
@@ -19,6 +18,7 @@ import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
 import type {BackendApiResponse} from "@/types";
 import {useUserStore} from "@/lib/store/userStore";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface ChangeEmailForm {
     newEmail: string;
@@ -92,9 +92,10 @@ export default function ChangeEmail(){
                             />
 
                             <div className="pt-2">
-                                <LightGreenSubmitBtn
+                                <LightGreenBtn
                                     label={!isSubmitting ? 'Сменить почту' : 'Сохраняем...'}
                                     disabled={isSubmitting}
+                                    type={`submit`}
                                     className="py-2.5"
                                 />
                             </div>

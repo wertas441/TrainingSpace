@@ -3,7 +3,6 @@
 import {GoalForm, GoalPriority} from "@/types/goal";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import MainTextarea from "@/components/inputs/MainTextarea";
@@ -21,6 +20,7 @@ import {
 import {Controller, useForm} from "react-hook-form";
 import HalfContentRow from "@/components/elements/HalfContentRow";
 import {useCreateGoalMutation} from "@/lib/hooks/mutations/goal";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
@@ -106,8 +106,9 @@ export default function AddGoal() {
                                     )}
                                 />
 
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
                                 label={!createGoalMutation.isPending ? 'Добавить' : 'Добавляем...'}
+                                type={`submit`}
                                 disabled={createGoalMutation.isPending}
                                 className={'mt-10 py-2.5'}
                             />

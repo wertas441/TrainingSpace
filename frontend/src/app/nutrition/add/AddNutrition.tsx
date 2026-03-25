@@ -1,7 +1,6 @@
 'use client'
 
 import ServerError from "@/components/errors/ServerError";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {showErrorMessage} from "@/lib";
 import {
@@ -26,6 +25,7 @@ import {useForm} from "react-hook-form";
 import {NutritionForm} from "@/types/nutrition";
 import HalfContentRow from "@/components/elements/HalfContentRow";
 import {useCreateDayMutation} from "@/lib/hooks/mutations/nutrition";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 export default function AddNutrition(){
 
@@ -149,9 +149,10 @@ export default function AddNutrition(){
                                 {...register('description', {validate: (value) => validateDayDescription(value) || true})}
                             />
 
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
                                 label={!isSubmitting ? 'Добавить' : 'Добавление...'}
                                 disabled={isSubmitting}
+                                type={`submit`}
                                 className="mt-2 py-2.5"
                             />
                         </form>

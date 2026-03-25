@@ -67,9 +67,9 @@ export interface BackendApiResponse<T = any> {
     error?: string;
 }
 
-export interface SimpleButtonProps {
+export interface ButtonProps {
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
     className?: string;
     disabled?: boolean;
     type?: "button" | "submit" | "reset";

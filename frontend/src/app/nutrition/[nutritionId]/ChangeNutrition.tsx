@@ -16,13 +16,13 @@ import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {NutritionDay, NutritionForm} from "@/types/nutrition";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import {useForm} from "react-hook-form";
 import {useDeleteDayMutation, useUpdateDayMutation} from "@/lib/hooks/mutations/nutrition";
-import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
+import RedGlassBtn from "@/components/buttons/RedGlassBtn";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface IProps {
     dayInfo: NutritionDay,
@@ -169,7 +169,8 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
                         />
 
                         <div className="mt-8 md:flex flex-row space-y-4 md:space-y-0  items-center gap-x-8">
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
+                                type={`submit`}
                                 label={!isSubmitting ? 'Изменить' : 'Изменение...'}
                                 disabled={isSubmitting}
                             />

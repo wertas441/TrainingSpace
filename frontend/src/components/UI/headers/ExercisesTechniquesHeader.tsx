@@ -1,15 +1,15 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {memo, useCallback, useMemo} from "react";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import BarsButton from "@/components/buttons/other/BarsButton";
+import BarsButton from "@/components/buttons/BarsButton";
 import {DifficultOptionsStructure} from "@/types";
 import ChipToggleGroup from "@/components/inputs/ChipToggleGroup";
 import {secondDarkColorTheme} from "@/styles";
-import XMarkButton from "@/components/buttons/other/XMarkButton";
+import XMarkButton from "@/components/buttons/XMarkButton";
 import {useExerciseStore} from "@/lib/store/exerciseStore";
 
 interface ValueOptions {

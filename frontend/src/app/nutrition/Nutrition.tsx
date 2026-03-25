@@ -11,7 +11,7 @@ import {useNutritionStore} from "@/lib/store/nutritionStore";
 import {useNutrition} from "@/lib/hooks/data/nutrition";
 import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
 export default function Nutrition({token}: {token: string}) {
 
