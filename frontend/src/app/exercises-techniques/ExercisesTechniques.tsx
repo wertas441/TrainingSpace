@@ -1,7 +1,7 @@
 'use client'
 
 import ExercisesTechniquesHeader from "@/components/UI/headers/ExercisesTechniquesHeader";
-import {memo, useEffect, useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import ExerciseRow from "@/components/elements/ExerciseRow";
 import {usePagination} from "@/lib/hooks/usePagination";
 import MainPagination from "@/components/UI/other/MainPagination";
@@ -12,21 +12,21 @@ import ErrorState from "@/components/errors/ErrorState";
 import Spinner from "@/components/UI/other/Spinner";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 
-function ExercisesTechniques() {
+export default function ExercisesTechniques() {
 
-    const { exercises, isLoading, isError, error, refetch, isFetching } = useExerciseList();
+    const { data, isLoading, isError, error, refetch, isFetching } = useExerciseList();
 
     const searchName = useExerciseStore(s => s.searchName)
     const difficultFilter = useExerciseStore(s => s.difficultFilter)
     const partOfBodyFilter = useExerciseStore(s => s.partOfBodyFilter)
 
     const itemsPerPage:number = 10;
-    const sourceExercises = useMemo(() => exercises ?? [], [exercises]);
+    const exercises = useMemo(() => data ?? [], [data]);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
 
-        return sourceExercises.filter(e => {
+        return exercises.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
 
             const matchesDifficulty = difficultFilter === null || e.difficulty === difficultFilter;
@@ -35,7 +35,7 @@ function ExercisesTechniques() {
 
             return matchesName && matchesDifficulty && matchesPart;
         });
-    }, [searchName, sourceExercises, difficultFilter, partOfBodyFilter]);
+    }, [searchName, exercises, difficultFilter, partOfBodyFilter]);
 
     const {
         currentPage,
@@ -50,9 +50,9 @@ function ExercisesTechniques() {
 
     return (
         <div className="space-y-4" ref={listTopRef} >
-            <ExercisesTechniquesHeader exercises={sourceExercises} />
+            <ExercisesTechniquesHeader exercises={exercises} />
 
-            {isLoading && sourceExercises.length === 0 && (
+            {isLoading && exercises.length === 0 && (
                 <div className="rounded-lg border border-emerald-100 p-6">
                     <Spinner label="Загрузка списка упражнений..." size="lg" />
                 </div>
@@ -74,7 +74,7 @@ function ExercisesTechniques() {
 
             {!isLoading && !isError && (
                 <>
-                    {isFetching && sourceExercises.length > 0 && (
+                    {isFetching && exercises.length > 0 && (
                         <Spinner className="justify-start" size="sm" label="Обновляем список упражнений..." />
                     )}
 
@@ -111,5 +111,3 @@ function ExercisesTechniques() {
         </div>
     );
 }
-
-export default memo(ExercisesTechniques);

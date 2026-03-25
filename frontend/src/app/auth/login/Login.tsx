@@ -17,7 +17,7 @@ import {useForm} from "react-hook-form";
 import {makeInitUserData, useUserStore} from "@/lib/store/userStore";
 import LoginHalfCard from "@/components/UI/UiContex/LoginHalfCard";
 
-interface LoginFormValues {
+interface LoginForm {
     userName: string;
     password: string;
     rememberMe: boolean;
@@ -25,12 +25,12 @@ interface LoginFormValues {
 
 export default function Login(){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<LoginFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
     const initUserData = useUserStore(makeInitUserData)
 
-    const onSubmit = async (values: LoginFormValues)=> {
+    const onSubmit = async (values: LoginForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
@@ -47,7 +47,9 @@ export default function Login(){
             const userData = useUserStore.getState().userData;
             if (!userData) {
                 setServerError("Не удалось получить данные пользователя после входа. Попробуйте обновить страницу.");
+
                 setIsSubmitting(false);
+
                 return;
             }
 

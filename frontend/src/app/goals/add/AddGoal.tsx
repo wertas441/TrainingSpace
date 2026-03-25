@@ -1,6 +1,6 @@
 'use client'
 
-import {GoalFormValues, GoalPriority} from "@/types/goal";
+import {GoalForm, GoalPriority} from "@/types/goal";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
@@ -26,26 +26,26 @@ const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', '
 
 export default function AddGoal() {
 
-    const {register, handleSubmit, control, formState: { errors }} = useForm<GoalFormValues>({
+    const { register, handleSubmit, control, formState: { errors } } = useForm<GoalForm>({
         defaultValues: {
-            goalPriority: 'Средний',
+            priority: 'Средний',
         }
     })
 
-    const { serverError, setServerError, router } = usePageUtils()
+    const { serverError, setServerError, goToPage } = usePageUtils();
     const createGoalMutation = useCreateGoalMutation();
 
-    const onSubmit = (values: GoalFormValues)=> {
+    const onSubmit = (values: GoalForm)=> {
         setServerError(null);
 
         const payload = {
-            name: values.goalName,
-            description: values.goalDescription,
-            priority: values.goalPriority,
+            name: values.name,
+            description: values.description,
+            priority: values.priority,
         }
 
         createGoalMutation.mutate(payload, {
-            onSuccess: () => router.push("/goals"),
+            onSuccess: () => goToPage("/goals"),
 
             onError: (err) => {
                 const message = err instanceof Error ? err.message : "Не удалось добавить цель. Попробуйте ещё раз.";
@@ -77,27 +77,27 @@ export default function AddGoal() {
 
                         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                             <MainInput
-                                id={'goalName'}
+                                id={'name'}
                                 label={'Название цели'}
                                 placeholder={'Пожать 100кг'}
-                                error={errors.goalName?.message}
-                                {...register('goalName', {validate: (value) => validateGoalName(value) || true})}
+                                error={errors.name?.message}
+                                {...register('name', {validate: (value) => validateGoalName(value) || true})}
                             />
 
                             <MainTextarea
-                                id="goalDescription"
+                                id="description"
                                 label="Описание"
                                 placeholder="Опционально: описание для цели"
-                                error={errors.goalDescription?.message}
-                                {...register('goalDescription', {validate: (value) => validateGoalDescription(value) || true})}
+                                error={errors.description?.message}
+                                {...register('description', {validate: (value) => validateGoalDescription(value) || true})}
                             />
 
                                 <Controller
                                     control={control}
-                                    name="goalPriority"
+                                    name="priority"
                                     render={({field}) => (
                                         <ChipRadioGroup<GoalPriority>
-                                            id="goalPriority"
+                                            id="priority"
                                             label={`Приоритет цели`}
                                             choices={goalPriorityOptions}
                                             value={field.value}

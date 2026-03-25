@@ -7,7 +7,7 @@ import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import {
     ActivityDataStructure,
-    ActivityDifficultyStructure, ActivityFormValues,
+    ActivityDifficultyStructure, ActivityForm,
     ActivityTypeStructure,
     ExerciseSetsByExerciseId
 } from "@/types/activity";
@@ -32,7 +32,6 @@ import {Controller, useForm} from "react-hook-form";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
 import {
     useDeleteActivityMutation,
-    useDeleteAсtivityMutation,
     useUpdateActivityMutation
 } from "@/lib/hooks/mutations/activity";
 import {useTrainings} from "@/lib/hooks/data/training";
@@ -47,13 +46,13 @@ const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая'
 
 export default function ChangeActivity({activityInfo, token}: IProps){
 
-    const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
+    const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm<ActivityForm>({
         defaultValues: {
-            activityName: activityInfo.name,
-            activityDescription: activityInfo.description,
-            activityDate: activityInfo.activityDate,
-            activityType: activityInfo.type,
-            activityDifficulty: activityInfo.difficulty,
+            name: activityInfo.name,
+            description: activityInfo.description,
+            date: activityInfo.activityDate,
+            type: activityInfo.type,
+            difficulty: activityInfo.difficulty,
             trainingId: String(activityInfo.trainingId),
         }
     })
@@ -82,7 +81,6 @@ export default function ChangeActivity({activityInfo, token}: IProps){
         trainingId,
         onTrainingIdChange: (val) => setValue('trainingId', val, { shouldDirty: true, shouldValidate: true }),
     });
-
 
     const [setsErrors, setSetsError] = useState<string  | null>(null)
     const [exerciseSets, setExerciseSets] = useState<ExerciseSetsByExerciseId>(() => {
@@ -142,7 +140,7 @@ export default function ChangeActivity({activityInfo, token}: IProps){
         return !(setsError);
     };
 
-    const onSubmit = async (values: ActivityFormValues)=> {
+    const onSubmit = async (values: ActivityForm)=> {
         setServerError(null);
 
         if (!validateForm()) return;
@@ -152,14 +150,14 @@ export default function ChangeActivity({activityInfo, token}: IProps){
         const exercisesPayload = buildExercisesPayload(exerciseSets);
 
         const payload = {
-            id: activityInfo.id,
+            id: String(activityInfo.id),
             publicId: activityInfo.publicId,
             activityId: activityInfo.publicId,
-            name: values.activityName,
-            description: values.activityDescription,
-            activityDate: values.activityDate,
-            type: values.activityType,
-            difficulty: values.activityDifficulty,
+            name: values.name,
+            description: values.description,
+            activityDate: values.date,
+            type: values.type,
+            difficulty: values.difficulty,
             trainingId: Number(values.trainingId),
             exercises: exercisesPayload,
         }
@@ -181,7 +179,7 @@ export default function ChangeActivity({activityInfo, token}: IProps){
 
         const payload = {
             tokenValue: token,
-            goalId: activityInfo.publicId,
+            activityId: activityInfo.publicId,
         }
 
         deleteActivityMutation.mutate(payload, {
@@ -206,35 +204,35 @@ export default function ChangeActivity({activityInfo, token}: IProps){
 
                         <DropDownContent label={`Основная информация`} defaultOpen={true}>
                             <MainInput
-                                id="activityName"
+                                id="name"
                                 label="Название активности"
                                 placeholder={`Тренировка в бассейне`}
-                                error={errors.activityName?.message}
-                                {...register('activityName', {validate: (value) => validateActivityName(value) || true})}
+                                error={errors.name?.message}
+                                {...register('name', {validate: (value) => validateActivityName(value) || true})}
                             />
 
                             <MainInput
-                                id={'activityDate'}
+                                id={'date'}
                                 type={'date'}
                                 label="Дата активности"
-                                error={errors.activityDate?.message}
-                                {...register('activityDate', {validate: (value) => validateActivityDate(value) || true})}
+                                error={errors.date?.message}
+                                {...register('date', {validate: (value) => validateActivityDate(value) || true})}
                             />
 
                             <MainTextarea
-                                id="activityDescription"
+                                id="description"
                                 label="Описание"
                                 placeholder="Опционально: комментарий к сессии"
-                                error={errors.activityDescription?.message}
-                                {...register('activityDescription', {validate: (value) => validateActivityDescription(value) || true})}
+                                error={errors.description?.message}
+                                {...register('description', {validate: (value) => validateActivityDescription(value) || true})}
                             />
 
                             <Controller
                                 control={control}
-                                name="activityType"
+                                name="type"
                                 render={({field}) => (
                                     <ChipRadioGroup<ActivityTypeStructure>
-                                        id="activityType"
+                                        id="type"
                                         label={`Тип`}
                                         choices={activityTypeChoices}
                                         value={field.value}
@@ -245,10 +243,10 @@ export default function ChangeActivity({activityInfo, token}: IProps){
 
                             <Controller
                                 control={control}
-                                name="activityDifficulty"
+                                name="difficulty"
                                 render={({field}) => (
                                     <ChipRadioGroup<ActivityDifficultyStructure>
-                                        id="activityDifficulty"
+                                        id="difficulty"
                                         label={'Сложность'}
                                         choices={activityDifficultyChoices}
                                         value={field.value}
@@ -303,7 +301,6 @@ export default function ChangeActivity({activityInfo, token}: IProps){
                 windowLabel={'Подтверждение удаления'}
                 windowText={`Вы действительно хотите удалить активность ${activityInfo.name}? Это действие необратимо.`}
                 error={serverError}
-                cancelButtonLabel={'Отмена'}
                 cancelFunction={toggleModalWindow}
                 confirmButtonLabel={'Удалить'}
                 confirmFunction={deleteActivityBtn}

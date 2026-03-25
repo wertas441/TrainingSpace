@@ -142,19 +142,16 @@ export async function deleteActivity(payload: DeleteActivityPayload):Promise<voi
 }
 
 
-const isValidExerciseSet = (set: ExerciseSetInput): boolean =>
-    Number.isFinite(set.weight) &&
-    set.weight > 0 &&
-    Number.isFinite(set.quantity) &&
-    set.quantity > 0;
+const isValidExerciseSet = (set: ExerciseSetInput): boolean => {
+    return Number.isFinite(set.weight) && set.weight > 0 && Number.isFinite(set.quantity) && set.quantity > 0;
+}
+
 
 export const buildExercisesPayload = (setsMap: ExerciseSetsMap): ExercisePayloadItem[] =>
     Object.entries(setsMap).reduce<ExercisePayloadItem[]>((acc, [exerciseId, sets]) => {
         const validSets = (sets ?? []).filter(isValidExerciseSet);
 
-        if (validSets.length === 0) {
-            return acc;
-        }
+        if (validSets.length === 0) return acc;
 
         acc.push({
             id: Number(exerciseId),

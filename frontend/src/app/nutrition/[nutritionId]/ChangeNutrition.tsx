@@ -17,7 +17,7 @@ import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import {NutritionDay, NutritionFormValues} from "@/types/nutrition";
+import {NutritionDay, NutritionForm} from "@/types/nutrition";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import {useForm} from "react-hook-form";
@@ -31,10 +31,10 @@ interface IProps {
 
 export default function ChangeNutrition({dayInfo, token}: IProps){
 
-    const { register, handleSubmit, formState: { errors } } = useForm<NutritionFormValues>({
+    const { register, handleSubmit, formState: { errors } } = useForm<NutritionForm>({
         defaultValues: {
-            dayName: dayInfo.name,
-            dayDescription: dayInfo.description,
+            name: dayInfo.name,
+            description: dayInfo.description,
             calories: String(dayInfo.calories),
             protein: String(dayInfo.protein),
             fat: String(dayInfo.fat),
@@ -49,14 +49,14 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
     const updateDayMutation = useUpdateDayMutation();
     const deleteDayMutation = useDeleteDayMutation();
 
-    const onSubmit = async (values: NutritionFormValues)=> {
+    const onSubmit = async (values: NutritionForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
         const payload = {
             publicId: dayInfo.publicId,
-            name: values.dayName,
-            description: values.dayDescription,
+            name: values.name,
+            description: values.description,
             date: values.dayDate,
             calories: parseInt(values.calories, 10),
             protein: parseInt(values.protein, 10),
@@ -108,11 +108,11 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
 
                     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                         <MainInput
-                            id={'dayName'}
+                            id={'name'}
                             label={'Наименование дня'}
                             placeholder={'Например: День с упором на белок'}
-                            error={errors.dayName?.message}
-                            {...register('dayName', {validate: (value) => validateDayName(value) || true})}
+                            error={errors.name?.message}
+                            {...register('name', {validate: (value) => validateDayName(value) || true})}
                         />
 
                         <div className="grid gap-4 sm:grid-cols-2">
@@ -161,11 +161,11 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
                         </div>
 
                         <MainTextarea
-                            id={'dayDescription'}
+                            id={'description'}
                             label={'Описание'}
                             placeholder={`Опционально: комментарий ко дню`}
-                            error={errors.dayDescription?.message}
-                            {...register('dayDescription', {validate: (value) => validateDayDescription(value) || true})}
+                            error={errors.description?.message}
+                            {...register('description', {validate: (value) => validateDayDescription(value) || true})}
                         />
 
                         <div className="mt-8 md:flex flex-row space-y-4 md:space-y-0  items-center gap-x-8">
@@ -189,7 +189,6 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
                 windowLabel={'Подтверждение удаления'}
                 windowText={`Вы действительно хотите удалить день ${dayInfo.name}? Это действие необратимо.`}
                 error={serverError}
-                cancelButtonLabel={'Отмена'}
                 cancelFunction={toggleModalWindow}
                 confirmButtonLabel={'Удалить'}
                 confirmFunction={deleteDayBtn}

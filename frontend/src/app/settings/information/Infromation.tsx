@@ -74,6 +74,7 @@ export default function Information() {
                                 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 transition-colors`}
                         >
                             <CodeBracketIcon className="h-5 w-5" />
+
                             <span>Открыть репозиторий на GitHub</span>
                         </Link>
                     </div>

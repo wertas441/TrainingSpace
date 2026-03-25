@@ -1,6 +1,6 @@
 'use client'
 
-import {TrainingListResponse} from "@/types/training";
+import {TrainingForm, TrainingListResponse} from "@/types/training";
 import type {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {useCallback, useEffect, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
@@ -30,17 +30,12 @@ interface IProps {
     exercises: ExerciseTechniqueItem[],
 }
 
-interface ChangeTrainingFormValues {
-    trainingName: string;
-    trainingDescription: string;
-}
-
 export default function ChangeTraining({ trainingInfo, token, exercises }: IProps) {
 
-    const {register, handleSubmit, formState: { errors }} = useForm<ChangeTrainingFormValues>({
+    const {register, handleSubmit, formState: { errors }} = useForm<TrainingForm>({
         defaultValues: {
-            trainingName: trainingInfo.name,
-            trainingDescription: trainingInfo.description,
+            name: trainingInfo.name,
+            description: trainingInfo.description,
         }
     })
 
@@ -86,17 +81,15 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
         return !(exercisesValidationError);
     }
 
-    const onSubmit = (values: ChangeTrainingFormValues)=> {
+    const onSubmit = (values: TrainingForm)=> {
         setServerError(null);
 
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         const payload = {
             trainingId: trainingInfo.publicId,
-            name: values.trainingName,
-            description: values.trainingDescription,
+            name: values.name,
+            description: values.description,
             exercises: selectedExerciseIds,
         }
 
@@ -147,19 +140,19 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
 
                             <DropDownContent label={`Основная информация`} defaultOpen={true}>
                                 <MainInput
-                                    id={'trainingName'}
+                                    id={'name'}
                                     label={`Название тренировки`}
                                     placeholder={'Силовая тренировка на грудь'}
-                                    error={errors.trainingName?.message}
-                                    {...register('trainingName', {validate: (value) => validateTrainingName(value) || true})}
+                                    error={errors.name?.message}
+                                    {...register('name', {validate: (value) => validateTrainingName(value) || true})}
                                 />
 
                                 <MainTextarea
-                                    id={'trainingDescription'}
+                                    id={'description'}
                                     label={'Описание тренировки'}
                                     placeholder="Опционально: описание для тренировки"
-                                    error={errors.trainingDescription?.message}
-                                    {...register('trainingDescription', {validate: (value) => validateTrainingDescription(value) || true})}
+                                    error={errors.description?.message}
+                                    {...register('description', {validate: (value) => validateTrainingDescription(value) || true})}
                                 />
                             </DropDownContent>
 
@@ -242,7 +235,6 @@ export default function ChangeTraining({ trainingInfo, token, exercises }: IProp
                 windowLabel={'Подтверждение удаления'}
                 windowText={`Вы действительно хотите удалить тренировку "${trainingInfo.name}"? Это действие необратимо. `}
                 error={serverError}
-                cancelButtonLabel={'Отмена'}
                 cancelFunction={toggleModalWindow}
                 confirmButtonLabel={'Удалить'}
                 confirmFunction={deleteTrainingBtn}

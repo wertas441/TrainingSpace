@@ -22,7 +22,7 @@ import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 import RegisterHalfCard from "@/components/UI/UiContex/RegisterHalfCard";
 
-interface RegistrationFormValues {
+interface RegistrationForm {
     userName: string;
     email: string;
     password: string;
@@ -31,11 +31,11 @@ interface RegistrationFormValues {
 
 export default function Registration(){
 
-    const {register, handleSubmit, getValues, formState: { errors }} = useForm<RegistrationFormValues>()
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<RegistrationForm>()
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils()
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, goToPage } = usePageUtils()
 
-    const onSubmit = async (values: RegistrationFormValues)=> {
+    const onSubmit = async (values: RegistrationForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
@@ -48,7 +48,7 @@ export default function Registration(){
         try {
             await serverApi.post<BackendApiResponse>('/user/registration', payload)
 
-            router.push("/auth/login");
+            goToPage("/auth/login");
         } catch (err) {
             const message:string = getServerErrorMessage(err);
 

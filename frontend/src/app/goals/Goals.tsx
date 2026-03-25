@@ -2,7 +2,7 @@
 
 import MainPagination from "@/components/UI/other/MainPagination";
 import {usePagination} from "@/lib/hooks/usePagination";
-import {memo, useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import GoalsHeader from "@/components/UI/headers/GoalsHeader";
 import GoalItem from "@/components/elements/GoalRow";
 import NullElementsError from "@/components/errors/NullElementsError";
@@ -11,7 +11,7 @@ import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
 import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
 
-function Goals({token}: {token: string}) {
+export default function Goals({token}: {token: string}) {
 
     const { goals, isLoading, error, isError, refetch, isFetching } = useGoals(token)
 
@@ -108,4 +108,3 @@ function Goals({token}: {token: string}) {
     )
 }
 
-export default memo(Goals);

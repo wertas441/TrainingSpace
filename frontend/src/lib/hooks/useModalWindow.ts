@@ -40,7 +40,6 @@ export function useModalWindow(){
 
 
     useEffect(() => {
-        // Управление монтированием для анимаций входа/выхода
         if (isModalWindowOpen) {
             if (exitTimerRef.current) {
                 window.clearTimeout(exitTimerRef.current);
@@ -48,6 +47,7 @@ export function useModalWindow(){
             }
 
             setIsRendered(true);
+
             setIsExiting(false);
         } else if (isRendered) {
             // Запускаем анимацию выхода и размонтируем по завершению

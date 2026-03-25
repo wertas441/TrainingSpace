@@ -23,7 +23,7 @@ import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
 import type {BackendApiResponse} from "@/types";
 
-interface ChangePasswordFormValues {
+interface ChangePasswordForm {
     currentPassword: string;
     newPassword: string;
     confirmPassword: string;
@@ -31,11 +31,11 @@ interface ChangePasswordFormValues {
 
 export default function ChangePassword(){
 
-    const { register, handleSubmit, getValues, formState: { errors } } = useForm<ChangePasswordFormValues>()
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<ChangePasswordForm>()
 
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router}  = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, goToPage}  = usePageUtils();
 
-    const onSubmit = async (values: ChangePasswordFormValues)=> {
+    const onSubmit = async (values: ChangePasswordForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
@@ -48,7 +48,7 @@ export default function ChangePassword(){
         try {
             await serverApi.post<BackendApiResponse>('/user/change-password', payload)
 
-            router.push("/settings/profile");
+            goToPage("/settings/profile");
         } catch (err) {
             const message:string = getServerErrorMessage(err);
 
