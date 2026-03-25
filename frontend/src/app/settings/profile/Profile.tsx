@@ -13,15 +13,17 @@ import ErrorState from "@/components/errors/ErrorState";
 export default function Profile() {
 
     const userData = useUserStore(getUserData)
-
+    
     if (!userData) {
         return <ErrorState
             title="Проблема с получением ваших данных"
             description="Похоже, что ваша сессия истекла или отсутствует токен доступа. Попробуйте войти заново."
         />
     }
-
-    const createdAtDate = userData.createdAt ? new Date(userData.createdAt) : null;
+    
+    const { userName, email, publicId, createdAt } = userData;
+    
+    const createdAtDate = createdAt ? new Date(createdAt) : null;
 
     const memberSince =
         createdAtDate && !Number.isNaN(createdAtDate.getTime())
@@ -32,7 +34,7 @@ export default function Profile() {
             })
             : null;
 
-    const initials = userData.userName
+    const initials = userName
         .trim()
         .split(/\s+/)
         .map((word) => word[0])
@@ -67,7 +69,7 @@ export default function Profile() {
                             </div>
 
                             <div className="text-lg sm:text-xl font-medium text-gray-900 dark:text-white">
-                                {userData.userName}
+                                {userName}
                             </div>
                         </div>
 
@@ -90,7 +92,7 @@ export default function Profile() {
                         </div>
 
                         <div className="mt-1 text-xs md:text-sm font-mono text-gray-900 break-all dark:text-white">
-                            {userData.publicId}
+                            {publicId}
                         </div>
                     </div>
 
@@ -100,7 +102,7 @@ export default function Profile() {
                         </div>
 
                         <div className="mt-1 text-xs md:text-sm font-mono text-gray-900 break-all dark:text-white">
-                            {userData.email}
+                            {email}
                         </div>
                     </div>
                 </div>

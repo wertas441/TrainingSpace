@@ -5,7 +5,7 @@ import {ActivityDataStructure} from "@/types/activity";
 export function useActivity(token: string) {
 
     const { data: activity, isLoading, error, isError, refetch, isFetching } = useQuery<ActivityDataStructure[]>({
-        queryKey: ['activity'],
+        queryKey: ['activity', token],
         queryFn: async () => {
             const data = await getActivityList(token);
 

@@ -1,6 +1,6 @@
 'use client'
 
-import {memo, useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import StatisticsHeader from "@/components/UI/headers/StatisticsHeader";
 import StatisticsMainCard from "@/components/UI/other/StatisticsMainCard";
 import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
@@ -36,7 +36,7 @@ const metricOptions: MetricOptionStructure[] = [
     {id: 'carb', label: 'Углеводы'},
 ] as const;
 
-function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: IProps) {
+export default function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: IProps) {
 
     const [selectedMetric, setSelectedMetric] = useState<NutritionMetric>('calories');
 
@@ -148,19 +148,19 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: IPr
                         </div>
 
                         <div className={`${thirdDarkColorTheme} inline-flex gap-3 items-center my-4 md:my-0 rounded-full bg-emerald-50 p-1 text-xs border border-emerald-100`}>
-                            {metricOptions.map((option) => {
-                                const isActive = selectedMetric === option.id;
+                            {metricOptions.map(({id, label}) => {
+                                const isActive = selectedMetric === id;
                                 return (
                                     <button
-                                        key={option.id}
+                                        key={id}
                                         type="button"
-                                        onClick={() => setSelectedMetric(option.id)}
+                                        onClick={() => setSelectedMetric(id)}
                                         className={`px-2.5 dark:text-white cursor-pointer py-1  rounded-full font-medium transition 
                                         ${isActive
                                             ? 'bg-emerald-600 text-white shadow-sm'
                                             : 'hover:text-emerald-700 dark:hover:text-emerald-500 text-emerald-500'}`}
                                     >
-                                        {option.label}
+                                        {label}
                                     </button>
                                 );
                             })}
@@ -178,5 +178,3 @@ function Statistics({mainCardData, nutritionCardData, nutritionGraphicData}: IPr
         </main>
     )
 }
-
-export default memo(Statistics);

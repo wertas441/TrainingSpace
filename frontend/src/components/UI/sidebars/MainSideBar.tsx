@@ -9,7 +9,7 @@ import {
     SquaresPlusIcon, WrenchScrewdriverIcon,
     XMarkIcon
 } from "@heroicons/react/24/outline";
-import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";
+import AnyStylesButton from "@/components/buttons/AnyStylesButton";
 import {firstDarkColorTheme} from "@/styles";
 
 interface IProps {

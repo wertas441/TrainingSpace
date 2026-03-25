@@ -7,25 +7,25 @@ import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {AtSymbolIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {useForm} from "react-hook-form";
 import type {BackendApiResponse} from "@/types";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
-interface ForgotPasswordFormValues {
+interface ForgotPasswordForm {
     email: string;
 }
 
 export default function ForgotPassword() {
 
-    const {register, handleSubmit, formState: { errors }} = useForm<ForgotPasswordFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<ForgotPasswordForm>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting} = usePageUtils();
 
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    const onSubmit = async (values: ForgotPasswordFormValues)=> {
+    const onSubmit = async (values: ForgotPasswordForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
@@ -79,8 +79,9 @@ export default function ForgotPassword() {
                         {...register('email', {validate: (value) => validateUserEmail(value) || true})}
                     />
 
-                    <LightGreenSubmitBtn
+                    <LightGreenBtn
                         label={!isSubmitting ? 'Отправить письмо' : 'Отправка...'}
+                        type={`submit`}
                         disabled={isSubmitting}
                     />
                 </form>

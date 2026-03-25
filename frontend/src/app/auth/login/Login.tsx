@@ -6,7 +6,6 @@ import Link from "next/link";
 import {validateUserName, validateUserPassword} from "@/lib/utils/validators/user";
 import MainInput from "@/components/inputs/MainInput";
 import ServerError from "@/components/errors/ServerError";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {
     LockClosedIcon,
@@ -16,8 +15,9 @@ import type {BackendApiResponse} from "@/types";
 import {useForm} from "react-hook-form";
 import {makeInitUserData, useUserStore} from "@/lib/store/userStore";
 import LoginHalfCard from "@/components/UI/UiContex/LoginHalfCard";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
-interface LoginFormValues {
+interface LoginForm {
     userName: string;
     password: string;
     rememberMe: boolean;
@@ -25,12 +25,12 @@ interface LoginFormValues {
 
 export default function Login(){
 
-    const {register, handleSubmit, formState: { errors }} = useForm<LoginFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>()
 
     const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
     const initUserData = useUserStore(makeInitUserData)
 
-    const onSubmit = async (values: LoginFormValues)=> {
+    const onSubmit = async (values: LoginForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
@@ -47,7 +47,9 @@ export default function Login(){
             const userData = useUserStore.getState().userData;
             if (!userData) {
                 setServerError("Не удалось получить данные пользователя после входа. Попробуйте обновить страницу.");
+
                 setIsSubmitting(false);
+
                 return;
             }
 
@@ -117,8 +119,9 @@ export default function Login(){
                             </div>
 
                             <div className="mt-7">
-                                <LightGreenSubmitBtn
+                                <LightGreenBtn
                                     label={!isSubmitting ? 'Войти' : 'Вход...'}
+                                    type={`submit`}
                                     disabled={isSubmitting}
                                     className="py-2.5"
                                 />

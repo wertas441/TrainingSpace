@@ -1,7 +1,7 @@
 import {memo} from "react";
-import {SimpleButtonProps} from "@/types";
+import {ButtonProps} from "@/types";
 
-function RedGlassBtn({label, onClick, className = '', disabled = false, type = "button"}: SimpleButtonProps ) {
+function RedGlassBtn({label, onClick, className = '', disabled = false, type = "button"}: ButtonProps ) {
 
     return (
         <button

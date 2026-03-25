@@ -10,28 +10,29 @@ import {useTrainings} from "@/lib/hooks/data/training";
 import {useExerciseList} from "@/lib/hooks/data/exercise";
 import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
 export default function MyTraining({token}: {token: string}) {
 
     const { trainings, isLoading, error, isError, refetch, isFetching } = useTrainings(token);
-    const { exercises } = useExerciseList();
+
+    const { data } = useExerciseList();
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
 
     const trainingList = useMemo(() => trainings ?? [], [trainings]);
-    const exercisesList = useMemo(() => exercises ?? [], [exercises]);
+    const exercises = useMemo(() => data ?? [], [data]);
 
     const exerciseNameById = useMemo(() => {
-        const map = new Map<number, string>();
+        const exerciseMap = new Map<number, string>();
 
-        for (const ex of exercisesList) {
-            map.set(ex.id, ex.name);
+        for (const { id, name } of exercises) {
+            exerciseMap.set(id, name);
         }
 
-        return map;
-    }, [exercisesList]);
+        return exerciseMap;
+    }, [exercises]);
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
@@ -54,10 +55,7 @@ export default function MyTraining({token}: {token: string}) {
 
     return (
         <div className="space-y-4" ref={listTopRef} >
-            <MyTrainingHeader
-                searchName={searchName}
-                setSearchName={setSearchName}
-            />
+            <MyTrainingHeader searchName={searchName} setSearchName={setSearchName} />
 
             {isLoading && trainingList.length === 0 && (
                 <div className="rounded-lg border border-emerald-100 p-6">
@@ -91,6 +89,7 @@ export default function MyTraining({token}: {token: string}) {
                             paginatedList.map((item) => {
                                 const exerciseNames: string[] = item.exercises.map((n) => {
                                     const byId = exerciseNameById.get(n);
+
                                     if (byId) return byId;
                                 }).filter((v): v is string => Boolean(v));
 

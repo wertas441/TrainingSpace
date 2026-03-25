@@ -9,7 +9,6 @@ import {useMemo} from "react";
 import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import ServerError from "@/components/errors/ServerError";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import MainInput from "@/components/inputs/MainInput";
 import {
     CheckCircleIcon,
@@ -22,8 +21,9 @@ import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
 import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
 import type {BackendApiResponse} from "@/types";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
-interface ChangePasswordFormValues {
+interface ChangePasswordForm {
     currentPassword: string;
     newPassword: string;
     confirmPassword: string;
@@ -31,11 +31,11 @@ interface ChangePasswordFormValues {
 
 export default function ChangePassword(){
 
-    const { register, handleSubmit, getValues, formState: { errors } } = useForm<ChangePasswordFormValues>()
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<ChangePasswordForm>()
 
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router}  = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, goToPage}  = usePageUtils();
 
-    const onSubmit = async (values: ChangePasswordFormValues)=> {
+    const onSubmit = async (values: ChangePasswordForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
@@ -48,7 +48,7 @@ export default function ChangePassword(){
         try {
             await serverApi.post<BackendApiResponse>('/user/change-password', payload)
 
-            router.push("/settings/profile");
+            goToPage("/settings/profile");
         } catch (err) {
             const message:string = getServerErrorMessage(err);
 
@@ -104,9 +104,10 @@ export default function ChangePassword(){
                             />
 
                             <div className="pt-2">
-                                <LightGreenSubmitBtn
+                                <LightGreenBtn
                                     label={!isSubmitting ? 'Сменить пароль' : 'Сохраняем...'}
                                     disabled={isSubmitting}
+                                    type={`submit`}
                                     className="py-2.5"
                                 />
                             </div>

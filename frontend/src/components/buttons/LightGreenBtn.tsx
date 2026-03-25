@@ -1,18 +1,22 @@
-import Link from "next/link";
-import {BasicLinkBtnProps} from "@/types";
+import {memo} from "react";
+import {ButtonProps} from "@/types";
 
-export default function LightGreenLinkBtn({label, href = '/', className = ''}: BasicLinkBtnProps) {
+function LightGreenBtn({label, type = 'button', onClick, disabled, className = ''}: ButtonProps) {
 
     return (
-        <Link
-            href={href}
+        <button
+            type={type}
+            onClick={onClick}
+            disabled={disabled}
             className={`w-full font-semibold p-2 rounded-md cursor-pointer 
             bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white 
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 
             disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
         >
             {label}
-        </Link>
+        </button>
     )
 }
+
+export default memo(LightGreenBtn);
 

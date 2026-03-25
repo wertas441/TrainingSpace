@@ -9,17 +9,15 @@ import QueryProvider from "@/lib/utils/QueryProvider";
 
 export default function LayoutWrapper({children}: {children: ReactNode}):ReactElement {
 
+	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
 	const pathname: string = usePathname();
 	const isAuthPage: boolean = pathname.startsWith('/auth');
-
-	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
 	const activeContext: string = useMemo(() => {
 		const segments = pathname.split('/').filter(Boolean);
 
-		if (segments.length === 0) {
-			return '/';
-		}
+		if (segments.length === 0) return '/';
 
 		return segments[0];
 	}, [pathname]);

@@ -1,7 +1,7 @@
 import {CalendarDaysIcon, FireIcon, BeakerIcon, ScaleIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 import {NutritionDay} from "@/types/nutrition";
 import {memo, useMemo} from "react";
-import ChangeButton from "@/components/buttons/other/ChangeButton";
+import ChangeButton from "@/components/buttons/ChangeButton";
 import NutritionInfo from "@/components/elements/NutritionInfo";
 import {secondDarkColorTheme} from "@/styles";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";

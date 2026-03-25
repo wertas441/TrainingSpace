@@ -1,7 +1,6 @@
 'use client'
 
 import ServerError from "@/components/errors/ServerError";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {showErrorMessage} from "@/lib";
 import {
@@ -23,16 +22,17 @@ import {
 import MainTextarea from "@/components/inputs/MainTextarea";
 import MainInput from "@/components/inputs/MainInput";
 import {useForm} from "react-hook-form";
-import {NutritionFormValues} from "@/types/nutrition";
+import {NutritionForm} from "@/types/nutrition";
 import HalfContentRow from "@/components/elements/HalfContentRow";
 import {useCreateDayMutation} from "@/lib/hooks/mutations/nutrition";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 export default function AddNutrition(){
 
     const today = new Date();
     const initialDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-    const {register, handleSubmit, formState: { errors }} = useForm<NutritionFormValues>({
+    const {register, handleSubmit, formState: { errors }} = useForm<NutritionForm>({
         defaultValues: {
             dayDate: initialDate,
         }
@@ -42,13 +42,13 @@ export default function AddNutrition(){
 
     const createDayMutation = useCreateDayMutation()
 
-    const onSubmit = async (values: NutritionFormValues)=> {
+    const onSubmit = async (values: NutritionForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
         const payload = {
-            name: values.dayName,
-            description: values.dayDescription,
+            name: values.name,
+            description: values.description,
             date: values.dayDate,
             calories: parseInt(values.calories, 10),
             protein: parseInt(values.protein, 10),
@@ -89,11 +89,11 @@ export default function AddNutrition(){
 
                         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                             <MainInput
-                                id={'dayName'}
+                                id={'name'}
                                 label={'Наименование дня'}
                                 placeholder={'Например: День с упором на белок'}
-                                error={errors.dayName?.message}
-                                {...register('dayName', {validate: (value) => validateDayName(value) || true})}
+                                error={errors.name?.message}
+                                {...register('name', {validate: (value) => validateDayName(value) || true})}
                             />
 
                             <div className="grid gap-4 sm:grid-cols-2">
@@ -142,16 +142,17 @@ export default function AddNutrition(){
                             </div>
 
                             <MainTextarea
-                                id={'dayDescription'}
+                                id={'description'}
                                 label={'Описание'}
                                 placeholder={`Опционально: комментарий ко дню`}
-                                error={errors.dayDescription?.message}
-                                {...register('dayDescription', {validate: (value) => validateDayDescription(value) || true})}
+                                error={errors.description?.message}
+                                {...register('description', {validate: (value) => validateDayDescription(value) || true})}
                             />
 
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
                                 label={!isSubmitting ? 'Добавить' : 'Добавление...'}
                                 disabled={isSubmitting}
+                                type={`submit`}
                                 className="mt-2 py-2.5"
                             />
                         </form>

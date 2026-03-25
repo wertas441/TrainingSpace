@@ -1,12 +1,12 @@
 import FilterInput from "@/components/inputs/FilterInput";
 import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 import {useModalWindowRef} from "@/lib/hooks/useModalWindowRef";
-import PlusButton from "@/components/buttons/other/PlusButton";
-import BarsButton from "@/components/buttons/other/BarsButton";
+import PlusButton from "@/components/buttons/PlusButton";
+import BarsButton from "@/components/buttons/BarsButton";
 import {secondDarkColorTheme} from "@/styles";
-import XMarkButton from "@/components/buttons/other/XMarkButton";
+import XMarkButton from "@/components/buttons/XMarkButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {useNutritionStore} from "@/lib/store/nutritionStore";
 

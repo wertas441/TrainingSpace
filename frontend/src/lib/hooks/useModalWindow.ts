@@ -11,9 +11,7 @@ export function useModalWindow(){
     const [isExiting, setIsExiting] = useState<boolean>(false);
     const exitTimerRef = useRef<number | null>(null);
 
-    const toggleModalWindow = useCallback(() => {
-        setIsModalWindowOpen(!isModalWindowOpen);
-    }, [isModalWindowOpen]);
+    const toggleModalWindow = useCallback(() => setIsModalWindowOpen(prevState => !prevState), []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -21,6 +19,7 @@ export function useModalWindow(){
                 if (!isProcess) toggleModalWindow();
             }
         };
+
         const handleEscape = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 if (isModalWindowOpen && !isProcess) toggleModalWindow();
@@ -29,43 +28,48 @@ export function useModalWindow(){
 
         if (isModalWindowOpen) {
             document.addEventListener('mousedown', handleClickOutside);
+
             document.addEventListener('keydown', handleEscape);
         }
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+
             document.removeEventListener('keydown', handleEscape);
         };
     }, [isModalWindowOpen, isProcess, toggleModalWindow]);
 
 
     useEffect(() => {
-        // Управление монтированием для анимаций входа/выхода
         if (isModalWindowOpen) {
             if (exitTimerRef.current) {
                 window.clearTimeout(exitTimerRef.current);
+
                 exitTimerRef.current = null;
             }
 
             setIsRendered(true);
+
             setIsExiting(false);
         } else if (isRendered) {
-            // Запускаем анимацию выхода и размонтируем по завершению
             setIsExiting(true);
+
             exitTimerRef.current = window.setTimeout(() => {
                 setIsRendered(false);
+
                 setIsExiting(false);
+
                 exitTimerRef.current = null;
             }, 220); // должно соответствовать длительности plx-scale-out/plx-fade-out
         }
         return () => {
             if (exitTimerRef.current) {
                 window.clearTimeout(exitTimerRef.current);
+
                 exitTimerRef.current = null;
             }
         };
     }, [isModalWindowOpen, isRendered]);
-
 
     return {
         isModalWindowOpen,

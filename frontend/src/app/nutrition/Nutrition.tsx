@@ -11,13 +11,13 @@ import {useNutritionStore} from "@/lib/store/nutritionStore";
 import {useNutrition} from "@/lib/hooks/data/nutrition";
 import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
 export default function Nutrition({token}: {token: string}) {
 
-    const { days, isLoading, error, isError, refetch, isFetching } = useNutrition(token);
+    const { data, isLoading, error, isError, refetch, isFetching } = useNutrition(token);
 
-    const userDays = useMemo(() => days ?? [], [days]);
+    const days = useMemo(() => data ?? [], [data]);
 
     const searchName = useNutritionStore(s => s.searchName);
     const searchDate = useNutritionStore(s => s.searchDate);
@@ -35,7 +35,7 @@ export default function Nutrition({token}: {token: string}) {
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
 
-        return userDays.filter(e => {
+        return days.filter(e => {
             const matchesName = q.length === 0 || e.name.toLowerCase().includes(q);
             const matchesData = searchDate === '' || normalizeToYMD(e.date) === searchDate;
             const byCaloriesMin = caloriesMin === '' || e.calories >= caloriesMin;
@@ -50,7 +50,7 @@ export default function Nutrition({token}: {token: string}) {
             return matchesName && matchesData && byCaloriesMin && byCaloriesMax && byProteinMin && byProteinMax
                 && byFatMin && byFatMax && byCarbMin && byCarbMax;
         });
-    }, [searchName, userDays, searchDate, caloriesMin, caloriesMax, proteinMin, proteinMax, fatMin, fatMax, carbMin, carbMax]);
+    }, [searchName, days, searchDate, caloriesMin, caloriesMax, proteinMin, proteinMax, fatMin, fatMax, carbMin, carbMax]);
 
     const {
         currentPage,
@@ -74,7 +74,7 @@ export default function Nutrition({token}: {token: string}) {
         <div className="space-y-4" ref={listTopRef} >
             <NutritionHeader />
 
-            {isLoading && userDays.length === 0 && (
+            {isLoading && days.length === 0 && (
                 <div className="rounded-lg border border-emerald-100 p-6">
                     <Spinner label="Загрузка списка дней..." size="lg" />
                 </div>
@@ -96,7 +96,7 @@ export default function Nutrition({token}: {token: string}) {
 
             {!isLoading && !isError && (
                 <>
-                    {isFetching && userDays.length > 0 && (
+                    {isFetching && days.length > 0 && (
                         <Spinner className="justify-start" size="sm" label="Обновляем список дней..." />
                     )}
 
@@ -119,7 +119,7 @@ export default function Nutrition({token}: {token: string}) {
                             )
                         ) : (
                             <NullElementsError text={
-                                userDays.length === 0
+                                days.length === 0
                                     ? "У вас пока нет добавленных дней. Нажмите «Добавить день», чтобы добавить первый."
                                     : "По заданным параметрам поиска дни не найдены. Попробуйте изменить фильтр."
                             } />

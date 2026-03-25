@@ -2,7 +2,6 @@
 
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators/user";
 import {useMemo} from "react";
@@ -19,20 +18,22 @@ import SettingsHeader from "@/components/UI/headers/SettingsHeader";
 import {useForm} from "react-hook-form";
 import type {BackendApiResponse} from "@/types";
 import {useUserStore} from "@/lib/store/userStore";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
-interface ChangeEmailFormValues {
+interface ChangeEmailForm {
     newEmail: string;
     currentPassword: string;
 }
 
 export default function ChangeEmail(){
 
-    const { register, handleSubmit, formState: { errors } } = useForm<ChangeEmailFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<ChangeEmailForm>()
 
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, goToPage } = usePageUtils();
+
     const changeEmail = useUserStore((s) => s.changeEmail);
 
-    const onSubmit = async (values: ChangeEmailFormValues)=> {
+    const onSubmit = async (values: ChangeEmailForm)=> {
         setServerError(null);
         setIsSubmitting(true);
 
@@ -44,8 +45,9 @@ export default function ChangeEmail(){
         try {
             await serverApi.post<BackendApiResponse>('/user/change-email', payload)
 
-            changeEmail(values.newEmail)
-            router.push("/settings/profile");
+            changeEmail(values.newEmail);
+
+            goToPage("/settings/profile");
         } catch (err) {
             const message:string = getServerErrorMessage(err);
 
@@ -90,9 +92,10 @@ export default function ChangeEmail(){
                             />
 
                             <div className="pt-2">
-                                <LightGreenSubmitBtn
+                                <LightGreenBtn
                                     label={!isSubmitting ? 'Сменить почту' : 'Сохраняем...'}
                                     disabled={isSubmitting}
+                                    type={`submit`}
                                     className="py-2.5"
                                 />
                             </div>

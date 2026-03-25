@@ -25,7 +25,8 @@ function ExerciseRow({id, name, description, partOfTheBody, difficulty}: Exercis
                     {partOfTheBody.map((part) => (
                         <span
                             key={part}
-                            className="px-2 py-0.5 text-xs border rounded-full border-emerald-200 text-emerald-800 bg-emerald-50 dark:text-white dark:bg-emerald-800 dark:border-emerald-700"
+                            className="px-2 py-0.5 text-xs border rounded-full border-emerald-200 text-emerald-800 bg-emerald-50
+                            dark:text-white dark:bg-emerald-800 dark:border-emerald-700"
                         >
                             {part}
                         </span>

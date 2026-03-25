@@ -1,5 +1,5 @@
 import {memo, useMemo} from "react";
-import ChangeButton from "@/components/buttons/other/ChangeButton";
+import ChangeButton from "@/components/buttons/ChangeButton";
 import {secondDarkColorTheme} from "@/styles";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 

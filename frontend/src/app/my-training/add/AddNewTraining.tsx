@@ -4,7 +4,6 @@ import {useEffect, useMemo, useState} from "react";
 import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {showErrorMessage} from "@/lib";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
@@ -31,21 +30,18 @@ import {useForm} from "react-hook-form";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
 import {useCreateTrainingMutation} from "@/lib/hooks/mutations/training";
 import {useExerciseList} from "@/lib/hooks/data/exercise";
-
-interface AddNewTrainingFormValues {
-    trainingName: string;
-    trainingDescription: string;
-}
+import {TrainingForm} from "@/types/training";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 export default function AddNewTraining() {
 
-    const { register, handleSubmit, formState: { errors } } = useForm<AddNewTrainingFormValues>()
+    const { register, handleSubmit, formState: { errors } } = useForm<TrainingForm>()
 
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, goToPage } = usePageUtils();
 
-    const { exercises: exerciseList } = useExerciseList();
+    const { data } = useExerciseList();
 
-    const exercises = useMemo(() => exerciseList ?? [], [exerciseList]);
+    const exercises = useMemo(() => data ?? [], [data]);
 
     const [exercisesError, setExercisesError] = useState<string | null>(null);
     const itemsPerPage:number = 8;
@@ -82,23 +78,21 @@ export default function AddNewTraining() {
         return !(exercisesValidationError);
     }
 
-    const onSubmit = async (values: AddNewTrainingFormValues)=> {
+    const onSubmit = async (values: TrainingForm)=> {
         setServerError(null);
 
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         setIsSubmitting(true);
 
         const payload = {
-            name: values.trainingName,
-            description: values.trainingDescription,
+            name: values.name,
+            description: values.description,
             exercises: selectedExerciseIds,
         }
 
         createTrainingMutation.mutate(payload, {
-            onSuccess: () => router.push("/my-training"),
+            onSuccess: () => goToPage("/my-training"),
 
             onError: (err) => {
                 const message = err instanceof Error ? err.message : "Не удалось добавить тренировку. Попробуйте ещё раз.";
@@ -131,19 +125,19 @@ export default function AddNewTraining() {
                         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                             <DropDownContent label={`Основная информация`} defaultOpen={true}>
                                 <MainInput
-                                    id={'trainingName'}
+                                    id={'name'}
                                     label={`Название тренировки`}
                                     placeholder={'Силовая тренировка на грудь'}
-                                    error={errors.trainingName?.message}
-                                    {...register('trainingName', {validate: (value) => validateTrainingName(value) || true})}
+                                    error={errors.name?.message}
+                                    {...register('name', {validate: (value) => validateTrainingName(value) || true})}
                                 />
 
                                 <MainTextarea
-                                    id={'trainingDescription'}
+                                    id={'description'}
                                     label={'Описание тренировки'}
                                     placeholder="Опционально: описание для тренировки"
-                                    error={errors.trainingDescription?.message}
-                                    {...register('trainingDescription', {validate: (value) => validateTrainingDescription(value) || true})}
+                                    error={errors.description?.message}
+                                    {...register('description', {validate: (value) => validateTrainingDescription(value) || true})}
                                 />
                             </DropDownContent>
 
@@ -218,8 +212,9 @@ export default function AddNewTraining() {
                                 handleToggleExercise={handleToggleExercise}
                             />
 
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
                                 label={!isSubmitting ? 'Добавить тренировку' : 'Добавление...'}
+                                type={`submit`}
                                 disabled={isSubmitting}
                                 className="py-2.5"
                             />

@@ -11,9 +11,9 @@ export interface NutritionDay {
     carb: string;
 }
 
-export interface NutritionFormValues {
-    dayName: string;
-    dayDescription: string;
+export interface NutritionForm {
+    name: string;
+    description: string;
     calories: string;
     protein: string;
     fat: string;

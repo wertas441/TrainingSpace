@@ -1,7 +1,7 @@
 import {GoalsStructure} from "@/types/goal";
 import {memo, useCallback, useState} from "react";
-import ChangeButton from "@/components/buttons/other/ChangeButton";
-import CheckButton from "@/components/buttons/other/CheckButton";
+import ChangeButton from "@/components/buttons/ChangeButton";
+import CheckButton from "@/components/buttons/CheckButton";
 import {getColorStyles, secondDarkColorTheme} from "@/styles";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {useCompleteGoalMutation} from "@/lib/hooks/mutations/goal";

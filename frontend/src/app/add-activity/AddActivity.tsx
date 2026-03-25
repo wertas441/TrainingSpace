@@ -3,12 +3,10 @@
 import {useMemo, useState} from "react";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import MainTextarea from "@/components/inputs/MainTextarea";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
 import ServerError from "@/components/errors/ServerError";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import type {BackendApiResponse} from "@/types";
+import {showErrorMessage} from "@/lib";
 import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import {ActivityDifficultyStructure, ActivityFormValues, ActivityTypeStructure} from "@/types/activity";
+import {ActivityDifficultyStructure, ActivityForm, ActivityTypeStructure} from "@/types/activity";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
 import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
 import MainInput from "@/components/inputs/MainInput";
@@ -31,6 +29,7 @@ import {buildExercisesPayload} from "@/lib/controllers/activity";
 import DropDownContent from "@/components/UI/UiContex/DropDownContent";
 import {useTrainings} from "@/lib/hooks/data/training";
 import {useCreateActivityMutation} from "@/lib/hooks/mutations/activity";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
@@ -40,17 +39,17 @@ export default function AddActivity({token} : {token: string}) {
     const today = new Date();
     const initialDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-    const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityFormValues>({
+    const {register, handleSubmit, control, setValue, watch, formState: { errors }} = useForm<ActivityForm>({
         defaultValues: {
-            activityDate: initialDate,
-            activityType: 'Силовая',
-            activityDifficulty: 'Средняя',
+            date: initialDate,
+            type: 'Силовая',
+            difficulty: 'Средняя',
         }
     })
 
     const { trainings } = useTrainings(token);
 
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, goToPage } = usePageUtils();
 
     const [setsErrors, setSetsError] = useState<string  | null>(null)
 
@@ -90,7 +89,7 @@ export default function AddActivity({token} : {token: string}) {
         return !(setsError);
     };
 
-    const onSubmit = async (values: ActivityFormValues)=> {
+    const onSubmit = async (values: ActivityForm)=> {
         setServerError(null);
 
         if (!validateForm()) {
@@ -102,17 +101,17 @@ export default function AddActivity({token} : {token: string}) {
         const exercisesPayload = buildExercisesPayload(exerciseSets);
 
         const payload = {
-            activityName: values.activityName,
-            description: values.activityDescription,
-            performedAt: values.activityDate,
-            activityType: values.activityType,
-            activityDifficult: values.activityDifficulty,
+            activityName: values.name,
+            description: values.description,
+            performedAt: values.date,
+            activityType: values.type,
+            activityDifficult: values.difficulty,
             trainingId: Number(values.trainingId),
             exercises: exercisesPayload,
         }
 
         createActivityMutation.mutate(payload, {
-            onSuccess: () => router.push("/my-activity"),
+            onSuccess: () => goToPage("/my-activity"),
 
             onError: (err) => {
                 const message = err instanceof Error ? err.message : "Не удалось добавить активность. Попробуйте ещё раз.";
@@ -144,35 +143,35 @@ export default function AddActivity({token} : {token: string}) {
 
                         <DropDownContent label={`Основная информация`} defaultOpen={true}>
                             <MainInput
-                                id="activityName"
+                                id="name"
                                 label="Название активности"
                                 placeholder={`Тренировка в бассейне`}
-                                error={errors.activityName?.message}
-                                {...register('activityName', {validate: (value) => validateActivityName(value) || true})}
+                                error={errors.name?.message}
+                                {...register('name', {validate: (value) => validateActivityName(value) || true})}
                             />
 
                             <MainInput
-                                id={'activityDate'}
+                                id={'date'}
                                 type={'date'}
                                 label="Дата активности"
-                                error={errors.activityDate?.message}
-                                {...register('activityDate', {validate: (value) => validateActivityDate(value) || true})}
+                                error={errors.date?.message}
+                                {...register('date', {validate: (value) => validateActivityDate(value) || true})}
                             />
 
                             <MainTextarea
-                                id="activityDescription"
+                                id="description"
                                 label="Описание"
                                 placeholder="Опционально: комментарий к сессии"
-                                error={errors.activityDescription?.message}
-                                {...register('activityDescription', {validate: (value) => validateActivityDescription(value) || true})}
+                                error={errors.description?.message}
+                                {...register('description', {validate: (value) => validateActivityDescription(value) || true})}
                             />
 
                             <Controller
                                 control={control}
-                                name="activityType"
+                                name="type"
                                 render={({field}) => (
                                     <ChipRadioGroup<ActivityTypeStructure>
-                                        id="activityType"
+                                        id="type"
                                         label={`Тип`}
                                         choices={activityTypeChoices}
                                         value={field.value}
@@ -183,10 +182,10 @@ export default function AddActivity({token} : {token: string}) {
 
                             <Controller
                                 control={control}
-                                name="activityDifficulty"
+                                name="difficulty"
                                 render={({field}) => (
                                     <ChipRadioGroup<ActivityDifficultyStructure>
-                                        id="activityDifficulty"
+                                        id="difficulty"
                                         label={'Сложность'}
                                         choices={activityDifficultyChoices}
                                         value={field.value}
@@ -227,8 +226,9 @@ export default function AddActivity({token} : {token: string}) {
                             </p>
                         )}
 
-                        <LightGreenSubmitBtn
+                        <LightGreenBtn
                             label={!isSubmitting ? "Сохранить активность" : 'Сохранение...' }
+                            type={`submit`}
                             disabled={isSubmitting}
                             className="py-2.5"
                         />

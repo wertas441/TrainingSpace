@@ -1,5 +1,3 @@
-import {HeaderMinimumProps} from "@/types/index";
-
 export type ActivityTypeStructure = 'Силовая' | 'Кардио' | 'Комбинированный';
 
 export type ActivityDifficultyStructure = 'Лёгкая' | 'Средняя' | 'Тяжелая';
@@ -8,15 +6,14 @@ export type ActivityDifficultyFilter= ActivityDifficultyStructure | null ;
 
 export type ActivityTypeFilter = ActivityTypeStructure | null;
 
-export interface ActivityFormValues {
-    activityName: string;
-    activityDescription: string;
-    activityDate: string;
-    activityType: ActivityTypeStructure;
-    activityDifficulty: ActivityDifficultyStructure;
+export interface ActivityForm {
+    name: string;
+    description: string;
+    date: string;
+    type: ActivityTypeStructure;
+    difficulty: ActivityDifficultyStructure;
     trainingId: string;
 }
-
 
 export interface ActivityDataStructure {
     id: number;

@@ -3,7 +3,7 @@ import {memo, useCallback, useMemo, useState} from "react";
 import {ActivityDataStructure} from "@/types/activity";
 import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
 import {getTrainingExercises} from "@/lib/controllers/activity";
-import ChangeButton from "@/components/buttons/other/ChangeButton";
+import ChangeButton from "@/components/buttons/ChangeButton";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {getColorStyles, iconDarkColorTheme, secondDarkColorTheme} from "@/styles";
 

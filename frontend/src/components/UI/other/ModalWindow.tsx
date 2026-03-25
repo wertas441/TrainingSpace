@@ -1,5 +1,5 @@
-import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import RedGlassBtn from "@/components/buttons/RedGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 import {memo, Ref} from "react";
 import {secondDarkColorTheme} from "@/styles";
 
@@ -9,7 +9,6 @@ interface IProps {
     windowLabel: string;
     windowText: string;
     error?: string | null;
-    cancelButtonLabel: string;
     cancelFunction: () => void;
     confirmButtonLabel: string;
     confirmFunction: () => void;
@@ -25,7 +24,6 @@ function ModalWindow(
         windowLabel,
         windowText,
         error,
-        cancelButtonLabel,
         cancelFunction,
         confirmButtonLabel,
         confirmFunction,
@@ -66,7 +64,7 @@ function ModalWindow(
 
                 <div className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 space-y-3 space-y-reverse sm:space-y-0">
                     <LightGreenGlassBtn
-                        label={cancelButtonLabel}
+                        label={'Отмена'}
                         disabled={isProcess}
                         onClick={cancelFunction}
                     />

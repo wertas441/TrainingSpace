@@ -11,9 +11,9 @@ import {useActivityStore} from "@/lib/store/activityStore";
 import {useActivity} from "@/lib/hooks/data/activity";
 import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
-export default function MyActivity({token}:{token: string; }) {
+export default function MyActivity({token}:{token: string}) {
 
     const { activity, isLoading, error, isError, refetch, isFetching } = useActivity(token);
 
@@ -30,17 +30,13 @@ export default function MyActivity({token}:{token: string; }) {
         const q = searchName.toLowerCase().trim();
 
         return clientActivity.filter((activity) => {
-            const matchesName =
-                q.length === 0 || activity.name.toLowerCase().includes(q);
+            const matchesName = q.length === 0 || activity.name.toLowerCase().includes(q);
 
-            const matchesDate =
-                !searchDate || normalizeToYMD(activity.activityDate) === searchDate;
+            const matchesDate = !searchDate || normalizeToYMD(activity.activityDate) === searchDate;
 
-            const matchesDifficulty =
-                difficultFilter === null || activity.difficulty === difficultFilter;
+            const matchesDifficulty = difficultFilter === null || activity.difficulty === difficultFilter;
 
-            const matchesType =
-                typeFilter === null || activity.type === typeFilter;
+            const matchesType = typeFilter === null || activity.type === typeFilter;
 
             return matchesName && matchesDate && matchesDifficulty && matchesType;
         });

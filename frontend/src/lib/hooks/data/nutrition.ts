@@ -4,8 +4,8 @@ import {NutritionDay} from "@/types/nutrition";
 
 export function useNutrition(token: string) {
 
-    const { data: days, isLoading, error, isError, refetch, isFetching } = useQuery<NutritionDay[]>({
-        queryKey: ['nutrition'],
+    const { data, isLoading, error, isError, refetch, isFetching } = useQuery<NutritionDay[]>({
+        queryKey: ['nutrition', token],
         queryFn: async () => {
             const data = await getDayList(token);
 
@@ -17,5 +17,5 @@ export function useNutrition(token: string) {
         staleTime: 60000 * 10,
     })
 
-    return { days, isLoading, error, isError, refetch, isFetching }
+    return { data, isLoading, error, isError, refetch, isFetching }
 }

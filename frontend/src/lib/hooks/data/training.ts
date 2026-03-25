@@ -5,7 +5,7 @@ import {getTrainingList} from "@/lib/controllers/training";
 export function useTrainings(token: string) {
 
     const { data: trainings, isLoading, error, isError, refetch, isFetching } = useQuery<TrainingListResponse[]>({
-        queryKey: ['training'],
+        queryKey: ['training', token],
         queryFn: async () => {
             const data = await getTrainingList(token);
 

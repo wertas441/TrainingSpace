@@ -3,8 +3,8 @@ import {memo, useMemo} from "react";
 import {MagnifyingGlassIcon, ClipboardDocumentCheckIcon, ClipboardDocumentListIcon} from "@heroicons/react/24/outline";
 import {HeaderMinimumProps} from "@/types";
 import {usePathname} from "next/navigation";
-import PlusButton from "@/components/buttons/other/PlusButton";
-import AnyStylesButton from "@/components/buttons/other/AnyStylesButton";
+import PlusButton from "@/components/buttons/PlusButton";
+import AnyStylesButton from "@/components/buttons/AnyStylesButton";
 import {secondDarkColorTheme} from "@/styles";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 

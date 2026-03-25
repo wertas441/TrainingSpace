@@ -1,7 +1,7 @@
 'use client'
 
 import {useCallback} from "react";
-import {GoalFormValues, GoalPriority, GoalsStructure} from "@/types/goal";
+import {GoalForm, GoalPriority, GoalsStructure} from "@/types/goal";
 import {usePageUtils} from "@/lib/hooks/usePageUtils";
 import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators/goal";
 import {showErrorMessage} from "@/lib";
@@ -10,13 +10,12 @@ import ServerError from "@/components/errors/ServerError";
 import MainInput from "@/components/inputs/MainInput";
 import MainTextarea from "@/components/inputs/MainTextarea";
 import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
-import LightGreenSubmitBtn from "@/components/buttons/LightGreenBtn/LightGreenSubmitBtn";
-import RedGlassBtn from "@/components/buttons/RedGlassButton/RedGlassBtn";
-import {deleteGoal} from "@/lib/controllers/goal";
+import RedGlassBtn from "@/components/buttons/RedGlassBtn";
 import {useModalWindow} from "@/lib/hooks/useModalWindow";
 import ModalWindow from "@/components/UI/other/ModalWindow";
 import {Controller, useForm} from "react-hook-form";
 import {useDeleteGoalMutation, useUpdateGoalMutation} from "@/lib/hooks/mutations/goal";
+import LightGreenBtn from "@/components/buttons/LightGreenBtn";
 
 interface IProps {
     goalInfo: GoalsStructure;
@@ -25,13 +24,13 @@ interface IProps {
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
-export function ChangeGoal({goalInfo, token}: IProps) {
+export default function ChangeGoal({goalInfo, token}: IProps) {
 
-    const {register, handleSubmit, control, formState: { errors }} = useForm<GoalFormValues>({
+    const { register, handleSubmit, control, formState: { errors } } = useForm<GoalForm>({
         defaultValues: {
-            goalName: goalInfo.name,
-            goalDescription: goalInfo.description,
-            goalPriority: goalInfo.priority,
+            name: goalInfo.name,
+            description: goalInfo.description,
+            priority: goalInfo.priority,
         }
     })
 
@@ -42,14 +41,14 @@ export function ChangeGoal({goalInfo, token}: IProps) {
     const updateGoalMutation = useUpdateGoalMutation();
     const deleteGoalMutation = useDeleteGoalMutation();
 
-    const onSubmit = (values: GoalFormValues)=> {
+    const onSubmit = (values: GoalForm)=> {
         setServerError(null);
 
         const payload = {
             goalId: goalInfo.publicId,
-            name: values.goalName,
-            description: values.goalDescription,
-            priority: values.goalPriority,
+            name: values.name,
+            description: values.description,
+            priority: values.priority,
         }
 
         updateGoalMutation.mutate(payload, {
@@ -96,27 +95,27 @@ export function ChangeGoal({goalInfo, token}: IProps) {
                     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
 
                         <MainInput
-                            id={'goalName'}
+                            id={'name'}
                             label={'Название цели'}
                             placeholder={'Например: Пожать 100кг'}
-                            error={errors.goalName?.message}
-                            {...register('goalName', {validate: (value) => validateGoalName(value) || true})}
+                            error={errors.name?.message}
+                            {...register('name', {validate: (value) => validateGoalName(value) || true})}
                         />
 
                         <MainTextarea
-                            id="goalDescription"
+                            id="description"
                             label="Описание"
                             placeholder="Опционально: описание для цели"
-                            error={errors.goalDescription?.message}
-                            {...register('goalDescription', {validate: (value) => validateGoalDescription(value) || true})}
+                            error={errors.description?.message}
+                            {...register('description', {validate: (value) => validateGoalDescription(value) || true})}
                         />
 
                         <Controller
                             control={control}
-                            name="goalPriority"
+                            name="priority"
                             render={({field}) => (
                                 <ChipRadioGroup<GoalPriority>
-                                    id="goalPriority"
+                                    id="priority"
                                     label={`Приоритет цели`}
                                     choices={goalPriorityOptions}
                                     value={field.value}
@@ -126,8 +125,9 @@ export function ChangeGoal({goalInfo, token}: IProps) {
                         />
 
                         <div className="mt-8 md:flex flex-row space-y-4 md:space-y-0  items-center gap-x-8">
-                            <LightGreenSubmitBtn
+                            <LightGreenBtn
                                 label={!updateGoalMutation.isPending ? 'Изменить' : 'Процесс...'}
+                                type={`submit`}
                                 disabled={isSubmitting || updateGoalMutation.isPending}
                             />
 
@@ -146,7 +146,6 @@ export function ChangeGoal({goalInfo, token}: IProps) {
                 windowLabel={'Подтверждение удаления'}
                 windowText={`Вы действительно хотите удалить цель ${goalInfo.name}? Это действие необратимо.`}
                 error={serverError}
-                cancelButtonLabel={'Отмена'}
                 cancelFunction={toggleModalWindow}
                 confirmButtonLabel={'Удалить'}
                 confirmFunction={deleteGoalBtn}

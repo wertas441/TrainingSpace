@@ -9,13 +9,14 @@ import NullElementsError from "@/components/errors/NullElementsError";
 import { useCompletedGoals } from "@/lib/hooks/data/goal";
 import Spinner from "@/components/UI/other/Spinner";
 import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn/LightGreenGlassBtn";
+import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
 
 export default function CompletedGoals({token}: {token: string}){
 
     const { completedGoals, isLoading, isError, error, refetch, isFetching } = useCompletedGoals(token);
 
     const [searchName, setSearchName] = useState<string>('');
+
     const itemsPerPage:number = 10;
 
     const sourceGoals = useMemo(() => completedGoals ?? [], [completedGoals]);
