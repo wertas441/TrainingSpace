@@ -1,11 +1,11 @@
 'use client'
 
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateUserEmail, validateUserPassword} from "@/lib/utils/validators/user";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import {validateUserEmail, validateUserPassword} from "@/entities/user/model/validation";
 import {useMemo} from "react";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/shared";
 import {
     AtSymbolIcon,
     CheckCircleIcon,
@@ -13,12 +13,12 @@ import {
     ShieldCheckIcon,
     SparklesIcon
 } from "@heroicons/react/24/outline";
-import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
-import SettingsHeader from "@/components/UI/headers/SettingsHeader";
+import SettingsPageContext from "@/widgets/UiContex/SettingsPageContext";
+import SettingsHeader from "@/widgets/SettingsHeader";
 import {useForm} from "react-hook-form";
-import type {BackendApiResponse} from "@/types";
-import {useUserStore} from "@/lib/store/userStore";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import type {BackendApiResponse} from "@/shared/types";
+import {useUserStore} from "@/entities/user/model/store";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
 
 interface ChangeEmailForm {
     newEmail: string;

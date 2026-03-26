@@ -1,0 +1,62 @@
+import {memo, useMemo} from "react";
+import {PlusCircleIcon, TrashIcon} from "@heroicons/react/24/outline";
+import {ExerciseTechniqueItem} from "@/entities/exercise/model/type";
+import {getColorStyles} from "@/shared/styles";
+
+interface IProps {
+    exercise: ExerciseTechniqueItem;
+    selected: boolean;
+    onToggle: (id: number) => void;
+}
+
+function SelectableExerciseRow({exercise, selected, onToggle}: IProps) {
+
+    return (
+        <div className={`w-full dark:bg-neutral-800 dark:border-neutral-700 rounded-lg border p-4 shadow-sm hover:shadow-md transition-shadow
+        ${selected ? 'border-emerald-300 ring-1 ring-emerald-200 dark:border-emerald-400 dark:ring-emerald-300' : 'border-emerald-100'} `}>
+            <div className="flex flex-col space-y-2 gap-3 md:flex-row md:items-start md:justify-between">
+                <div className="flex-1 space-y-3">
+                    <div className="flex items-center gap-2">
+                        <h3 className="text-md md:text-lg font-semibold text-gray-800 dark:text-white">{exercise.name}</h3>
+
+                        <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium border rounded-full ${getColorStyles(exercise.difficulty)}`}>
+                            {exercise.difficulty === 'Лёгкий' ? 'Лёгкий' : exercise.difficulty === 'Средний' ? 'Средний' : 'Сложный'}
+                        </span>
+                    </div>
+
+                    <div className="mt-2 md:mt-3 flex flex-wrap gap-2">
+                        {exercise.partOfTheBody.map((part) => (
+                            <span
+                                key={part}
+                                className="px-2 py-0.5 text-xs border rounded-full border-gray-200 text-gray-700 bg-gray-50 dark:text-white
+                                 dark:bg-emerald-800 dark:border-emerald-700"
+                            >
+                                {part}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+                <div className="md:ml-4">
+                    <button
+                        type="button"
+                        onClick={() => onToggle(exercise.id)}
+                        className={`inline-flex cursor-pointer w-full  items-center  dark:hover:bg-neutral-700 gap-2 rounded-md border px-3 py-2 text-sm transition ${
+                            selected
+                                ? 'border-rose-200 text-rose-700 hover:bg-rose-50 dark:text-white dark:border-rose-400 '
+                                : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50  dark:text-white dark:border-emerald-400'
+                        }`}
+                    >
+                        {useMemo(() => selected
+                            ? <TrashIcon className="h-4 w-4" />
+                            : <PlusCircleIcon className="h-5 w-5" />, [selected])}
+                        {selected ? 'Убрать' : 'Добавить'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default memo(SelectableExerciseRow);
+
+

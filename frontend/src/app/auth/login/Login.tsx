@@ -1,21 +1,21 @@
 'use client'
 
 import {useMemo} from "react";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
 import Link from "next/link";
-import {validateUserName, validateUserPassword} from "@/lib/utils/validators/user";
-import MainInput from "@/components/inputs/MainInput";
-import ServerError from "@/components/errors/ServerError";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
+import {validateUserName, validateUserPassword} from "@/entities/user/model/validation";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/shared";
 import {
     LockClosedIcon,
     UserIcon
 } from "@heroicons/react/24/outline";
-import type {BackendApiResponse} from "@/types";
+import type {BackendApiResponse} from "@/shared/types";
 import {useForm} from "react-hook-form";
-import {makeInitUserData, useUserStore} from "@/lib/store/userStore";
-import LoginHalfCard from "@/components/UI/UiContex/LoginHalfCard";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import {makeInitUserData, useUserStore} from "@/entities/user/model/store";
+import LoginHalfCard from "@/widgets/UiContex/LoginHalfCard";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
 
 interface LoginForm {
     userName: string;
@@ -27,7 +27,8 @@ export default function Login(){
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>()
 
-    const {serverError, setServerError, isSubmitting, setIsSubmitting, router} = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+
     const initUserData = useUserStore(makeInitUserData)
 
     const onSubmit = async (values: LoginForm)=> {

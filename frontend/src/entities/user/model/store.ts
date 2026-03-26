@@ -1,0 +1,72 @@
+import { create, type StateCreator } from "zustand";
+import type { BackendApiResponse, UserProfileRequest } from "@/shared/types";
+import {serverApi, getServerErrorMessage, clientApi} from "@/shared";
+import { createJSONStorage, persist } from "zustand/middleware";
+
+interface UserStore {
+    userData: UserProfileRequest | null;
+
+    initUserData: () => Promise<void>;
+    fetchUserData: () => Promise<UserProfileRequest | undefined>;
+
+    getUserData: () => UserProfileRequest | null;
+    changeEmail: (email: string) => void;
+    logout: () => Promise<void>;
+}
+
+const userStore: StateCreator<UserStore> = (set, get) => ({
+    userData: null,
+    getUserData: () => get().userData,
+
+    initUserData: async () => {
+        if (get().userData) return;
+        await get().fetchUserData();
+    },
+
+    fetchUserData: async () => {
+        try {
+            const { data } = await serverApi.get<BackendApiResponse<{ userData: UserProfileRequest }>>("/user/me",);
+
+            if (!data.success || !data.data?.userData) return undefined;
+
+            const userData = data.data.userData;
+            set({userData});
+
+            return userData;
+        } catch (err) {
+            console.error(getServerErrorMessage(err) || "Ошибка запроса информации об аккаунте");
+            return undefined;
+        }
+    },
+
+    changeEmail: (email) => set((s) => ({
+        userData: s.userData ? { ...s.userData, email } : s.userData,
+    })),
+
+    logout: async () => {
+        try {
+            const { data } = await clientApi.post<BackendApiResponse>(`/user/logout`);
+
+            if (!data.success) return;
+
+            set({userData: null});
+
+            return;
+        } catch (err) {
+            console.error(getServerErrorMessage(err) || "Ошибка выхода");
+
+            return;
+        }
+    },
+})
+
+export const useUserStore = create<UserStore>()(
+    persist(userStore, {
+        name: "TSUserStore",
+        storage: createJSONStorage(() => localStorage)
+    })
+)
+
+export const getUserData = (s: UserStore) => s.userData;
+export const makeLogout = (s: UserStore) => s.logout;
+export const makeInitUserData = (s: UserStore) => s.initUserData;

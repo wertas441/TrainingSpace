@@ -7,13 +7,13 @@ import {
     setServerErrorMock,
 } from '@/tests/utils/mockUsePageUtils';
 import {replaceMock} from '@/tests/utils/mockNextNavigation';
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
+import {ExerciseTechniqueItem} from "@/entities/exercise/model/type";
 import ChangeTraining from "@/app/my-training/[trainingId]/ChangeTraining";
-import {TrainingListResponse} from "@/types/training";
+import {TrainingListResponse} from "@/entities/training/model/type";
 import { mockAxiosInstance } from '@/tests/utils/mockAxios';
-import QueryProvider from "@/lib/utils/QueryProvider";
+import QueryProvider from "@/app/QueryProvider";
 
-jest.mock('@/lib/hooks/usePageUtils', () => ({
+jest.mock('@/shared/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     ...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));

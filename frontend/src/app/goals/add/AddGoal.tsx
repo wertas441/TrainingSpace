@@ -1,12 +1,12 @@
 'use client'
 
-import {GoalForm, GoalPriority} from "@/types/goal";
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
-import MainTextarea from "@/components/inputs/MainTextarea";
-import {showErrorMessage} from "@/lib";
+import {GoalForm, GoalPriority} from "@/entities/goal/model/type";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import ChipRadioGroup from "@/shared/UI-kit/inputs/ChipRadioGroup";
+import MainTextarea from "@/shared/UI-kit/inputs/MainTextarea";
+import {showErrorMessage} from "@/shared";
 import {
     ChartBarSquareIcon,
     ClipboardDocumentCheckIcon,
@@ -16,11 +16,11 @@ import {
 import {
     validateGoalDescription,
     validateGoalName,
-} from "@/lib/utils/validators/goal";
+} from "@/entities/goal/model/validation";
 import {Controller, useForm} from "react-hook-form";
-import HalfContentRow from "@/components/elements/HalfContentRow";
-import {useCreateGoalMutation} from "@/lib/hooks/mutations/goal";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import HalfContentRow from "@/shared/UI-kit/elements/HalfContentRow";
+import {useCreateGoalMutation} from "@/entities/goal/model/mutation";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
 
 const goalPriorityOptions: GoalPriority[] = ['Низкий', 'Средний', 'Высокий'] as const;
 
@@ -33,6 +33,7 @@ export default function AddGoal() {
     })
 
     const { serverError, setServerError, goToPage } = usePageUtils();
+
     const createGoalMutation = useCreateGoalMutation();
 
     const onSubmit = (values: GoalForm)=> {

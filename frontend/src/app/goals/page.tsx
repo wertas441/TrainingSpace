@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Goals from "@/app/goals/Goals";
 import {cookies} from "next/headers";
-import ErrorState from "@/components/errors/ErrorState";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Цели | TrainingPage",

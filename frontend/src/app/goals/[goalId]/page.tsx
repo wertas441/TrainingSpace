@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import ChangeGoal from "@/app/goals/[goalId]/ChangeGoal";
 import { cookies } from "next/headers";
-import { getGoalInformation } from "@/lib/controllers/goal";
-import ErrorState from "@/components/errors/ErrorState";
+import { getGoalInformation } from "@/entities/goal/model/controller";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Изменение цели | TrainingSpace",

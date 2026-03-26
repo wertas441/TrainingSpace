@@ -1,16 +1,16 @@
 'use client'
 
-import MainPagination from "@/components/UI/other/MainPagination";
-import MyTrainingHeader from "@/components/UI/headers/MyTrainingHeader";
-import {usePagination} from "@/lib/hooks/usePagination";
+import MyTrainingHeader from "@/entities/training/UI/MyTrainingHeader";
+import {usePagination} from "@/shared/hooks/usePagination";
 import {useEffect, useMemo, useState} from "react";
-import MyTrainingRow from "@/components/elements/MyTrainingRow";
-import NullElementsError from "@/components/errors/NullElementsError";
-import {useTrainings} from "@/lib/hooks/data/training";
-import {useExerciseList} from "@/lib/hooks/data/exercise";
-import Spinner from "@/components/UI/other/Spinner";
-import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
+import MyTrainingRow from "@/entities/training/UI/MyTrainingRow";
+import NullElementsError from "@/shared/UI-kit/errors/NullElementsError";
+import {useTrainings} from "@/entities/training/model/data";
+import {useExerciseList} from "@/entities/exercise/model/data";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
+import LightGreenGlassBtn from "@/shared/UI-kit/buttons/LightGreenGlassBtn";
+import MainPagination from "@/widgets/MainPagination";
+import Spinner from "@/widgets/Spinner";
 
 export default function MyTraining({token}: {token: string}) {
 

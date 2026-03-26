@@ -8,10 +8,10 @@ import {
 import {pushMock} from '@/tests/utils/mockNextNavigation';
 import Goals from "@/app/goals/Goals";
 import MyTraining from "@/app/my-training/MyTraining";
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
-import {TrainingListResponse} from "@/types/training";
+import {ExerciseTechniqueItem} from "@/entities/exercise/model/type";
+import {TrainingListResponse} from "@/entities/training/model/type";
 
-jest.mock('@/lib/hooks/usePageUtils', () => ({
+jest.mock('@/shared/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     ...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));

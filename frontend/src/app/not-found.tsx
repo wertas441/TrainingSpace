@@ -1,5 +1,4 @@
-import Image from "next/image";
-import {secondDarkColorTheme} from "@/styles";
+import {secondDarkColorTheme} from "@/shared/styles";
 import {Metadata} from "next";
 
 export const metadata: Metadata = {

@@ -5,8 +5,8 @@ import {
     getMainStatisticsCardInfo,
     getNutritionGraphicInfo,
     getNutritionStatisticsCardInfo
-} from "@/lib/controllers/statistic";
-import ErrorState from "@/components/errors/ErrorState";
+} from "@/entities/statistic/model/controller";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Ваша статистика | TrainingSpace",

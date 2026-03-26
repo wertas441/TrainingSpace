@@ -6,17 +6,17 @@ import {
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
 import {pushMock} from '@/tests/utils/mockNextNavigation';
-import {GoalsStructure} from "@/types/goal";
+import {GoalsStructure} from "@/entities/goal/model/type";
 import Goals from "@/app/goals/Goals";
-import QueryProvider from "@/lib/utils/QueryProvider";
-import useGoals from "@/lib/hooks/data/goal";
+import QueryProvider from "@/app/QueryProvider";
+import useGoals from "@/entities/goal/model/data";
 
-jest.mock('@/lib/hooks/usePageUtils', () => ({
+jest.mock('@/shared/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     ...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));
 
-jest.mock('@/lib/hooks/data/goal', () => ({
+jest.mock('@/entities/goal/model/data', () => ({
     __esModule: true,
     default: jest.fn(),
 }));

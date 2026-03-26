@@ -1,0 +1,122 @@
+import FilterInput from "@/shared/UI-kit/inputs/FilterInput";
+import {useMemo} from "react";
+import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
+import BarsButton from "@/shared/UI-kit/buttons/BarsButton";
+import {useModalWindowRef} from "@/shared/hooks/useModalWindowRef";
+import {
+    ActivityDifficultyStructure,
+    ActivityTypeStructure
+} from "@/entities/activity/model/type";
+import ChipToggleGroup from "@/shared/UI-kit/inputs/ChipToggleGroup";
+import LightGreenGlassBtn from "@/shared/UI-kit/buttons/LightGreenGlassBtn";
+import {secondDarkColorTheme} from "@/shared/styles";
+import XMarkButton from "@/shared/UI-kit/buttons/XMarkButton";
+import {useActivityStore} from "@/entities/activity/model/store";
+
+const difficultOptions: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;
+const typeOptions: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
+
+export default function MyActivityHeader(){
+
+    const searchName = useActivityStore(s => s.searchName);
+    const setSearchName = useActivityStore(s => s.setSearchName);
+
+    const searchDate = useActivityStore(s => s.searchDate);
+    const setSearchDate = useActivityStore(s => s.setSearchDate);
+
+    const difficultFilter = useActivityStore(s => s.difficultFilter);
+    const setDifficultFilter = useActivityStore(s => s.setDifficultFilter);
+
+    const typeFilter = useActivityStore(s => s.typeFilter);
+    const setTypeFilter = useActivityStore(s => s.setTypeFilter);
+
+    const isFilterWindowOpen = useActivityStore(s => s.isFilterWindowOpen);
+    const toggleFilterWindow = useActivityStore(s => s.toggleFilterWindow);
+
+    const handleReset = useActivityStore(s => s.resetFilters)
+
+    const { modalWindowRef, toggleBtnRef } = useModalWindowRef(isFilterWindowOpen, toggleFilterWindow);
+
+    return (
+        <div className={`${secondDarkColorTheme} relative w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center">
+                    <h1 className="text-3xl font-semibold text-emerald-800 dark:text-white">Моя активность</h1>
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 w-full md:w-auto">
+                    <div className="w-full sm:flex-1 md:w-65">
+                        <FilterInput
+                            id="training-search-name"
+                            placeholder="Поиск по названию активности..."
+                            value={searchName}
+                            onChange={setSearchName}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5" />, [])}
+                            error={null}
+                        />
+                    </div>
+
+                    <div className="w-full sm:flex-1 md:w-65">
+                        <FilterInput
+                            id="nutrition-search-date"
+                            type="date"
+                            placeholder="Дата"
+                            value={searchDate}
+                            onChange={setSearchDate}
+                            icon={<CalendarIcon className="h-5 w-5" />}
+                            error={null}
+                        />
+                    </div>
+
+                    <div className="w-full sm:w-auto">
+                        <BarsButton
+                            onClick={toggleFilterWindow}
+                            ref={toggleBtnRef}
+                            className={`w-full sm:w-auto`}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {isFilterWindowOpen && (
+                <div
+                    ref={modalWindowRef}
+                    className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[520px] rounded-xl shadow-lg border border-emerald-100`}
+                >
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-100 dark:border-neutral-700">
+                        <h2 className="text-lg font-semibold text-emerald-800 dark:text-white">Фильтры</h2>
+
+                        <XMarkButton onClick={toggleFilterWindow} />
+                    </div>
+                    <div className="px-5 py-4 space-y-6">
+
+                        <ChipToggleGroup<ActivityDifficultyStructure>
+                            id="activity-difficulty"
+                            label="Уровень сложности"
+                            choices={difficultOptions}
+                            value={difficultFilter}
+                            onChange={setDifficultFilter}
+                            alwaysSelected={false}
+                        />
+
+                        <ChipToggleGroup<ActivityTypeStructure>
+                            id="activity-type"
+                            label="Тип тренировки"
+                            choices={typeOptions}
+                            value={typeFilter}
+                            onChange={setTypeFilter}
+                            alwaysSelected={false}
+                        />
+                    </div>
+
+                    <div className="px-5 py-4 border-t border-emerald-100 dark:border-neutral-700">
+                        <LightGreenGlassBtn
+                            label={`Сбросить`}
+                            onClick={handleReset}
+                        />
+                    </div>
+                </div>
+            )}
+        </div>
+    )
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import {cookies} from "next/headers";
 import AddActivity from "@/app/add-activity/AddActivity";
-import ErrorState from "@/components/errors/ErrorState";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Добавить активность | TrainingSpace",

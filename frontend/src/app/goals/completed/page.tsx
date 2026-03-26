@@ -1,7 +1,7 @@
 import {Metadata} from "next";
 import CompletedGoals from "@/app/goals/completed/CompletedGoals";
 import {cookies} from "next/headers";
-import ErrorState from "@/components/errors/ErrorState";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: 'Выполненные цели | TrainingSpace',

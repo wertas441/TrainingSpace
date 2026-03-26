@@ -1,40 +1,40 @@
 'use client'
 
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
 import {useCallback, useMemo, useState} from "react";
-import MainTextarea from "@/components/inputs/MainTextarea";
-import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
+import MainTextarea from "@/shared/UI-kit/inputs/MainTextarea";
+import ChipRadioGroup from "@/shared/UI-kit/inputs/ChipRadioGroup";
 import {
     ActivityDataStructure,
     ActivityDifficultyStructure, ActivityForm,
     ActivityTypeStructure,
     ExerciseSetsByExerciseId
-} from "@/types/activity";
-import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {buildExercisesPayload} from "@/lib/controllers/activity";
-import {showErrorMessage} from "@/lib";
-import ModalWindow from "@/components/UI/other/ModalWindow";
-import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import RedGlassBtn from "@/components/buttons/RedGlassBtn";
+} from "@/entities/activity/model/type";
+import MainMultiSelect from "@/shared/UI-kit/inputs/MainMultiSelect";
+import AddTrainingActivityItem from "@/entities/activity/UI/AddTrainingActivityItem";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import {buildExercisesPayload} from "@/entities/activity/model/controller";
+import {showErrorMessage} from "@/shared";
+import {useModalWindow} from "@/shared/hooks/useModalWindow";
+import RedGlassBtn from "@/shared/UI-kit/buttons/RedGlassBtn";
 import {
     validateActivityDate,
     validateActivityDescription,
     validateActivityName,
     validateActivitySets,
-} from "@/lib/utils/validators/activity";
-import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
-import {secondDarkColorTheme} from "@/styles";
+} from "@/entities/activity/model/validation";
+import {useActivityUtils} from "@/entities/activity/useActivityUtils";
+import {secondDarkColorTheme} from "@/shared/styles";
 import {Controller, useForm} from "react-hook-form";
-import DropDownContent from "@/components/UI/UiContex/DropDownContent";
+import DropDownContent from "@/widgets/UiContex/DropDownContent";
 import {
     useDeleteActivityMutation,
     useUpdateActivityMutation
-} from "@/lib/hooks/mutations/activity";
-import {useTrainings} from "@/lib/hooks/data/training";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+} from "@/entities/activity/model/mutation";
+import {useTrainings} from "@/entities/training/model/data";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
+import ModalWindow from "@/widgets/ModalWindow";
 
 interface IProps {
     activityInfo: ActivityDataStructure,
@@ -94,9 +94,7 @@ export default function ChangeActivity({activityInfo, token}: IProps){
             }));
         });
 
-        const relatedTraining = myTrainings.find(
-            (t) => t.id === activityInfo.trainingId
-        );
+        const relatedTraining = myTrainings.find(({id}) => id === activityInfo.trainingId);
 
         if (relatedTraining) {
             relatedTraining.exercises.forEach((exId) => {
@@ -113,9 +111,10 @@ export default function ChangeActivity({activityInfo, token}: IProps){
         setSetsError(null);
         handleChangeTraining(val);
 
-        const found = val ? myTrainings.find(t => t.id === Number(val)) : undefined;
+        const found = val ? myTrainings.find(({id}) => id === Number(val)) : undefined;
         if (!found) {
             setExerciseSets({});
+
             return;
         }
 

@@ -1,24 +1,22 @@
 'use client'
 
 import {useEffect, useMemo, useState} from "react";
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
-import MainTextarea from "@/components/inputs/MainTextarea";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {showErrorMessage} from "@/lib";
-import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import {usePagination} from "@/lib/hooks/usePagination";
-import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
+import MainTextarea from "@/shared/UI-kit/inputs/MainTextarea";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import {showErrorMessage} from "@/shared";
+import MainMultiSelect from "@/shared/UI-kit/inputs/MainMultiSelect";
+import {usePagination} from "@/shared/hooks/usePagination";
+import SelectableExerciseRow from "@/entities/training/UI/SelectableExerciseRow";
 import {
     validateTrainingDescription,
     validateTrainingExercises,
     validateTrainingName
-} from "@/lib/utils/validators/training";
-import MainPagination from "@/components/UI/other/MainPagination";
-import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
-import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
-import NullElementsError from "@/components/errors/NullElementsError";
-import HalfContentRow from "@/components/elements/HalfContentRow";
+} from "@/entities/training/model/validation";
+import {useTrainingUtils} from "@/entities/training/useTrainingUtils";
+import NullElementsError from "@/shared/UI-kit/errors/NullElementsError";
+import HalfContentRow from "@/shared/UI-kit/elements/HalfContentRow";
 import {
     CheckCircleIcon,
     ClipboardDocumentCheckIcon,
@@ -27,11 +25,13 @@ import {
     SparklesIcon
 } from "@heroicons/react/24/outline";
 import {useForm} from "react-hook-form";
-import DropDownContent from "@/components/UI/UiContex/DropDownContent";
-import {useCreateTrainingMutation} from "@/lib/hooks/mutations/training";
-import {useExerciseList} from "@/lib/hooks/data/exercise";
-import {TrainingForm} from "@/types/training";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import DropDownContent from "@/widgets/UiContex/DropDownContent";
+import {useCreateTrainingMutation} from "@/entities/training/model/mutation";
+import {useExerciseList} from "@/entities/exercise/model/data";
+import {TrainingForm} from "@/entities/training/model/type";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
+import SelectExerciseUi from "@/widgets/SelectExerciseUi";
+import MainPagination from "@/widgets/MainPagination";
 
 export default function AddNewTraining() {
 
@@ -73,6 +73,7 @@ export default function AddNewTraining() {
 
     const validateForm = (): boolean => {
         const exercisesValidationError = validateTrainingExercises(selectedExerciseIds);
+
         setExercisesError(exercisesValidationError);
 
         return !(exercisesValidationError);
@@ -142,67 +143,66 @@ export default function AddNewTraining() {
                             </DropDownContent>
 
                             <DropDownContent label={`Упражнения`} >
+                                <div ref={listTopRef} className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+                                    Подбор упражнений
+                                </div>
 
-                                    <div ref={listTopRef} className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-200">
-                                        Подбор упражнений
+                                <div className="space-y-4">
+                                    <MainInput
+                                        id="exercise-search"
+                                        value={searchName}
+                                        onChange={(e) => setSearchName(e.target.value)}
+                                        label="Поиск упражнения по имени"
+                                        error={undefined}
+                                    />
+
+                                    <MainMultiSelect
+                                        id="muscle-groups"
+                                        options={muscleOptions}
+                                        value={selectedMuscles}
+                                        onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
+                                        label="Поиск упражнения по группе мышц"
+                                        placeholder={'Выберите группу мышц...'}
+                                        error={undefined}
+                                    />
+                                </div>
+
+                                <div className="mb-3 flex items-center justify-between gap-3">
+                                    <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                                        Список упражнений
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <MainInput
-                                            id="exercise-search"
-                                            value={searchName}
-                                            onChange={(e) => setSearchName(e.target.value)}
-                                            label="Поиск упражнения по имени"
-                                            error={undefined}
-                                        />
-
-                                        <MainMultiSelect
-                                            id="muscle-groups"
-                                            options={muscleOptions}
-                                            value={selectedMuscles}
-                                            onChange={(vals) => setPartOfBodyFilter(vals.map(v => v.value))}
-                                            label="Поиск упражнения по группе мышц"
-                                            placeholder={'Выберите группу мышц...'}
-                                            error={undefined}
-                                        />
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                                        Найдено: {totalItems}
                                     </div>
+                                </div>
 
-                                    <div className="mb-3 flex items-center justify-between gap-3">
-                                        <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                                            Список упражнений
-                                        </div>
-
-                                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                                            Найдено: {totalItems}
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 gap-3">
-                                        {filteredList.length > 0 ? (
-                                            paginatedList.map(ex => (
-                                                <SelectableExerciseRow
-                                                    key={ex.id}
-                                                    exercise={ex}
-                                                    selected={selectedExerciseIds.includes(ex.id)}
-                                                    onToggle={handleToggleExercise}
-                                                />
-                                            ))
-                                        ) : (
-                                            <NullElementsError text={`Таких упражнений не найдено. Попробуйте изменить запрос.`} />
-                                        )}
-                                    </div>
-
-                                    {totalItems > itemsPerPage && (
-                                        <div className="mt-4">
-                                            <MainPagination
-                                                currentPage={currentPage}
-                                                totalPages={totalPages}
-                                                totalItems={totalItems}
-                                                setCurrentPage={setCurrentPage}
-                                                itemsPerPage={itemsPerPage}
+                                <div className="grid grid-cols-1 gap-3">
+                                    {filteredList.length > 0 ? (
+                                        paginatedList.map(ex => (
+                                            <SelectableExerciseRow
+                                                key={ex.id}
+                                                exercise={ex}
+                                                selected={selectedExerciseIds.includes(ex.id)}
+                                                onToggle={handleToggleExercise}
                                             />
-                                        </div>
+                                        ))
+                                    ) : (
+                                        <NullElementsError text={`Таких упражнений не найдено. Попробуйте изменить запрос.`} />
                                     )}
+                                </div>
+
+                                {totalItems > itemsPerPage && (
+                                    <div className="mt-4">
+                                        <MainPagination
+                                            currentPage={currentPage}
+                                            totalPages={totalPages}
+                                            totalItems={totalItems}
+                                            setCurrentPage={setCurrentPage}
+                                            itemsPerPage={itemsPerPage}
+                                        />
+                                    </div>
+                                )}
                             </DropDownContent>
 
                             <SelectExerciseUi

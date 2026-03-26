@@ -1,9 +1,9 @@
 import Dashboard from "@/app/Dashboard";
 import {Metadata} from "next";
 import {cookies} from "next/headers";
-import {getGoalShortyList} from "@/lib/controllers/goal";
-import {getNutritionGraphicInfo} from "@/lib/controllers/statistic";
-import ErrorState from "@/components/errors/ErrorState";
+import {getGoalShortyList} from "@/entities/goal/model/controller";
+import {getNutritionGraphicInfo} from "@/entities/statistic/model/controller";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Главная | TrainingSpace",

@@ -12,12 +12,12 @@ import { mockAxiosInstance } from '@/tests/utils/mockAxios';
 
 const initUserDataMock = jest.fn().mockResolvedValue(undefined);
 
-jest.mock('@/lib/hooks/usePageUtils', () => ({
+jest.mock('@/shared/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
 	...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));
 
-jest.mock('@/lib/store/userStore', () => ({
+jest.mock('@/entities/user/model/store', () => ({
 	useUserStore: Object.assign(
 		(selector?: (state: { initUserData: () => Promise<void> }) => unknown) =>
 			selector ? selector({ initUserData: initUserDataMock }) : { initUserData: initUserDataMock },

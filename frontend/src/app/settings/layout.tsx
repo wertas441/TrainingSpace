@@ -2,7 +2,7 @@
 
 import {ReactNode} from "react";
 import {usePathname} from "next/navigation";
-import SettingsSideBar from "@/components/UI/sidebars/SettingsSideBar";
+import SettingsSideBar from "@/widgets/SettingsSideBar";
 
 export default function SettingsLayout({children}:{children: ReactNode}) {
 

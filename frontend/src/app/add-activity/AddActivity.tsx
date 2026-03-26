@@ -1,23 +1,23 @@
 'use client'
 
 import {useMemo, useState} from "react";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import MainTextarea from "@/components/inputs/MainTextarea";
-import ServerError from "@/components/errors/ServerError";
-import {showErrorMessage} from "@/lib";
-import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import {ActivityDifficultyStructure, ActivityForm, ActivityTypeStructure} from "@/types/activity";
-import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
-import AddTrainingActivityItem from "@/components/elements/AddTrainingActivityItem";
-import MainInput from "@/components/inputs/MainInput";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import MainTextarea from "@/shared/UI-kit/inputs/MainTextarea";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import {showErrorMessage} from "@/shared";
+import MainMultiSelect from "@/shared/UI-kit/inputs/MainMultiSelect";
+import {ActivityDifficultyStructure, ActivityForm, ActivityTypeStructure} from "@/entities/activity/model/type";
+import ChipRadioGroup from "@/shared/UI-kit/inputs/ChipRadioGroup";
+import AddTrainingActivityItem from "@/entities/activity/UI/AddTrainingActivityItem";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
 import {
     validateActivityDate,
     validateActivityDescription,
     validateActivityName,
     validateActivitySets,
-} from "@/lib/utils/validators/activity";
-import {useActivityUtils} from "@/lib/hooks/useActivityUtils";
-import HalfContentRow from "@/components/elements/HalfContentRow";
+} from "@/entities/activity/model/validation";
+import {useActivityUtils} from "@/entities/activity/useActivityUtils";
+import HalfContentRow from "@/shared/UI-kit/elements/HalfContentRow";
 import {
     ChartBarSquareIcon,
     ClipboardDocumentCheckIcon,
@@ -25,11 +25,11 @@ import {
     SparklesIcon
 } from "@heroicons/react/24/outline";
 import {Controller, useForm} from "react-hook-form";
-import {buildExercisesPayload} from "@/lib/controllers/activity";
-import DropDownContent from "@/components/UI/UiContex/DropDownContent";
-import {useTrainings} from "@/lib/hooks/data/training";
-import {useCreateActivityMutation} from "@/lib/hooks/mutations/activity";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import {buildExercisesPayload} from "@/entities/activity/model/controller";
+import DropDownContent from "@/widgets/UiContex/DropDownContent";
+import {useTrainings} from "@/entities/training/model/data";
+import {useCreateActivityMutation} from "@/entities/activity/model/mutation";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
 
 const activityTypeChoices: ActivityTypeStructure[] = ['Силовая', 'Кардио', 'Комбинированный'] as const;
 const activityDifficultyChoices: ActivityDifficultyStructure[] = ['Лёгкая', 'Средняя', 'Тяжелая'] as const;

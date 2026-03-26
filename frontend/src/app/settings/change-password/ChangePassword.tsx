@@ -1,15 +1,15 @@
 'use client'
 
-import MainHideInput from "@/components/inputs/MainHideInput";
+import MainHideInput from "@/shared/UI-kit/inputs/MainHideInput";
 import {
     validateConfirmPassword, validateNewPassword,
     validateUserPassword
-} from "@/lib/utils/validators/user";
+} from "@/entities/user/model/validation";
 import {useMemo} from "react";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/shared";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
 import {
     CheckCircleIcon,
     CheckIcon,
@@ -17,11 +17,11 @@ import {
     ShieldCheckIcon,
     SparklesIcon
 } from "@heroicons/react/24/outline";
-import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
-import SettingsHeader from "@/components/UI/headers/SettingsHeader";
+import SettingsPageContext from "@/widgets/UiContex/SettingsPageContext";
+import SettingsHeader from "@/widgets/SettingsHeader";
 import {useForm} from "react-hook-form";
-import type {BackendApiResponse} from "@/types";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import type {BackendApiResponse} from "@/shared/types";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
 
 interface ChangePasswordForm {
     currentPassword: string;

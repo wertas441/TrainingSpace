@@ -1,26 +1,26 @@
 "use client"
 
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
 import {
     validateConfirmPassword,
     validateUserEmail,
     validateUserName,
     validateUserPassword
-} from "@/lib/utils/validators/user";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
+} from "@/entities/user/model/validation";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/shared";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
 import {
     AtSymbolIcon,
     LockClosedIcon,
     UserIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import MainHideInput from "@/components/inputs/MainHideInput";
-import type {BackendApiResponse} from "@/types";
+import MainHideInput from "@/shared/UI-kit/inputs/MainHideInput";
+import type {BackendApiResponse} from "@/shared/types";
 import {useForm} from "react-hook-form";
-import RegisterHalfCard from "@/components/UI/UiContex/RegisterHalfCard";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import RegisterHalfCard from "@/widgets/UiContex/RegisterHalfCard";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
 
 interface RegistrationForm {
     userName: string;

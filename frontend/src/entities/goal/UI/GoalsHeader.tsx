@@ -1,0 +1,60 @@
+import FilterInput from "@/shared/UI-kit/inputs/FilterInput";
+import {memo, useMemo} from "react";
+import {MagnifyingGlassIcon, ClipboardDocumentCheckIcon, ClipboardDocumentListIcon} from "@heroicons/react/24/outline";
+import {HeaderMinimumProps} from "@/shared/types";
+import {usePathname} from "next/navigation";
+import PlusButton from "@/shared/UI-kit/buttons/PlusButton";
+import AnyStylesButton from "@/shared/UI-kit/buttons/AnyStylesButton";
+import {secondDarkColorTheme} from "@/shared/styles";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+
+interface GoalsHeaderProps extends HeaderMinimumProps {
+    label: string;
+}
+
+function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
+
+    const pathname:string = usePathname();
+    const isGoalPage = pathname.endsWith("/goals");
+
+    const { goToPage } = usePageUtils();
+
+    return (
+        <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center">
+                    <h1 className="text-3xl font-semibold text-emerald-800 dark:text-white">{label}</h1>
+                </div>
+
+                <div className="flex-row space-y-3 md:space-y-0 md:flex items-center gap-5 justify-between ">
+                    <div className="w-full md:w-80">
+                        <FilterInput
+                            id="goals-search-name"
+                            placeholder="Поиск по названию цели..."
+                            value={searchName}
+                            onChange={(v) => setSearchName(String(v))}
+                            icon={useMemo(() => <MagnifyingGlassIcon className="h-5 w-5" />, [])}
+                            error={null}
+                        />
+                    </div>
+
+                    <div className="flex gap-3">
+                        <AnyStylesButton
+                            IconComponent={isGoalPage ? ClipboardDocumentCheckIcon : ClipboardDocumentListIcon}
+                            onClick={() => goToPage(isGoalPage? '/goals/completed' : '/goals')}
+                            className="w-full"
+                            border={true}
+                        />
+
+                        <PlusButton
+                            onClick={() => goToPage(`/goals/add`)}
+                            className="w-full"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default memo(GoalsHeader);

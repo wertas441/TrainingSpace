@@ -1,13 +1,13 @@
 'use client'
 
-import DashboardStopwatchCard from "@/components/UI/dashboard/DashboardStopwatchCard";
-import DashboardCalendarCard from "@/components/UI/dashboard/DashboardCalendarCard";
-import DashboardQuickActionsCard from "@/components/UI/dashboard/DashboardQuickActionsCard";
-import DashboardChartCard from "@/components/UI/dashboard/DashboardChartCard";
-import DashboardGoalsCard from "@/components/UI/dashboard/DashboardGoalsCard";
-import {GoalShortyStructure} from "@/types/goal";
-import {NutritionStatisticsGraphicResponse} from "@/types/statistics";
-import {getUserData, useUserStore} from "@/lib/store/userStore";
+import DashboardStopwatchCard from "@/entities/dashboard/UI/DashboardStopwatchCard";
+import DashboardCalendarCard from "@/entities/dashboard/UI/DashboardCalendarCard";
+import DashboardQuickActionsCard from "@/entities/dashboard/UI/DashboardQuickActionsCard";
+import DashboardChartCard from "@/entities/dashboard/UI/DashboardChartCard";
+import DashboardGoalsCard from "@/entities/dashboard/UI/DashboardGoalsCard";
+import {GoalShortyStructure} from "@/entities/goal/model/type";
+import {NutritionStatisticsGraphicResponse} from "@/entities/statistic/model/type";
+import {getUserData, useUserStore} from "@/entities/user/model/store";
 
 interface IProps {
     goalsShortyList: GoalShortyStructure[],

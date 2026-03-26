@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import ChangeActivity from "@/app/my-activity/[activityId]/ChangeActivity";
-import {getActivityInformation} from "@/lib/controllers/activity";
-import ErrorState from "@/components/errors/ErrorState";
+import {getActivityInformation} from "@/entities/activity/model/controller";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Изменение активности | TrainingSpace",

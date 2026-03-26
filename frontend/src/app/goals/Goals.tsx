@@ -1,32 +1,32 @@
 'use client'
 
-import MainPagination from "@/components/UI/other/MainPagination";
-import {usePagination} from "@/lib/hooks/usePagination";
+import {usePagination} from "@/shared/hooks/usePagination";
 import {useMemo, useState} from "react";
-import GoalsHeader from "@/components/UI/headers/GoalsHeader";
-import GoalItem from "@/components/elements/GoalRow";
-import NullElementsError from "@/components/errors/NullElementsError";
-import {useGoals} from "@/lib/hooks/data/goal";
-import Spinner from "@/components/UI/other/Spinner";
-import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
+import GoalsHeader from "@/entities/goal/UI/GoalsHeader";
+import GoalItem from "@/entities/goal/UI/GoalRow";
+import NullElementsError from "@/shared/UI-kit/errors/NullElementsError";
+import {useGoals} from "@/entities/goal/model/data";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
+import LightGreenGlassBtn from "@/shared/UI-kit/buttons/LightGreenGlassBtn";
+import Spinner from "@/widgets/Spinner";
+import MainPagination from "@/widgets/MainPagination";
 
 export default function Goals({token}: {token: string}) {
 
-    const { goals, isLoading, error, isError, refetch, isFetching } = useGoals(token)
+    const { data, isLoading, error, isError, refetch, isFetching } = useGoals(token)
 
     const [searchName, setSearchName] = useState<string>('');
     const itemsPerPage:number = 10;
 
-    const clientGoals = useMemo(() => goals ?? [], [goals]) ;
+    const goals = useMemo(() => data ?? [], [data]) ;
 
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
 
-        return clientGoals.filter(e => {
+        return goals.filter(e => {
             return q.length === 0 || e.name.toLowerCase().includes(q) ;
         });
-    }, [searchName, clientGoals]);
+    }, [searchName, goals]);
 
     const {
         currentPage,
@@ -45,7 +45,7 @@ export default function Goals({token}: {token: string}) {
                 setSearchName={setSearchName}
             />
 
-            {isLoading && clientGoals.length === 0 && (
+            {isLoading && goals.length === 0 && (
                 <div className="rounded-lg border border-emerald-100 p-6">
                     <Spinner label="Загрузка списка целей..." size="lg" />
                 </div>
@@ -67,7 +67,7 @@ export default function Goals({token}: {token: string}) {
 
             {!isLoading && !isError && (
                 <>
-                    {isFetching && clientGoals.length > 0 && (
+                    {isFetching && goals.length > 0 && (
                         <Spinner className="justify-start" size="sm" label="Обновляем список целей..." />
                     )}
 
@@ -86,7 +86,7 @@ export default function Goals({token}: {token: string}) {
                             ))
                         ) : (
                             <NullElementsError text={
-                                clientGoals.length === 0
+                                goals.length === 0
                                     ? "У вас пока нет активных целей. Нажмите «Добавить цель», чтобы создать первую."
                                     : "По заданным параметрам поиска цели не найдены. Попробуйте изменить фильтр."
                             } />

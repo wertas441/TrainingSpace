@@ -1,6 +1,6 @@
 'use client'
 
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
 import {
     validateCalories,
     validateCarbGrams,
@@ -9,20 +9,20 @@ import {
     validateDayName,
     validateFatGrams,
     validateProteinGrams
-} from "@/lib/utils/validators/nutrition";
+} from "@/entities/nutrtition/model/validation";
 import {useCallback} from "react";
-import {showErrorMessage} from "@/lib";
-import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
-import MainTextarea from "@/components/inputs/MainTextarea";
-import {NutritionDay, NutritionForm} from "@/types/nutrition";
-import ModalWindow from "@/components/UI/other/ModalWindow";
-import {useModalWindow} from "@/lib/hooks/useModalWindow";
+import {showErrorMessage} from "@/shared";
+import BlockPageContext from "@/widgets/UiContex/BlockPageContext";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
+import MainTextarea from "@/shared/UI-kit/inputs/MainTextarea";
+import {NutritionDay, NutritionForm} from "@/entities/nutrtition/model/type";
+import {useModalWindow} from "@/shared/hooks/useModalWindow";
 import {useForm} from "react-hook-form";
-import {useDeleteDayMutation, useUpdateDayMutation} from "@/lib/hooks/mutations/nutrition";
-import RedGlassBtn from "@/components/buttons/RedGlassBtn";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import {useDeleteDayMutation, useUpdateDayMutation} from "@/entities/nutrtition/model/mutation";
+import RedGlassBtn from "@/shared/UI-kit/buttons/RedGlassBtn";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
+import ModalWindow from "@/widgets/ModalWindow";
 
 interface IProps {
     dayInfo: NutritionDay,
@@ -94,7 +94,6 @@ export default function ChangeNutrition({dayInfo, token}: IProps){
             },
         });
     }, [setServerError, token, dayInfo.publicId, deleteDayMutation, router])
-
 
     return (
         <>

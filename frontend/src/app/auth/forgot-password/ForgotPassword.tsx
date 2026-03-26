@@ -1,17 +1,17 @@
 'use client'
 
 import {useState} from "react";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateUserEmail} from "@/lib/utils/validators/user";
-import {serverApi, getServerErrorMessage, showErrorMessage} from "@/lib";
-import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import {validateUserEmail} from "@/entities/user/model/validation";
+import {serverApi, getServerErrorMessage, showErrorMessage} from "@/shared";
+import BlockPageContext from "@/widgets/UiContex/BlockPageContext";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
 import {AtSymbolIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {useForm} from "react-hook-form";
-import type {BackendApiResponse} from "@/types";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import type {BackendApiResponse} from "@/shared/types";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
 
 interface ForgotPasswordForm {
     email: string;

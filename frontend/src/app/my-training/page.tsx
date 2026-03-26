@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import MyTraining from "@/app/my-training/MyTraining";
 import {cookies} from "next/headers";
-import ErrorState from "@/components/errors/ErrorState";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: 'Мои тренировки | TrainingSpace',

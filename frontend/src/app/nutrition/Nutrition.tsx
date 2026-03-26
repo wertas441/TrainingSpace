@@ -1,17 +1,17 @@
 'use client'
 
-import NutritionHeader from "@/components/UI/headers/NutritionHeader";
-import NutritionDayItem from "@/components/elements/NutritionDayRow";
+import NutritionHeader from "@/entities/nutrtition/UI/NutritionHeader";
+import NutritionDayItem from "@/entities/nutrtition/UI/NutritionDayRow";
 import {useEffect, useMemo} from "react";
-import {usePagination} from "@/lib/hooks/usePagination";
-import MainPagination from "@/components/UI/other/MainPagination";
-import NullElementsError from "@/components/errors/NullElementsError";
-import {normalizeToYMD} from "@/lib";
-import {useNutritionStore} from "@/lib/store/nutritionStore";
-import {useNutrition} from "@/lib/hooks/data/nutrition";
-import Spinner from "@/components/UI/other/Spinner";
-import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
+import {usePagination} from "@/shared/hooks/usePagination";
+import NullElementsError from "@/shared/UI-kit/errors/NullElementsError";
+import {normalizeToYMD} from "@/shared";
+import {useNutritionStore} from "@/entities/nutrtition/model/store";
+import {useNutrition} from "@/entities/nutrtition/model/data";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
+import LightGreenGlassBtn from "@/shared/UI-kit/buttons/LightGreenGlassBtn";
+import MainPagination from "@/widgets/MainPagination";
+import Spinner from "@/widgets/Spinner";
 
 export default function Nutrition({token}: {token: string}) {
 
@@ -61,7 +61,7 @@ export default function Nutrition({token}: {token: string}) {
         paginatedList,
     } = usePagination(filteredList, itemsPerPage)
 
-    useEffect(() => {setCurrentPage(1);}, [
+    useEffect(() => {setCurrentPage(1)}, [
         searchName, searchDate,
         caloriesMin, caloriesMax,
         proteinMin, proteinMax,

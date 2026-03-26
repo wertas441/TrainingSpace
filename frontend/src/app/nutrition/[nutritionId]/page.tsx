@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import ChangeNutrition from "@/app/nutrition/[nutritionId]/ChangeNutrition";
-import {getDayInformation} from "@/lib/controllers/nutrition";
-import ErrorState from "@/components/errors/ErrorState";
+import {getDayInformation} from "@/entities/nutrtition/model/controller";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export const metadata: Metadata = {
     title: "Изменение дня | TrainingSpace",

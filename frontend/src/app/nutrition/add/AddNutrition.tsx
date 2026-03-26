@@ -1,8 +1,8 @@
 'use client'
 
-import ServerError from "@/components/errors/ServerError";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {showErrorMessage} from "@/lib";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import {showErrorMessage} from "@/shared";
 import {
     CalendarDaysIcon,
     ChartBarSquareIcon,
@@ -18,14 +18,14 @@ import {
     validateFatGrams,
     validateProteinGrams,
     validateDayDescription,
-} from "@/lib/utils/validators/nutrition";
-import MainTextarea from "@/components/inputs/MainTextarea";
-import MainInput from "@/components/inputs/MainInput";
+} from "@/entities/nutrtition/model/validation";
+import MainTextarea from "@/shared/UI-kit/inputs/MainTextarea";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
 import {useForm} from "react-hook-form";
-import {NutritionForm} from "@/types/nutrition";
-import HalfContentRow from "@/components/elements/HalfContentRow";
-import {useCreateDayMutation} from "@/lib/hooks/mutations/nutrition";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import {NutritionForm} from "@/entities/nutrtition/model/type";
+import HalfContentRow from "@/shared/UI-kit/elements/HalfContentRow";
+import {useCreateDayMutation} from "@/entities/nutrtition/model/mutation";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
 
 export default function AddNutrition(){
 
@@ -38,7 +38,7 @@ export default function AddNutrition(){
         }
     })
 
-    const { serverError, setServerError, isSubmitting, setIsSubmitting, router } = usePageUtils();
+    const { serverError, setServerError, isSubmitting, setIsSubmitting, goToPage } = usePageUtils();
 
     const createDayMutation = useCreateDayMutation()
 
@@ -57,7 +57,7 @@ export default function AddNutrition(){
         }
 
         createDayMutation.mutate(payload, {
-            onSuccess: () => router.push("/nutrition"),
+            onSuccess: () => goToPage("/nutrition"),
 
             onError: (err) => {
                 const message = err instanceof Error ? err.message : "Не удалось добавить день. Попробуйте ещё раз.";

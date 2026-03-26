@@ -4,11 +4,11 @@ import {
     CalendarIcon,
     UserCircleIcon
 } from "@heroicons/react/24/outline";
-import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
-import SettingsHeader from "@/components/UI/headers/SettingsHeader";
-import {thirdDarkColorTheme} from "@/styles";
-import {getUserData, useUserStore} from "@/lib/store/userStore";
-import ErrorState from "@/components/errors/ErrorState";
+import SettingsPageContext from "@/widgets/UiContex/SettingsPageContext";
+import SettingsHeader from "@/widgets/SettingsHeader";
+import {thirdDarkColorTheme} from "@/shared/styles";
+import {getUserData, useUserStore} from "@/entities/user/model/store";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
 
 export default function Profile() {
 

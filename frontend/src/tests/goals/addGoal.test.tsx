@@ -9,9 +9,9 @@ import {
 import {pushMock} from '@/tests/utils/mockNextNavigation';
 import AddGoal from "@/app/goals/add/AddGoal";
 import { mockAxiosInstance } from '@/tests/utils/mockAxios';
-import QueryProvider from "@/lib/utils/QueryProvider";
+import QueryProvider from "@/app/QueryProvider";
 
-jest.mock('@/lib/hooks/usePageUtils', () => ({
+jest.mock('@/shared/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     ...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));

@@ -1,16 +1,16 @@
 'use client'
 
-import ExercisesTechniquesHeader from "@/components/UI/headers/ExercisesTechniquesHeader";
+import ExercisesTechniquesHeader from "@/entities/exercise/UI/ExercisesTechniquesHeader";
 import {useEffect, useMemo} from "react";
-import ExerciseRow from "@/components/elements/ExerciseRow";
-import {usePagination} from "@/lib/hooks/usePagination";
-import MainPagination from "@/components/UI/other/MainPagination";
-import NullElementsError from "@/components/errors/NullElementsError";
-import {useExerciseStore} from "@/lib/store/exerciseStore";
-import {useExerciseList} from "@/lib/hooks/data/exercise";
-import ErrorState from "@/components/errors/ErrorState";
-import Spinner from "@/components/UI/other/Spinner";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
+import ExerciseRow from "@/shared/UI-kit/elements/ExerciseRow";
+import {usePagination} from "@/shared/hooks/usePagination";
+import NullElementsError from "@/shared/UI-kit/errors/NullElementsError";
+import {useExerciseStore} from "@/entities/exercise/model/store";
+import {useExerciseList} from "@/entities/exercise/model/data";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
+import LightGreenGlassBtn from "@/shared/UI-kit/buttons/LightGreenGlassBtn";
+import MainPagination from "@/widgets/MainPagination";
+import Spinner from "@/widgets/Spinner";
 
 export default function ExercisesTechniques() {
 

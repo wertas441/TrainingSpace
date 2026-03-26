@@ -2,11 +2,11 @@ import {render, screen} from '@testing-library/react';
 import {
     resetUsePageUtilsOverrides,
 } from '@/tests/utils/mockUsePageUtils';
-import {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
+import {ExerciseTechniqueItem} from "@/entities/exercise/model/type";
 import ExercisesTechniques from "@/app/exercises-techniques/ExercisesTechniques";
-import QueryProvider from "@/lib/utils/QueryProvider";
+import QueryProvider from "@/app/QueryProvider";
 
-jest.mock('@/lib/hooks/usePageUtils', () => ({
+jest.mock('@/shared/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     ...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));

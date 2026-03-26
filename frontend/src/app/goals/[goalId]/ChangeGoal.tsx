@@ -1,21 +1,21 @@
 'use client'
 
 import {useCallback} from "react";
-import {GoalForm, GoalPriority, GoalsStructure} from "@/types/goal";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import {validateGoalDescription, validateGoalName} from "@/lib/utils/validators/goal";
-import {showErrorMessage} from "@/lib";
-import BlockPageContext from "@/components/UI/UiContex/BlockPageContext";
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
-import MainTextarea from "@/components/inputs/MainTextarea";
-import ChipRadioGroup from "@/components/inputs/ChipRadioGroup";
-import RedGlassBtn from "@/components/buttons/RedGlassBtn";
-import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import ModalWindow from "@/components/UI/other/ModalWindow";
+import {GoalForm, GoalPriority, GoalsStructure} from "@/entities/goal/model/type";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import {validateGoalDescription, validateGoalName} from "@/entities/goal/model/validation";
+import {showErrorMessage} from "@/shared";
+import BlockPageContext from "@/widgets/UiContex/BlockPageContext";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
+import MainTextarea from "@/shared/UI-kit/inputs/MainTextarea";
+import ChipRadioGroup from "@/shared/UI-kit/inputs/ChipRadioGroup";
+import RedGlassBtn from "@/shared/UI-kit/buttons/RedGlassBtn";
+import {useModalWindow} from "@/shared/hooks/useModalWindow";
 import {Controller, useForm} from "react-hook-form";
-import {useDeleteGoalMutation, useUpdateGoalMutation} from "@/lib/hooks/mutations/goal";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import {useDeleteGoalMutation, useUpdateGoalMutation} from "@/entities/goal/model/mutation";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
+import ModalWindow from "@/widgets/ModalWindow";
 
 interface IProps {
     goalInfo: GoalsStructure;

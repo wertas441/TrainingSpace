@@ -1,6 +1,6 @@
 'use client'
 
-import SettingsPageContext from "@/components/UI/UiContex/SettingsPageContext";
+import SettingsPageContext from "@/widgets/UiContex/SettingsPageContext";
 import {
     InformationCircleIcon,
     CodeBracketIcon,
@@ -9,9 +9,9 @@ import {
     GlobeAltIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import InformationPageBlock from "@/components/elements/InformationPageBlock";
-import SettingsHeader from "@/components/UI/headers/SettingsHeader";
-import {thirdDarkColorTheme} from "@/styles";
+import InformationPageBlock from "@/entities/user/UI/InformationPageBlock";
+import SettingsHeader from "@/widgets/SettingsHeader";
+import {thirdDarkColorTheme} from "@/shared/styles";
 
 const informationBlock = [
     {
@@ -81,12 +81,12 @@ export default function Information() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {informationBlock.map((item) => (
+                    {informationBlock.map(({id, label, text, icon}) => (
                         <InformationPageBlock
-                            key={item.id}
-                            label={item.label}
-                            text={item.text}
-                            icon={item.icon}
+                            key={id}
+                            label={label}
+                            text={text}
+                            icon={icon}
                         />
                     ))}
                 </div>

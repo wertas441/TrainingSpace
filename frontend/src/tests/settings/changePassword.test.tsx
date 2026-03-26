@@ -10,7 +10,7 @@ import {pushMock} from '@/tests/utils/mockNextNavigation';
 import ChangePassword from "@/app/settings/change-password/ChangePassword";
 import {mockAxiosInstance} from "@/tests/utils/mockAxios";
 
-jest.mock('@/lib/hooks/usePageUtils', () => ({
+jest.mock('@/shared/hooks/usePageUtils', () => ({
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     ...require('@/tests/utils/mockUsePageUtils').buildUsePageUtilsMock(),
 }));

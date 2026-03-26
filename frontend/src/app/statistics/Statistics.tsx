@@ -1,16 +1,16 @@
 'use client'
 
 import {useMemo, useState} from "react";
-import StatisticsHeader from "@/components/UI/headers/StatisticsHeader";
-import StatisticsMainCard from "@/components/UI/other/StatisticsMainCard";
-import NutritionTrendChart from "@/components/UI/other/NutritionTrendChart";
+import StatisticsHeader from "@/entities/statistic/UI/StatisticsHeader";
+import StatisticsMainCard from "@/entities/statistic/UI/StatisticsMainCard";
+import NutritionTrendChart from "@/entities/nutrtition/UI/NutritionTrendChart";
 import {
     MainStatisticsCardResponse,
     MetricOptionStructure,
     NutritionMetric,
     NutritionStatisticsCardResponse,
     NutritionStatisticsGraphicResponse
-} from "@/types/statistics";
+} from "@/entities/statistic/model/type";
 import {
     CalendarDaysIcon,
     FlagIcon,
@@ -21,7 +21,7 @@ import {
     ScaleIcon
 } from "@heroicons/react/24/outline";
 import {ChartBarIcon} from "@heroicons/react/24/solid";
-import {secondDarkColorTheme, thirdDarkColorTheme} from "@/styles";
+import {secondDarkColorTheme, thirdDarkColorTheme} from "@/shared/styles";
 
 interface IProps {
     mainCardData: MainStatisticsCardResponse;

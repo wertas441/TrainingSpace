@@ -1,23 +1,23 @@
 'use client'
 
 import {useEffect, useMemo} from "react";
-import {usePagination} from "@/lib/hooks/usePagination";
-import MainPagination from "@/components/UI/other/MainPagination";
-import MyActivityHeader from "@/components/UI/headers/MyActivityHeader";
-import MyActivityRow from "@/components/elements/MyActivityRow";
-import NullElementsError from "@/components/errors/NullElementsError";
-import {normalizeToYMD} from "@/lib";
-import {useActivityStore} from "@/lib/store/activityStore";
-import {useActivity} from "@/lib/hooks/data/activity";
-import Spinner from "@/components/UI/other/Spinner";
-import ErrorState from "@/components/errors/ErrorState";
-import LightGreenGlassBtn from "@/components/buttons/LightGreenGlassBtn";
+import {usePagination} from "@/shared/hooks/usePagination";
+import MyActivityHeader from "@/entities/activity/UI/MyActivityHeader";
+import MyActivityRow from "@/entities/activity/UI/MyActivityRow";
+import NullElementsError from "@/shared/UI-kit/errors/NullElementsError";
+import {normalizeToYMD} from "@/shared";
+import {useActivityStore} from "@/entities/activity/model/store";
+import {useActivity} from "@/entities/activity/model/data";
+import ErrorState from "@/shared/UI-kit/errors/ErrorState";
+import LightGreenGlassBtn from "@/shared/UI-kit/buttons/LightGreenGlassBtn";
+import MainPagination from "@/widgets/MainPagination";
+import Spinner from "@/widgets/Spinner";
 
 export default function MyActivity({token}:{token: string}) {
 
-    const { activity, isLoading, error, isError, refetch, isFetching } = useActivity(token);
+    const { data, isLoading, error, isError, refetch, isFetching } = useActivity(token);
 
-    const clientActivity = useMemo(() => activity ?? [], [activity]);
+    const activity = useMemo(() => data ?? [], [data]);
 
     const searchName = useActivityStore(s => s.searchName);
     const searchDate = useActivityStore(s => s.searchDate);
@@ -29,7 +29,7 @@ export default function MyActivity({token}:{token: string}) {
     const filteredList = useMemo(() => {
         const q = searchName.toLowerCase().trim();
 
-        return clientActivity.filter((activity) => {
+        return activity.filter((activity) => {
             const matchesName = q.length === 0 || activity.name.toLowerCase().includes(q);
 
             const matchesDate = !searchDate || normalizeToYMD(activity.activityDate) === searchDate;
@@ -40,7 +40,7 @@ export default function MyActivity({token}:{token: string}) {
 
             return matchesName && matchesDate && matchesDifficulty && matchesType;
         });
-    }, [searchName, searchDate, difficultFilter, typeFilter, clientActivity]);
+    }, [searchName, searchDate, difficultFilter, typeFilter, activity]);
 
     const {
         currentPage,
@@ -57,7 +57,7 @@ export default function MyActivity({token}:{token: string}) {
         <div className="space-y-4" ref={listTopRef} >
             <MyActivityHeader />
 
-            {isLoading && clientActivity.length === 0 && (
+            {isLoading && activity.length === 0 && (
                 <div className="rounded-lg border border-emerald-100 p-6">
                     <Spinner label="Загрузка списка активностей..." size="lg" />
                 </div>
@@ -79,7 +79,7 @@ export default function MyActivity({token}:{token: string}) {
 
             {!isLoading && !isError && (
                 <>
-                    {isFetching && clientActivity.length > 0 && (
+                    {isFetching && activity.length > 0 && (
                         <Spinner className="justify-start" size="sm" label="Обновляем список активностей..." />
                     )}
 
@@ -93,7 +93,7 @@ export default function MyActivity({token}:{token: string}) {
                             ))
                         ) : (
                             <NullElementsError text={
-                                clientActivity.length === 0
+                                activity.length === 0
                                     ? "У вас пока нет добавленной активности. Нажмите «Добавить активность», чтобы добавить первую."
                                     : "По заданным параметрам поиска активности не найдены. Попробуйте изменить фильтр."
                             } />

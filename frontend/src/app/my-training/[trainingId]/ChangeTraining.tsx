@@ -1,28 +1,28 @@
 'use client'
 
-import {TrainingForm, TrainingListResponse} from "@/types/training";
-import type {ExerciseTechniqueItem} from "@/types/exercisesTechniques";
+import {TrainingForm, TrainingListResponse} from "@/entities/training/model/type";
+import type {ExerciseTechniqueItem} from "@/entities/exercise/model/type";
 import {useCallback, useEffect, useState} from "react";
-import {usePageUtils} from "@/lib/hooks/usePageUtils";
-import MainMultiSelect from "@/components/inputs/MainMultiSelect";
-import {usePagination} from "@/lib/hooks/usePagination";
-import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/lib/utils/validators/training";
-import {showErrorMessage} from "@/lib";
-import ServerError from "@/components/errors/ServerError";
-import MainInput from "@/components/inputs/MainInput";
-import MainTextarea from "@/components/inputs/MainTextarea";
-import SelectableExerciseRow from "@/components/elements/SelectableExerciseRow";
-import MainPagination from "@/components/UI/other/MainPagination";
-import RedGlassBtn from "@/components/buttons/RedGlassBtn";
-import ModalWindow from "@/components/UI/other/ModalWindow";
-import {useModalWindow} from "@/lib/hooks/useModalWindow";
-import {useTrainingUtils} from "@/lib/hooks/useTrainingUtils";
-import SelectExerciseUi from "@/components/UI/other/SelectExerciseUi";
-import {secondDarkColorTheme} from "@/styles";
+import {usePageUtils} from "@/shared/hooks/usePageUtils";
+import MainMultiSelect from "@/shared/UI-kit/inputs/MainMultiSelect";
+import {usePagination} from "@/shared/hooks/usePagination";
+import {validateTrainingDescription, validateTrainingExercises, validateTrainingName} from "@/entities/training/model/validation";
+import {showErrorMessage} from "@/shared";
+import ServerError from "@/shared/UI-kit/errors/ServerError";
+import MainInput from "@/shared/UI-kit/inputs/MainInput";
+import MainTextarea from "@/shared/UI-kit/inputs/MainTextarea";
+import SelectableExerciseRow from "@/entities/training/UI/SelectableExerciseRow";
+import RedGlassBtn from "@/shared/UI-kit/buttons/RedGlassBtn";
+import {useModalWindow} from "@/shared/hooks/useModalWindow";
+import {useTrainingUtils} from "@/entities/training/useTrainingUtils";
+import {secondDarkColorTheme} from "@/shared/styles";
 import {useForm} from "react-hook-form";
-import DropDownContent from "@/components/UI/UiContex/DropDownContent";
-import {useDeleteTrainingMutation, useUpdateTrainingMutation} from "@/lib/hooks/mutations/training";
-import LightGreenBtn from "@/components/buttons/LightGreenBtn";
+import DropDownContent from "@/widgets/UiContex/DropDownContent";
+import {useDeleteTrainingMutation, useUpdateTrainingMutation} from "@/entities/training/model/mutation";
+import LightGreenBtn from "@/shared/UI-kit/buttons/LightGreenBtn";
+import ModalWindow from "@/widgets/ModalWindow";
+import MainPagination from "@/widgets/MainPagination";
+import SelectExerciseUi from "@/widgets/SelectExerciseUi";
 
 interface IProps {
     trainingInfo: TrainingListResponse,
