@@ -11,13 +11,13 @@ import {
 } from "recharts";
 import {NutritionStatisticsGraphicResponse} from "@/entities/statistic/model/type";
 
-
 interface NutritionTrendChartProps {
     days: NutritionStatisticsGraphicResponse[];
     metric: 'calories' | 'protein' | 'fat' | 'carb';
 }
 
 const CustomTooltip = ({active, payload}: any) => {
+
     if (!active || !payload || payload.length === 0) return null;
 
     const item = payload[0]?.payload as any;

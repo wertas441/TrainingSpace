@@ -7,7 +7,7 @@ interface IProps {
     icon: ElementType;
 }
 
-export default function InformationPageBlock({label, text, icon}: IProps) {
+export function InformationPageBlock({label, text, icon}: IProps) {
 
     const IconComponent = icon;
 

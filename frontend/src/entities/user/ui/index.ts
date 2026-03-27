@@ -1,0 +1,3 @@
+
+
+export { InformationPageBlock } from './InformationPageBlock'

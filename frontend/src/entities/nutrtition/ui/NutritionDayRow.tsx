@@ -1,3 +1,5 @@
+'use client'
+
 import {CalendarDaysIcon, FireIcon, BeakerIcon, ScaleIcon, Squares2X2Icon} from "@heroicons/react/24/outline";
 import {NutritionDay} from "@/entities/nutrtition/model/type";
 import {memo, useMemo} from "react";
@@ -8,7 +10,7 @@ import {usePageUtils} from "@/shared/hooks/usePageUtils";
 
 function NutritionDayRow({publicId, name, date, description, calories, protein, fat, carb }: NutritionDay) {
 
-    const informationElements = useMemo(() =>[
+    const information = useMemo(() =>[
         {
             label: 'Ккал',
             icon: FireIcon,
@@ -55,12 +57,12 @@ function NutritionDayRow({publicId, name, date, description, calories, protein, 
 
 				<div className="flex-row md:flex justify-end gap-3 md:col-span-2">
 					<div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {informationElements.map((element, index) => (
+                        {information.map(({label, icon, value}) => (
                             <NutritionInfo
-                                key={index}
-                                label={element.label}
-                                icon={element.icon}
-                                value={element.value}
+                                key={label}
+                                label={label}
+                                icon={icon}
+                                value={value}
                             />
                         ))}
 					</div>

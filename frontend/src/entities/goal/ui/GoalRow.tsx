@@ -1,3 +1,5 @@
+'use client'
+
 import {GoalsStructure} from "@/entities/goal/model/type";
 import {memo, useCallback, useState} from "react";
 import ChangeButton from "@/shared/UI-kit/buttons/ChangeButton";
@@ -17,6 +19,7 @@ function GoalRow({publicId, name, description, priority, token}: IProps ) {
     const [isHidden, setIsHidden] = useState<boolean>(false);
 
     const { goToPage } = usePageUtils();
+
     const {mutate: completeGoalMutate, isPending: isCompletingPending} = useCompleteGoalMutation(token);
 
     const handleCompleteClick = useCallback(() => {
@@ -37,9 +40,7 @@ function GoalRow({publicId, name, description, priority, token}: IProps ) {
         });
     }, [isCompleting, isCompletingPending, completeGoalMutate, publicId]);
 
-    if (isHidden) {
-        return null;
-    }
+    if (isHidden) return null;
 
     return (
         <div className={`${secondDarkColorTheme} w-full rounded-lg border border-emerald-100 p-4 shadow-sm transition-all duration-300 ease-out 

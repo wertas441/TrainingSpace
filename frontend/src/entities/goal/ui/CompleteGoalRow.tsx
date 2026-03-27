@@ -1,3 +1,5 @@
+'use client'
+
 import {memo} from "react";
 import {secondDarkColorTheme} from "@/shared/styles";
 
@@ -22,12 +24,13 @@ function CompleteGoalRow({name, description, achieve_at}: IProps){
                     </p>
 
                     <span className={`inline-flex text-gray-600 dark:text-white items-center pt-3 text-xs font-medium rounded-full`}>
-                            Цель достигнута: {new Date(achieve_at).toLocaleDateString('ru-RU', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                    })}
-                        </span>
+                        Цель достигнута: {new Date(achieve_at).toLocaleDateString('ru-RU', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        }
+                    )}
+                    </span>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import {secondDarkColorTheme} from "@/shared/styles";
 
-export default function StatisticsHeader() {
+export function StatisticsHeader() {
 
     return (
         <div className={`${secondDarkColorTheme} w-full border border-emerald-100 rounded-lg p-4 shadow-sm`}>

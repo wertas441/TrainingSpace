@@ -1,6 +1,5 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {completeGoal, createGoal, deleteGoal, updateGoal} from "@/entities/goal/model/controller";
-import {deleteTraining} from "@/entities/training/model/controller";
 
 export function useCreateGoalMutation() {
     const queryClient = useQueryClient();

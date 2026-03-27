@@ -1,3 +1,5 @@
+'use client'
+
 import FilterInput from "@/shared/UI-kit/inputs/FilterInput";
 import {memo, useMemo} from "react";
 import {MagnifyingGlassIcon, ClipboardDocumentCheckIcon, ClipboardDocumentListIcon} from "@heroicons/react/24/outline";
@@ -15,6 +17,7 @@ interface GoalsHeaderProps extends HeaderMinimumProps {
 function GoalsHeader({label, searchName, setSearchName}:GoalsHeaderProps){
 
     const pathname:string = usePathname();
+
     const isGoalPage = pathname.endsWith("/goals");
 
     const { goToPage } = usePageUtils();

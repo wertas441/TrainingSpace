@@ -1,3 +1,5 @@
+'use client'
+
 import FilterInput from "@/shared/UI-kit/inputs/FilterInput";
 import {CalendarIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {memo} from "react";
@@ -81,12 +83,14 @@ function NutritionHeader() {
                 </div>
 
                 {isFilterWindowOpen && (
-                    <div ref={modalWindowRef}
-                         className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[560px] 
+                    <div
+                        ref={modalWindowRef}
+                        className={`${secondDarkColorTheme} absolute right-0 top-full mt-2 z-20 w-full md:w-[560px] 
                         rounded-xl shadow-lg border border-emerald-100`}
                     >
                         <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-100 dark:border-neutral-700">
                             <h2 className="text-lg font-semibold text-emerald-800 dark:text-white">Фильтры</h2>
+
                             <XMarkButton onClick={toggleFilterWindow} />
                         </div>
 
