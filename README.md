@@ -1,6 +1,6 @@
 ## TrainingSpace
 
-**TrainingSpace** — это Open Source‑приложение для отслеживания тренировок, питания, активности и целей.  
+**TrainingSpace** - это Open Source‑приложение для отслеживания тренировок, питания, активности и целей.  
 Оно помогает вести более осознанный образ жизни: планировать тренировки, фиксировать прогресс и работать с целями в одном месте.
 
 
@@ -93,7 +93,7 @@ URL: https://your-training.space
 2. Запустить **backend**
 3. Запустить **frontend**
 
-Ниже — инструкции подробнее.
+Ниже - подробная инструкция.
 
 ---
 
@@ -132,10 +132,10 @@ JWT_SECRET=your-jwt-secret
 ### 3. Инициализация БД
 
 В `backend/src/database` есть файлы для инициализации схемы и базовых данных:
-- `schema.sql` — структура таблиц
+- `schema.sql` - структура таблиц
 
 
-- `init.ts`, `seedExercises.ts` — скрипты инициализации
+- `init.ts`, `seedExercises.ts` - скрипты инициализации
 
 
 ### 4. Запуск в режиме разработки
@@ -215,19 +215,6 @@ yarn test
 backend/   # Backend API (Express + TypeScript + PostgreSQL)
 frontend/  # Frontend (Next.js + React + TypeScript)
 ```
-
-Подробнее о структуре вы можете посмотреть в:
-
-- `backend/src` — конфиг, модели, роуты, типы и т.д.
-
-
-- `frontend/src/app` — страницы и layout‑ы
-
-
-- `frontend/src/components` — UI‑компоненты
-
-
-- `frontend/src/lib` — контроллеры, утилиты, хуки
 
 ---
 
