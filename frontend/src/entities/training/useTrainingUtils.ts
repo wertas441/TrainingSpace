@@ -1,3 +1,5 @@
+'use client'
+
 import {Dispatch, SetStateAction, useCallback, useMemo, useState} from "react";
 import {OptionType} from "@/shared/UI-kit/inputs/MainMultiSelect";
 import {ExerciseTechniqueItem} from "@/entities/exercise/model/type";

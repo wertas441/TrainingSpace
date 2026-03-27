@@ -1,3 +1,5 @@
+'use client'
+
 import { ExerciseSetsByExerciseId } from "@/entities/activity/model/type";
 import {TrainingDataStructure} from "@/shared/types";
 import {getTrainingExercises} from "@/entities/activity/model/controller";
